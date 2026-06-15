@@ -34,9 +34,9 @@ export default function PartnersSection() {
         py: { xs: 6, md: 8 },
         px: { xs: 3, lg: '40px' },
         mx: 'auto',
-        height:'455px',
-        background: '#121212',
+        height: '455px',
         width: '100%',
+        bgcolor: 'black',
       }}
     >
        <Typography

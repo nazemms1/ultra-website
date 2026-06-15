@@ -8,7 +8,7 @@ import ServicesOrbital from '@/components/sections/services-orbital/ServicesOrbi
 
 export default function Home() {
   return (
-    <main style={{ background: '#060E10', minHeight: '100vh' }}>
+    <main style={{ background: '#121212', minHeight: '100vh' }}>
       <Navbar />
       <HeroSection />
       <PartnersSection />
