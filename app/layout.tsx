@@ -2,6 +2,8 @@ import './globals.css';
 import type { Metadata } from 'next';
 import { Rajdhani } from 'next/font/google';
 import Providers from '@/components/Providers';
+import Navbar from '@/components/Navbar';
+import FooterSection from '@/components/FooterSection';
 
 const rajdhani = Rajdhani({
   subsets: ['latin'],
@@ -37,8 +39,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           href="https://fonts.cdnfonts.com/css/ethnocentric"
         />
       </head>
-      <body className="font-rajdhani antialiased">
-        <Providers>{children}</Providers>
+      <body className="font-rajdhani antialiased bg-[#121212] min-h-screen text-white">
+        <Providers>
+          <Navbar />
+          {children}
+          <FooterSection />
+        </Providers>
       </body>
     </html>
   );

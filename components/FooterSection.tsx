@@ -8,10 +8,10 @@ import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid';
 
 const usefulLinks = [
-  { label: 'About Us', href: '#' },
-  { label: 'Our services', href: '#' },
-  { label: 'Our projects', href: '#' },
-  { label: 'About...', href: '#' },
+  { label: 'About Us', href: '/about' },
+  { label: 'Our services', href: '/services' },
+  { label: 'Our projects', href: '/projects' },
+  { label: 'Contact Us', href: '/contact' },
 ];
 
 const services = [

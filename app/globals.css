@@ -181,14 +181,14 @@
 
 /* Glass effect — Figma Glass plugin: Light -45° 80%, Refraction 80, Depth 20, Dispersion 50, Frost 4, Splay 0 */
 .glass {
-  background: transparent;
-  backdrop-filter: blur(4px);
-  -webkit-backdrop-filter: blur(4px);
-  border: 1px solid #FFFFFF1A;
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   box-shadow:
-    inset 1px 1px 0px 0px rgba(255, 255, 255, 0.13),
+    inset 1px 1px 0px 0px rgba(255, 255, 255, 0.18),
     inset -1px -1px 0px 0px rgba(255, 255, 255, 0.05),
-    0px 20px 40px -10px rgba(0, 0, 0, 0.20);
+    0 8px 32px 0 rgba(0, 0, 0, 0.37);
 }
 
 /* Card surface */

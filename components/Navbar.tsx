@@ -6,10 +6,9 @@ import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
-  { label: 'About us', href: '#about' },
-  { label: 'Our services', href: '#services' },
-  { label: 'Our projects', href: '#projects' },
-  { label: 'About', href: '#team' },
+  { label: 'About us', href: '/about' },
+  { label: 'Our services', href: '/services' },
+  { label: 'Our projects', href: '/projects' },
 ];
 
 export default function Navbar() {
@@ -37,11 +36,11 @@ export default function Navbar() {
           maxWidth: '1318px',
           height: '68px',
           borderRadius: '50px',
-          border: '1px solid rgba(255,255,255,0.1)',
-          boxShadow: '0px 4px 30px 0px rgba(0,0,0,0.1)',
-          background: 'rgba(8,20,24,0.75)',
-          backdropFilter: 'blur(20px)',
-          WebkitBackdropFilter: 'blur(20px)',
+          border: '1px solid rgba(255, 255, 255, 0.18)',
+          boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 1px 1px 0px 0px rgba(255, 255, 255, 0.25), inset -1px -1px 0px 0px rgba(255, 255, 255, 0.05)',
+          background: 'rgba(255, 255, 255, 0.04)',
+          backdropFilter: 'blur(40px)',
+          WebkitBackdropFilter: 'blur(40px)',
           display: 'flex',
           alignItems: 'center',
           paddingLeft: '24px',
@@ -91,7 +90,7 @@ export default function Navbar() {
           }}
         >
           <Link
-            href="#contact"
+            href="/contact"
             className="hidden md:inline-flex"
             style={{
               alignItems: 'center',
@@ -150,11 +149,11 @@ export default function Navbar() {
             width: '100%',
             maxWidth: '1318px',
             borderRadius: '24px',
-            background: 'rgba(8,20,24,0.96)',
-            backdropFilter: 'blur(20px)',
-            WebkitBackdropFilter: 'blur(20px)',
-            border: '1px solid rgba(255,255,255,0.1)',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.3)',
+            background: 'rgba(255, 255, 255, 0.06)',
+            backdropFilter: 'blur(40px)',
+            WebkitBackdropFilter: 'blur(40px)',
+            border: '1px solid rgba(255, 255, 255, 0.18)',
+            boxShadow: '0 8px 32px 0 rgba(0, 0, 0, 0.4), inset 1px 1px 0px 0px rgba(255, 255, 255, 0.25), inset -1px -1px 0px 0px rgba(255, 255, 255, 0.05)',
             padding: '20px 24px',
             display: 'flex',
             flexDirection: 'column',
@@ -183,7 +182,7 @@ export default function Navbar() {
             </Link>
           ))}
           <Link
-            href="#contact"
+            href="/contact"
             onClick={() => setMobileOpen(false)}
             style={{
               display: 'inline-flex',
