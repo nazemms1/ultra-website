@@ -95,8 +95,8 @@ export default function OrbitalDeck({
           width: 640,
           height: 640,
           borderRadius: "9999px",
-          background:
-            "radial-gradient(circle at 50% 56%, rgba(13,241,217,0.16) 0%, rgba(13,241,217,0.06) 38%, rgba(6,14,16,0) 70%)",
+          // background:
+          //   "radial-gradient(circle at 50% 56%, rgba(13,241,217,0.16) 0%, rgba(13,241,217,0.06) 38%, rgba(6,14,16,0) 70%)",
         }}
       />
 
@@ -175,7 +175,7 @@ function OrbitalSpoke({
   });
   const cardScale = useTransform(cardOpacity, (o) => 0.82 + 0.18 * o);
   const cardPointer = useTransform(cardOpacity, (o) =>
-    o < 0.25 ? "none" : "auto"
+    o < 0.25 ? "none" : "auto",
   );
 
   return (

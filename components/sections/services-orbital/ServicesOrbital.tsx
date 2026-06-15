@@ -16,7 +16,7 @@ export default function ServicesOrbital() {
   return (
     <section
       id="services"
-      className="relative overflow-hidden bg-[#0B0B0C] px-6 py-24 lg:py-32"
+      className="relative overflow-hidden px-6 py-24 lg:py-32"
     >
       {/* Ambient teal glow anchored to the orbital side. */}
       <div className="pointer-events-none absolute right-0 top-1/2 h-[640px] w-[640px] -translate-y-1/2 rounded-full bg-accent/5 blur-[150px]" />
@@ -35,7 +35,8 @@ export default function ServicesOrbital() {
           </p>
 
           <h2 className="font-ethnocentric text-[2.1rem] uppercase leading-[1.18] tracking-wide text-white sm:text-[2.6rem] lg:text-[2.85rem]">
-            Services built for <span className="text-accent">ultra</span> outcomes
+            Services built for <span className="text-accent">ultra</span>{" "}
+            outcomes
           </h2>
 
           {/* Active service: title + long description (swaps on hover). */}

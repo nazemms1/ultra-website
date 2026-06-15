@@ -2,8 +2,8 @@
 
 import { motion } from "framer-motion";
 import { Smartphone } from "lucide-react";
-import OrbitalTrack from "./services/OrbitalTrack";
-import AnimatedButton from "./services/AnimatedButton";
+import ServicesOrbital from "./services-orbital/ServicesOrbital";
+import AnimatedButton from "./services-orbital/ViewAllButton";
 import type { ServiceCardData } from "./services/ServiceCard";
 
 const services: ServiceCardData[] = [
@@ -99,7 +99,7 @@ export default function Services() {
           className="flex h-[380px] items-center justify-center sm:h-[480px] lg:h-[560px]"
         >
           <div className="origin-center scale-[0.6] sm:scale-[0.82] lg:scale-90 xl:scale-100">
-            <OrbitalTrack cards={services} />
+            <ServicesOrbital />
           </div>
         </motion.div>
       </div>

@@ -154,7 +154,7 @@ export default function CTASection() {
             mb: "10px",
           }}
         >
-          Let's build together
+          Let&apos;s build together
         </Typography>
 
         <Typography
