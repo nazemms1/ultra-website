@@ -2,6 +2,11 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Grid from '@mui/material/Grid';
+
 const usefulLinks = [
   { label: 'About Us', href: '#' },
   { label: 'Our services', href: '#' },
@@ -58,148 +63,136 @@ const socials = [
   },
 ];
 
+const sectionTitleSx = {
+  fontFamily: "'Rajdhani', sans-serif",
+  fontSize: '11px',
+  letterSpacing: '1.5px',
+  textTransform: 'uppercase' as const,
+  color: '#0DF1D9',
+  fontWeight: 600,
+  mb: 2,
+};
+
+const linkSx = {
+  fontFamily: "'Rajdhani', sans-serif",
+  fontSize: '14px',
+  letterSpacing: '0.3px',
+  color: 'rgba(255,255,255,0.6)',
+  textDecoration: 'none',
+  transition: 'color 0.2s',
+  '&:hover': { color: '#0DF1D9' },
+};
+
 export default function FooterSection() {
   return (
-    <footer className="relative w-full overflow-hidden" style={{ height: '695px' }}>
-     
+    <Box
+      component="footer"
+      sx={{ position: 'relative', width: '100%', overflow: 'hidden', height: '695px' }}
+    >
+      {/* Background Video */}
       <video
         autoPlay
         loop
         muted
         playsInline
-        className="absolute inset-0 w-full h-full object-cover"
-        style={{ zIndex: 0 }}
+        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
       >
         <source src="/videos/footer.mp4" type="video/mp4" />
       </video>
 
-       <div
-        className="absolute inset-0"
-        style={{ background: 'rgba(6, 14, 16, 0.5)', zIndex: 1 }}
+      {/* Overlay */}
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          background: 'rgba(6, 14, 16, 0.5)',
+          zIndex: 1,
+        }}
       />
 
-       <div className="relative" style={{ zIndex: 2 }}>
-         <div
-          className="mx-auto px-8 pt-14 pb-10"
-          style={{ maxWidth: '1280px' }}
-        >
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-             <div className="flex flex-col gap-5">
-              <Image
-                src="/images/logo/logo-ultra.svg"
-                alt="Ultra"
-                width={100}
-                height={32}
-                priority
-              />
-              <p
-                style={{
-                  color: 'rgba(255,255,255,0.55)',
-                  fontSize: '13px',
-                  lineHeight: '22px',
-                  letterSpacing: '0.3px',
-                  fontFamily: "'Rajdhani', sans-serif",
-                }}
-              >
-                We provide cutting-edge solutions for businesses seeking to
-                optimize their operations.
-              </p>
-               <div className="flex items-center gap-3 mt-1">
-                {socials.map((s, i) => (
-                  <Link
-                    key={i}
-                    href={s.href}
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '32px',
-                      height: '32px',
-                      borderRadius: '6px',
-                      border: '1px solid rgba(255,255,255,0.15)',
-                      color: 'rgba(255,255,255,0.6)',
-                      transition: 'all 0.2s',
-                    }}
-                    onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLElement).style.borderColor =
-                        '#0DF1D9';
-                      (e.currentTarget as HTMLElement).style.color = '#0DF1D9';
-                    }}
-                    onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLElement).style.borderColor =
-                        'rgba(255,255,255,0.15)';
-                      (e.currentTarget as HTMLElement).style.color =
-                        'rgba(255,255,255,0.6)';
-                    }}
-                  >
-                    {s.icon}
-                  </Link>
-                ))}
-              </div>
-            </div>
+      {/* Content */}
+      <Box sx={{ position: 'relative', zIndex: 2 }}>
+        <Box sx={{ maxWidth: '1280px', mx: 'auto', px: 4, pt: 7, pb: 5 }}>
 
-             <div>
-              <p
-                style={{
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontSize: '11px',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
-                  color: '#0DF1D9',
-                  fontWeight: 600,
-                  marginBottom: '16px',
-                }}
-              >
-                Useful Links
-              </p>
-              <ul className="flex flex-col gap-3">
-                {usefulLinks.map((link) => (
-                  <li key={link.label}>
-                    <Link
-                      href={link.href}
-                      style={{
-                        fontFamily: "'Rajdhani', sans-serif",
-                        fontSize: '14px',
-                        letterSpacing: '0.3px',
+          {/* Main Grid */}
+          <Grid container spacing={5}>
+
+            {/* Col 1 — Brand */}
+            <Grid size={{ xs: 12, md: 3 }}>
+              <Stack spacing={2.5}>
+                <Image
+                  src="/images/logo/logo-ultra.svg"
+                  alt="Ultra"
+                  width={100}
+                  height={32}
+                  priority
+                />
+                <Typography
+                  sx={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: '13px',
+                    lineHeight: '22px',
+                    letterSpacing: '0.3px',
+                    color: 'rgba(255,255,255,0.55)',
+                  }}
+                >
+                  We provide cutting-edge solutions for businesses seeking to
+                  optimize their operations.
+                </Typography>
+
+                {/* Social Icons */}
+                <Stack direction="row" spacing={1} sx={{ mt: 0.5 }}>
+                  {socials.map((s, i) => (
+                    <Box
+                      key={i}
+                      component={Link}
+                      href={s.href}
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        width: '32px',
+                        height: '32px',
+                        borderRadius: '6px',
+                        border: '1px solid rgba(255,255,255,0.15)',
                         color: 'rgba(255,255,255,0.6)',
-                        transition: 'color 0.2s',
-                        textDecoration: 'none',
+                        transition: 'all 0.2s',
+                        '&:hover': {
+                          borderColor: '#0DF1D9',
+                          color: '#0DF1D9',
+                        },
                       }}
-                      onMouseEnter={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color =
-                          '#0DF1D9')
-                      }
-                      onMouseLeave={(e) =>
-                        ((e.currentTarget as HTMLElement).style.color =
-                          'rgba(255,255,255,0.6)')
-                      }
                     >
+                      {s.icon}
+                    </Box>
+                  ))}
+                </Stack>
+              </Stack>
+            </Grid>
+
+            {/* Col 2 — Useful Links */}
+            <Grid size={{ xs: 12, md: 3 }}>
+              <Typography sx={sectionTitleSx}>Useful Links</Typography>
+              <Stack spacing={1.5} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
+                {usefulLinks.map((link) => (
+                  <Box key={link.label} component="li">
+                    <Box component={Link} href={link.href} sx={linkSx}>
                       {link.label}
-                    </Link>
-                  </li>
+                    </Box>
+                  </Box>
                 ))}
-              </ul>
-            </div>
+              </Stack>
+            </Grid>
 
-             <div>
-              <p
-                style={{
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontSize: '11px',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
-                  color: '#0DF1D9',
-                  fontWeight: 600,
-                  marginBottom: '16px',
-                }}
-              >
-                Services
-              </p>
-              <ul className="flex flex-col gap-3">
+            {/* Col 3 — Services */}
+            <Grid size={{ xs: 12, md: 3 }}>
+              <Typography sx={sectionTitleSx}>Services</Typography>
+              <Stack spacing={1.5} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {services.map((s) => (
-                  <li
+                  <Typography
                     key={s}
-                    style={{
+                    component="li"
+                    sx={{
                       fontFamily: "'Rajdhani', sans-serif",
                       fontSize: '14px',
                       letterSpacing: '0.3px',
@@ -207,30 +200,20 @@ export default function FooterSection() {
                     }}
                   >
                     {s}
-                  </li>
+                  </Typography>
                 ))}
-              </ul>
-            </div>
+              </Stack>
+            </Grid>
 
-             <div>
-              <p
-                style={{
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontSize: '11px',
-                  letterSpacing: '1.5px',
-                  textTransform: 'uppercase',
-                  color: '#0DF1D9',
-                  fontWeight: 600,
-                  marginBottom: '16px',
-                }}
-              >
-                Services
-              </p>
-              <ul className="flex flex-col gap-3">
+            {/* Col 4 — Contact (placeholder matching original) */}
+            <Grid size={{ xs: 12, md: 3 }}>
+              <Typography sx={sectionTitleSx}>Services</Typography>
+              <Stack spacing={1.5} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {services.map((s) => (
-                  <li
+                  <Typography
                     key={s}
-                    style={{
+                    component="li"
+                    sx={{
                       fontFamily: "'Rajdhani', sans-serif",
                       fontSize: '14px',
                       letterSpacing: '0.3px',
@@ -238,16 +221,17 @@ export default function FooterSection() {
                     }}
                   >
                     {s}
-                  </li>
+                  </Typography>
                 ))}
-              </ul>
-            </div>
-          </div>
+              </Stack>
+            </Grid>
+          </Grid>
 
-           <div className="mt-14 flex justify-center">
-            <div
+          {/* Stats Bar */}
+          <Box sx={{ mt: 7, display: 'flex', justifyContent: 'center' }}>
+            <Box
               className="glass"
-              style={{
+              sx={{
                 width: '1120px',
                 maxWidth: '100%',
                 height: '120px',
@@ -255,28 +239,27 @@ export default function FooterSection() {
                 borderRadius: '16px',
               }}
             >
-             
-
               {stats.map((stat, i) => (
-                <div
+                <Stack
                   key={stat.label}
-                  style={{
+                
+                  sx={{
                     width: '278.75px',
                     height: '118px',
-                    paddingTop: '28px',
-                    paddingBottom: '28px',
+                    position: 'absolute',
                     left: `${1 + i * 279.75}px`,
                     top: '1px',
-                    position: 'absolute',
-                    display: 'inline-flex',
-                    flexDirection: 'column',
-                    justifyContent: 'center',
-                    alignItems: 'center',
+                    py: 3.5,
+                      alignItems:"center"  ,  
+                    justifyContent:"center"
+
                   }}
                 >
-                  <div style={{ position: 'relative' }}>
-                    <span
-                      style={{
+                  {/* Value */}
+                  <Box sx={{ position: 'relative' }}>
+                    <Typography
+                      component="span"
+                      sx={{
                         position: 'absolute',
                         left: 0,
                         top: '-0.5px',
@@ -290,19 +273,20 @@ export default function FooterSection() {
                       }}
                     >
                       {stat.value}
-                    </span>
-                     <span style={{ visibility: 'hidden', fontSize: '36px', lineHeight: '36px', fontWeight: 400 }}>
+                    </Typography>
+                    <Typography
+                      component="span"
+                      sx={{ visibility: 'hidden', fontSize: '36px', lineHeight: '36px', fontWeight: 400 }}
+                    >
                       {stat.value}
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      paddingTop: '7.5px',
-                      paddingBottom: '0.5px',
-                    }}
-                  >
-                    <span
-                      style={{
+                    </Typography>
+                  </Box>
+
+                  {/* Label */}
+                  <Box sx={{ pt: '7.5px', pb: '0.5px' }}>
+                    <Typography
+                      component="span"
+                      sx={{
                         color: 'rgba(255,255,255,0.50)',
                         fontSize: '12px',
                         fontFamily: "'Rajdhani', sans-serif",
@@ -313,61 +297,61 @@ export default function FooterSection() {
                       }}
                     >
                       {stat.label}
-                    </span>
-                  </div>
-                </div>
+                    </Typography>
+                  </Box>
+                </Stack>
               ))}
-            </div>
-          </div>
-        </div>
+            </Box>
+          </Box>
+        </Box>
 
-         <div
-          style={{ borderTop: '1px solid rgba(255,255,255,0.10)' }}
-        >
-          <div
-            className="mx-auto px-8 py-4 flex flex-col md:flex-row items-center justify-between gap-3"
-            style={{ maxWidth: '1280px' }}
+        {/* Bottom Bar */}
+        <Box sx={{ borderTop: '1px solid rgba(255,255,255,0.10)' }}>
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            sx={{
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              maxWidth: '1280px',
+              mx: 'auto',
+              px: 4,
+              py: 2,
+            }}
           >
-            <span
-              style={{
+            <Typography
+              sx={{
                 fontFamily: "'Rajdhani', sans-serif",
                 fontSize: '12px',
                 letterSpacing: '0.3px',
                 color: 'rgba(255,255,255,0.35)',
               }}
             >
-             © 2026 Ultrawares. All rights reserved.
-            </span>
-            <div className="flex items-center gap-6">
-              {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map(
-                (item) => (
-                  <Link
-                    key={item}
-                    href="#"
-                    style={{
-                      fontFamily: "'Rajdhani', sans-serif",
-                      fontSize: '12px',
-                      letterSpacing: '0.3px',
-                      color: 'rgba(255,255,255,0.35)',
-                      textDecoration: 'none',
-                      transition: 'color 0.2s',
-                    }}
-                    onMouseEnter={(e) =>
-                      ((e.currentTarget as HTMLElement).style.color = '#0DF1D9')
-                    }
-                    onMouseLeave={(e) =>
-                      ((e.currentTarget as HTMLElement).style.color =
-                        'rgba(255,255,255,0.35)')
-                    }
-                  >
-                    {item}
-                  </Link>
-                )
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
-    </footer>
+              © 2026 Ultrawares. All rights reserved.
+            </Typography>
+
+            <Stack direction="row" spacing={3}>
+              {['Privacy Policy', 'Terms of Service', 'Cookie Policy'].map((item) => (
+                <Box
+                  key={item}
+                  component={Link}
+                  href="#"
+                  sx={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontSize: '12px',
+                    letterSpacing: '0.3px',
+                    color: 'rgba(255,255,255,0.35)',
+                    textDecoration: 'none',
+                    transition: 'color 0.2s',
+                    '&:hover': { color: '#0DF1D9' },
+                  }}
+                >
+                  {item}
+                </Box>
+              ))}
+            </Stack>
+          </Stack>
+        </Box>
+      </Box>
+    </Box>
   );
 }
