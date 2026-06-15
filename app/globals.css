@@ -1,9 +1,9 @@
+/* Ethnocentric from CDN — must be before @tailwind directives */
+@import url('https://fonts.cdnfonts.com/css/ethnocentric');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-/* Ethnocentric from CDN */
-@import url('https://fonts.cdnfonts.com/css/ethnocentric');
 
 :root {
   --foreground-rgb: 255, 255, 255;
@@ -81,14 +81,12 @@
 
 /* Ethnocentric heading utility */
 .font-ethnocentric {
-  font-family: 'Ethnocentric', 'Rajdhani', sans-serif;
-  font-weight: 400;
+  font-family: 'Ethnocentric Rg', sans-serif;
 }
 
 /* Rajdhani nav/body utility */
 .font-rajdhani {
   font-family: 'Rajdhani', sans-serif;
-  font-weight: 400;
   letter-spacing: 0.7px;
   text-transform: uppercase;
 }

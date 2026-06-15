@@ -10,8 +10,8 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        ethnocentric: ['Ethnocentric', 'sans-serif'],
-        rajdhani: ['Rajdhani', 'sans-serif'],
+        ethnocentric: ['Ethnocentric', 'var(--font-rajdhani)', 'sans-serif'],
+        rajdhani: ['var(--font-rajdhani)', 'sans-serif'],
       },
       colors: {
         accent: {

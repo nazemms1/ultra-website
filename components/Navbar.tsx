@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 const navLinks = [
@@ -55,37 +56,16 @@ export default function Navbar() {
           <Link
             href="/"
             aria-label="Ultra Home"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              textDecoration: 'none',
-            }}
+            style={{ display: 'flex', alignItems: 'center', textDecoration: 'none' }}
           >
-            <svg width="36" height="36" viewBox="0 0 36 36" fill="none">
-              <ellipse cx="18" cy="16" rx="10" ry="11" stroke="#0DF1D9" strokeWidth="1.6" />
-              <line x1="18" y1="5" x2="18" y2="2" stroke="#0DF1D9" strokeWidth="1.4" strokeLinecap="round" />
-              <circle cx="18" cy="1.5" r="1.2" fill="#0DF1D9" />
-              <circle cx="14.5" cy="15" r="2.2" fill="#0DF1D9" opacity="0.9" />
-              <circle cx="21.5" cy="15" r="2.2" fill="#0DF1D9" opacity="0.9" />
-              <circle cx="15.2" cy="14.2" r="0.7" fill="#fff" />
-              <circle cx="22.2" cy="14.2" r="0.7" fill="#fff" />
-              <path d="M14.5 19.5 Q18 22 21.5 19.5" stroke="#0DF1D9" strokeWidth="1.3" strokeLinecap="round" fill="none" />
-              <path d="M8 14 Q6.5 16 8 18" stroke="#0DF1D9" strokeWidth="1.4" strokeLinecap="round" />
-              <path d="M28 14 Q29.5 16 28 18" stroke="#0DF1D9" strokeWidth="1.4" strokeLinecap="round" />
-            </svg>
-            <span
-              style={{
-                fontFamily: 'Ethnocentric, Rajdhani, sans-serif',
-                fontWeight: 400,
-                fontSize: '22px',
-                letterSpacing: '2px',
-                color: '#ffffff',
-                lineHeight: 1,
-              }}
-            >
-              LTRA
-            </span>
+            <Image
+              src="/images/logo/logo-ultra.svg"
+              alt="Ultrawares"
+              width={140}
+              height={40}
+              priority
+              style={{ objectFit: 'contain' }}
+            />
           </Link>
         </div>
 
