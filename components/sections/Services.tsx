@@ -1,83 +1,107 @@
-'use client';
+"use client";
 
-import { Shield, Brain, Cpu, Rocket, Smartphone, Globe } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import { motion } from "framer-motion";
+import { Smartphone } from "lucide-react";
+import OrbitalTrack from "./services/OrbitalTrack";
+import AnimatedButton from "./services/AnimatedButton";
+import type { ServiceCardData } from "./services/ServiceCard";
 
-const services = [
+const services: ServiceCardData[] = [
   {
-    icon: <Cpu className="w-8 h-8 text-[#0DF1D9]" />,
-    title: 'Cyber Infrastructure',
-    description: 'Build enterprise grade cloud architectures and secure servers optimized for speed and automated deployments.',
+    title: "Mobile & Web Engineering",
+    description: "High-performance apps and web platforms built to scale.",
+    Icon: Smartphone,
   },
   {
-    icon: <Brain className="w-8 h-8 text-[#0DF1D9]" />,
-    title: 'Artificial Intelligence',
-    description: 'Deploy custom LLMs, deep learning models, and automated bots tailored specifically to streamline company operations.',
+    title: "Mobile & Web Engineering",
+    description: "High-performance apps and web platforms built to scale.",
+    Icon: Smartphone,
   },
   {
-    icon: <Shield className="w-8 h-8 text-[#0DF1D9]" />,
-    title: 'Advanced Security',
-    description: 'End-to-end security audits, active penetration testing, and compliance setups ensuring total business resilience.',
+    title: "Mobile & Web Engineering",
+    description: "High-performance apps and web platforms built to scale.",
+    Icon: Smartphone,
   },
   {
-    icon: <Rocket className="w-8 h-8 text-[#0DF1D9]" />,
-    title: 'Web Platforms',
-    description: 'Stunning websites built with modern frameworks like Next.js that feature lightning-fast loading speeds and rich animations.',
-  },
-  {
-    icon: <Smartphone className="w-8 h-8 text-[#0DF1D9]" />,
-    title: 'Mobile Apps',
-    description: 'High-performance cross-platform iOS and Android apps focusing on fluid UX and native hardware integration.',
-  },
-  {
-    icon: <Globe className="w-8 h-8 text-[#0DF1D9]" />,
-    title: 'Global Scale',
-    description: 'Scale products to millions of active users through robust microservices, real-time sync databases, and global CDNs.',
+    title: "Mobile & Web Engineering",
+    description: "High-performance apps and web platforms built to scale.",
+    Icon: Smartphone,
   },
 ];
 
+const EASE = [0.22, 1, 0.36, 1] as const;
+
 export default function Services() {
   return (
-    <section id="services" className="relative py-24 px-6 overflow-hidden bg-[#060E10]">
-      {/* Background decoration */}
-      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[500px] h-[500px] bg-[#0DF1D9]/5 rounded-full blur-[100px] pointer-events-none" />
+    <section
+      id="services"
+      className="relative overflow-hidden px-6 py-24 lg:py-32"
+    >
+      {/* ambient glow */}
+      <div className="pointer-events-none absolute right-0 top-1/2 h-[600px] w-[600px] -translate-y-1/2 rounded-full bg-accent/5 blur-[140px]" />
 
-      <div className="max-w-[1280px] mx-auto relative z-10">
-        <div className="text-center mb-16 max-w-2xl mx-auto">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold tracking-wider text-[#0DF1D9] bg-[#0DF1D9]/10 border border-[#0DF1D9]/20 uppercase mb-4">
-            Our Expertise
-          </div>
-          <h2 className="text-3xl md:text-5xl font-ethnocentric mb-6 tracking-wide leading-tight">
-            WHAT WE <span className="text-shimmer">DELIVER</span>
-          </h2>
-          <p className="text-gray-400 font-rajdhani text-lg uppercase tracking-wider">
-            Premium technologies engineered for exceptional digital products.
+      <div className="relative z-10 mx-auto grid max-w-[1340px] items-center gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-8 px-2">
+        {/* ---- Left column: text + CTA (enters from the left) ---- */}
+        <motion.div
+          initial={{ opacity: 0, x: -60 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.8, ease: EASE }}
+          className="max-w-xl"
+        >
+          <p className="mb-6 font-rajdhani text-xs font-semibold uppercase tracking-[0.45em] text-accent">
+            What We Do
           </p>
-        </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-          {services.map((service, index) => (
-            <div
-              key={index}
-              className="card-surface p-8 group hover:border-[#0DF1D9]/40 hover:shadow-[0_0_30px_rgba(13,241,217,0.1)] transition-all duration-300 flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-14 h-14 rounded-lg bg-[#0DF1D9]/5 border border-[#0DF1D9]/25 flex items-center justify-center mb-6 group-hover:scale-110 group-hover:bg-[#0DF1D9]/10 transition-all duration-300">
-                  {service.icon}
-                </div>
-                <h3 className="text-xl font-bold font-rajdhani text-white tracking-wide uppercase mb-3">
-                  {service.title}
-                </h3>
-                <p className="text-gray-400 font-rajdhani text-sm leading-relaxed mb-6">
-                  {service.description}
-                </p>
-              </div>
-              <Button variant="cyberGhost" size="sm" className="w-fit px-0 hover:translate-x-1 duration-300">
-                Learn More &rarr;
-              </Button>
+          <h2 className="font-ethnocentric text-4xl uppercase leading-[1.12] tracking-wide text-white sm:text-5xl lg:text-[3.25rem]">
+            Services Built
+            <br />
+            For <span className="text-accent">Ultra</span>
+            <br />
+            Outcomes
+          </h2>
+
+          <div className="mt-10 flex gap-5">
+            {/* cyan rail: solid dot on top, gradient fading to transparent */}
+            <div className="relative mt-2 hidden w-[10px] shrink-0 sm:block">
+              <span className="absolute left-1/2 top-0 h-[10px] w-[10px] -translate-x-1/2 rounded-full bg-accent shadow-[0_0_10px_2px_rgba(13,241,217,0.7)]" />
+              <span className="absolute left-1/2 top-[10px] bottom-0 w-[2px] -translate-x-1/2 bg-gradient-to-b from-accent via-accent/40 to-transparent" />
             </div>
-          ))}
-        </div>
+            <div>
+              <h3 className="mb-3 text-lg font-semibold normal-case tracking-normal text-white">
+                Mobile &amp; Web Engineering
+              </h3>
+              <p className="text-justify text-[15px] font-normal normal-case leading-relaxed tracking-normal text-white/55">
+                We specialize in crafting robust, high-performance applications
+                and web platforms that are thoughtfully engineered to evolve
+                seamlessly with your business needs. Our solutions emphasize
+                seamless scalability and resilience, ensuring your systems
+                maintain optimal reliability and responsiveness even as demand
+                grows. By integrating intuitive design principles and advanced
+                technologies, we create user-friendly experiences that drive
+                engagement and efficiency, empowering your business to thrive in
+                dynamic markets.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-10">
+            <AnimatedButton label="View All Services" />
+          </div>
+        </motion.div>
+
+        {/* ---- Right column: orbital system (enters from the right) ---- */}
+        <motion.div
+          initial={{ opacity: 0, x: 60 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true, amount: 0.2 }}
+          transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+          className="flex h-[380px] items-center justify-center sm:h-[480px] lg:h-[560px]"
+        >
+          <div className="origin-center scale-[0.6] sm:scale-[0.82] lg:scale-90 xl:scale-100">
+            <OrbitalTrack cards={services} />
+          </div>
+        </motion.div>
       </div>
     </section>
   );
