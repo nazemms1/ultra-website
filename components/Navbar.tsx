@@ -61,8 +61,8 @@ export default function Navbar() {
             <Image
               src="/images/logo/logo-ultra.svg"
               alt="Ultrawares"
-              width={140}
-              height={40}
+              width={83}
+             height={42}
               priority
               style={{ objectFit: 'contain' }}
             />

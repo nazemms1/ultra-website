@@ -1,6 +1,7 @@
 /* Ethnocentric from CDN — must be before @tailwind directives */
 @import url('https://fonts.cdnfonts.com/css/ethnocentric');
 
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -73,7 +74,7 @@
   }
   body {
     @apply bg-background text-foreground;
-    background-color: #060E10;
+    background-color: #121212;
     color: #ffffff;
     font-family: 'Rajdhani', sans-serif;
   }
@@ -166,6 +167,28 @@
   border-color: #0DF1D9;
   color: #0DF1D9;
   box-shadow: 0 0 16px rgba(13, 241, 217, 0.18);
+}
+
+/* FAQ card hover pulse */
+@keyframes faq-glow-pulse {
+  0%, 100% { box-shadow: 0 0 16px 2px rgba(13, 241, 217, 0.25); }
+  50%       { box-shadow: 0 0 32px 8px rgba(13, 241, 217, 0.50); }
+}
+
+.faq-card-hover {
+  animation: faq-glow-pulse 1.8s ease-in-out infinite;
+}
+
+/* Glass effect — Figma Glass plugin: Light -45° 80%, Refraction 80, Depth 20, Dispersion 50, Frost 4, Splay 0 */
+.glass {
+  background: transparent;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 1px solid #FFFFFF1A;
+  box-shadow:
+    inset 1px 1px 0px 0px rgba(255, 255, 255, 0.13),
+    inset -1px -1px 0px 0px rgba(255, 255, 255, 0.05),
+    0px 20px 40px -10px rgba(0, 0, 0, 0.20);
 }
 
 /* Card surface */

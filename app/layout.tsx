@@ -26,7 +26,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={rajdhani.variable}>
       <head>
-        {/* Ethnocentric via CDN fonts — fallback if @import in CSS is blocked */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap"
+        />
+        {/* Ethnocentric via CDN fonts */}
         <link
           rel="stylesheet"
           href="https://fonts.cdnfonts.com/css/ethnocentric"
