@@ -31,8 +31,7 @@ export default function Navbar() {
         paddingRight: '16px',
       }}
     >
-      {/* ── Single unified pill ── */}
-      <div
+       <div
         style={{
           width: '100%',
           maxWidth: '1318px',
@@ -51,8 +50,7 @@ export default function Navbar() {
           overflow: 'hidden',
         }}
       >
-        {/* Column 1 — Logo (fixed width, aligns left) */}
-        <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center' }}>
+         <div style={{ flex: '0 0 auto', display: 'flex', alignItems: 'center' }}>
           <Link
             href="/"
             aria-label="Ultra Home"
@@ -69,8 +67,7 @@ export default function Navbar() {
           </Link>
         </div>
 
-        {/* Column 2 — Nav links (flex:1, centered) — hidden on mobile */}
-        <div
+         <div
           style={{
             flex: '1 1 0',
             alignItems: 'center',
@@ -84,8 +81,7 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* Column 3 — CTA + mobile toggle (fixed width, aligns right) */}
-        <div
+         <div
           style={{
             flex: '0 0 auto',
             display: 'flex',
@@ -147,8 +143,7 @@ export default function Navbar() {
         </div>
       </div>
 
-      {/* Mobile dropdown */}
-      {mobileOpen && (
+       {mobileOpen && (
         <div
           style={{
             marginTop: '10px',

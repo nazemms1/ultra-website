@@ -32,8 +32,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           rel="stylesheet"
           href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&display=swap"
         />
-        {/* Ethnocentric via CDN fonts */}
-        <link
+         <link
           rel="stylesheet"
           href="https://fonts.cdnfonts.com/css/ethnocentric"
         />

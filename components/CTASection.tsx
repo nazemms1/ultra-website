@@ -8,10 +8,8 @@ export default function CTASection() {
   const cardRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
 
-  // Target position (raw mouse)
-  const target = useRef({ x: 0, y: 0 });
-  // Current interpolated position
-  const current = useRef({ x: 0, y: 0 });
+   const target = useRef({ x: 0, y: 0 });
+   const current = useRef({ x: 0, y: 0 });
   const rafId = useRef<number | null>(null);
 
   useEffect(() => {
@@ -59,7 +57,7 @@ export default function CTASection() {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        /* Fade into the section above */
+     
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -71,7 +69,7 @@ export default function CTASection() {
           zIndex: 2,
           pointerEvents: 'none',
         },
-        /* Fade into the section below */
+      
         '&::after': {
           content: '""',
           position: 'absolute',
@@ -85,7 +83,7 @@ export default function CTASection() {
         },
       }}
     >
-      {/* Background video */}
+ 
       <video
         autoPlay
         loop
@@ -102,8 +100,7 @@ export default function CTASection() {
       >
         <source src="/videos/colorflow-animation.mp4" type="video/mp4" />
       </video>
-
-      {/* Dark overlay */}
+ 
       <Box
         sx={{
           position: 'absolute',
@@ -113,8 +110,7 @@ export default function CTASection() {
         }}
       />
 
-      {/* Glass card — moves with mouse parallax offset 40 */}
-      <Box
+       <Box
         ref={cardRef}
         sx={{
           position: 'relative',
@@ -130,8 +126,7 @@ export default function CTASection() {
           justifyContent: 'center',
           textAlign: 'center',
           willChange: 'transform',
-          /* Glass */
-          background: 'transparent',
+           background: 'transparent',
           backdropFilter: 'none',
           WebkitBackdropFilter: 'none',
           border: '1px solid rgba(1, 177, 177, 0.30)',
@@ -157,7 +152,7 @@ export default function CTASection() {
           Let's build together
         </Typography>
 
-        {/* Headline */}
+ 
         <Typography
           sx={{
             fontFamily: "'Ethnocentric Rg', sans-serif",
@@ -175,7 +170,7 @@ export default function CTASection() {
           </Box>
         </Typography>
 
-        {/* Subtitle */}
+         
         <Typography
           sx={{
             fontFamily: "'Rajdhani', sans-serif",
@@ -190,7 +185,7 @@ export default function CTASection() {
           Let's talk about your product, your users, and how Ultrawares can help you ship it.
         </Typography>
 
-        {/* CTA Button */}
+ 
         <a
           href="#contact"
           style={{

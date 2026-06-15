@@ -39,8 +39,7 @@ export default function PartnersSection() {
         width: '100%',
       }}
     >
-      {/* Title — fade in from below on scroll */}
-      <Typography
+       <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",
           fontWeight: 400,
@@ -59,7 +58,7 @@ export default function PartnersSection() {
         Our Partners
       </Typography>
 
-      {/* Logos */}
+     
       <Box
         sx={{
           display: 'flex',

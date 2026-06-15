@@ -4,13 +4,15 @@ import PartnersSection from '@/components/PartnersSection';
 import CTASection from '@/components/CTASection';
 import FAQSection from '@/components/FAQSection';
 import FooterSection from '@/components/FooterSection';
+import ServicesOrbital from '@/components/sections/services-orbital/ServicesOrbital';
 
 export default function Home() {
   return (
-    <main style={{ minHeight: '100vh', background: '#121212' }}>
+    <main style={{ background: '#060E10', minHeight: '100vh' }}>
       <Navbar />
       <HeroSection />
       <PartnersSection />
+      <ServicesOrbital />
       <CTASection />
       <FAQSection />
       <FooterSection />

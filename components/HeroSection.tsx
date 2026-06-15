@@ -59,8 +59,7 @@ export default function HeroSection() {
       </video>
     
 
-      {/* Fade bottom edge only — no color tint over the video */}
-      <Box
+       <Box
         sx={{
           position: 'absolute',
           bottom: 0,
@@ -125,8 +124,7 @@ export default function HeroSection() {
             </Typography>
           </motion.div>
 
-          {/* Buttons */}
-          <motion.div variants={itemVariants}>
+           <motion.div variants={itemVariants}>
             <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
               <UltraButton variant="primary" href="#services">
                 Explore Services

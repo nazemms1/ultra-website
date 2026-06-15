@@ -42,13 +42,13 @@ function FAQCard({ question, answer }: { question: string; answer: string }) {
     const shimmer = shimmerRef.current;
     const card = cardRef.current;
     if (!shimmer || !card) return;
-    // shimmer sweep
+ 
     shimmer.style.transition = 'none';
     shimmer.style.left = '-100%';
     shimmer.getBoundingClientRect();
     shimmer.style.transition = 'left 3.5s ease';
     shimmer.style.left = '150%';
-    // lift up
+  
     card.style.transition = 'transform 0.3s ease';
     card.style.transform = 'translateY(-6px) scale(1.01)';
     card.classList.add('faq-card-hover');
@@ -60,7 +60,7 @@ function FAQCard({ question, answer }: { question: string; answer: string }) {
     if (!shimmer || !card) return;
     shimmer.style.transition = 'none';
     shimmer.style.left = '-100%';
-    // remove glow pulse + reset lift
+   
     card.classList.remove('faq-card-hover');
     card.style.transition = 'transform 0.3s ease';
     card.style.transform = 'translateY(0) scale(1)';
@@ -80,7 +80,7 @@ function FAQCard({ question, answer }: { question: string; answer: string }) {
         cursor: 'pointer',
       }}
     >
-      {/* Horizontal shimmer sweep on hover */}
+     
       <div
         ref={shimmerRef}
         style={{
@@ -95,7 +95,7 @@ function FAQCard({ question, answer }: { question: string; answer: string }) {
         }}
       />
 
-      {/* Question row */}
+ 
       <Box
         sx={{
           position: 'relative',
@@ -121,8 +121,7 @@ function FAQCard({ question, answer }: { question: string; answer: string }) {
           {question}
         </Typography>
 
-        {/* + / x button */}
-        <div
+         <div
           style={{
             flexShrink: 0,
             width: '30px',
@@ -148,8 +147,7 @@ function FAQCard({ question, answer }: { question: string; answer: string }) {
         </div>
       </Box>
 
-      {/* Answer — shown below a divider when open */}
-      <Box
+       <Box
         sx={{
           position: 'relative',
           zIndex: 1,
@@ -158,7 +156,7 @@ function FAQCard({ question, answer }: { question: string; answer: string }) {
           transition: 'max-height 0.35s ease',
         }}
       >
-        {/* Divider */}
+     
         <div style={{ height: '1px', background: '#FFFFFF1A', margin: '0 1.75rem' }} />
         <Typography
           sx={{
@@ -191,7 +189,7 @@ export default function FAQSection() {
         background: '#121212',
       }}
     >
-      {/* Glow orb — right */}
+     
       <Box sx={{
         position: 'absolute',
         top: 0,
@@ -219,7 +217,7 @@ export default function FAQSection() {
         zIndex: 0,
       }} />
 
-      {/* Content */}
+ 
       <Box
         sx={{
           position: 'relative',
@@ -230,7 +228,7 @@ export default function FAQSection() {
           width: '100%',
         }}
       >
-        {/* Eyebrow */}
+ 
         <Typography
           sx={{
             fontFamily: "'Rajdhani', sans-serif",
@@ -246,7 +244,7 @@ export default function FAQSection() {
           FAQ
         </Typography>
 
-        {/* Title */}
+     
         <Typography
           sx={{
             fontFamily: "'Ethnocentric Rg', sans-serif",
@@ -265,7 +263,7 @@ export default function FAQSection() {
           </Box>
         </Typography>
 
-        {/* Subtitle */}
+      
         <Typography
           sx={{
             fontFamily: "'Rajdhani', sans-serif",
@@ -280,14 +278,14 @@ export default function FAQSection() {
           Everything you need to know before we plug into your stack.
         </Typography>
 
-        {/* FAQ Cards */}
+ 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {faqs.map((faq) => (
             <FAQCard key={faq.question} question={faq.question} answer={faq.answer} />
           ))}
         </Box>
 
-        {/* Bottom CTA */}
+         
          <Box
           sx={{
             mt: '40px',
@@ -305,7 +303,7 @@ export default function FAQSection() {
             background: 'rgba(6,14,16,0.6)',
           }}
         >
-          {/* Icon + text */}
+        
           <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
             <Box
               sx={{
@@ -333,8 +331,7 @@ export default function FAQSection() {
               </Typography>
             </Box>
           </Box>
-
-          {/* Contact button */}
+ 
           <a
             href="#contact"
             style={{

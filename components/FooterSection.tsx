@@ -61,7 +61,7 @@ const socials = [
 export default function FooterSection() {
   return (
     <footer className="relative w-full overflow-hidden" style={{ height: '695px' }}>
-      {/* Background Video */}
+     
       <video
         autoPlay
         loop
@@ -73,22 +73,18 @@ export default function FooterSection() {
         <source src="/videos/footer.mp4" type="video/mp4" />
       </video>
 
-      {/* 50% opacity overlay */}
-      <div
+       <div
         className="absolute inset-0"
         style={{ background: 'rgba(6, 14, 16, 0.5)', zIndex: 1 }}
       />
 
-      {/* Footer content */}
-      <div className="relative" style={{ zIndex: 2 }}>
-        {/* Main footer grid */}
-        <div
+       <div className="relative" style={{ zIndex: 2 }}>
+         <div
           className="mx-auto px-8 pt-14 pb-10"
           style={{ maxWidth: '1280px' }}
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-10">
-            {/* Column 1 — Logo + description + socials */}
-            <div className="flex flex-col gap-5">
+             <div className="flex flex-col gap-5">
               <Image
                 src="/images/logo/logo-ultra.svg"
                 alt="Ultra"
@@ -108,8 +104,7 @@ export default function FooterSection() {
                 We provide cutting-edge solutions for businesses seeking to
                 optimize their operations.
               </p>
-              {/* Social icons */}
-              <div className="flex items-center gap-3 mt-1">
+               <div className="flex items-center gap-3 mt-1">
                 {socials.map((s, i) => (
                   <Link
                     key={i}
@@ -143,8 +138,7 @@ export default function FooterSection() {
               </div>
             </div>
 
-            {/* Column 2 — Useful Links */}
-            <div>
+             <div>
               <p
                 style={{
                   fontFamily: "'Rajdhani', sans-serif",
@@ -187,8 +181,7 @@ export default function FooterSection() {
               </ul>
             </div>
 
-            {/* Column 3 — Services */}
-            <div>
+             <div>
               <p
                 style={{
                   fontFamily: "'Rajdhani', sans-serif",
@@ -219,8 +212,7 @@ export default function FooterSection() {
               </ul>
             </div>
 
-            {/* Column 4 — duplicate Services (matching design) */}
-            <div>
+             <div>
               <p
                 style={{
                   fontFamily: "'Rajdhani', sans-serif",
@@ -252,8 +244,7 @@ export default function FooterSection() {
             </div>
           </div>
 
-          {/* Stats row — Glass card */}
-          <div className="mt-14 flex justify-center">
+           <div className="mt-14 flex justify-center">
             <div
               className="glass"
               style={{
@@ -264,8 +255,7 @@ export default function FooterSection() {
                 borderRadius: '16px',
               }}
             >
-              {/* Dividers */}
-            
+             
 
               {stats.map((stat, i) => (
                 <div
@@ -301,8 +291,7 @@ export default function FooterSection() {
                     >
                       {stat.value}
                     </span>
-                    {/* invisible spacer to give the container natural size */}
-                    <span style={{ visibility: 'hidden', fontSize: '36px', lineHeight: '36px', fontWeight: 400 }}>
+                     <span style={{ visibility: 'hidden', fontSize: '36px', lineHeight: '36px', fontWeight: 400 }}>
                       {stat.value}
                     </span>
                   </div>
@@ -332,8 +321,7 @@ export default function FooterSection() {
           </div>
         </div>
 
-        {/* Bottom bar */}
-        <div
+         <div
           style={{ borderTop: '1px solid rgba(255,255,255,0.10)' }}
         >
           <div
