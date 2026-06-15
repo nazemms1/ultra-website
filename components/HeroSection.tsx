@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import { ArrowRight, Zap } from 'lucide-react';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import UltraButton from '@/components/ui/UltraButton';
+import { ArrowRight, Zap } from "lucide-react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import UltraButton from "@/components/ui/UltraButton";
 // أضفنا استيراد النوع Variants من المكتبة
-import { motion, Variants } from 'framer-motion';
+import { motion, Variants } from "framer-motion";
 
- const containerVariants: Variants = {
+const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
     opacity: 1,
@@ -18,18 +18,18 @@ import { motion, Variants } from 'framer-motion';
   },
 };
 
- const itemVariants: Variants = {
-  hidden: { 
-    opacity: 0, 
-    x: -250, 
+const itemVariants: Variants = {
+  hidden: {
+    opacity: 0,
+    x: -250,
   },
   visible: {
     opacity: 1,
     x: 0,
-    transition: { 
-      type: 'spring', 
-      stiffness: 50, 
-      damping: 12, 
+    transition: {
+      type: "spring",
+      stiffness: 50,
+      damping: 12,
     },
   },
 };
@@ -39,71 +39,79 @@ export default function HeroSection() {
     <Box
       component="section"
       sx={{
-        position: 'relative',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        overflow: 'hidden',
-        background: '#121212',
+        position: "relative",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        overflow: "hidden",
+        // background: '#121212',
       }}
     >
-      
       <video
         autoPlay
         muted
         loop
         playsInline
-        style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', zIndex: 0 }}
+        style={{
+          position: "absolute",
+          inset: 0,
+          width: "100%",
+          height: "100%",
+          objectFit: "cover",
+          zIndex: 0,
+        }}
       >
         <source src="/videos/hero.mp4" type="video/mp4" />
       </video>
-    
 
-       <Box
+      <Box
         sx={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           left: 0,
           right: 0,
-          height: '180px',
-          background: 'linear-gradient(to top, #121212 0%, transparent 100%)',
+          height: "180px",
+          background: "linear-gradient(to top, #121212 0%, transparent 100%)",
           zIndex: 1,
-          pointerEvents: 'none',
+          pointerEvents: "none",
         }}
       />
 
-       <Box
+      <Box
         sx={{
-          position: 'relative',
+          position: "relative",
           zIndex: 2,
           flex: 1,
-          display: 'flex',
-          alignItems: 'flex-start',
-          pt: '160px',
-          px: { xs: 3, lg: '40px' },
-          maxWidth: '1280px',
-          mx: 'auto',
-          width: '100%',
+          display: "flex",
+          alignItems: "flex-start",
+          pt: "160px",
+          px: { xs: 3, lg: "40px" },
+          maxWidth: "1280px",
+          mx: "auto",
+          width: "100%",
         }}
       >
-         <Box
+        <Box
           component={motion.div}
           variants={containerVariants}
           initial="hidden"
           animate="visible"
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            textAlign: 'left',
-            maxWidth: '740px',
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            textAlign: "left",
+            maxWidth: "740px",
           }}
         >
-          
-           <motion.div variants={itemVariants}>
-            <Typography variant="h1" sx={{ mb: '10px' }}>
-              WITH{' '}
-              <Box component="span" className="text-shimmer" sx={{ color: '#0DF1D9',fontSize:"50px" }}>
+          <motion.div variants={itemVariants}>
+            <Typography variant="h1" sx={{ mb: "10px" }}>
+              WITH{" "}
+              <Box
+                component="span"
+                className="text-shimmer"
+                sx={{ color: "#0DF1D9", fontSize: "50px" }}
+              >
                 ULTRAWARES
               </Box>
               <br />
@@ -113,19 +121,26 @@ export default function HeroSection() {
             </Typography>
           </motion.div>
 
-           <motion.div variants={itemVariants}>
+          <motion.div variants={itemVariants}>
             <Typography
               variant="body1"
-              sx={{ mb: 5, maxWidth: '520px', color: 'rgba(255,255,255,0.6)' }}
+              sx={{ mb: 5, maxWidth: "520px", color: "rgba(255,255,255,0.6)" }}
             >
-              Ultrawares provides cutting-edge solutions for businesses wanting to
-              optimize their operations and gain a competitive edge in an
+              Ultrawares provides cutting-edge solutions for businesses wanting
+              to optimize their operations and gain a competitive edge in an
               increasingly digital world.
             </Typography>
           </motion.div>
 
-           <motion.div variants={itemVariants}>
-            <Box sx={{ display: 'flex', flexWrap: 'wrap', alignItems: 'center', gap: '16px' }}>
+          <motion.div variants={itemVariants}>
+            <Box
+              sx={{
+                display: "flex",
+                flexWrap: "wrap",
+                alignItems: "center",
+                gap: "16px",
+              }}
+            >
               <UltraButton variant="primary" href="#services">
                 Explore Services
               </UltraButton>
@@ -135,7 +150,6 @@ export default function HeroSection() {
               </UltraButton>
             </Box>
           </motion.div>
-
         </Box>
       </Box>
     </Box>

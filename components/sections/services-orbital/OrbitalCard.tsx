@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useState } from "react";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -19,7 +19,9 @@ const CARD_PATH =
 const ICON_SIZE = 64;
 const ICON_X = 194;
 const ICON_Y = 12;
-const EASE = [0.22, 1, 0.36, 1] as const;
+
+/** transition-all duration-300 ease-out */
+const TRANSITION = { duration: 0.3, ease: "easeOut" } as const;
 
 interface OrbitalCardProps {
   title: string;
@@ -43,28 +45,42 @@ export default function OrbitalCard({
   const strokeId = `orbital-card-stroke-${id}`;
   const strokeHoverId = `orbital-card-stroke-hover-${id}`;
 
+  // The whole card container is the single master hover trigger. Every part of
+  // the card reacts to this one state, so the body, border, background tint,
+  // glow and icon all animate together (no fragile variant propagation).
+  const [hovered, setHovered] = useState(false);
+  const state = hovered ? "hover" : "rest";
+
   return (
     <motion.div
       initial="rest"
-      animate="rest"
-      whileHover="hover"
-      onHoverStart={onHoverStart}
-      onHoverEnd={onHoverEnd}
-      variants={{ rest: { scale: 1 }, hover: { scale: 1.03 } }}
-      transition={{ duration: 0.4, ease: EASE }}
+      animate={state}
+      onHoverStart={() => {
+        setHovered(true);
+        onHoverStart?.();
+      }}
+      onHoverEnd={() => {
+        setHovered(false);
+        onHoverEnd?.();
+      }}
+      variants={{ rest: { scale: 1 }, hover: { scale: 1.02 } }}
+      transition={TRANSITION}
       className={cn("group relative cursor-pointer", className)}
-      style={{ width: CARD_W, height: CARD_H }}
+      // The hit-box spans the full card footprint, including the rounded
+      // top-right corner where the icon sits.
+      style={{ width: CARD_W, height: CARD_H, transformOrigin: "50% 55%" }}
     >
       {/* Radiating cyan bloom — intensifies on hover. */}
       <motion.div
         aria-hidden
-        variants={{ rest: { opacity: 0.45 }, hover: { opacity: 1 } }}
-        transition={{ duration: 0.4 }}
+        animate={state}
+        variants={{ rest: { opacity: 0.4 }, hover: { opacity: 1 } }}
+        transition={TRANSITION}
         className="pointer-events-none absolute left-[18px] top-[22px] h-[112px] w-[210px] rounded-[32px] bg-[#0DF1D9]/15 blur-[40px]"
       />
 
-      {/* Glass body: fill + base border + brighter hover border, all on the
-          exact Figma union path. */}
+      {/* Glass body: fill + hover teal tint + base/hover border + the cyan
+          outer drop-shadow glow, all on the exact Figma union path. */}
       <motion.svg
         width={UNION_W}
         height={UNION_H}
@@ -72,6 +88,7 @@ export default function OrbitalCard({
         fill="none"
         className="absolute left-0 top-[0.5px] overflow-visible"
         aria-hidden
+        animate={state}
         variants={{
           rest: {
             filter:
@@ -79,20 +96,30 @@ export default function OrbitalCard({
           },
           hover: {
             filter:
-              "drop-shadow(0px 24px 40px rgba(0,0,0,0.55)) drop-shadow(0px 0px 48px rgba(13,241,217,0.55))",
+              "drop-shadow(0px 24px 40px rgba(0,0,0,0.55)) drop-shadow(0px 0px 52px rgba(13,241,217,0.6))",
           },
         }}
-        transition={{ duration: 0.4 }}
+        transition={TRANSITION}
       >
+        {/* base fill */}
         <path d={CARD_PATH} fill={`url(#${fillId})`} />
+        {/* background tint brightens on hover */}
+        <motion.path
+          d={CARD_PATH}
+          fill="#0DF1D9"
+          animate={state}
+          variants={{ rest: { opacity: 0 }, hover: { opacity: 0.07 } }}
+          transition={TRANSITION}
+        />
         {/* base, subtle border */}
         <motion.path
           d={CARD_PATH}
           stroke={`url(#${strokeId})`}
           strokeWidth={1}
           vectorEffect="non-scaling-stroke"
+          animate={state}
           variants={{ rest: { opacity: 1 }, hover: { opacity: 0 } }}
-          transition={{ duration: 0.4 }}
+          transition={TRANSITION}
         />
         {/* brightened border, revealed on hover */}
         <motion.path
@@ -100,8 +127,9 @@ export default function OrbitalCard({
           stroke={`url(#${strokeHoverId})`}
           strokeWidth={1.25}
           vectorEffect="non-scaling-stroke"
+          animate={state}
           variants={{ rest: { opacity: 0 }, hover: { opacity: 1 } }}
-          transition={{ duration: 0.4 }}
+          transition={TRANSITION}
         />
         <defs>
           <linearGradient
@@ -136,19 +164,20 @@ export default function OrbitalCard({
             y2={UNION_H}
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor="#FFFFFF" stopOpacity="0.45" />
-            <stop offset="0.45" stopColor="#0DF1D9" stopOpacity="0.55" />
-            <stop offset="1" stopColor="#0DF1D9" stopOpacity="0.4" />
+            <stop stopColor="#FFFFFF" stopOpacity="0.5" />
+            <stop offset="0.45" stopColor="#0DF1D9" stopOpacity="0.6" />
+            <stop offset="1" stopColor="#0DF1D9" stopOpacity="0.45" />
           </linearGradient>
         </defs>
       </motion.svg>
 
       {/* Circular glass icon well cradled in the top-right notch.
-          Outer wrapper drifts outward; inner wrapper scales + glows + the ring
-          brightens — so the whole icon container animates on hover. */}
+          Outer wrapper drifts outward; inner wrapper scales, the ring brightens
+          and the glow blooms — all driven by the same master hover state. */}
       <motion.div
+        animate={state}
         variants={{ rest: { x: 0, y: 0 }, hover: { x: 7, y: -7 } }}
-        transition={{ duration: 0.4, ease: EASE }}
+        transition={TRANSITION}
         className="absolute"
         style={{
           left: ICON_X,
@@ -158,30 +187,35 @@ export default function OrbitalCard({
         }}
       >
         <motion.div
+          animate={state}
           variants={{
             rest: {
               scale: 1,
-              borderColor: "rgba(255,255,255,0.10)",
+              borderColor: "rgba(255,255,255,0.12)",
               boxShadow:
                 "inset 0px 4px 10px 0px rgba(255,255,255,0.22), 0px 0px 24px 0px rgba(1,177,177,0.40)",
             },
             hover: {
               scale: 1.1,
-              borderColor: "rgba(13,241,217,0.55)",
+              borderColor: "rgba(13,241,217,0.6)",
               boxShadow:
-                "inset 0px 4px 12px 0px rgba(255,255,255,0.35), 0px 0px 42px 6px rgba(13,241,217,0.55)",
+                "inset 0px 4px 12px 0px rgba(255,255,255,0.32), 0px 0px 42px 6px rgba(13,241,217,0.55)",
             },
           }}
-          transition={{ duration: 0.4, ease: EASE }}
+          transition={TRANSITION}
           className="flex h-full w-full items-center justify-center rounded-full border backdrop-blur-xl"
           style={{ background: "rgba(25,25,27,0.4)" }}
         >
           <motion.div
+            animate={state}
             variants={{ rest: { scale: 1 }, hover: { scale: 1.08 } }}
-            transition={{ duration: 0.4, ease: EASE }}
+            transition={TRANSITION}
             className="flex items-center justify-center"
           >
-            <Icon className="h-[26px] w-[26px] text-[#0DF1D9]" strokeWidth={1.6} />
+            <Icon
+              className="h-[26px] w-[26px] text-[#0DF1D9]"
+              strokeWidth={1.6}
+            />
           </motion.div>
         </motion.div>
       </motion.div>
