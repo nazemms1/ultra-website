@@ -31,7 +31,7 @@ export default function PhaseCard({
 }: PhaseCardProps) {
   const rel = (p: number) => index - p * (total - 1);
 
-  const x = useTransform(progress, (p) => rel(p) * 88);
+  const x = useTransform(progress, (p) => rel(p) * 112);
   const y = useTransform(progress, (p) => Math.abs(rel(p)) * 38);
   const scale = useTransform(progress, (p) =>
     Math.max(0.7, 1 - Math.min(Math.abs(rel(p)), 2) * 0.16),
