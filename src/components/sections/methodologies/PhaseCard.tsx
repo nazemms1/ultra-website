@@ -18,7 +18,7 @@ export default function PhaseCard({ phase, index, total, progress }: PhaseCardPr
   const rel = (p: number) => index - p * (total - 1)
 
   const x = useTransform(progress, p => rel(p) * 112)
-  const y = useTransform(progress, p => Math.abs(rel(p)) * 38)
+  const y = useTransform(progress, p => Math.abs(rel(p)) * 24)
   const scale = useTransform(progress, p => Math.max(0.7, 1 - Math.min(Math.abs(rel(p)), 2) * 0.16))
   const rotateZ = useTransform(progress, p => rel(p) * 6)
   const rotateY = useTransform(progress, p => rel(p) * -18)
@@ -38,7 +38,7 @@ export default function PhaseCard({ phase, index, total, progress }: PhaseCardPr
         position: 'absolute',
         left: '50%',
         top: '50%',
-        width: 'min(92vw, 860px)',
+        width: 'min(86vw, 700px)',
         willChange: 'transform',
       }}
       style={{ transform, opacity, zIndex, pointerEvents }}
@@ -57,8 +57,8 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '0.95fr 1fr' },
         overflow: 'hidden',
-        borderRadius: '24px',
-        boxShadow: `0 24px 63px -16px ${alpha(theme.palette.primary.darker, 0.35)}`,
+        borderRadius: '20px',
+        boxShadow: `0 20px 48px -14px ${alpha(theme.palette.primary.darker, 0.35)}`,
         backdropFilter: 'blur(12px)',
       })}
     >
@@ -68,7 +68,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           pointerEvents: 'none',
           position: 'absolute',
           inset: 0,
-          borderRadius: '24px',
+          borderRadius: '20px',
           backgroundImage: `linear-gradient(154deg, ${alpha(theme.palette.primary.darker, 0.18)} 0%, ${alpha(theme.palette.background.elevated, 0.95)} 60%)`,
         })}
       />
@@ -78,7 +78,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           pointerEvents: 'none',
           position: 'absolute',
           inset: 0,
-          borderRadius: '24px',
+          borderRadius: '20px',
           boxShadow: `inset 0 0 0 1px ${alpha(theme.palette.primary.main, 0.25)}`,
         })}
       />
@@ -87,22 +87,22 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
         sx={{
           position: 'relative',
           zIndex: 1,
-          height: { xs: 230, sm: 280, md: 'auto' },
-          minHeight: { md: 440 },
+          height: { xs: 170, sm: 200, md: 'auto' },
+          minHeight: { md: 320 },
         }}
       >
-        <PhaseGlyph Icon={phase.Icon} index={Number(phase.number) - 1} />
+        <PhaseGlyph Icon={phase.Icon} index={Number(phase.number) - 1} compact />
         <Typography
           component="span"
           aria-hidden
           sx={theme => ({
             pointerEvents: 'none',
             position: 'absolute',
-            bottom: 20,
-            left: 24,
+            bottom: 16,
+            left: 20,
             userSelect: 'none',
             fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-            fontSize: { xs: '68px', sm: '88px' },
+            fontSize: { xs: '50px', sm: '64px' },
             lineHeight: 1,
             letterSpacing: '-0.02em',
             color: 'transparent',
@@ -122,17 +122,17 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          gap: { xs: 2, sm: 2.5 },
-          p: { xs: 3.5, sm: 5.5 },
+          gap: { xs: 1.5, sm: 2 },
+          p: { xs: 2.75, sm: 3.75 },
         }}
       >
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-          <Box sx={{ height: '1px', width: 32, bgcolor: 'primary.main' }} />
+        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.25 }}>
+          <Box sx={{ height: '1px', width: 28, bgcolor: 'primary.main' }} />
           <Typography
             sx={{
               fontFamily: "'Rajdhani', sans-serif",
               fontSize: '11px',
-              letterSpacing: '0.35em',
+              letterSpacing: '0.32em',
               color: 'primary.main',
             }}
           >
@@ -144,7 +144,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           component="h3"
           sx={{
             fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-            fontSize: { xs: '1.875rem', sm: '2.25rem' },
+            fontSize: { xs: '1.375rem', sm: '1.625rem' },
             textTransform: 'uppercase',
             lineHeight: 1.2,
             letterSpacing: '0.02em',
@@ -156,16 +156,16 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
 
         <Typography
           sx={{
-            maxWidth: '36ch',
-            fontSize: '15px',
-            lineHeight: 1.625,
+            maxWidth: '35ch',
+            fontSize: '14px',
+            lineHeight: 1.6,
             color: 'text.secondary',
           }}
         >
           {phase.description}
         </Typography>
 
-        <Box sx={{ mt: 0.5, display: 'flex', flexWrap: 'wrap', gap: 1.25 }}>
+        <Box sx={{ mt: 0.25, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
           {phase.tags.map(tag => (
             <Box
               key={tag}
@@ -173,8 +173,8 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
                 borderRadius: '9999px',
                 border: `1px solid ${alpha(theme.palette.primary.main, 0.4)}`,
                 bgcolor: alpha(theme.palette.primary.main, 0.06),
-                px: 1.75,
-                py: 0.75,
+                px: 1.5,
+                py: 0.625,
                 fontSize: '10px',
                 fontWeight: 500,
                 textTransform: 'uppercase',
