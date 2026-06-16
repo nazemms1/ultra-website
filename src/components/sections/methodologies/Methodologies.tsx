@@ -50,7 +50,7 @@ export default function Methodologies() {
             mx: 'auto',
             mt: 7,
             display: 'flex',
-            maxWidth: 860,
+            maxWidth: 700,
             flexDirection: 'column',
             gap: 4,
           }}
@@ -111,11 +111,19 @@ export default function Methodologies() {
           })}
         />
 
-        <Box sx={{ position: 'relative', zIndex: 1, flexShrink: 0, pt: { xs: 8, sm: 10 } }}>
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 2,
+            flexShrink: 0,
+            pt: { xs: 11, sm: 12 },
+            pb: { xs: 1, sm: 1.25 },
+          }}
+        >
           <Header />
         </Box>
 
-        <Box sx={{ position: 'relative', zIndex: 1, flex: 1 }}>
+        <Box sx={{ position: 'relative', zIndex: 1, flex: 1, minHeight: 0 }}>
           <Box
             component={motion.div}
             initial={{ opacity: 0, x: 180 }}
@@ -141,7 +149,16 @@ export default function Methodologies() {
           </Box>
         </Box>
 
-        <Box sx={{ position: 'relative', zIndex: 1, flexShrink: 0, px: { xs: 3, sm: 5 }, pb: 4 }}>
+        <Box
+          sx={{
+            position: 'relative',
+            zIndex: 1,
+            flexShrink: 0,
+            px: { xs: 3, sm: 5 },
+            pt: { xs: 1.5, sm: 2 },
+            pb: 3,
+          }}
+        >
           <Timeline labels={PHASES.map(p => p.title)} progress={progress} onSeek={seekToPhase} />
         </Box>
       </Box>
@@ -155,8 +172,8 @@ function Header() {
       <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",
-          fontSize: '14px',
-          letterSpacing: '0.5em',
+          fontSize: { xs: '12px', sm: '13px' },
+          letterSpacing: '0.45em',
           color: 'primary.main',
         }}
       >
@@ -166,12 +183,12 @@ function Header() {
         component="h2"
         sx={{
           mx: 'auto',
-          mt: 2,
-          maxWidth: 896,
+          mt: { xs: 1.25, sm: 1.5 },
+          maxWidth: 720,
           fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-          fontSize: { xs: '1.875rem', sm: '2.25rem', lg: '2.7rem' },
+          fontSize: { xs: '1.375rem', sm: '1.75rem', lg: '2rem' },
           textTransform: 'uppercase',
-          lineHeight: 1.2,
+          lineHeight: 1.15,
           letterSpacing: '0.02em',
           color: 'text.primary',
         }}

@@ -3,9 +3,9 @@
 import { ArrowRight } from 'lucide-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import UltraButton from '@/components/shared/UltraButton'
 import ShimmerText from '@/components/shared/ShimmerText'
 import { motion, Variants } from 'framer-motion'
+import AnimatedButton from '../shared/AnimatedButton'
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -130,13 +130,16 @@ export default function HeroSection() {
                 gap: '16px',
               }}
             >
-              <UltraButton variant="primary" href="#services">
+              <AnimatedButton variant="primary" href="#services">
                 Explore Services
-              </UltraButton>
-              <UltraButton variant="glass" href="#contact">
+              </AnimatedButton>
+              <AnimatedButton
+                variant="secondary"
+                href="#contact"
+                endIcon={<ArrowRight size={14} />}
+              >
                 Get In Touch
-                <ArrowRight size={14} />
-              </UltraButton>
+              </AnimatedButton>
             </Box>
           </motion.div>
         </Box>

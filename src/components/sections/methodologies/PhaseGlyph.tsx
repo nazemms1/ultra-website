@@ -14,12 +14,17 @@ const floatKeyframes = {
 interface PhaseGlyphProps {
   Icon: LucideIcon
   index: number
+  compact?: boolean
   sx?: object
 }
 
-export default function PhaseGlyph({ Icon, index, sx }: PhaseGlyphProps) {
+export default function PhaseGlyph({ Icon, index, compact = false, sx }: PhaseGlyphProps) {
   const theme = useTheme()
   const primary = theme.palette.primary.main
+  const hub = compact ? 112 : 132
+  const ring = compact ? 78 : 92
+  const iconSize = compact ? 40 : 48
+  const innerInset = compact ? '13px' : '16px'
 
   return (
     <Box
@@ -108,8 +113,8 @@ export default function PhaseGlyph({ Icon, index, sx }: PhaseGlyphProps) {
         sx={{
           position: 'relative',
           display: 'flex',
-          width: 132,
-          height: 132,
+          width: hub,
+          height: hub,
           alignItems: 'center',
           justifyContent: 'center',
         }}
@@ -125,7 +130,7 @@ export default function PhaseGlyph({ Icon, index, sx }: PhaseGlyphProps) {
         <Box
           sx={{
             position: 'absolute',
-            inset: '16px',
+            inset: innerInset,
             borderRadius: '50%',
             border: `1px solid ${alpha(primary, 0.15)}`,
           }}
@@ -135,8 +140,8 @@ export default function PhaseGlyph({ Icon, index, sx }: PhaseGlyphProps) {
             position: 'absolute',
             left: '50%',
             top: '50%',
-            width: 92,
-            height: 92,
+            width: ring,
+            height: ring,
             transform: 'translate(-50%, -50%)',
             borderRadius: '50%',
             background: `radial-gradient(circle, ${alpha(primary, 0.3)}, transparent 70%)`,
@@ -147,8 +152,8 @@ export default function PhaseGlyph({ Icon, index, sx }: PhaseGlyphProps) {
             position: 'absolute',
             left: '50%',
             top: '50%',
-            width: 92,
-            height: 92,
+            width: ring,
+            height: ring,
             transform: 'translate(-50%, -50%)',
             borderRadius: '50%',
             border: `1px solid ${alpha(primary, 0.4)}`,
@@ -158,7 +163,7 @@ export default function PhaseGlyph({ Icon, index, sx }: PhaseGlyphProps) {
         <Box
           sx={{ color: 'primary.main', filter: `drop-shadow(0 0 14px ${alpha(primary, 0.85)})` }}
         >
-          <Icon size={48} color="currentColor" strokeWidth={1.4} />
+          <Icon size={iconSize} color="currentColor" strokeWidth={1.4} />
         </Box>
       </Box>
     </Box>
