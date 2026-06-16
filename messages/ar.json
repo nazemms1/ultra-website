@@ -1,0 +1,16 @@
+{
+  "LocaleLayout": {
+    "title": "Ultrawares — Ultra Solutions",
+    "description": "Ultrawares provides cutting-edge solutions for businesses wanting to optimize their operations and gain a competitive edge."
+  },
+  "Navigation": {
+    "about": "About us",
+    "services": "Our services",
+    "projects": "Our projects",
+    "contact": "Contact Us"
+  },
+  "Common": {
+    "exploreServices": "Explore Services",
+    "getInTouch": "Get In Touch"
+  }
+}
