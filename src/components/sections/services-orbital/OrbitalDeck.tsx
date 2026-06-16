@@ -18,10 +18,10 @@ import {
 import OrbitalCard, { CARD_H, CARD_W } from './OrbitalCard'
 import { SERVICES, type ServiceItem } from './data'
 
-const DECK = 600
-const CENTER = DECK / 2
 const R_DOT = 134
-const R_CARD = 250
+const R_CARD = R_DOT + 8 + CARD_W / 2  
+ const DECK = (R_CARD + CARD_H / 2 + 40) * 2  
+const CENTER = DECK / 2
 
 const EMBLEM_PATH_A =
   'M8.9231 14.8325C9.48125 19.1045 12.5182 34.5605 18.9041 32.5765C26.2257 30.3845 28.5076 17.6325 29.2299 11.0725C29.7716 7.39251 35.1889 7.92051 34.9591 11.6485C34.7457 12.8325 34.4338 14.0005 34.1218 15.1685C32.1355 22.4005 27.9494 33.8405 19.2653 35.2005C10.3513 36.4325 9.13649 20.8165 8.9231 14.8325Z'
@@ -89,22 +89,6 @@ export default function OrbitalDeck({ baseSpeed = 7, onActivate }: OrbitalDeckPr
         }}
       />
 
-      <Box
-        aria-hidden
-        sx={{
-          pointerEvents: 'none',
-          position: 'absolute',
-          bottom: '4%',
-          left: '50%',
-          width: 470,
-          height: 150,
-          transform: 'translateX(-50%)',
-          borderRadius: '9999px',
-          background: 'radial-gradient(ellipse at center, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0) 70%)',
-          filter: 'blur(10px)',
-        }}
-      />
-
       <OrbitalCenter />
 
       {SERVICES.map((service, i) => (
@@ -123,16 +107,16 @@ export default function OrbitalDeck({ baseSpeed = 7, onActivate }: OrbitalDeckPr
         />
       ))}
 
-      <Box
+       <Box
         aria-hidden
-        sx={theme => ({
+        sx={{
           pointerEvents: 'none',
           position: 'absolute',
           inset: '0 0 0 auto',
           zIndex: 20,
           width: '40%',
-          background: `linear-gradient(to right, ${alpha(theme.palette.background.default, 0)} 0%, ${alpha(theme.palette.background.default, 0.65)} 55%, ${alpha(theme.palette.background.default, 0.95)} 100%)`,
-        })}
+          background: `linear-gradient(to right, transparent 0%, rgba(18,18,18,0.65) 55%, rgba(18,18,18,0.95) 100%)`,
+        }}
       />
     </Box>
   )
@@ -154,9 +138,12 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
   const cardCounterRotate = useTransform(spin, s => -(baseAngle + s))
 
   const cardOpacity = useTransform(spin, s => {
-    const a = (((baseAngle + s) % 360) + 360) % 360
-    const d = Math.min(a, 360 - a)
-    return clamp((d - 18) / (72 - 18), 0, 1)
+     const a = (((baseAngle + s) % 360) + 360) % 360
+     const d = Math.abs(a - 180)
+   
+    const FADE_START = 60  
+    const FADE_END = 90   
+    return clamp((FADE_END - d) / (FADE_END - FADE_START), 0, 1)
   })
   const cardScale = useTransform(cardOpacity, o => 0.82 + 0.18 * o)
   const cardPointer = useTransform(cardOpacity, o => (o < 0.25 ? 'none' : 'auto'))
@@ -175,7 +162,9 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
       style={{ rotate: spokeRotate }}
     >
       <Box
+        component={motion.div}
         aria-hidden
+        style={{ opacity: cardOpacity }}
         sx={{
           position: 'absolute',
           left: R_DOT,
@@ -195,20 +184,6 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
         sx={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0 }}
         style={{ opacity: cardOpacity }}
       >
-        <Box
-          aria-hidden
-          sx={{
-            position: 'absolute',
-            left: R_DOT,
-            top: 0,
-            width: R_CARD - R_DOT,
-            height: 2,
-            mt: '-1px',
-            transformOrigin: 'left center',
-            background: `linear-gradient(90deg, ${alpha(primary, 0.55)} 0%, ${alpha(primary, 0)} 100%)`,
-          }}
-        />
-
         <Box
           component={motion.div}
           sx={{
@@ -244,10 +219,12 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
   )
 }
 
+const SECTION_BG = '#121212'
+
 function OrbitalCenter() {
   const theme = useTheme()
   const primary = theme.palette.primary.main
-  const bgDefault = theme.palette.background.default
+  const bgDefault = SECTION_BG
 
   return (
     <Box
@@ -260,37 +237,28 @@ function OrbitalCenter() {
         height: 0,
       }}
     >
-      <Ring diameter={320} sx={{ borderColor: alpha(primary, 0.1) }} />
-      <Ring diameter={268} sx={{ borderColor: alpha(primary, 0.06) }} />
+      <Ring diameter={320} sx={{ borderColor: '#244D59' }} />
+      <Ring diameter={268} sx={{ borderColor: '#2A5A68' }} />
       <Ring
         diameter={200}
         sx={{
-          borderColor: alpha(primary, 0.6),
-          boxShadow: `inset 0 0 30px ${alpha(primary, 0.14)}`,
+          borderColor: '#00E6D2',
+          boxShadow: `inset 0 0 30px ${alpha('#00E6D2', 0.14)}`,
         }}
       />
 
       <Box
+        aria-hidden
         sx={{
           position: 'absolute',
-          left: -150,
-          top: -150,
-          width: 300,
-          height: 300,
+          left: -200,
+          top: -200,
+          width: 400,
+          height: 400,
           borderRadius: '50%',
-          background: `radial-gradient(circle at 50% 50%, ${alpha(primary, 0.24)} 0%, ${alpha(primary, 0.08)} 48%, ${alpha(bgDefault, 0)} 76%)`,
-        }}
-      />
-
-      <Box
-        sx={{
-          position: 'absolute',
-          left: -100,
-          top: -100,
-          width: 200,
-          height: 200,
-          borderRadius: '50%',
-          background: `radial-gradient(circle at 50% 58%, ${alpha(primary, 0.32)} 0%, ${alpha(primary, 0.12)} 46%, ${alpha(bgDefault, 0)} 72%)`,
+          background: 'radial-gradient(ellipse 70.71% 70.71% at 50% 50%, rgba(13,241,217,0.18) 0%, rgba(18,18,18,0) 65%)',
+          filter: 'blur(40px)',
+          pointerEvents: 'none',
         }}
       />
 

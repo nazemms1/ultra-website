@@ -21,7 +21,7 @@ export const ultraDarkPalette = {
     contrastText: '#060E10',
   },
   background: {
-    default: '#060E10',
+    default: '#121212',
     paper: '#0B1820',
     card: '#0B1820',
     elevated: '#121A22',
@@ -68,7 +68,7 @@ export const ultraLightPalette = {
     card: '#FFFFFF',
     elevated: '#E8F4F4',
     appbar: 'rgba(255, 255, 255, 0.85)',
-    divider: 'rgba(6, 14, 16, 0.08)',
+    divider: 'rgba(20, 114, 138, 0.08)',
   },
   text: {
     primary: '#060E10',
