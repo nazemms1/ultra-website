@@ -3,6 +3,7 @@
 import type { AbstractIntlMessages } from 'next-intl'
 import { NextIntlClientProvider } from 'next-intl'
 import type { Locale } from 'next-intl'
+import { SplashScreenGate } from '@/components/shared/SplashScreen'
 import ThemeProvider from './Theme'
 
 type AppProvidersProps = {
@@ -15,7 +16,7 @@ export default function AppProviders({ locale, messages, children }: AppProvider
   return (
     <ThemeProvider locale={locale}>
       <NextIntlClientProvider locale={locale} messages={messages}>
-        {children}
+        <SplashScreenGate>{children}</SplashScreenGate>
       </NextIntlClientProvider>
     </ThemeProvider>
   )
