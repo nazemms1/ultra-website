@@ -8,7 +8,6 @@ import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 import type { SxProps } from '@mui/material/styles'
-import { motion } from 'framer-motion'
 import Image from 'next/image'
 import Link from 'next/link'
 import MenuIcon from '@mui/icons-material/Menu'
@@ -19,14 +18,17 @@ import { navLinks, type NavLabels } from '@/components/Layout/navLinks'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { useNavbarScrollMode } from './useNavbarScrollMode'
 
-const MotionBox = motion.create(Box)
+/** Crossfade unified ↔ split */
+const SHAPE_MS = 520
+const SHAPE_EASE = 'cubic-bezier(0.4, 0, 0.2, 1)'
+const shapeTransition = `opacity ${SHAPE_MS}ms ${SHAPE_EASE}, transform ${SHAPE_MS}ms ${SHAPE_EASE}, visibility ${SHAPE_MS}ms, filter ${SHAPE_MS}ms ${SHAPE_EASE}`
 
-const LAYOUT_TRANSITION = {
-  layout: { duration: 0.45, ease: [0.4, 0, 0.2, 1] as const },
-}
+const NAV_HEIGHT = 68
+const SPLIT_MAX_WIDTH = 1298
+const UNIFIED_MAX_WIDTH = 1318
+const GROUPED_GAP = 17
 
-const SURFACE_TRANSITION =
-  'background 0.45s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.45s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.45s cubic-bezier(0.4, 0, 0.2, 1), backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1), -webkit-backdrop-filter 0.45s cubic-bezier(0.4, 0, 0.2, 1), flex 0.45s cubic-bezier(0.4, 0, 0.2, 1), gap 0.45s cubic-bezier(0.4, 0, 0.2, 1), padding 0.45s cubic-bezier(0.4, 0, 0.2, 1), max-width 0.45s cubic-bezier(0.4, 0, 0.2, 1)'
+const lerp = (from: number, to: number, t: number) => from + (to - from) * t
 
 function navGlassPill(theme: Theme): SxProps<Theme> {
   return {
@@ -37,14 +39,8 @@ function navGlassPill(theme: Theme): SxProps<Theme> {
   }
 }
 
-function segmentPlainSx(): SxProps<Theme> {
-  return {
-    border: '1px solid transparent',
-    boxShadow: 'none',
-    bgcolor: 'transparent',
-    backdropFilter: 'none',
-    WebkitBackdropFilter: 'none',
-  }
+function easeInOutQuart(t: number) {
+  return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
 }
 
 type NavbarProps = {
@@ -54,22 +50,36 @@ type NavbarProps = {
 export default function Navbar({ labels }: NavbarProps) {
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
-  const { mode, mergeProgress } = useNavbarScrollMode()
+  const { mergeProgress, spreadProgress } = useNavbarScrollMode()
   const [mobileOpen, setMobileOpen] = useState(false)
 
-  const isUnified = !isDesktop || mergeProgress > 0.5
-  const isScrollDown = mode === 'scroll-down'
-  const isSplit = isDesktop && mergeProgress <= 0.5
+  const t = isDesktop ? easeInOutQuart(Math.max(0, Math.min(1, mergeProgress))) : 1
+  const splitOpacity = 1 - t
+  const unifiedOpacity = t
+  /** 1 = logo/cta at edges, 0 = grouped & centered around nav */
+  const spread = isDesktop ? Math.max(0, Math.min(1, spreadProgress)) : 0
+
+  const outerSpacerSx: SxProps<Theme> = {
+    flexGrow: 1 - spread,
+    flexShrink: 1,
+    flexBasis: 0,
+    minWidth: 0,
+    alignSelf: 'stretch',
+    pointerEvents: 'none',
+  }
+
+  const innerSpacerSx: SxProps<Theme> = {
+    flexGrow: spread,
+    flexShrink: 1,
+    flexBasis: `${(1 - spread) * GROUPED_GAP}px`,
+    minWidth: 0,
+    maxWidth: spread > 0.01 ? 'none' : `${GROUPED_GAP}px`,
+    alignSelf: 'stretch',
+    pointerEvents: 'none',
+  }
 
   const navLinksStack = (
-    <Stack
-      direction="row"
-      sx={{
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: '45px',
-      }}
-    >
+    <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'center', gap: '45px' }}>
       {navLinks.map(link => (
         <Box
           key={link.href}
@@ -123,41 +133,35 @@ export default function Navbar({ labels }: NavbarProps) {
     </AnimatedButton>
   )
 
-  const segmentSx = (segment: 'logo' | 'nav' | 'cta'): SxProps<Theme> => {
-    const sideFlex = isUnified ? 1 : 0
+  const mobileMenuButton = (
+    <IconButton
+      aria-label="Toggle menu"
+      onClick={() => setMobileOpen(v => !v)}
+      sx={{
+        display: { xs: 'inline-flex', md: 'none' },
+        width: 36,
+        height: 36,
+        bgcolor: theme => `color-mix(in srgb, ${theme.palette.primary.main} 10%, transparent)`,
+        border: theme =>
+          `1px solid color-mix(in srgb, ${theme.palette.primary.main} 25%, transparent)`,
+        color: 'primary.main',
+      }}
+    >
+      {mobileOpen ? <CloseIcon fontSize="small" /> : <MenuIcon fontSize="small" />}
+    </IconButton>
+  )
 
-    return {
-      display: segment === 'nav' ? { xs: 'none', md: 'flex' } : 'flex',
-      alignItems: 'center',
-      transition: SURFACE_TRANSITION,
-      ...(segment === 'logo' && {
-        flex: isUnified ? `${sideFlex} 1 0` : '0 0 auto',
-        justifyContent: 'flex-start',
-      }),
-      ...(segment === 'nav' && {
-        flex: '0 0 auto',
-        justifyContent: 'center',
-      }),
-      ...(segment === 'cta' && {
-        flex: isUnified ? `${sideFlex} 1 0` : '0 0 auto',
-        justifyContent: 'flex-end',
-      }),
-      ...(isSplit
-        ? {
-            height: 68,
-            ...navGlassPill(theme),
-            ...(segment === 'logo' && { pl: '25px', pr: '25px', py: '13px' }),
-            ...(segment === 'nav' && { px: '81px', py: '13px' }),
-            ...(segment === 'cta' && { p: '13px' }),
-          }
-        : {
-            height: 'auto',
-            py: 0,
-            px: 0,
-            ...segmentPlainSx(),
-          }),
-    }
-  }
+  const splitPillSx = (segment: 'logo' | 'nav' | 'cta'): SxProps<Theme> => ({
+    display: segment === 'nav' ? { xs: 'none', md: 'flex' } : 'flex',
+    alignItems: 'center',
+    height: NAV_HEIGHT,
+    flexShrink: 0,
+    transition: shapeTransition,
+    ...navGlassPill(theme),
+    ...(segment === 'logo' && { pl: '25px', pr: '25px', py: '13px' }),
+    ...(segment === 'nav' && { px: '81px', py: '13px' }),
+    ...(segment === 'cta' && { p: '13px' }),
+  })
 
   return (
     <Box
@@ -175,60 +179,100 @@ export default function Navbar({ labels }: NavbarProps) {
         px: 2,
       }}
     >
-      <MotionBox
-        layout
-        transition={LAYOUT_TRANSITION}
+      <Box
         sx={{
+          position: 'relative',
           width: '100%',
-          maxWidth: isUnified ? 1318 : 1298,
-          display: 'flex',
-          alignItems: 'center',
-          transition: SURFACE_TRANSITION,
-          ...(isUnified
-            ? {
-                height: 68,
-                px: '25px',
-                py: '13px',
-                ...navGlassPill(theme),
-              }
-            : {
-                px: '20px',
-                justifyContent: isScrollDown ? 'space-between' : 'center',
-                gap: isScrollDown ? 0 : '17px',
-                height: 'auto',
-                ...segmentPlainSx(),
-              }),
+          maxWidth: UNIFIED_MAX_WIDTH,
+          height: NAV_HEIGHT,
         }}
       >
-        <MotionBox layout transition={LAYOUT_TRANSITION} sx={segmentSx('logo')}>
-          {logo}
-        </MotionBox>
-
-        <MotionBox layout transition={LAYOUT_TRANSITION} sx={segmentSx('nav')}>
-          {navLinksStack}
-        </MotionBox>
-
-        <MotionBox layout transition={LAYOUT_TRANSITION} sx={segmentSx('cta')}>
-          {contactButton}
-
-          <IconButton
-            aria-label="Toggle menu"
-            onClick={() => setMobileOpen(v => !v)}
+        {/* Split layer — 3 pills (scroll-down: spread | scroll-up: grouped) */}
+        {isDesktop ? (
+          <Box
+            aria-hidden={unifiedOpacity > 0.95}
             sx={{
-              display: { xs: 'inline-flex', md: 'none' },
-              width: 36,
-              height: 36,
-              bgcolor: theme =>
-                `color-mix(in srgb, ${theme.palette.primary.main} 10%, transparent)`,
-              border: theme =>
-                `1px solid color-mix(in srgb, ${theme.palette.primary.main} 25%, transparent)`,
-              color: 'primary.main',
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              justifyContent: 'center',
+              px: '20px',
+              opacity: splitOpacity,
+              transform: `scale(${lerp(0.97, 1, splitOpacity)}) translateY(${lerp(6, 0, splitOpacity)}px)`,
+              visibility: splitOpacity < 0.02 ? 'hidden' : 'visible',
+              pointerEvents: t > 0.45 ? 'none' : 'auto',
+              transition: shapeTransition,
+              willChange: 'opacity, transform',
             }}
           >
-            {mobileOpen ? <CloseIcon fontSize="small" /> : <MenuIcon fontSize="small" />}
-          </IconButton>
-        </MotionBox>
-      </MotionBox>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                width: '100%',
+                maxWidth: SPLIT_MAX_WIDTH,
+              }}
+            >
+              <Box aria-hidden sx={outerSpacerSx} />
+              <Box sx={splitPillSx('logo')}>{logo}</Box>
+              <Box aria-hidden sx={innerSpacerSx} />
+              <Box sx={splitPillSx('nav')}>{navLinksStack}</Box>
+              <Box aria-hidden sx={innerSpacerSx} />
+              <Box sx={splitPillSx('cta')}>{contactButton}</Box>
+              <Box aria-hidden sx={outerSpacerSx} />
+            </Box>
+          </Box>
+        ) : null}
+
+        {/* Unified layer — single pill at scroll offset 0 */}
+        <Box
+          aria-hidden={isDesktop && unifiedOpacity < 0.05}
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: NAV_HEIGHT,
+            px: '25px',
+            py: '13px',
+            opacity: isDesktop ? unifiedOpacity : 1,
+            transform: `scale(${lerp(0.97, 1, unifiedOpacity)}) translateY(${lerp(6, 0, unifiedOpacity)}px)`,
+            visibility: isDesktop && unifiedOpacity < 0.02 ? 'hidden' : 'visible',
+            pointerEvents: isDesktop && t < 0.55 ? 'none' : 'auto',
+            transition: shapeTransition,
+            willChange: 'opacity, transform',
+            ...navGlassPill(theme),
+          }}
+        >
+          <Box sx={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>{logo}</Box>
+
+          <Box
+            sx={{
+              position: 'absolute',
+              left: '50%',
+              top: '50%',
+              transform: 'translate(-50%, -50%)',
+              display: { xs: 'none', md: 'flex' },
+              alignItems: 'center',
+            }}
+          >
+            {navLinksStack}
+          </Box>
+
+          <Box
+            sx={{
+              flexShrink: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+            }}
+          >
+            {contactButton}
+            {mobileMenuButton}
+          </Box>
+        </Box>
+      </Box>
 
       {mobileOpen ? (
         <Box
@@ -236,7 +280,7 @@ export default function Navbar({ labels }: NavbarProps) {
             display: { xs: 'flex', md: 'none' },
             mt: 1.25,
             width: '100%',
-            maxWidth: 1318,
+            maxWidth: UNIFIED_MAX_WIDTH,
             ...glassSurface(theme, { tint: 0.06, radius: 24 }),
             p: '20px 24px',
             flexDirection: 'column',
