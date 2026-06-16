@@ -16,7 +16,7 @@ const GlobalStyles = () => css`
     font-style: normal;
     font-weight: 400;
     font-display: swap;
-    src: url('https://fonts.cdnfonts.com/s/14882/Ethnocentric Rg.otf') format('opentype');
+    src: url('/fonts/Ethnocentric-Regular.otf') format('opentype');
   }
 
   ::-webkit-scrollbar {

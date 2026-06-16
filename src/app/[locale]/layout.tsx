@@ -77,9 +77,6 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={rajdhani.className}
       suppressHydrationWarning
     >
-      <head>
-        <link rel="preconnect" href="https://fonts.cdnfonts.com" crossOrigin="anonymous" />
-      </head>
       <body suppressHydrationWarning>
         <InitColorSchemeScript attribute="class" defaultMode="dark" />
         <AppProviders locale={locale as AppLocale} messages={messages}>
