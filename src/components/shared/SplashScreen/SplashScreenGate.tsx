@@ -34,10 +34,6 @@ export default function SplashScreenGate({
   const [scrollLocked, setScrollLocked] = useState(true)
 
   useEffect(() => {
-    if (isSplashVisible) setScrollLocked(true)
-  }, [isSplashVisible])
-
-  useEffect(() => {
     document.body.style.overflow = scrollLocked ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''

@@ -15,6 +15,8 @@ const DEFAULT_MIN_DURATION_MS = 900
 const DEFAULT_MAX_DURATION_MS = 14_000
 const DEFAULT_SETTLE_MS = 120
 const DEFAULT_PER_ASSET_TIMEOUT_MS = 8_000
+/** Resolve DOM wait when no img/video appears (e.g. lightweight routes). */
+const DEFAULT_EMPTY_DOM_RESOLVE_MS = 2_500
 
 /** `HTMLMediaElement.HAVE_CURRENT_DATA` — literal avoids SSR ReferenceError. */
 const VIDEO_READY_STATE = 2
@@ -122,14 +124,20 @@ function collectDomMedia(root: ParentNode): {
   return { images, videos }
 }
 
-function waitForDomMedia(root: ParentNode, perAssetTimeoutMs: number, settleMs: number): Promise<void> {
+function waitForDomMedia(
+  root: ParentNode,
+  perAssetTimeoutMs: number,
+  settleMs: number,
+  emptyResolveMs: number,
+): Promise<void> {
   return new Promise(resolve => {
     let settleTimer: number | undefined
-    let observer: MutationObserver | undefined
+    let emptyTimer: number | undefined
 
     const finish = () => {
-      observer?.disconnect()
+      observer.disconnect()
       if (settleTimer !== undefined) window.clearTimeout(settleTimer)
+      if (emptyTimer !== undefined) window.clearTimeout(emptyTimer)
       resolve()
     }
 
@@ -150,16 +158,36 @@ function waitForDomMedia(root: ParentNode, perAssetTimeoutMs: number, settleMs: 
       }
 
       if (pending.length === 0) {
-        if (images.length + videos.length === 0) return
+        if (images.length + videos.length === 0) {
+          if (emptyTimer === undefined) {
+            emptyTimer = window.setTimeout(finish, emptyResolveMs)
+          }
+          return
+        }
+
+        if (emptyTimer !== undefined) {
+          window.clearTimeout(emptyTimer)
+          emptyTimer = undefined
+        }
         scheduleSettle()
         return
+      }
+
+      if (emptyTimer !== undefined) {
+        window.clearTimeout(emptyTimer)
+        emptyTimer = undefined
       }
 
       void Promise.all(pending).then(scheduleSettle)
     }
 
-    observer = new MutationObserver(check)
-    observer.observe(root, { childList: true, subtree: true, attributes: true, attributeFilter: ['src'] })
+    const observer = new MutationObserver(check)
+    observer.observe(root, {
+      childList: true,
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['src'],
+    })
     check()
   })
 }
@@ -186,7 +214,7 @@ export async function waitForPageMedia(options: WaitForPageMediaOptions = {}): P
   const readiness = Promise.all([
     document.fonts.ready,
     waitForCriticalAssets(perAssetTimeoutMs),
-    waitForDomMedia(document.body, perAssetTimeoutMs, settleMs),
+    waitForDomMedia(document.body, perAssetTimeoutMs, settleMs, DEFAULT_EMPTY_DOM_RESOLVE_MS),
     waitForWindowLoad(),
   ])
 
