@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { Mail, MapPin, Phone, Send } from 'lucide-react';
 import FAQSection from '@/components/FAQSection';
-import { Button } from '@/components/ui/button';
+import Button from '@mui/material/Button';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -224,7 +224,27 @@ export default function ContactPage() {
                   </div>
 
                   {/* Submit button */}
-                  <Button type="submit" variant="cyber" size="lg" className="w-full font-bold">
+                  <Button
+                    type="submit"
+                    fullWidth
+                    sx={{
+                      borderRadius: '9999px',
+                      bgcolor: '#0DF1D9',
+                      color: '#060E10',
+                      fontFamily: "'Rajdhani', sans-serif",
+                      fontWeight: 700,
+                      fontSize: '16px',
+                      letterSpacing: '0.05em',
+                      textTransform: 'uppercase',
+                      py: 1.5,
+                      boxShadow: '0 0 25px rgba(13,241,217,0.6)',
+                      '&:hover': {
+                        bgcolor: '#0CE0CB',
+                        boxShadow: '0 0 25px rgba(13,241,217,0.6)',
+                      },
+                      '&:active': { transform: 'scale(0.98)' },
+                    }}
+                  >
                     Send Message
                   </Button>
                 </form>

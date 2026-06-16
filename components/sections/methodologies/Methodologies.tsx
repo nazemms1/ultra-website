@@ -1,6 +1,8 @@
 "use client";
 
 import { useRef } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import {
   motion,
   useReducedMotion,
@@ -12,6 +14,7 @@ import Timeline from "./Timeline";
 import { PHASES } from "./data";
 
 const EASE = [0.22, 1, 0.36, 1] as const;
+const ACCENT = "#0DF1D9";
 
 export default function Methodologies() {
   const trackRef = useRef<HTMLDivElement>(null);
@@ -22,7 +25,6 @@ export default function Methodologies() {
     offset: ["start start", "end end"],
   });
 
-  // Light spring keeps the carousel buttery without lagging the scrollbar.
   const progress = useSpring(scrollYProgress, {
     stiffness: 90,
     damping: 28,
@@ -30,7 +32,6 @@ export default function Methodologies() {
     restDelta: 0.0005,
   });
 
-  // Smoothly scroll the window so a phase becomes the centred/active card.
   const seekToPhase = (index: number) => {
     const el = trackRef.current;
     if (!el) return;
@@ -41,45 +42,99 @@ export default function Methodologies() {
     window.scrollTo({ top: target, behavior: "smooth" });
   };
 
-  // Reduced motion: skip the scroll-jacking track and stack cards statically.
   if (reduce) {
     return (
-      <section id="methodologies" className="relative overflow-hidden px-6 py-24">
+      <Box
+        component="section"
+        id="methodologies"
+        sx={{ position: "relative", overflow: "hidden", px: 3, py: 12 }}
+      >
         <Header />
-        <div className="mx-auto mt-14 flex max-w-[860px] flex-col gap-8">
+        <Box
+          sx={{
+            mx: "auto",
+            mt: 7,
+            display: "flex",
+            maxWidth: 860,
+            flexDirection: "column",
+            gap: 4,
+          }}
+        >
           {PHASES.map((phase) => (
             <PhaseCardContent key={phase.number} phase={phase} />
           ))}
-        </div>
-      </section>
+        </Box>
+      </Box>
     );
   }
 
   return (
-    <section
+    <Box
+      component="section"
       id="methodologies"
       ref={trackRef}
-      className="relative h-[500vh]"
       aria-label="How we turn ideas into reality"
+      sx={{ position: "relative", height: "500vh" }}
     >
-      {/* Sticky viewport — natively locks while the 500vh track scrolls past. */}
-      <div className="sticky top-0 flex h-screen w-full flex-col overflow-hidden">
-        {/* Ambient glows. */}
-        <div className="pointer-events-none absolute -left-24 top-24 h-[600px] w-[600px] rounded-full bg-[radial-gradient(circle,rgba(1,177,177,0.18)_0%,transparent_65%)] blur-[20px]" />
-        <div className="pointer-events-none absolute right-0 top-28 h-[500px] w-[500px] rounded-full bg-[radial-gradient(circle,rgba(13,241,217,0.14)_0%,transparent_65%)] blur-[40px]" />
+      <Box
+        sx={{
+          position: "sticky",
+          top: 0,
+          display: "flex",
+          height: "100vh",
+          width: "100%",
+          flexDirection: "column",
+          overflow: "hidden",
+        }}
+      >
+        <Box
+          aria-hidden
+          sx={{
+            pointerEvents: "none",
+            position: "absolute",
+            left: -96,
+            top: 96,
+            width: 600,
+            height: 600,
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(1,177,177,0.18) 0%, transparent 65%)",
+            filter: "blur(20px)",
+          }}
+        />
+        <Box
+          aria-hidden
+          sx={{
+            pointerEvents: "none",
+            position: "absolute",
+            right: 0,
+            top: 112,
+            width: 500,
+            height: 500,
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(13,241,217,0.14) 0%, transparent 65%)",
+            filter: "blur(40px)",
+          }}
+        />
 
-        <div className="relative z-10 shrink-0 pt-16 sm:pt-20">
+        <Box sx={{ position: "relative", zIndex: 1, flexShrink: 0, pt: { xs: 8, sm: 10 } }}>
           <Header />
-        </div>
+        </Box>
 
-        {/* Carousel deck. */}
-        <div className="relative z-10 flex-1">
-          <motion.div
-            className="absolute inset-0 [perspective:1400px] [transform-style:preserve-3d]"
+        <Box sx={{ position: "relative", zIndex: 1, flex: 1 }}>
+          <Box
+            component={motion.div}
             initial={{ opacity: 0, x: 180 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.9, ease: EASE }}
+            sx={{
+              position: "absolute",
+              inset: 0,
+              perspective: "1400px",
+              transformStyle: "preserve-3d",
+            }}
           >
             {PHASES.map((phase, i) => (
               <PhaseCard
@@ -90,31 +145,53 @@ export default function Methodologies() {
                 progress={progress}
               />
             ))}
-          </motion.div>
-        </div>
+          </Box>
+        </Box>
 
-        {/* Bottom timeline. */}
-        <div className="relative z-10 shrink-0 px-6 pb-8 sm:px-10">
+        <Box sx={{ position: "relative", zIndex: 1, flexShrink: 0, px: { xs: 3, sm: 5 }, pb: 4 }}>
           <Timeline
             labels={PHASES.map((p) => p.title)}
             progress={progress}
             onSeek={seekToPhase}
           />
-        </div>
-      </div>
-    </section>
+        </Box>
+      </Box>
+    </Box>
   );
 }
 
 function Header() {
   return (
-    <div className="px-6 text-center">
-      <p className="font-rajdhani text-sm tracking-[0.5em] text-accent">
+    <Box sx={{ px: 3, textAlign: "center" }}>
+      <Typography
+        sx={{
+          fontFamily: "'Rajdhani', sans-serif",
+          fontSize: "14px",
+          letterSpacing: "0.5em",
+          color: ACCENT,
+        }}
+      >
         Our methodologies
-      </p>
-      <h2 className="mx-auto mt-4 max-w-4xl font-ethnocentric text-3xl uppercase leading-[1.2] tracking-wide text-white sm:text-4xl lg:text-[2.7rem]">
-        How we turn ideas into <span className="text-accent">reality</span>
-      </h2>
-    </div>
+      </Typography>
+      <Typography
+        component="h2"
+        sx={{
+          mx: "auto",
+          mt: 2,
+          maxWidth: 896,
+          fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+          fontSize: { xs: "1.875rem", sm: "2.25rem", lg: "2.7rem" },
+          textTransform: "uppercase",
+          lineHeight: 1.2,
+          letterSpacing: "0.02em",
+          color: "#ffffff",
+        }}
+      >
+        How we turn ideas into{" "}
+        <Box component="span" sx={{ color: ACCENT }}>
+          reality
+        </Box>
+      </Typography>
+    </Box>
   );
 }

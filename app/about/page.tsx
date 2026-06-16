@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { motion } from 'framer-motion';
-import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
-import PartnersSection from '@/components/PartnersSection';
-import CTASection from '@/components/CTASection';
+import { motion } from "framer-motion";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import PartnersSection from "@/components/PartnersSection";
+import CTASection from "@/components/CTASection";
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -19,22 +19,25 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
-    transition: { type: 'spring' as const, stiffness: 60, damping: 12 },
+    transition: { type: "spring" as const, stiffness: 60, damping: 12 },
   },
 };
 
 const values = [
   {
-    title: 'INNOVATION',
-    description: 'We continuously push the boundaries of digital engineering, delivering ahead-of-time solutions to keep you competitive.',
+    title: "INNOVATION",
+    description:
+      "We continuously push the boundaries of digital engineering, delivering ahead-of-time solutions to keep you competitive.",
   },
   {
-    title: 'EXECUTION',
-    description: 'Our methodologies emphasize rapid, precise shipping of products with microsecond performance and bulletproof reliability.',
+    title: "EXECUTION",
+    description:
+      "Our methodologies emphasize rapid, precise shipping of products with microsecond performance and bulletproof reliability.",
   },
   {
-    title: 'PARTNERSHIP',
-    description: 'We act as an extension of your own team, aligning our goals with yours to create long-term shared value.',
+    title: "PARTNERSHIP",
+    description:
+      "We act as an extension of your own team, aligning our goals with yours to create long-term shared value.",
   },
 ];
 
@@ -51,11 +54,11 @@ export default function AboutPage() {
         initial="hidden"
         animate="visible"
         sx={{
-          maxWidth: '1280px',
-          mx: 'auto',
-          px: { xs: 3, lg: '40px' },
-          width: '100%',
-          position: 'relative',
+          maxWidth: "1280px",
+          mx: "auto",
+          px: { xs: 3, lg: "40px" },
+          width: "100%",
+          position: "relative",
           zIndex: 10,
         }}
       >
@@ -73,34 +76,60 @@ export default function AboutPage() {
           </Typography>
           <Typography
             variant="body1"
-            sx={{ maxW: '680px', mx: 'auto', color: 'rgba(255,255,255,0.6)', fontSize: '18px', fontFamily: "'Rajdhani', sans-serif" }}
+            sx={{
+              maxW: "680px",
+              mx: "auto",
+              color: "rgba(255,255,255,0.6)",
+              fontSize: "18px",
+              fontFamily: "'Rajdhani', sans-serif",
+            }}
           >
-            We are a group of specialized engineers, product strategists, and designers dedicated to elevating corporate systems to the ultra level of responsiveness and throughput.
+            We are a group of specialized engineers, product strategists, and
+            designers dedicated to elevating corporate systems to the ultra
+            level of responsiveness and throughput.
           </Typography>
         </motion.div>
 
         {/* Brand Story Section */}
         <div className="grid md:grid-cols-2 gap-12 items-center mb-32">
           <motion.div variants={itemVariants} className="space-y-6">
-            <Typography variant="h3" className="font-rajdhani text-2xl font-bold text-[#0DF1D9] tracking-wider uppercase">
+            <Typography
+              variant="h3"
+              className="font-rajdhani text-2xl font-bold text-[#0DF1D9] tracking-wider uppercase"
+            >
               Our Philosophy
             </Typography>
             <Typography className="text-gray-300 font-rajdhani text-lg leading-relaxed normal-case tracking-wide">
-              At Ultrawares, we believe that software should not just run; it should fly. Every line of code we write and every layout we ship is optimized for extreme throughput and efficiency.
+              At Ultrawares, we believe that software should not just run; it
+              should fly. Every line of code we write and every layout we ship
+              is optimized for extreme throughput and efficiency.
             </Typography>
             <Typography className="text-gray-400 font-rajdhani text-base leading-relaxed normal-case tracking-wide">
-              We leverage modern architectural paradigms — from high-performance microservices and serverless infrastructure to reactive, responsive user interfaces. Our solutions eliminate lag, reduce overhead, and help operations scale seamlessly.
+              We leverage modern architectural paradigms — from high-performance
+              microservices and serverless infrastructure to reactive,
+              responsive user interfaces. Our solutions eliminate lag, reduce
+              overhead, and help operations scale seamlessly.
             </Typography>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="relative p-8 rounded-[30px] border border-white/10 glass bg-white/[0.02] shadow-2xl">
+          <motion.div
+            variants={itemVariants}
+            className="relative p-8 rounded-[30px] border border-white/10 glass bg-white/[0.02] shadow-2xl"
+          >
             <div className="absolute -top-3 -left-3 w-8 h-8 border-t-2 border-l-2 border-[#0DF1D9]" />
             <div className="absolute -bottom-3 -right-3 w-8 h-8 border-b-2 border-r-2 border-[#0DF1D9]" />
-            <Typography variant="h4" className="font-ethnocentric text-lg uppercase text-white mb-4">
+            <Typography
+              variant="h4"
+              className="font-ethnocentric text-lg uppercase text-white mb-4"
+            >
               Our Vision
             </Typography>
             <Typography className="text-gray-300 font-rajdhani text-[15px] leading-relaxed normal-case tracking-wide">
-              To empower regional and international enterprises with top-tier technology infrastructure that turns complex workflows into effortless systems. We serve clients across Syria, the UAE, and globally, bridging modern engineering practices with local business context.
+              To empower regional and international enterprises with top-tier
+              technology infrastructure that turns complex workflows into
+              effortless systems. We serve clients across Syria, the UAE, and
+              globally, bridging modern engineering practices with local
+              business context.
             </Typography>
           </motion.div>
         </div>

@@ -1,5 +1,7 @@
 "use client";
 
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import {
   motion,
   useMotionTemplate,
@@ -9,20 +11,15 @@ import {
 import PhaseGlyph from "./PhaseGlyph";
 import type { Phase } from "./data";
 
+const ACCENT = "#0DF1D9";
+
 interface PhaseCardProps {
   phase: Phase;
   index: number;
   total: number;
-  /** Whole-track scroll progress, 0 → 1. */
   progress: MotionValue<number>;
 }
 
-/**
- * A single phase card riding a circular carousel arc. `rel` is the card's signed
- * distance from the active centre (0 = centred, +1 = next/right, -1 = prev/left).
- * As scroll advances, `rel` decreases so cards sweep right → left along an arc
- * that also dips, scales and rotates them for a pseudo-3D wheel effect.
- */
 export default function PhaseCard({
   phase,
   index,
@@ -52,38 +49,81 @@ export default function PhaseCard({
   const transform = useMotionTemplate`translate(-50%, -50%) translateX(${x}%) translateY(${y}px) rotateY(${rotateY}deg) rotateZ(${rotateZ}deg) scale(${scale})`;
 
   return (
-    <motion.div
-      className="absolute left-1/2 top-1/2 w-[min(92vw,860px)] will-change-transform"
+    <Box
+      component={motion.div}
+      sx={{
+        position: "absolute",
+        left: "50%",
+        top: "50%",
+        width: "min(92vw, 860px)",
+        willChange: "transform",
+      }}
       style={{ transform, opacity, zIndex, pointerEvents }}
     >
       <PhaseCardContent phase={phase} />
-    </motion.div>
+    </Box>
   );
 }
 
 export function PhaseCardContent({ phase }: { phase: Phase }) {
   return (
-    <article className="relative grid grid-cols-1 overflow-hidden rounded-[24px] shadow-[0_24px_63px_-16px_rgba(1,177,177,0.35)] backdrop-blur-md md:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)]">
-      {/* Glass gradient skin + inset cyan border. */}
-      <div
+    <Box
+      component="article"
+      sx={{
+        position: "relative",
+        display: "grid",
+        gridTemplateColumns: { xs: "1fr", md: "0.95fr 1fr" },
+        overflow: "hidden",
+        borderRadius: "24px",
+        boxShadow: "0 24px 63px -16px rgba(1,177,177,0.35)",
+        backdropFilter: "blur(12px)",
+      }}
+    >
+      <Box
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[24px]"
-        style={{
+        sx={{
+          pointerEvents: "none",
+          position: "absolute",
+          inset: 0,
+          borderRadius: "24px",
           backgroundImage:
             "linear-gradient(154deg, rgba(1,177,177,0.18) 0%, rgba(18,18,18,0.95) 60%)",
         }}
       />
-      <div
+      <Box
         aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[24px] shadow-[inset_0_0_0_1px_rgba(13,241,217,0.25)]"
+        sx={{
+          pointerEvents: "none",
+          position: "absolute",
+          inset: 0,
+          borderRadius: "24px",
+          boxShadow: "inset 0 0 0 1px rgba(13,241,217,0.25)",
+        }}
       />
 
-      {/* Left: holographic illustration + big number watermark. */}
-      <div className="relative z-10 h-[230px] sm:h-[280px] md:h-auto md:min-h-[440px]">
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          height: { xs: 230, sm: 280, md: "auto" },
+          minHeight: { md: 440 },
+        }}
+      >
         <PhaseGlyph Icon={phase.Icon} index={Number(phase.number) - 1} />
-        <span
-          className="pointer-events-none absolute bottom-5 left-6 select-none font-ethnocentric text-[68px] leading-none tracking-tight text-transparent sm:text-[88px]"
-          style={{
+        <Typography
+          component="span"
+          aria-hidden
+          sx={{
+            pointerEvents: "none",
+            position: "absolute",
+            bottom: 20,
+            left: 24,
+            userSelect: "none",
+            fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+            fontSize: { xs: "68px", sm: "88px" },
+            lineHeight: 1,
+            letterSpacing: "-0.02em",
+            color: "transparent",
             backgroundImage:
               "linear-gradient(180deg, rgba(13,241,217,0.95) 0%, rgba(13,241,217,0.1) 100%)",
             backgroundClip: "text",
@@ -91,37 +131,81 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           }}
         >
           {phase.number}
-        </span>
-      </div>
+        </Typography>
+      </Box>
 
-      {/* Right: phase meta, title, copy, chips. */}
-      <div className="relative z-10 flex flex-col justify-center gap-4 p-7 sm:gap-5 sm:p-11">
-        <div className="flex items-center gap-3">
-          <span className="h-px w-8 bg-accent" />
-          <span className="font-rajdhani text-[11px] tracking-[0.35em] text-accent">
+      <Box
+        sx={{
+          position: "relative",
+          zIndex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          gap: { xs: 2, sm: 2.5 },
+          p: { xs: 3.5, sm: 5.5 },
+        }}
+      >
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
+          <Box sx={{ height: "1px", width: 32, bgcolor: ACCENT }} />
+          <Typography
+            sx={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontSize: "11px",
+              letterSpacing: "0.35em",
+              color: ACCENT,
+            }}
+          >
             Phase {phase.number}
-          </span>
-        </div>
+          </Typography>
+        </Box>
 
-        <h3 className="font-ethnocentric text-3xl uppercase leading-tight tracking-wide text-white sm:text-4xl">
+        <Typography
+          component="h3"
+          sx={{
+            fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+            fontSize: { xs: "1.875rem", sm: "2.25rem" },
+            textTransform: "uppercase",
+            lineHeight: 1.2,
+            letterSpacing: "0.02em",
+            color: "#ffffff",
+          }}
+        >
           {phase.title}
-        </h3>
+        </Typography>
 
-        <p className="max-w-[36ch] text-[15px] leading-relaxed text-white/[0.78]">
+        <Typography
+          sx={{
+            maxWidth: "36ch",
+            fontSize: "15px",
+            lineHeight: 1.625,
+            color: "rgba(255,255,255,0.78)",
+          }}
+        >
           {phase.description}
-        </p>
+        </Typography>
 
-        <div className="mt-1 flex flex-wrap gap-2.5">
+        <Box sx={{ mt: 0.5, display: "flex", flexWrap: "wrap", gap: 1.25 }}>
           {phase.tags.map((tag) => (
-            <span
+            <Box
               key={tag}
-              className="rounded-full border border-accent/40 bg-accent/[0.06] px-3.5 py-1.5 text-[10px] font-medium uppercase tracking-[0.18em] text-accent"
+              sx={{
+                borderRadius: "9999px",
+                border: "1px solid rgba(13,241,217,0.4)",
+                bgcolor: "rgba(13,241,217,0.06)",
+                px: 1.75,
+                py: 0.75,
+                fontSize: "10px",
+                fontWeight: 500,
+                textTransform: "uppercase",
+                letterSpacing: "0.18em",
+                color: ACCENT,
+              }}
             >
               {tag}
-            </span>
+            </Box>
           ))}
-        </div>
-      </div>
-    </article>
+        </Box>
+      </Box>
+    </Box>
   );
 }

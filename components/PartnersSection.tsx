@@ -37,7 +37,6 @@ export default function PartnersSection() {
         mx: "auto",
         height: "455px",
         width: "100%",
-        bgcolor: "black",
       }}
     >
       <Typography

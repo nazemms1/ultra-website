@@ -1,36 +1,64 @@
 "use client";
 
+import Box from "@mui/material/Box";
 import type { LucideIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
+
+const ACCENT = "#0DF1D9";
+
+const floatKeyframes = {
+  "@keyframes phaseFloat": {
+    "0%, 100%": { transform: "translateY(0px)" },
+    "50%": { transform: "translateY(-18px)" },
+  },
+};
 
 interface PhaseGlyphProps {
   Icon: LucideIcon;
-  /** Phase index — used to vary the floating wireframe debris per phase. */
   index: number;
-  className?: string;
+  sx?: object;
 }
 
-/**
- * A self-contained, holographic isometric illustration: an animated perspective
- * grid floor, ambient cyan bloom, concentric rings and a glowing central glyph.
- * Pure CSS/SVG so the section renders out-of-the-box with no asset dependency.
- */
-export default function PhaseGlyph({ Icon, index, className }: PhaseGlyphProps) {
+export default function PhaseGlyph({ Icon, index, sx }: PhaseGlyphProps) {
   return (
-    <div
-      className={cn(
-        "relative flex h-full w-full items-center justify-center overflow-hidden",
-        className,
-      )}
+    <Box
       aria-hidden
+      sx={{
+        position: "relative",
+        display: "flex",
+        height: "100%",
+        width: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        overflow: "hidden",
+        ...sx,
+      }}
     >
-      {/* Ambient bloom behind the glyph. */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 h-[78%] w-[78%] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(13,241,217,0.22)_0%,rgba(13,241,217,0.05)_45%,transparent_70%)] blur-[6px]" />
+      <Box
+        sx={{
+          pointerEvents: "none",
+          position: "absolute",
+          left: "50%",
+          top: "50%",
+          width: "78%",
+          height: "78%",
+          transform: "translate(-50%, -50%)",
+          borderRadius: "50%",
+          background:
+            "radial-gradient(circle, rgba(13,241,217,0.22) 0%, rgba(13,241,217,0.05) 45%, transparent 70%)",
+          filter: "blur(6px)",
+        }}
+      />
 
-      {/* Isometric grid floor. */}
-      <div
-        className="pointer-events-none absolute bottom-[14%] left-1/2 h-[58%] w-[86%] -translate-x-1/2 opacity-70 [transform:perspective(560px)_rotateX(64deg)]"
-        style={{
+      <Box
+        sx={{
+          pointerEvents: "none",
+          position: "absolute",
+          bottom: "14%",
+          left: "50%",
+          width: "86%",
+          height: "58%",
+          transform: "translateX(-50%) perspective(560px) rotateX(64deg)",
+          opacity: 0.7,
           backgroundImage:
             "linear-gradient(rgba(13,241,217,0.28) 1px, transparent 1px), linear-gradient(90deg, rgba(13,241,217,0.28) 1px, transparent 1px)",
           backgroundSize: "26px 26px",
@@ -41,49 +69,124 @@ export default function PhaseGlyph({ Icon, index, className }: PhaseGlyphProps) 
         }}
       />
 
-      {/* Floating wireframe debris — varies subtly per phase. */}
       <FloatingShape
-        className="left-[14%] top-[20%] h-9 w-9 rounded-[10px] border animate-float"
+        sx={{
+          left: "14%",
+          top: "20%",
+          width: 36,
+          height: 36,
+          borderRadius: "10px",
+          ...floatKeyframes,
+          animation: "phaseFloat 6s ease-in-out infinite",
+        }}
         rotate={index * 12 + 18}
       />
       <FloatingShape
-        className="right-[16%] top-[26%] h-6 w-6 rounded-md border animate-float-slow"
+        sx={{
+          right: "16%",
+          top: "26%",
+          width: 24,
+          height: 24,
+          borderRadius: "6px",
+          ...floatKeyframes,
+          animation: "phaseFloat 9s ease-in-out infinite",
+        }}
         rotate={-index * 16 - 10}
       />
       <FloatingShape
-        className="bottom-[24%] right-[20%] h-7 w-7 rounded-lg border animate-float"
+        sx={{
+          bottom: "24%",
+          right: "20%",
+          width: 28,
+          height: 28,
+          borderRadius: "8px",
+          ...floatKeyframes,
+          animation: "phaseFloat 6s ease-in-out infinite",
+        }}
         rotate={index * 20 + 30}
       />
 
-      {/* Central glyph with concentric rings. */}
-      <div className="relative flex h-[132px] w-[132px] items-center justify-center">
-        <span className="absolute inset-0 rounded-full border border-accent/25" />
-        <span className="absolute inset-[16px] rounded-full border border-accent/15" />
-        <span className="absolute left-1/2 top-1/2 h-[92px] w-[92px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(13,241,217,0.30),transparent_70%)]" />
-        <span className="absolute left-1/2 top-1/2 h-[92px] w-[92px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-accent/40 shadow-[inset_0_0_22px_rgba(13,241,217,0.20)]" />
-        <Icon
-          className="relative h-12 w-12 text-accent drop-shadow-[0_0_14px_rgba(13,241,217,0.85)]"
-          strokeWidth={1.4}
+      <Box
+        sx={{
+          position: "relative",
+          display: "flex",
+          width: 132,
+          height: 132,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            inset: 0,
+            borderRadius: "50%",
+            border: "1px solid rgba(13,241,217,0.25)",
+          }}
         />
-      </div>
-    </div>
+        <Box
+          sx={{
+            position: "absolute",
+            inset: "16px",
+            borderRadius: "50%",
+            border: "1px solid rgba(13,241,217,0.15)",
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            width: 92,
+            height: 92,
+            transform: "translate(-50%, -50%)",
+            borderRadius: "50%",
+            background:
+              "radial-gradient(circle, rgba(13,241,217,0.30), transparent 70%)",
+          }}
+        />
+        <Box
+          sx={{
+            position: "absolute",
+            left: "50%",
+            top: "50%",
+            width: 92,
+            height: 92,
+            transform: "translate(-50%, -50%)",
+            borderRadius: "50%",
+            border: "1px solid rgba(13,241,217,0.4)",
+            boxShadow: "inset 0 0 22px rgba(13,241,217,0.20)",
+          }}
+        />
+        <Icon
+          size={48}
+          color={ACCENT}
+          strokeWidth={1.4}
+          style={{ filter: "drop-shadow(0 0 14px rgba(13,241,217,0.85))" }}
+        />
+      </Box>
+    </Box>
   );
 }
 
 function FloatingShape({
-  className,
+  sx,
   rotate,
 }: {
-  className: string;
+  sx?: object;
   rotate: number;
 }) {
   return (
-    <span
-      className={cn(
-        "pointer-events-none absolute border-accent/30 bg-accent/[0.04] backdrop-blur-[1px]",
-        className,
-      )}
-      style={{ transform: `rotate(${rotate}deg)` }}
+    <Box
+      sx={{
+        pointerEvents: "none",
+        position: "absolute",
+        border: "1px solid rgba(13,241,217,0.3)",
+        bgcolor: "rgba(13,241,217,0.04)",
+        backdropFilter: "blur(1px)",
+        transform: `rotate(${rotate}deg)`,
+        ...sx,
+      }}
     />
   );
 }

@@ -1,5 +1,6 @@
 import HeroSection from "@/components/HeroSection";
 import PartnersSection from "@/components/PartnersSection";
+import Stats from "@/components/sections/stats/Stats";
 import CTASection from "@/components/CTASection";
 import FAQSection from "@/components/FAQSection";
 import ServicesOrbital from "@/components/sections/services-orbital/ServicesOrbital";
@@ -11,6 +12,7 @@ export default function Home() {
       <HeroSection />
       <PartnersSection />
       <ServicesOrbital />
+      <Stats />
       <Methodologies />
       <CTASection />
       <FAQSection />

@@ -1,16 +1,15 @@
 "use client";
 
 import { useId, useState } from "react";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import type { SxProps, Theme } from "@mui/material/styles";
 import { motion } from "framer-motion";
 import type { LucideIcon } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-/** Card footprint used by the orbital geometry. */
 export const CARD_W = 270;
 export const CARD_H = 150;
 
-/** Exact Figma `Union` geometry (node 792:9513) — glass body with the
- *  top-right notch that cradles the circular icon well. */
 const UNION_W = 268.968;
 const UNION_H = 144.231;
 const CARD_PATH =
@@ -19,8 +18,7 @@ const CARD_PATH =
 const ICON_SIZE = 64;
 const ICON_X = 194;
 const ICON_Y = 12;
-
-/** transition-all duration-300 ease-out */
+const ACCENT = "#0DF1D9";
 const TRANSITION = { duration: 0.3, ease: "easeOut" } as const;
 
 interface OrbitalCardProps {
@@ -29,7 +27,7 @@ interface OrbitalCardProps {
   Icon: LucideIcon;
   onHoverStart?: () => void;
   onHoverEnd?: () => void;
-  className?: string;
+  sx?: SxProps<Theme>;
 }
 
 export default function OrbitalCard({
@@ -38,21 +36,19 @@ export default function OrbitalCard({
   Icon,
   onHoverStart,
   onHoverEnd,
-  className,
+  sx,
 }: OrbitalCardProps) {
   const id = useId().replace(/:/g, "");
   const fillId = `orbital-card-fill-${id}`;
   const strokeId = `orbital-card-stroke-${id}`;
   const strokeHoverId = `orbital-card-stroke-hover-${id}`;
 
-  // The whole card container is the single master hover trigger. Every part of
-  // the card reacts to this one state, so the body, border, background tint,
-  // glow and icon all animate together (no fragile variant propagation).
   const [hovered, setHovered] = useState(false);
   const state = hovered ? "hover" : "rest";
 
   return (
-    <motion.div
+    <Box
+      component={motion.div}
       initial="rest"
       animate={state}
       onHoverStart={() => {
@@ -65,28 +61,39 @@ export default function OrbitalCard({
       }}
       variants={{ rest: { scale: 1 }, hover: { scale: 1.02 } }}
       transition={TRANSITION}
-      className={cn("group relative cursor-pointer", className)}
-      // The hit-box spans the full card footprint, including the rounded
-      // top-right corner where the icon sits.
-      style={{ width: CARD_W, height: CARD_H, transformOrigin: "50% 55%" }}
+      sx={{
+        position: "relative",
+        cursor: "pointer",
+        width: CARD_W,
+        height: CARD_H,
+        transformOrigin: "50% 55%",
+        ...sx,
+      }}
     >
-      {/* Radiating cyan bloom — intensifies on hover. */}
-      <motion.div
+      <Box
+        component={motion.div}
         aria-hidden
         animate={state}
         variants={{ rest: { opacity: 0.4 }, hover: { opacity: 1 } }}
         transition={TRANSITION}
-        className="pointer-events-none absolute left-[18px] top-[22px] h-[112px] w-[210px] rounded-[32px] bg-[#0DF1D9]/15 blur-[40px]"
+        sx={{
+          pointerEvents: "none",
+          position: "absolute",
+          left: "18px",
+          top: "22px",
+          width: 210,
+          height: 112,
+          borderRadius: "32px",
+          bgcolor: "rgba(13,241,217,0.15)",
+          filter: "blur(40px)",
+        }}
       />
 
-      {/* Glass body: fill + hover teal tint + base/hover border + the cyan
-          outer drop-shadow glow, all on the exact Figma union path. */}
       <motion.svg
         width={UNION_W}
         height={UNION_H}
         viewBox={`0 0 ${UNION_W} ${UNION_H}`}
         fill="none"
-        className="absolute left-0 top-[0.5px] overflow-visible"
         aria-hidden
         animate={state}
         variants={{
@@ -100,18 +107,21 @@ export default function OrbitalCard({
           },
         }}
         transition={TRANSITION}
+        style={{
+          position: "absolute",
+          left: 0,
+          top: "0.5px",
+          overflow: "visible",
+        }}
       >
-        {/* base fill */}
         <path d={CARD_PATH} fill={`url(#${fillId})`} />
-        {/* background tint brightens on hover */}
         <motion.path
           d={CARD_PATH}
-          fill="#0DF1D9"
+          fill={ACCENT}
           animate={state}
           variants={{ rest: { opacity: 0 }, hover: { opacity: 0.07 } }}
           transition={TRANSITION}
         />
-        {/* base, subtle border */}
         <motion.path
           d={CARD_PATH}
           stroke={`url(#${strokeId})`}
@@ -121,7 +131,6 @@ export default function OrbitalCard({
           variants={{ rest: { opacity: 1 }, hover: { opacity: 0 } }}
           transition={TRANSITION}
         />
-        {/* brightened border, revealed on hover */}
         <motion.path
           d={CARD_PATH}
           stroke={`url(#${strokeHoverId})`}
@@ -171,22 +180,21 @@ export default function OrbitalCard({
         </defs>
       </motion.svg>
 
-      {/* Circular glass icon well cradled in the top-right notch.
-          Outer wrapper drifts outward; inner wrapper scales, the ring brightens
-          and the glow blooms — all driven by the same master hover state. */}
-      <motion.div
+      <Box
+        component={motion.div}
         animate={state}
         variants={{ rest: { x: 0, y: 0 }, hover: { x: 7, y: -7 } }}
         transition={TRANSITION}
-        className="absolute"
-        style={{
+        sx={{
+          position: "absolute",
           left: ICON_X,
           top: ICON_Y,
           width: ICON_SIZE,
           height: ICON_SIZE,
         }}
       >
-        <motion.div
+        <Box
+          component={motion.div}
           animate={state}
           variants={{
             rest: {
@@ -203,32 +211,74 @@ export default function OrbitalCard({
             },
           }}
           transition={TRANSITION}
-          className="flex h-full w-full items-center justify-center rounded-full border backdrop-blur-xl"
-          style={{ background: "rgba(25,25,27,0.4)" }}
+          sx={{
+            display: "flex",
+            height: "100%",
+            width: "100%",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "50%",
+            border: "1px solid",
+            backdropFilter: "blur(24px)",
+            bgcolor: "rgba(25,25,27,0.4)",
+          }}
         >
-          <motion.div
+          <Box
+            component={motion.div}
             animate={state}
             variants={{ rest: { scale: 1 }, hover: { scale: 1.08 } }}
             transition={TRANSITION}
-            className="flex items-center justify-center"
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-            <Icon
-              className="h-[26px] w-[26px] text-[#0DF1D9]"
-              strokeWidth={1.6}
-            />
-          </motion.div>
-        </motion.div>
-      </motion.div>
+            <Icon size={26} color={ACCENT} strokeWidth={1.6} />
+          </Box>
+        </Box>
+      </Box>
 
-      {/* Title + compact description. */}
-      <div className="absolute left-[26px] top-[36px] flex w-[168px] flex-col items-start gap-[9px]">
-        <h3 className="w-[160px] text-base font-medium normal-case leading-snug tracking-[0] text-white">
+      <Box
+        sx={{
+          position: "absolute",
+          left: "26px",
+          top: "36px",
+          display: "flex",
+          width: 168,
+          flexDirection: "column",
+          alignItems: "flex-start",
+          gap: "9px",
+        }}
+      >
+        <Typography
+          component="h3"
+          sx={{
+            width: 160,
+            fontSize: "16px",
+            fontWeight: 500,
+            lineHeight: 1.375,
+            letterSpacing: 0,
+            textTransform: "none",
+            color: "#ffffff",
+          }}
+        >
           {title}
-        </h3>
-        <p className="w-full text-xs font-normal normal-case leading-normal tracking-[0] text-[#C0C0C0]">
+        </Typography>
+        <Typography
+          sx={{
+            width: "100%",
+            fontSize: "12px",
+            fontWeight: 400,
+            lineHeight: 1.5,
+            letterSpacing: 0,
+            textTransform: "none",
+            color: "#C0C0C0",
+          }}
+        >
           {description}
-        </p>
-      </div>
-    </motion.div>
+        </Typography>
+      </Box>
+    </Box>
   );
 }

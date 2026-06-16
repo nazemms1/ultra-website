@@ -1,5 +1,7 @@
 "use client";
 
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
 import {
   motion,
   useMotionTemplate,
@@ -7,11 +9,11 @@ import {
   type MotionValue,
 } from "framer-motion";
 
+const ACCENT = "#0DF1D9";
+
 interface TimelineProps {
   labels: string[];
-  /** Whole-track scroll progress, 0 → 1. */
   progress: MotionValue<number>;
-  /** Smoothly scroll the window to a given phase index. */
   onSeek: (index: number) => void;
 }
 
@@ -20,26 +22,64 @@ export default function Timeline({ labels, progress, onSeek }: TimelineProps) {
   const fillWidth = useMotionTemplate`${useTransform(progress, (p) => p * 100)}%`;
 
   return (
-    <div className="mx-auto w-full max-w-[1280px] px-2">
-      <div className="flex items-center justify-between">
-        <span className="font-rajdhani text-[11px] tracking-[0.25em] text-white/50">
+    <Box sx={{ mx: "auto", width: "100%", maxWidth: 1280, px: 1 }}>
+      <Box sx={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+        <Typography
+          sx={{
+            fontFamily: "'Rajdhani', sans-serif",
+            fontSize: "11px",
+            letterSpacing: "0.25em",
+            color: "rgba(255,255,255,0.5)",
+          }}
+        >
           Scroll to advance
-        </span>
-        <span className="font-rajdhani text-[11px] tracking-[0.25em] text-white/50">
+        </Typography>
+        <Typography
+          sx={{
+            fontFamily: "'Rajdhani', sans-serif",
+            fontSize: "11px",
+            letterSpacing: "0.25em",
+            color: "rgba(255,255,255,0.5)",
+          }}
+        >
           {total} Phases
-        </span>
-      </div>
+        </Typography>
+      </Box>
 
-      {/* Progress rail. */}
-      <div className="relative mt-3 h-0.5 w-full overflow-hidden rounded-full bg-white/[0.08]">
-        <motion.div
-          className="absolute left-0 top-0 h-full rounded-full bg-accent shadow-[0_0_10px_rgba(13,241,217,0.7)]"
+      <Box
+        sx={{
+          position: "relative",
+          mt: 1.5,
+          height: "2px",
+          width: "100%",
+          overflow: "hidden",
+          borderRadius: "9999px",
+          bgcolor: "rgba(255,255,255,0.08)",
+        }}
+      >
+        <Box
+          component={motion.div}
+          sx={{
+            position: "absolute",
+            left: 0,
+            top: 0,
+            height: "100%",
+            borderRadius: "9999px",
+            bgcolor: ACCENT,
+            boxShadow: "0 0 10px rgba(13,241,217,0.7)",
+          }}
           style={{ width: fillWidth }}
         />
-      </div>
+      </Box>
 
-      {/* Dots + labels. */}
-      <div className="mt-3 flex items-start justify-between">
+      <Box
+        sx={{
+          mt: 1.5,
+          display: "flex",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+        }}
+      >
         {labels.map((label, i) => (
           <TimelineTick
             key={label}
@@ -50,8 +90,8 @@ export default function Timeline({ labels, progress, onSeek }: TimelineProps) {
             onSeek={onSeek}
           />
         ))}
-      </div>
-    </div>
+      </Box>
+    </Box>
   );
 }
 
@@ -78,20 +118,49 @@ function TimelineTick({
   );
 
   return (
-    <motion.button
+    <Box
+      component={motion.button}
       type="button"
       onClick={() => onSeek(index)}
       style={{ opacity }}
-      className="group flex shrink-0 cursor-pointer flex-col items-center gap-2 outline-none"
+      sx={{
+        display: "flex",
+        flexShrink: 0,
+        cursor: "pointer",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 1,
+        border: "none",
+        bgcolor: "transparent",
+        outline: "none",
+        p: 0,
+        "&:hover .timeline-label": { color: ACCENT },
+      }}
       aria-label={`Go to ${label} phase`}
     >
-      <motion.span
-        className="block h-2.5 w-2.5 rounded-full bg-accent"
+      <Box
+        component={motion.span}
+        sx={{
+          display: "block",
+          width: 10,
+          height: 10,
+          borderRadius: "50%",
+          bgcolor: ACCENT,
+        }}
         style={{ scale: dotScale, boxShadow: glow }}
       />
-      <span className="font-rajdhani text-[11px] tracking-[0.18em] text-white transition-colors group-hover:text-accent">
+      <Typography
+        className="timeline-label"
+        sx={{
+          fontFamily: "'Rajdhani', sans-serif",
+          fontSize: "11px",
+          letterSpacing: "0.18em",
+          color: "#ffffff",
+          transition: "color 0.2s",
+        }}
+      >
         {label}
-      </span>
-    </motion.button>
+      </Typography>
+    </Box>
   );
 }
