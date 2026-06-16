@@ -1,17 +1,19 @@
 import type { Theme } from '@mui/material/styles'
 import { alpha } from '@mui/material/styles'
 import type { SxProps } from '@mui/material/styles'
+import { paletteAlpha } from './paletteAlpha'
 
 /** Figma Glass plugin — light -45°, frost blur, inner highlight */
 export function glassSurface(theme: Theme, opts?: { tint?: number; radius?: number | string }) {
-  const tint = opts?.tint ?? 0.06
+  const tint = opts?.tint ?? 0.1
   const radius = opts?.radius ?? theme.shape.borderRadius
 
   return {
-    background: alpha(theme.palette.common.white, tint),
+    background: paletteAlpha(theme.vars!.palette.background.paper, tint),
     backdropFilter: 'blur(24px) brightness(1.05)',
     WebkitBackdropFilter: 'blur(24px) brightness(1.05)',
-    border: `1px solid ${alpha(theme.palette.common.white, 0.12)}`,
+    border: `1px solid`,
+    borderColor: 'divider',
     borderRadius: radius,
     boxShadow: [
       '0 8px 32px 0 rgba(0, 0, 0, 0.37)',

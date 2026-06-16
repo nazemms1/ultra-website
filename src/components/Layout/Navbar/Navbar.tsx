@@ -157,10 +157,11 @@ export default function Navbar({ labels }: NavbarProps) {
     height: NAV_HEIGHT,
     flexShrink: 0,
     transition: shapeTransition,
-    ...navGlassPill(theme),
     ...(segment === 'logo' && { pl: '25px', pr: '25px', py: '13px' }),
     ...(segment === 'nav' && { px: '81px', py: '13px' }),
     ...(segment === 'cta' && { p: '13px' }),
+    ...navGlassPill(theme),
+    willChange: 'opacity, transform',
   })
 
   return (
