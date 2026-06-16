@@ -9,7 +9,10 @@ export function glassSurface(theme: Theme, opts?: { tint?: number; radius?: numb
   const radius = opts?.radius ?? theme.shape.borderRadius
 
   return {
-    background: paletteAlpha(theme.vars!.palette.background.paper, tint),
+    background: paletteAlpha(
+      theme.vars?.palette.background.paper ?? theme.palette.background.paper,
+      tint,
+    ),
     backdropFilter: 'blur(24px) brightness(1.05)',
     WebkitBackdropFilter: 'blur(24px) brightness(1.05)',
     border: `1px solid`,

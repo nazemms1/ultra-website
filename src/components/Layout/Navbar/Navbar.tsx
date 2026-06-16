@@ -157,6 +157,9 @@ export default function Navbar({ labels }: NavbarProps) {
     height: NAV_HEIGHT,
     flexShrink: 0,
     transition: shapeTransition,
+    opacity: splitOpacity,
+    transform: `scale(${lerp(0.97, 1, splitOpacity)}) translateY(${lerp(6, 0, splitOpacity)}px)`,
+    visibility: splitOpacity < 0.02 ? 'hidden' : 'visible',
     ...(segment === 'logo' && { pl: '25px', pr: '25px', py: '13px' }),
     ...(segment === 'nav' && { px: '81px', py: '13px' }),
     ...(segment === 'cta' && { p: '13px' }),
@@ -198,12 +201,7 @@ export default function Navbar({ labels }: NavbarProps) {
               display: 'flex',
               justifyContent: 'center',
               px: '20px',
-              opacity: splitOpacity,
-              transform: `scale(${lerp(0.97, 1, splitOpacity)}) translateY(${lerp(6, 0, splitOpacity)}px)`,
-              visibility: splitOpacity < 0.02 ? 'hidden' : 'visible',
               pointerEvents: t > 0.45 ? 'none' : 'auto',
-              transition: shapeTransition,
-              willChange: 'opacity, transform',
             }}
           >
             <Box
