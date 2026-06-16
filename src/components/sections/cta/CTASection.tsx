@@ -5,7 +5,8 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import UltraButton from '@/components/shared/UltraButton'
-
+import { Zap } from 'lucide-react'
+ 
 export default function CTASection() {
   const cardRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -90,6 +91,7 @@ export default function CTASection() {
         },
       })}
     >
+ 
       <video
         autoPlay
         loop

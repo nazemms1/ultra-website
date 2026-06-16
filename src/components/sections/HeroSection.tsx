@@ -1,12 +1,12 @@
 'use client'
 
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, Rocket } from 'lucide-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import ShimmerText from '@/components/shared/ShimmerText'
 import { motion, Variants } from 'framer-motion'
 import AnimatedButton from '../shared/AnimatedButton'
-
+ 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
   visible: {
@@ -46,7 +46,7 @@ export default function HeroSection() {
         overflow: 'hidden',
       }}
     >
-      <Box
+       <Box
         component="video"
         autoPlay
         muted
@@ -87,6 +87,7 @@ export default function HeroSection() {
           maxWidth: theme.breakpoints.values.xl,
           mx: 'auto',
           width: '100%',
+          px: { xs: 3, sm: 5, md: '80px' },
         })}
       >
         <Box

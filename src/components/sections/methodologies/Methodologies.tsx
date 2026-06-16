@@ -8,7 +8,8 @@ import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import PhaseCard, { PhaseCardContent } from './PhaseCard'
 import Timeline from './Timeline'
 import { PHASES } from './data'
-
+import { GitBranch } from 'lucide-react'
+ 
 const EASE = [0.22, 1, 0.36, 1] as const
 
 export default function Methodologies() {
@@ -44,7 +45,7 @@ export default function Methodologies() {
         id="methodologies"
         sx={{ position: 'relative', overflow: 'hidden', px: 3, py: 12 }}
       >
-        <Header />
+         <Header />
         <Box
           sx={{
             mx: 'auto',
@@ -82,7 +83,7 @@ export default function Methodologies() {
           overflow: 'hidden',
         }}
       >
-        <Box
+         <Box
           aria-hidden
           sx={theme => ({
             pointerEvents: 'none',

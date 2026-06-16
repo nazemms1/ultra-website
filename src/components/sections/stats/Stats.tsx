@@ -6,7 +6,8 @@ import Grid from '@mui/material/Grid'
 import { useInView } from 'framer-motion'
 import StatItem from './StatItem'
 import { STATS } from './data'
-
+import { BarChart3 } from 'lucide-react'
+ 
 export default function Stats() {
   const sectionRef = useRef<HTMLElement>(null)
   const isInView = useInView(sectionRef, { once: true, amount: 0.35 })
@@ -21,15 +22,16 @@ export default function Stats() {
         width: '100%',
         pt: { xs: 5, md: '60px' },
         pb: { xs: 6, md: 8 },
-        px: { xs: 3, sm: 5, md: '80px' },
+        overflow: 'hidden',
       }}
     >
-      <Grid
+       <Grid
         container
         spacing={{ xs: 4, md: 4 }}
         sx={{
-          maxWidth: 1280,
+          maxWidth: 1440,
           mx: 'auto',
+          px: { xs: 3, sm: 5, md: '80px' },
           justifyContent: 'center',
           alignItems: 'flex-start',
         }}
