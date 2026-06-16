@@ -111,6 +111,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
           fontWeight: 600,
           letterSpacing: '0.7px',
           minHeight: 42,
+          maxHeight: 42,
           fontSize: 18,
           p: theme => theme.spacing(1, 2.5),
           transition: 'transform 0.2s ease, box-shadow 0.3s ease',
