@@ -46,11 +46,11 @@ export default function HeroSection() {
         overflow: 'hidden',
       }}
     >
-      <video
+      <Box
+        component="video"
         autoPlay
         muted
         loop
-        playsInline
         style={{
           position: 'absolute',
           inset: 0,
@@ -60,8 +60,8 @@ export default function HeroSection() {
           zIndex: 0,
         }}
       >
-        <source src="/videos/hero.mp4" type="video/mp4" />
-      </video>
+        <Box component="source" src="/videos/hero.mp4" type="video/mp4" />
+      </Box>
 
       <Box
         sx={theme => ({
@@ -77,18 +77,17 @@ export default function HeroSection() {
       />
 
       <Box
-        sx={{
+        sx={theme => ({
           position: 'relative',
           zIndex: 2,
           flex: 1,
           display: 'flex',
           alignItems: 'flex-start',
           pt: '160px',
-          px: { xs: 3, lg: '40px' },
-          maxWidth: '1280px',
+          maxWidth: theme.breakpoints.values.xl,
           mx: 'auto',
           width: '100%',
-        }}
+        })}
       >
         <Box
           component={motion.div}
@@ -100,13 +99,11 @@ export default function HeroSection() {
             flexDirection: 'column',
             alignItems: 'flex-start',
             textAlign: 'left',
-            maxWidth: '740px',
           }}
         >
           <motion.div variants={itemVariants}>
-            <Typography variant="h1" sx={{ mb: '10px' }}>
-              WITH{' '}
-              <ShimmerText sx={{ color: 'primary.main', fontSize: '50px' }}>ULTRAWARES</ShimmerText>
+            <Typography variant="h1" sx={{ mb: '10px', fontSize: 50, lineHeight: '78px' }}>
+              WITH <ShimmerText sx={{ color: 'primary.main' }}>ULTRAWARES</ShimmerText>
               <br />
               COMES ULTRA
               <br />
@@ -115,7 +112,10 @@ export default function HeroSection() {
           </motion.div>
 
           <motion.div variants={itemVariants}>
-            <Typography variant="body1" sx={{ mb: 5, maxWidth: '520px', color: 'text.secondary' }}>
+            <Typography
+              variant="body1"
+              sx={{ mb: 5, maxWidth: 625, color: 'text.secondary', fontSize: 25 }}
+            >
               Ultrawares provides cutting-edge solutions for businesses wanting to optimize their
               operations and gain a competitive edge in an increasingly digital world.
             </Typography>

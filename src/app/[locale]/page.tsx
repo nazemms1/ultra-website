@@ -1,4 +1,4 @@
-import HeroSection from '@/components/Layout/HeroSection'
+import HeroSection from '@/components/sections/HeroSection'
 import PartnersSection from '@/components/sections/partners/PartnersSection'
 import Stats from '@/components/sections/stats/Stats'
 import CTASection from '@/components/sections/cta/CTASection'

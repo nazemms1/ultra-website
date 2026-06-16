@@ -28,7 +28,7 @@ const theme = createTheme({
       sm: 600,
       md: 900,
       lg: 1200,
-      xl: 1280,
+      xl: 1440,
     },
   },
   components: {
@@ -60,7 +60,7 @@ const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         maxWidthXl: {
-          maxWidth: 1280,
+          maxWidth: 1440,
         },
       },
     },

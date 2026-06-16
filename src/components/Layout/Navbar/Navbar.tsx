@@ -41,7 +41,7 @@ export default function Navbar({ labels }: NavbarProps) {
       <Box
         sx={{
           width: '100%',
-          maxWidth: 1318,
+          maxWidth: theme.breakpoints.values.xl,
           height: 68,
           ...glassSurface(theme, { tint: 0.04, radius: theme.shape.borderRadiusPill }),
           display: 'flex',
