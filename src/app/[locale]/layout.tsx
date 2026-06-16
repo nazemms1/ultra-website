@@ -34,6 +34,11 @@ export async function generateMetadata({
     },
     description: t('description'),
     metadataBase: new URL(host),
+    icons: {
+      icon: '/images/logo/logo-ultra.svg',
+      shortcut: '/images/logo/logo-ultra.svg',
+      apple: '/images/logo/logo-ultra.svg',
+    },
     openGraph: {
       title: t('title'),
       description: t('description'),

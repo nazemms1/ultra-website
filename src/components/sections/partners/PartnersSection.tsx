@@ -4,7 +4,8 @@ import Image from 'next/image'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useEffect, useRef, useState } from 'react'
-
+import { Handshake } from 'lucide-react'
+ 
 const partners = [
   { name: 'Partner 1', logo: '/images/partners/partners-1.png' },
   { name: 'Partner 2', logo: '/images/partners/partners-2.png' },
@@ -32,14 +33,17 @@ export default function PartnersSection() {
       ref={sectionRef}
       component="section"
       sx={{
+        position: 'relative',
         py: { xs: 6, md: 8 },
-        px: { xs: 3, lg: '40px' },
+        px: { xs: 3, sm: 5, md: '80px' },
         mx: 'auto',
+        maxWidth: 1440,
         height: '455px',
         width: '100%',
+        overflow: 'hidden',
       }}
     >
-      <Typography
+       <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",
           fontWeight: 400,
