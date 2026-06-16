@@ -12,6 +12,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import UltraButton from '@/components/shared/UltraButton'
 import { glassSurface } from '@/lib/theme/surfaces'
 import { navLinks, type NavLabels } from '@/components/Layout/navLinks'
+import AnimatedButton from '@/components/shared/AnimatedButton'
 
 type NavbarProps = {
   labels: NavLabels
@@ -98,13 +99,13 @@ export default function Navbar({ labels }: NavbarProps) {
           spacing={1.5}
           sx={{ flex: '0 0 auto', ml: 'auto', alignItems: 'center' }}
         >
-          <UltraButton
+          <AnimatedButton
             variant="primary"
             href="/contact"
             sx={{ display: { xs: 'none', md: 'inline-flex' } }}
           >
             {labels.contact}
-          </UltraButton>
+          </AnimatedButton>
 
           <IconButton
             aria-label="Toggle menu"
