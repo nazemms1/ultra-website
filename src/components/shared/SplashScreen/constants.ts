@@ -42,3 +42,9 @@ export const AMBIENT_PULSE_TRANSITION = {
   repeat: Infinity,
   ease: 'easeInOut',
 } as const
+
+/** Minimum idle splash time before exit can start (wave + spinner must be seen). */
+export const MIN_SPLASH_DISPLAY_MS = 1_600
+
+/** Extra beat after media is ready — pause before accordion doors open. */
+export const SPLASH_POST_READY_HOLD_MS = 500

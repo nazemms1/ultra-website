@@ -8,15 +8,16 @@ type UsePageAssetsReadyOptions = {
   maxDurationMs?: number
 }
 
+/** Returns `true` once fonts, critical assets, and in-DOM media have settled (or timed out). */
 export function usePageAssetsReady(options: UsePageAssetsReadyOptions = {}): boolean {
   const { minDurationMs, maxDurationMs } = options
-  const [isLoading, setIsLoading] = useState(true)
+  const [isReady, setIsReady] = useState(false)
 
   useEffect(() => {
     let cancelled = false
 
     void waitForPageMedia({ minDurationMs, maxDurationMs }).finally(() => {
-      if (!cancelled) setIsLoading(false)
+      if (!cancelled) setIsReady(true)
     })
 
     return () => {
@@ -24,5 +25,5 @@ export function usePageAssetsReady(options: UsePageAssetsReadyOptions = {}): boo
     }
   }, [maxDurationMs, minDurationMs])
 
-  return isLoading
+  return isReady
 }

@@ -2,12 +2,16 @@
 
 import { useEffect, useState } from 'react'
 import SplashScreen from './SplashScreen'
-import { usePageAssetsReady } from './usePageAssetsReady'
+import { useSplashDismissTiming } from './useSplashDismissTiming'
 
 type SplashScreenGateProps = {
   children: React.ReactNode
   minDurationMs?: number
   maxDurationMs?: number
+  /** Minimum splash idle time before exit (default 1600ms). */
+  minDisplayMs?: number
+  /** Pause after media ready before doors open (default 500ms). */
+  postReadyHoldMs?: number
 }
 
 /**
@@ -18,13 +22,20 @@ export default function SplashScreenGate({
   children,
   minDurationMs,
   maxDurationMs,
+  minDisplayMs,
+  postReadyHoldMs,
 }: SplashScreenGateProps) {
-  const assetsReady = usePageAssetsReady({ minDurationMs, maxDurationMs })
+  const { isSplashVisible } = useSplashDismissTiming({
+    minDurationMs,
+    maxDurationMs,
+    minDisplayMs,
+    postReadyHoldMs,
+  })
   const [scrollLocked, setScrollLocked] = useState(true)
 
   useEffect(() => {
-    if (!assetsReady) setScrollLocked(true)
-  }, [assetsReady])
+    if (isSplashVisible) setScrollLocked(true)
+  }, [isSplashVisible])
 
   useEffect(() => {
     document.body.style.overflow = scrollLocked ? 'hidden' : ''
@@ -36,10 +47,7 @@ export default function SplashScreenGate({
   return (
     <>
       {children}
-      <SplashScreen
-        isLoading={!assetsReady}
-        onExitComplete={() => setScrollLocked(false)}
-      />
+      <SplashScreen isLoading={isSplashVisible} onExitComplete={() => setScrollLocked(false)} />
     </>
   )
 }
