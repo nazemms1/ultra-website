@@ -1,15 +1,18 @@
 'use client'
 
 import Box from '@mui/material/Box'
-import { useTheme } from '@mui/material/styles'
-import { motion, useReducedMotion } from 'framer-motion'
-import { paletteAlpha } from '@/lib/theme/paletteAlpha'
-import { COLUMN_BREATHE_TRANSITION } from './constants'
+import { useTheme, alpha } from '@mui/material/styles'
+import { motion } from 'framer-motion'
+import { useColumnWaveMotion } from './useColumnWaveMotion'
 import type { SplashColumnProps } from './types'
 
-export default function SplashColumn({ heightPercent, index, showDivider = true }: SplashColumnProps) {
+export default function SplashColumn({
+  heightPercent,
+  index,
+  showDivider = true,
+}: SplashColumnProps) {
   const theme = useTheme()
-  const reducedMotion = useReducedMotion()
+  const { scaleY, crestY, glowOpacity } = useColumnWaveMotion(index)
   const primaryMain = theme.palette.primary.main
   const primaryDark = theme.palette.primary.darker
 
@@ -28,38 +31,59 @@ export default function SplashColumn({ heightPercent, index, showDivider = true 
     >
       <Box
         component={motion.div}
-        initial={false}
-        animate={reducedMotion ? { scaleY: 1 } : { scaleY: [1, 1.028, 1] }}
-        transition={{
-          ...COLUMN_BREATHE_TRANSITION,
-          delay: index * 0.07,
+        style={{
+          scaleY,
+          transformOrigin: 'bottom center',
         }}
         sx={{
           position: 'absolute',
           bottom: 0,
-          left: 0,
-          width: '100%',
+          left: '-8%',
+          width: '116%',
           height: `${heightPercent}%`,
-          transformOrigin: 'bottom center',
           willChange: 'transform',
           background: `linear-gradient(to top,
             ${primaryDark} 0%,
-            ${paletteAlpha(primaryMain, 0.92)} 18%,
-            ${paletteAlpha(primaryMain, 0.55)} 48%,
-            ${paletteAlpha(primaryMain, 0.18)} 72%,
+            ${alpha(primaryMain, 0.95)} 14%,
+            ${alpha(primaryMain, 0.72)} 38%,
+            ${alpha(primaryMain, 0.38)} 58%,
+            ${alpha(primaryMain, 0.14)} 76%,
             transparent 100%)`,
-          '&::after': {
-            content: '""',
-            position: 'absolute',
-            top: '-8%',
-            left: '-20%',
-            right: '-20%',
-            height: '42%',
-            background: `radial-gradient(ellipse at center bottom, ${paletteAlpha(primaryMain, 0.22)} 0%, transparent 72%)`,
-            pointerEvents: 'none',
-          },
         }}
-      />
+      >
+        <Box
+          component={motion.div}
+          style={{
+            y: crestY,
+            opacity: glowOpacity,
+          }}
+          sx={{
+            position: 'absolute',
+            top: '-18%',
+            left: '-25%',
+            right: '-25%',
+            height: '52%',
+            pointerEvents: 'none',
+            background: `radial-gradient(ellipse at center bottom, ${alpha(primaryMain, 0.55)} 0%, ${alpha(primaryMain, 0.18)} 42%, transparent 78%)`,
+            filter: 'blur(6px)',
+          }}
+        />
+
+        <Box
+          component={motion.div}
+          style={{ y: crestY }}
+          sx={{
+            position: 'absolute',
+            top: '-4%',
+            left: 0,
+            right: 0,
+            height: '28%',
+            pointerEvents: 'none',
+            background: `linear-gradient(to bottom, transparent 0%, ${alpha(primaryMain, 0.22)} 100%)`,
+            filter: 'blur(10px)',
+          }}
+        />
+      </Box>
     </Box>
   )
 }

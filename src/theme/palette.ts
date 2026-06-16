@@ -7,7 +7,7 @@ export const ultraDarkPalette = {
   primary: {
     lighter: '#7FFFF4',
     light: '#3DF5E8',
-    main: '#0DF1D9',
+    main: '#01B1B1',
     dark: '#04C4AE',
     darker: '#01B1B1',
     contrastText: '#060E10',
@@ -49,7 +49,7 @@ export const ultraLightPalette = {
   primary: {
     lighter: '#E6FFFC',
     light: '#5EF5E8',
-    main: '#0AB8A5',
+    main: '#01B1B1',
     dark: '#088F80',
     darker: '#066B60',
     contrastText: '#FFFFFF',

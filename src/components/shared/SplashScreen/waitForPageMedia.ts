@@ -16,7 +16,11 @@ const DEFAULT_MAX_DURATION_MS = 14_000
 const DEFAULT_SETTLE_MS = 120
 const DEFAULT_PER_ASSET_TIMEOUT_MS = 8_000
 
-const VIDEO_READY_STATE = HTMLMediaElement.HAVE_CURRENT_DATA
+/** `HTMLMediaElement.HAVE_CURRENT_DATA` — literal avoids SSR ReferenceError. */
+const VIDEO_READY_STATE = 2
+
+/** `HTMLMediaElement.NETWORK_NO_SOURCE` */
+const VIDEO_NETWORK_NO_SOURCE = 3
 
 function delay(ms: number): Promise<void> {
   return new Promise(resolve => {
@@ -62,7 +66,7 @@ function waitForVideoElement(video: HTMLVideoElement, timeoutMs: number): Promis
       video.addEventListener('loadeddata', finish, { once: true })
       video.addEventListener('canplay', finish, { once: true })
       video.addEventListener('error', finish, { once: true })
-      if (video.networkState === HTMLMediaElement.NETWORK_NO_SOURCE) {
+      if (video.networkState === VIDEO_NETWORK_NO_SOURCE) {
         video.load()
       }
     }),
@@ -172,6 +176,8 @@ function waitForWindowLoad(): Promise<void> {
  * (or when maxDurationMs is reached).
  */
 export async function waitForPageMedia(options: WaitForPageMediaOptions = {}): Promise<void> {
+  if (typeof window === 'undefined') return
+
   const minDurationMs = options.minDurationMs ?? DEFAULT_MIN_DURATION_MS
   const maxDurationMs = options.maxDurationMs ?? DEFAULT_MAX_DURATION_MS
   const settleMs = options.settleMs ?? DEFAULT_SETTLE_MS

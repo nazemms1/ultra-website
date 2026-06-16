@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import SplashColumn from './SplashColumn'
 import SplashSpinner from './SplashSpinner'
+import SplashWaveAmbient from './SplashWaveAmbient'
 import {
   COLUMN_HEIGHT_PROFILE,
   DOOR_EXIT_TRANSITION,
@@ -36,11 +37,15 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
             bgcolor: 'background.default',
           }}
         >
+          <SplashWaveAmbient />
+
           <Box
             sx={{
               display: 'flex',
               width: '100%',
               height: '100%',
+              position: 'relative',
+              zIndex: 1,
             }}
           >
             <Box
@@ -99,6 +104,7 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
               alignItems: 'center',
               justifyContent: 'center',
               pointerEvents: 'none',
+              zIndex: 2,
             }}
           >
             <SplashSpinner />
