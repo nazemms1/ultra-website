@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import SplashScreen from './SplashScreen'
 import { usePageAssetsReady } from './usePageAssetsReady'
 
@@ -19,19 +19,27 @@ export default function SplashScreenGate({
   minDurationMs,
   maxDurationMs,
 }: SplashScreenGateProps) {
-  const isLoading = usePageAssetsReady({ minDurationMs, maxDurationMs })
+  const assetsReady = usePageAssetsReady({ minDurationMs, maxDurationMs })
+  const [scrollLocked, setScrollLocked] = useState(true)
 
   useEffect(() => {
-    document.body.style.overflow = isLoading ? 'hidden' : ''
+    if (!assetsReady) setScrollLocked(true)
+  }, [assetsReady])
+
+  useEffect(() => {
+    document.body.style.overflow = scrollLocked ? 'hidden' : ''
     return () => {
       document.body.style.overflow = ''
     }
-  }, [isLoading])
+  }, [scrollLocked])
 
   return (
     <>
       {children}
-      <SplashScreen isLoading={isLoading} />
+      <SplashScreen
+        isLoading={!assetsReady}
+        onExitComplete={() => setScrollLocked(false)}
+      />
     </>
   )
 }

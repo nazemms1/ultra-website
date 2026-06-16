@@ -2,6 +2,7 @@
 
 import Box from '@mui/material/Box'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import SplashBackdropVeil from './SplashBackdropVeil'
 import SplashColumn from './SplashColumn'
 import SplashSpinner from './SplashSpinner'
 import SplashWaveAmbient from './SplashWaveAmbient'
@@ -34,9 +35,10 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
             height: '100vh',
             overflow: 'hidden',
             zIndex: SPLASH_Z_INDEX,
-            bgcolor: 'background.default',
+            bgcolor: 'transparent',
           }}
         >
+          <SplashBackdropVeil />
           <SplashWaveAmbient />
 
           <Box
