@@ -3,10 +3,10 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { ArrowRight } from 'lucide-react'
-import { useTransform } from 'framer-motion'
+import { useMotionTemplate, useTransform } from 'framer-motion'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { MotionBox } from './MotionBox'
-import { CLIP_CLOSED, CLIP_OPEN, getPanelRanges } from './constants'
+import { BLUR_MAX, CLIP_CLOSED, CLIP_OPEN, getPanelRanges } from './constants'
 import type { ProjectPanelProps } from './types'
 
 export default function ProjectPanel({ project, index, total, progress }: ProjectPanelProps) {
@@ -17,6 +17,14 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
   const [enterStart, enterEnd] = enter
   const exitStart = hasExit ? exit[0] : 1
   const exitEnd = hasExit ? exit[1] : 1
+
+  const imageFirst = project.imageSide === 'left'
+  const isMobileMockup = project.mockup.kind === 'mobile'
+
+  // Split outward: each element leaves toward its own side so cards never
+  // cross over and collide (e.g. Etihad has its copy on the left).
+  const imageExit = imageFirst ? '-100%' : '100%'
+  const textExit = imageFirst ? '100%' : '-100%'
 
   // Whole-panel opacity: incoming cards fade in, outgoing cards fade out.
   const opacity = useTransform(
@@ -41,24 +49,30 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
     isFirst ? [CLIP_CLOSED, CLIP_OPEN] : [CLIP_OPEN, CLIP_OPEN],
   )
 
-  // Exit split — text leaves to the right, mockup leaves to the left.
+  // Exit split — text + mockup each slide off toward their own edge.
   const textX = useTransform(
     progress,
     hasExit ? [exitStart, exitEnd] : [0, 1],
-    hasExit ? ['0%', '100%'] : ['0%', '0%'],
+    hasExit ? ['0%', textExit] : ['0%', '0%'],
   )
   const imageX = useTransform(
     progress,
     hasExit ? [exitStart, exitEnd] : [0, 1],
-    hasExit ? ['0%', '-100%'] : ['0%', '0%'],
+    hasExit ? ['0%', imageExit] : ['0%', '0%'],
   )
 
-  const imageFirst = project.imageSide === 'left'
-  const isMobileMockup = project.mockup.kind === 'mobile'
+  // Depth-of-field blur: cards arrive sharp, then blur out as they leave so a
+  // transitioning pair never reads as two overlapping screens at once.
+  const blur = useTransform(
+    progress,
+    hasExit ? [enterStart, enterEnd, exitStart, exitEnd] : [enterStart, enterEnd],
+    hasExit ? [isFirst ? 0 : BLUR_MAX, 0, 0, BLUR_MAX] : [isFirst ? 0 : BLUR_MAX, 0],
+  )
+  const filter = useMotionTemplate`blur(${blur}px)`
 
   return (
     <MotionBox
-      style={{ opacity, y, clipPath }}
+      style={{ opacity, y, clipPath, filter }}
       sx={{
         position: 'absolute',
         inset: 0,
@@ -66,7 +80,7 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        willChange: 'opacity, transform, clip-path',
+        willChange: 'opacity, transform, clip-path, filter',
       }}
     >
       <Box

@@ -43,3 +43,6 @@ export function getPanelRanges(index: number, total: number): PanelRanges {
 
 export const CLIP_CLOSED = 'inset(50% 0% 50% 0%)'
 export const CLIP_OPEN = 'inset(0% 0% 0% 0%)'
+
+/** Peak blur (px) applied to a card while it is entering or exiting. */
+export const BLUR_MAX = 12
