@@ -9,7 +9,7 @@ import {
   type MotionValue,
 } from 'framer-motion'
 
-export const PARALLAX_MAX = 10
+export const PARALLAX_MAX = 6
 export const PARALLAX_SPRING = { stiffness: 120, damping: 20, mass: 0.6 } as const
 
 export interface OrbitalPointerParallax {
