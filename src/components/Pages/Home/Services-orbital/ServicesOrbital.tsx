@@ -13,7 +13,7 @@ import { SERVICES } from './data'
 const EASE = [0.22, 1, 0.36, 1] as const
 const PANEL_TRANSITION = { duration: 0.48, ease: EASE } as const
 const LAYOUT_TRANSITION = { layout: { duration: 0.55, ease: EASE } } as const
-const DEACTIVATE_DELAY_MS = 180
+const DEACTIVATE_DELAY_MS = 200
 
 const panelVariants = {
   initial: { opacity: 0, y: 18 },
