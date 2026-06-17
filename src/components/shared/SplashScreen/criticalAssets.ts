@@ -7,8 +7,8 @@ export const SPLASH_CRITICAL_VIDEOS = [
 
 export const SPLASH_CRITICAL_IMAGES = [
   '/images/logo/logo-ultra.svg',
-  '/images/partners/partners-1.png',
-  '/images/partners/partners-2.png',
-  '/images/partners/partners-3.png',
-  '/images/partners/partners-4.png',
+  '/images/partners/like-cyan.png',
+  '/images/partners/digidia-cyan.png',
+  '/images/partners/sawa-cyan.png',
+  '/images/partners/osc-cyan.png',
 ] as const

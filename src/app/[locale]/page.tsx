@@ -1,4 +1,4 @@
-import PartnersSection from '@/components/Pages/Home/PartnersSection'
+import PartnersSection from '@/components/Pages/Home/Partners'
 import Stats from '@/components/Pages/Home/Stats/Stats'
 import CTASection from '@/components/Pages/Home/CTASection'
 import FAQSection from '@/components/Pages/Home/FAQSection'
@@ -14,8 +14,8 @@ export default function HomePage() {
       <PartnersSection />
       <ServicesOrbital />
       <Stats />
-      <Methodologies />
       <Projects />
+      <Methodologies />
       <CTASection />
       <FAQSection />
     </>
