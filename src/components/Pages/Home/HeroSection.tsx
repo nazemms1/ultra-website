@@ -70,7 +70,7 @@ export default function HeroSection() {
           left: 0,
           right: 0,
           height: '180px',
-          background: `linear-gradient(to top, ${theme.palette.background.elevated} 0%, transparent 100%)`,
+          background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
           zIndex: 1,
           pointerEvents: 'none',
         })}
