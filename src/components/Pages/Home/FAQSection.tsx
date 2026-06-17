@@ -4,10 +4,10 @@ import { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
-import { Plus, Minus, HelpCircle } from 'lucide-react'
+import { Plus, Minus } from 'lucide-react'
 import { glassSurface } from '@/lib/theme/surfaces'
 import UltraButton from '@/components/shared/UltraButton'
- 
+
 const faqs = [
   {
     question: 'What makes Ultrawares VPS different from typical hosting?',
@@ -197,7 +197,6 @@ export default function FAQSection() {
         overflow: 'hidden',
       }}
     >
- 
       <Box
         sx={theme => ({
           position: 'absolute',

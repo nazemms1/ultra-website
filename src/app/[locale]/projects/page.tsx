@@ -2,7 +2,7 @@
 
 import PageHero, { ShimmerText } from '@/components/shared/PageHero'
 import Portfolio from '@/components/sections/Portfolio'
-import CTASection from '@/components/sections/cta/CTASection'
+import CTASection from '@/components/Pages/Home/CTASection'
 
 export default function ProjectsPage() {
   return (

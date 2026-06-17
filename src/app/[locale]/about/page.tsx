@@ -7,8 +7,8 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import PageHero, { ShimmerText } from '@/components/shared/PageHero'
-import PartnersSection from '@/components/sections/partners/PartnersSection'
-import CTASection from '@/components/sections/cta/CTASection'
+import PartnersSection from '@/components/Pages/Home/PartnersSection'
+import CTASection from '@/components/Pages/Home/CTASection'
 import { cardSurface, glassSurface } from '@/lib/theme/surfaces'
 
 const containerVariants = {

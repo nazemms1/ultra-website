@@ -9,8 +9,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 import OrbitalDeck from './OrbitalDeck'
 import ViewAllButton from './ViewAllButton'
 import { DEFAULT_SERVICE_INDEX, SERVICES } from './data'
-import { Layers } from 'lucide-react'
- 
+
 const EASE = [0.22, 1, 0.36, 1] as const
 
 export default function ServicesOrbital() {
@@ -28,7 +27,7 @@ export default function ServicesOrbital() {
         overflow: 'clip',
       }}
     >
-       <Grid
+      <Grid
         container
         spacing={0}
         sx={{
@@ -37,7 +36,7 @@ export default function ServicesOrbital() {
           alignItems: 'center',
         }}
       >
-         <Grid size={{ xs: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, lg: 6 }}>
           <Box
             component={motion.div}
             initial={{ opacity: 0, x: -60 }}
@@ -101,7 +100,12 @@ export default function ServicesOrbital() {
                     y: isHovered ? 0 : 24,
                   }}
                   transition={{ duration: 0.5, ease: EASE }}
-                  sx={{ mt: 5, display: 'flex', gap: 2.5, pointerEvents: isHovered ? 'auto' : 'none' }}
+                  sx={{
+                    mt: 5,
+                    display: 'flex',
+                    gap: 2.5,
+                    pointerEvents: isHovered ? 'auto' : 'none',
+                  }}
                 >
                   <Box
                     sx={{
@@ -212,7 +216,7 @@ export default function ServicesOrbital() {
           </Box>
         </Grid>
 
-         <Grid size={{ xs: 12, lg: 6 }}>
+        <Grid size={{ xs: 12, lg: 6 }}>
           <Box
             component={motion.div}
             initial={{ opacity: 0, x: 60 }}

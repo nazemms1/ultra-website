@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import ShimmerText from '@/components/shared/ShimmerText'
 import { motion, Variants } from 'framer-motion'
-import AnimatedButton from '../shared/AnimatedButton'
+import AnimatedButton from '@/components/shared/AnimatedButton'
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },

@@ -1,9 +1,9 @@
 'use client'
 
 import PageHero, { ShimmerText } from '@/components/shared/PageHero'
-import ServicesOrbital from '@/components/sections/services-orbital/ServicesOrbital'
-import Methodologies from '@/components/sections/methodologies/Methodologies'
-import CTASection from '@/components/sections/cta/CTASection'
+import ServicesOrbital from '@/components/Pages/Home/Services-orbital/ServicesOrbital'
+import Methodologies from '@/components/Pages/Home/Methodologies/Methodologies'
+import CTASection from '@/components/Pages/Home/CTASection'
 
 export default function ServicesPage() {
   return (
