@@ -219,12 +219,9 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
   )
 }
 
-const SECTION_BG = '#121212'
-
 function OrbitalCenter() {
   const theme = useTheme()
   const primary = theme.palette.primary.main
-  const bgDefault = SECTION_BG
 
   return (
     <Box
