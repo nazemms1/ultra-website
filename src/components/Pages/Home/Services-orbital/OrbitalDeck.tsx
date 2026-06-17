@@ -16,6 +16,7 @@ import {
   type MotionValue,
 } from 'framer-motion'
 import OrbitalCard, { CARD_H, CARD_W } from './OrbitalCard'
+import OrbitalEmblem from './OrbitalEmblem'
 import { SERVICES, type ServiceItem } from './data'
 
 const R_DOT = 134
@@ -23,17 +24,19 @@ const R_CARD = R_DOT + 8 + CARD_W / 2
 const DECK = (R_CARD + CARD_H / 2 + 40) * 2
 const CENTER = DECK / 2
 
-const EMBLEM_PATH_A =
-  'M8.9231 14.8325C9.48125 19.1045 12.5182 34.5605 18.9041 32.5765C26.2257 30.3845 28.5076 17.6325 29.2299 11.0725C29.7716 7.39251 35.1889 7.92051 34.9591 11.6485C34.7457 12.8325 34.4338 14.0005 34.1218 15.1685C32.1355 22.4005 27.9494 33.8405 19.2653 35.2005C10.3513 36.4325 9.13649 20.8165 8.9231 14.8325Z'
-const EMBLEM_PATH_B =
-  'M25.4876 18.7845C26.3084 14.3205 27.5068 2.92848 21.3835 1.80848C13.159 0.784479 6.72394 10.0485 3.4243 16.3205C2.98106 17.1845 1.88118 17.5365 0.994708 17.1045C0.0425729 16.6245 -0.28575 15.4725 0.272399 14.5925C4.55701 7.76045 12.486 -1.67952 21.7447 0.256478C28.9185 2.19248 26.8829 13.5205 25.4876 18.7845Z'
-
 interface OrbitalDeckProps {
   baseSpeed?: number
   onActivate: (index: number | null) => void
+  eyeOffsetX: MotionValue<number>
+  eyeOffsetY: MotionValue<number>
 }
 
-export default function OrbitalDeck({ baseSpeed = 7, onActivate }: OrbitalDeckProps) {
+export default function OrbitalDeck({
+  baseSpeed = 7,
+  onActivate,
+  eyeOffsetX,
+  eyeOffsetY,
+}: OrbitalDeckProps) {
   const prefersReduced = useReducedMotion()
   const spin = useMotionValue(0)
   const pausedRef = useRef(false)
@@ -89,7 +92,7 @@ export default function OrbitalDeck({ baseSpeed = 7, onActivate }: OrbitalDeckPr
         }}
       />
 
-      <OrbitalCenter />
+      <OrbitalCenter offsetX={eyeOffsetX} offsetY={eyeOffsetY} />
 
       {SERVICES.map((service, i) => (
         <OrbitalSpoke
@@ -219,10 +222,12 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
   )
 }
 
-function OrbitalCenter() {
-  const theme = useTheme()
-  const primary = theme.palette.primary.main
+interface OrbitalCenterProps {
+  offsetX: MotionValue<number>
+  offsetY: MotionValue<number>
+}
 
+function OrbitalCenter({ offsetX, offsetY }: OrbitalCenterProps) {
   return (
     <Box
       sx={{
@@ -260,32 +265,7 @@ function OrbitalCenter() {
         }}
       />
 
-      <Box
-        sx={{
-          position: 'absolute',
-          left: -40,
-          top: -40,
-          width: 80,
-          height: 80,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        <Box
-          component="svg"
-          width={64}
-          height={66}
-          viewBox="0 0 35 36"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-          aria-hidden
-          sx={{ filter: `drop-shadow(0 0 18px ${alpha(primary, 0.65)})` }}
-        >
-          <path d={EMBLEM_PATH_A} fill={primary} />
-          <path d={EMBLEM_PATH_B} fill={theme.palette.secondary.main} />
-        </Box>
-      </Box>
+      <OrbitalEmblem offsetX={offsetX} offsetY={offsetY} />
     </Box>
   )
 }

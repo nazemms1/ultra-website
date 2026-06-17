@@ -9,6 +9,7 @@ import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import OrbitalDeck from './OrbitalDeck'
 import ViewAllButton from './ViewAllButton'
 import { SERVICES } from './data'
+import { useOrbitalPointerParallax } from './useOrbitalPointerParallax'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 const PANEL_TRANSITION = { duration: 0.48, ease: EASE } as const
@@ -22,9 +23,11 @@ const panelVariants = {
 }
 
 export default function ServicesOrbital() {
+  const sectionRef = useRef<HTMLElement>(null)
   const [activeIndex, setActiveIndex] = useState<number | null>(null)
   const deactivateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const active = activeIndex !== null ? SERVICES[activeIndex] : null
+  const { offsetX, offsetY } = useOrbitalPointerParallax(sectionRef)
 
   const handleActivate = useCallback((index: number | null) => {
     if (deactivateTimerRef.current) {
@@ -52,6 +55,7 @@ export default function ServicesOrbital() {
 
   return (
     <Box
+      ref={sectionRef}
       component="section"
       id="services"
       sx={{
@@ -219,7 +223,7 @@ export default function ServicesOrbital() {
                 },
               }}
             >
-              <OrbitalDeck onActivate={handleActivate} />
+              <OrbitalDeck onActivate={handleActivate} eyeOffsetX={offsetX} eyeOffsetY={offsetY} />
             </Box>
           </Box>
         </Grid>
