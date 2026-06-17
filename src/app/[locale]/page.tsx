@@ -6,6 +6,7 @@ import ServicesOrbital from '@/components/Pages/Home/Services-orbital/ServicesOr
 import Methodologies from '@/components/Pages/Home/Methodologies/Methodologies'
 import Projects from '@/components/Pages/Home/Projects/Projects'
 import HeroSection from '@/components/Pages/Home/HeroSection'
+import ContactSection from '@/components/Pages/Home/ContactSection'
 
 export default function HomePage() {
   return (
@@ -18,6 +19,7 @@ export default function HomePage() {
       <Methodologies />
       <CTASection />
       <FAQSection />
+      <ContactSection />
     </>
   )
 }
