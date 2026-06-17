@@ -2,8 +2,9 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
-import { motion } from 'framer-motion'
+import { alpha, useTheme } from '@mui/material/styles'
+import { motion, type Transition } from 'framer-motion'
+import { useState } from 'react'
 
 interface ViewAllButtonProps {
   label?: string
@@ -11,21 +12,42 @@ interface ViewAllButtonProps {
   sx?: object
 }
 
-const EASE = [0.22, 1, 0.36, 1] as const
+const SWEEP_EASE = [0.22, 1, 0.36, 1] as const
+const SWEEP_DURATION = 0.55
+
+const hoverTransition: Transition = {
+  duration: SWEEP_DURATION,
+  ease: SWEEP_EASE,
+}
+
+const backgroundVariants = {
+  rest: { width: '0%' },
+  hover: { width: '100%' },
+}
 
 export default function ViewAllButton({
   label = 'View all services',
   href = '#services',
   sx,
 }: ViewAllButtonProps) {
+  const theme = useTheme()
+  const [isHovered, setIsHovered] = useState(false)
+  const secondaryFill = alpha(theme.palette.common.white, 0.18)
+
+  const handleMouseEnter = () => {
+    setIsHovered(true)
+  }
+
+  const handleMouseLeave = () => {
+    setIsHovered(false)
+  }
+
   return (
     <Box
-      component={motion.a}
+      component="a"
       href={href}
-      initial="rest"
-      animate="rest"
-      whileHover="hover"
-      whileTap={{ scale: 0.98 }}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
       sx={theme => ({
         position: 'relative',
         display: 'inline-flex',
@@ -33,37 +55,41 @@ export default function ViewAllButton({
         justifyContent: 'center',
         overflow: 'hidden',
         borderRadius: '9999px',
-        border: `1px solid ${alpha(theme.palette.common.white, 0.2)}`,
+        border: `1px solid ${alpha(theme.palette.common.white, 0.35)}`,
         bgcolor: 'transparent',
         px: 4,
         py: '15px',
         backdropFilter: 'blur(4px)',
+        WebkitBackdropFilter: 'blur(4px)',
         textDecoration: 'none',
-        transition: 'border-color 0.3s, box-shadow 0.3s',
+        transition: 'border-color 0.3s ease, transform 0.2s ease',
         '&:hover': {
-          borderColor: alpha(theme.palette.common.white, 0.35),
-          boxShadow: `0 0 28px ${alpha(theme.palette.primary.main, 0.18)}`,
+          bgcolor: 'transparent',
+          borderColor: alpha(theme.palette.common.white, 0.45),
+        },
+        '&:active': {
+          transform: 'scale(0.98)',
         },
         ...sx,
       })}
     >
-      <Box
-        component={motion.span}
+      <motion.span
         aria-hidden
         initial="rest"
-        variants={{
-          rest: { width: '0%', opacity: 0 },
-          hover: { width: '80%', opacity: 1 },
-        }}
-        transition={{ duration: 0.5, ease: EASE }}
-        sx={theme => ({
+        animate={isHovered ? 'hover' : 'rest'}
+        variants={backgroundVariants}
+        transition={hoverTransition}
+        style={{
           pointerEvents: 'none',
           position: 'absolute',
-          inset: '0 auto 0 0',
+          top: 0,
+          bottom: 0,
+          left: 0,
           zIndex: 0,
-          borderRadius: '9999px',
-          background: `linear-gradient(90deg, ${alpha(theme.palette.primary.main, 0.3)} 0%, ${alpha(theme.palette.primary.main, 0.12)} 65%, ${alpha(theme.palette.primary.main, 0)} 100%)`,
-        })}
+          display: 'block',
+          borderRadius: 9999,
+          backgroundColor: secondaryFill,
+        }}
       />
 
       <Typography
