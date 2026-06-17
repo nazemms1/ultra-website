@@ -1,4 +1,14 @@
-import { BarChart3, Cloud, Code2, Cpu, Database, PenTool, Smartphone, TrendingUp, type LucideIcon } from 'lucide-react'
+import {
+  BarChart3,
+  Cloud,
+  Code2,
+  Cpu,
+  Database,
+  PenTool,
+  Smartphone,
+  TrendingUp,
+  type LucideIcon,
+} from 'lucide-react'
 
 export interface ServiceItem {
   /** Short label used in the orbital card. */
@@ -18,7 +28,6 @@ export interface ServiceItem {
   baseAngle: number
 }
 
- 
 export const SERVICES: ServiceItem[] = [
   {
     title: 'Mobile & Web Engineering',
@@ -60,7 +69,7 @@ export const SERVICES: ServiceItem[] = [
     title: 'AI & Automation',
     cardDescription: 'Intelligent workflows that eliminate friction and scale impact.',
     description:
-      'We build AI-powered systems and automation pipelines that remove bottlenecks and multiply your team\'s capacity. From custom machine learning models and LLM integrations to end-to-end workflow automation, we help you move faster, reduce errors, and unlock insights that were previously out of reach.',
+      "We build AI-powered systems and automation pipelines that remove bottlenecks and multiply your team's capacity. From custom machine learning models and LLM integrations to end-to-end workflow automation, we help you move faster, reduce errors, and unlock insights that were previously out of reach.",
     Icon: Cpu,
     tags: ['LLMs', 'Automation'],
     baseAngle: 293,
@@ -69,7 +78,7 @@ export const SERVICES: ServiceItem[] = [
     title: 'Data Engineering',
     cardDescription: 'Pipelines and platforms that turn raw data into decisions.',
     description:
-      'We architect scalable data pipelines, warehouses, and analytics platforms that give your team reliable, real-time access to the metrics that matter. Whether you\'re consolidating scattered sources or building a modern lakehouse from scratch, we ensure your data is clean, trusted, and ready to power decisions.',
+      "We architect scalable data pipelines, warehouses, and analytics platforms that give your team reliable, real-time access to the metrics that matter. Whether you're consolidating scattered sources or building a modern lakehouse from scratch, we ensure your data is clean, trusted, and ready to power decisions.",
     Icon: Database,
     tags: ['ETL', 'Analytics'],
     baseAngle: 338,

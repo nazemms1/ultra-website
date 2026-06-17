@@ -19,8 +19,8 @@ import OrbitalCard, { CARD_H, CARD_W } from './OrbitalCard'
 import { SERVICES, type ServiceItem } from './data'
 
 const R_DOT = 134
-const R_CARD = R_DOT + 8 + CARD_W / 2  
- const DECK = (R_CARD + CARD_H / 2 + 40) * 2  
+const R_CARD = R_DOT + 8 + CARD_W / 2
+const DECK = (R_CARD + CARD_H / 2 + 40) * 2
 const CENTER = DECK / 2
 
 const EMBLEM_PATH_A =
@@ -107,7 +107,7 @@ export default function OrbitalDeck({ baseSpeed = 7, onActivate }: OrbitalDeckPr
         />
       ))}
 
-       <Box
+      <Box
         aria-hidden
         sx={{
           pointerEvents: 'none',
@@ -138,11 +138,11 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
   const cardCounterRotate = useTransform(spin, s => -(baseAngle + s))
 
   const cardOpacity = useTransform(spin, s => {
-     const a = (((baseAngle + s) % 360) + 360) % 360
-     const d = Math.abs(a - 180)
-   
-    const FADE_START = 60  
-    const FADE_END = 90   
+    const a = (((baseAngle + s) % 360) + 360) % 360
+    const d = Math.abs(a - 180)
+
+    const FADE_START = 60
+    const FADE_END = 90
     return clamp((FADE_END - d) / (FADE_END - FADE_START), 0, 1)
   })
   const cardScale = useTransform(cardOpacity, o => 0.82 + 0.18 * o)
@@ -256,7 +256,8 @@ function OrbitalCenter() {
           width: 400,
           height: 400,
           borderRadius: '50%',
-          background: 'radial-gradient(ellipse 70.71% 70.71% at 50% 50%, rgba(13,241,217,0.18) 0%, rgba(18,18,18,0) 65%)',
+          background:
+            'radial-gradient(ellipse 70.71% 70.71% at 50% 50%, rgba(13,241,217,0.18) 0%, rgba(18,18,18,0) 65%)',
           filter: 'blur(40px)',
           pointerEvents: 'none',
         }}

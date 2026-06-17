@@ -42,8 +42,7 @@ export function useSplashDismissTiming(options: UseSplashDismissTimingOptions = 
     return () => window.clearTimeout(timer)
   }, [assetsReady, postReadyHoldMs])
 
-  const isSplashVisible =
-    !minDisplayComplete || !assetsReady || !postReadyHoldComplete
+  const isSplashVisible = !minDisplayComplete || !assetsReady || !postReadyHoldComplete
 
   return { isSplashVisible }
 }

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useEffect, useRef, useState } from 'react'
 import { Handshake } from 'lucide-react'
- 
+
 const partners = [
   { name: 'Partner 1', logo: '/images/partners/partners-1.png' },
   { name: 'Partner 2', logo: '/images/partners/partners-2.png' },
@@ -43,7 +43,7 @@ export default function PartnersSection() {
         overflow: 'hidden',
       }}
     >
-       <Typography
+      <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",
           fontWeight: 400,
