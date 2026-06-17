@@ -1,6 +1,7 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
+import { SplashProvider, useMarkSplashComplete } from './SplashContext'
 import SplashScreen from './SplashScreen'
 import { useSplashDismissTiming } from './useSplashDismissTiming'
 
@@ -18,13 +19,14 @@ type SplashScreenGateProps = {
  * Renders page content immediately (so media loads behind the overlay),
  * then dismisses the splash once fonts, videos, and images are ready.
  */
-export default function SplashScreenGate({
+function SplashScreenGateInner({
   children,
   minDurationMs,
   maxDurationMs,
   minDisplayMs,
   postReadyHoldMs,
 }: SplashScreenGateProps) {
+  const markSplashComplete = useMarkSplashComplete()
   const { isSplashVisible } = useSplashDismissTiming({
     minDurationMs,
     maxDurationMs,
@@ -40,10 +42,23 @@ export default function SplashScreenGate({
     }
   }, [scrollLocked])
 
+  const handleSplashExitComplete = useCallback(() => {
+    setScrollLocked(false)
+    markSplashComplete()
+  }, [markSplashComplete])
+
   return (
     <>
       {children}
-      <SplashScreen isLoading={isSplashVisible} onExitComplete={() => setScrollLocked(false)} />
+      <SplashScreen isLoading={isSplashVisible} onExitComplete={handleSplashExitComplete} />
     </>
+  )
+}
+
+export default function SplashScreenGate(props: SplashScreenGateProps) {
+  return (
+    <SplashProvider>
+      <SplashScreenGateInner {...props} />
+    </SplashProvider>
   )
 }

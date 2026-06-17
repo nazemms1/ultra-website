@@ -4,6 +4,7 @@ import { ArrowRight } from 'lucide-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import ShimmerText from '@/components/shared/ShimmerText'
+import { useSplashComplete } from '@/components/shared/SplashScreen'
 import { motion, Variants } from 'framer-motion'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 
@@ -35,6 +36,8 @@ const itemVariants: Variants = {
 }
 
 export default function HeroSection() {
+  const splashComplete = useSplashComplete()
+
   return (
     <Box
       component="section"
@@ -94,7 +97,7 @@ export default function HeroSection() {
           component={motion.div}
           variants={containerVariants}
           initial="hidden"
-          animate="visible"
+          animate={splashComplete ? 'visible' : 'hidden'}
           sx={{
             display: 'flex',
             flexDirection: 'column',

@@ -11,5 +11,6 @@ export {
 export { SPLASH_CRITICAL_IMAGES, SPLASH_CRITICAL_VIDEOS } from './criticalAssets'
 export { usePageAssetsReady } from './usePageAssetsReady'
 export { useSplashDismissTiming } from './useSplashDismissTiming'
+export { SplashProvider, useMarkSplashComplete, useSplashComplete } from './SplashContext'
 export { waitForPageMedia } from './waitForPageMedia'
 export type { SplashScreenProps, SplashColumnProps } from './types'
