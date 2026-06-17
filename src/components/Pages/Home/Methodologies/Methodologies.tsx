@@ -2,9 +2,9 @@
 
 import { useRef } from 'react'
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import SectionHeader from '@/components/shared/SectionHeader'
 import PhaseCard, { PhaseCardContent } from './PhaseCard'
 import Timeline from './Timeline'
 import { PHASES } from './data'
@@ -168,36 +168,39 @@ export default function Methodologies() {
 
 function Header() {
   return (
-    <Box sx={{ px: 3, textAlign: 'center' }}>
-      <Typography
-        sx={{
-          fontFamily: "'Rajdhani', sans-serif",
-          fontSize: { xs: '12px', sm: '13px' },
-          letterSpacing: '0.45em',
-          color: 'primary.main',
-        }}
-      >
-        Our methodologies
-      </Typography>
-      <Typography
-        component="h2"
-        sx={{
+    <SectionHeader
+      align="center"
+      sx={{
+        px: 3,
+        mb: 0,
+        '& h2': {
           mx: 'auto',
-          mt: { xs: 1.25, sm: 1.5 },
           maxWidth: 720,
-          fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
           fontSize: { xs: '1.375rem', sm: '1.75rem', lg: '2rem' },
-          textTransform: 'uppercase',
-          lineHeight: 1.15,
-          letterSpacing: '0.02em',
-          color: 'text.primary',
-        }}
-      >
-        How we turn ideas into{' '}
-        <Box component="span" sx={{ color: 'primary.main' }}>
-          reality
-        </Box>
-      </Typography>
-    </Box>
+        },
+      }}
+      title={
+        <>
+          <Box
+            component="span"
+            sx={{
+              display: 'block',
+              mb: { xs: 1.25, sm: 1.5 },
+              fontFamily: "'Rajdhani', sans-serif",
+              fontSize: { xs: '12px', sm: '13px' },
+              letterSpacing: '0.45em',
+              textTransform: 'none',
+              color: 'primary.main',
+            }}
+          >
+            Our methodologies
+          </Box>
+          How we turn ideas into{' '}
+          <Box component="span" sx={{ color: 'primary.main' }}>
+            reality
+          </Box>
+        </>
+      }
+    />
   )
 }

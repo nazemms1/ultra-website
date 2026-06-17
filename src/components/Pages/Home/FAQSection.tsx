@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { Plus, Minus } from 'lucide-react'
 import { glassSurface } from '@/lib/theme/surfaces'
+import SectionHeader from '@/components/shared/SectionHeader'
 import UltraButton from '@/components/shared/UltraButton'
 
 const faqs = [
@@ -237,52 +238,46 @@ export default function FAQSection() {
           width: '100%',
         }}
       >
-        <Typography
+        <SectionHeader
+          align="center"
+          title={
+            <>
+              <Box
+                component="span"
+                sx={{
+                  display: 'block',
+                  mb: 1.25,
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontWeight: 500,
+                  fontSize: '12px',
+                  letterSpacing: '4px',
+                  textTransform: 'uppercase',
+                  color: 'primary.main',
+                }}
+              >
+                FAQ
+              </Box>
+              FREQUENTLY{' '}
+              <Box component="span" sx={{ color: 'primary.main' }}>
+                ASKED
+              </Box>
+            </>
+          }
+          subtitle="Everything you need to know before we plug into your stack."
           sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500,
-            fontSize: '12px',
-            letterSpacing: '4px',
-            textTransform: 'uppercase',
-            color: 'primary.main',
-            textAlign: 'center',
-            mb: '10px',
+            mb: 6,
+            '& h2': {
+              fontSize: { xs: '30px', md: '42px' },
+              lineHeight: 1.1,
+              letterSpacing: '1.5px',
+            },
+            '& .MuiTypography-body1': {
+              color: 'text.tertiary',
+              fontSize: '14px',
+              letterSpacing: '0.3px',
+            },
           }}
-        >
-          FAQ
-        </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: "'Ethnocentric Rg', sans-serif",
-            fontWeight: 400,
-            fontSize: { xs: '30px', md: '42px' },
-            lineHeight: 1.1,
-            letterSpacing: '1.5px',
-            textAlign: 'center',
-            color: 'text.primary',
-            mb: '12px',
-          }}
-        >
-          FREQUENTLY{' '}
-          <Box component="span" sx={{ color: 'primary.main' }}>
-            ASKED
-          </Box>
-        </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 400,
-            fontSize: '14px',
-            letterSpacing: '0.3px',
-            color: 'text.tertiary',
-            textAlign: 'center',
-            mb: '48px',
-          }}
-        >
-          Everything you need to know before we plug into your stack.
-        </Typography>
+        />
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
           {faqs.map(faq => (
