@@ -44,16 +44,15 @@ export default function OrbitalCard({
   const fillId = `orbital-card-fill-${id}`
   const strokeId = `orbital-card-stroke-${id}`
   const strokeHoverId = `orbital-card-stroke-hover-${id}`
-
   const [hovered, setHovered] = useState(false)
 
   const fillStart = alpha(theme.palette.background.card, 0.55)
   const fillMid = alpha(theme.palette.background.elevated, 0.62)
   const fillEnd = alpha(theme.palette.background.default, 0.7)
 
-  const cardFilter = hovered
-    ? `drop-shadow(0px 24px 40px rgba(0,0,0,0.55)) drop-shadow(0px 0px 52px ${alpha(primary, 0.6)})`
-    : `drop-shadow(0px 20px 34px rgba(0,0,0,0.5)) drop-shadow(0px 0px 26px ${alpha(primaryDarker, 0.14)})`
+  // const cardFilter = hovered
+  //   ? `drop-shadow(0px 24px 40px rgba(0,0,0,0.55)) drop-shadow(0px 0px 52px ${alpha(primary, 0.6)})`
+  //   : `drop-shadow(0px 20px 34px rgba(0,0,0,0.5)) drop-shadow(0px 0px 26px ${alpha(primaryDarker, 0.14)})`
 
   const handleHoverStart = () => {
     setHovered(true)
@@ -109,14 +108,14 @@ export default function OrbitalCard({
           left: 0,
           top: '0.5px',
           overflow: 'visible',
-          filter: cardFilter,
+          // filter: cardFilter,
           transition: `filter ${TRANSITION}`,
         }}
       >
         <path d={CARD_PATH} fill={`url(#${fillId})`} />
         <path
           d={CARD_PATH}
-          fill={primary}
+          // fill={primary}
           opacity={hovered ? 0.07 : 0}
           style={{ transition: `opacity ${TRANSITION}` }}
         />
@@ -196,13 +195,13 @@ export default function OrbitalCard({
             justifyContent: 'center',
             borderRadius: '50%',
             border: '1px solid',
-            backdropFilter: 'blur(24px)',
-            bgcolor: alpha(theme.palette.background.elevated, 0.4),
+            // backdropFilter: 'blur(24px)',
+            // bgcolor: alpha(theme.palette.background.paper, 0.4),
             transform: hovered ? 'scale(1.1)' : 'scale(1)',
             borderColor: hovered ? alpha(primary, 0.6) : alpha(theme.palette.common.white, 0.12),
             boxShadow: hovered
-              ? `inset 0px 4px 12px 0px ${alpha(theme.palette.common.white, 0.32)}, 0px 0px 42px 6px ${alpha(primary, 0.55)}`
-              : `inset 0px 4px 10px 0px ${alpha(theme.palette.common.white, 0.22)}, 0px 0px 24px 0px ${alpha(primaryDarker, 0.4)}`,
+              ? `inset 0px 3px 8px 0px ${alpha(theme.palette.common.white, 0.32)}, 0px 0px 42px 6px ${alpha(primary, 0.1)}`
+              : `inset 0px 3px 5px 0px ${alpha(theme.palette.common.white, 0.22)}, 0px 0px 24px 0px ${alpha(primaryDarker, 0.1)}`,
             transition: `transform ${TRANSITION}, border-color ${TRANSITION}, box-shadow ${TRANSITION}`,
           }}
         >

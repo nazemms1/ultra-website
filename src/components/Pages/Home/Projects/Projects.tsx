@@ -155,7 +155,7 @@ function AmbientGlow() {
         sx={theme => ({
           pointerEvents: 'none',
           position: 'absolute',
-          top: -120,
+          top: 0,
           left: -120,
           width: 520,
           height: 520,
@@ -169,7 +169,7 @@ function AmbientGlow() {
         sx={theme => ({
           pointerEvents: 'none',
           position: 'absolute',
-          bottom: -140,
+          bottom: 0,
           right: -120,
           width: 480,
           height: 480,
