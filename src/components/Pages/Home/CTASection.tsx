@@ -4,7 +4,7 @@ import { useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
-import UltraButton from '@/components/shared/UltraButton'
+import AnimatedButton from '@/components/shared/AnimatedButton'
 
 export default function CTASection() {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -188,9 +188,9 @@ export default function CTASection() {
           Let&apos;s talk about your product, your users, and how Ultrawares can help you ship it.
         </Typography>
 
-        <UltraButton variant="primary" href="#contact">
+        <AnimatedButton variant="primary" href="#contact">
           Start a Project
-        </UltraButton>
+        </AnimatedButton>
       </Box>
     </Box>
   )

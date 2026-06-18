@@ -7,7 +7,7 @@ import { alpha } from '@mui/material/styles'
 import { Plus, Minus } from 'lucide-react'
 import { glassSurface } from '@/lib/theme/surfaces'
 import SectionHeader from '@/components/shared/SectionHeader'
-import UltraButton from '@/components/shared/UltraButton'
+import AnimatedButton from '@/components/shared/AnimatedButton'
 
 const faqs = [
   {
@@ -353,9 +353,9 @@ export default function FAQSection() {
             </Box>
           </Box>
 
-          <UltraButton variant="primary" href="#contact">
+          <AnimatedButton variant="primary" href="#contact">
             Contact Us
-          </UltraButton>
+          </AnimatedButton>
         </Box>
       </Box>
     </Box>
