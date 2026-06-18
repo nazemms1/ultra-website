@@ -2,7 +2,7 @@ import type { SxProps, Theme } from '@mui/material/styles'
 
 export const footerSectionTitleSx: SxProps<Theme> = {
   fontSize: '11px',
-  letterSpacing: '1.5px',
+  letterSpacing: '3px',
   textTransform: 'uppercase',
   color: 'primary.main',
   fontWeight: 600,
