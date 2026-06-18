@@ -7,12 +7,12 @@ export default function FieldLabel({ children }: { children: React.ReactNode }) 
     <Typography
       sx={{
         fontFamily: "'Rajdhani', sans-serif",
-        fontSize: '10px',
-        fontWeight: 700,
-        letterSpacing: '0.14em',
+        fontSize: '11px',
+        fontWeight: 600,
+        letterSpacing: '0.12em',
         textTransform: 'uppercase',
-        color: 'text.secondary',
-        mb: '6px',
+        color: 'primary.main',
+        mb: '8px',
       }}
     >
       {children}

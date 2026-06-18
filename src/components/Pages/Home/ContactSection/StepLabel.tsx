@@ -1,30 +1,34 @@
 'use client'
 
+import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
-import { alpha, useTheme } from '@mui/material/styles'
+import Typography, { typographyClasses } from '@mui/material/Typography'
 
 export default function StepLabel({ num, label }: { num: string; label: string }) {
-  const theme = useTheme()
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px', mb: '20px' }}>
-      <Box
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: '12px',
+        mb: '20px',
+        [`.${typographyClasses.root}`]: {
+          fontFamily: "'Ethnocentric Rg', sans-serif !important",
+          textTransform: 'uppercase',
+        },
+      }}
+    >
+      <IconButton
         sx={{
           width: 32,
           height: 32,
-          borderRadius: '50%',
-          border: `1.5px solid ${theme.palette.primary.main}`,
-          bgcolor: alpha(theme.palette.primary.main, 0.08),
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
+          border: '1px solid rgba(13, 241, 217, 0.40)',
+          background: 'rgba(13, 241, 217, 0.10)',
         }}
       >
         <Typography
           sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontSize: '11px',
+            fontSize: 10,
             fontWeight: 800,
             color: 'primary.main',
             lineHeight: 1,
@@ -33,11 +37,10 @@ export default function StepLabel({ num, label }: { num: string; label: string }
         >
           {num}
         </Typography>
-      </Box>
+      </IconButton>
       <Typography
         sx={{
-          fontFamily: "'Rajdhani', sans-serif",
-          fontSize: '12px',
+          fontSize: 11,
           fontWeight: 700,
           letterSpacing: '0.22em',
           textTransform: 'uppercase',

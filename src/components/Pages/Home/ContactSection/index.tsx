@@ -1,34 +1,36 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { ArrowRight, MapPin, Mail, Phone } from 'lucide-react'
+import { Briefcase, Mail, MapPin, Phone } from 'lucide-react'
 import ShimmerText from '@/components/shared/ShimmerText'
+import { glowOrb } from '@/lib/theme/surfaces'
 import { SERVICES, BASE_OFFERINGS } from './data'
+import type { ConsultationType, Region } from './types'
 import StepLabel from './StepLabel'
 import SectionDivider from './SectionDivider'
-import ServiceCard from './ServiceCard'
-import ScrollArrow from './ScrollArrow'
+import ServiceCarousel from './ServiceCarousel'
 import OfferingCheckbox from './OfferingCheckbox'
 import RadioOption from './RadioOption'
 import FieldLabel from './FieldLabel'
 import InputField from './InputField'
+import CaptchaBox from './CaptchaBox'
+import ContactSubmitButton from './ContactSubmitButton'
 
 export default function ContactSection() {
   const theme = useTheme()
-  const scrollRef = useRef<HTMLDivElement>(null)
 
   const [selectedService, setSelectedService] = useState<string | null>(null)
   const [offerings, setOfferings] = useState<string[]>([])
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [sector, setSector] = useState('')
-  const [consultationType, setConsultationType] = useState<'online' | 'onsite'>('online')
-  const [region, setRegion] = useState<'syria' | 'uae'>('syria')
+  const [consultationType, setConsultationType] = useState<ConsultationType>('online')
+  const [region, setRegion] = useState<Region>('syria')
   const [address, setAddress] = useState('')
-  const captchaDone = false
+  const [captchaDone, setCaptchaDone] = useState(false)
 
   const activeService = SERVICES.find(s => s.id === selectedService)
   const availableOfferings = activeService ? activeService.offerings : BASE_OFFERINGS
@@ -39,13 +41,7 @@ export default function ContactSection() {
   }
 
   const toggleOffering = (label: string) => {
-    setOfferings(prev =>
-      prev.includes(label) ? prev.filter(o => o !== label) : [...prev, label],
-    )
-  }
-
-  const scrollServices = (dir: 'left' | 'right') => {
-    scrollRef.current?.scrollBy({ left: dir === 'left' ? -180 : 180, behavior: 'smooth' })
+    setOfferings(prev => (prev.includes(label) ? prev.filter(o => o !== label) : [...prev, label]))
   }
 
   const canSubmit = captchaDone && !!selectedService && !!email
@@ -58,34 +54,26 @@ export default function ContactSection() {
         position: 'relative',
         py: { xs: 10, md: 14 },
         px: { xs: '20px', md: '40px', lg: '80px' },
-        bgcolor: 'background.default',
         overflow: 'hidden',
       }}
     >
-      {/* Background glows */}
       <Box
         sx={{
-          pointerEvents: 'none',
-          position: 'absolute',
+          ...glowOrb(theme, 0.04),
           top: '20%',
           right: '5%',
           width: 600,
           height: 600,
-          borderRadius: '50%',
-          bgcolor: alpha(theme.palette.primary.main, 0.04),
           filter: 'blur(140px)',
         }}
       />
       <Box
         sx={{
-          pointerEvents: 'none',
-          position: 'absolute',
+          ...glowOrb(theme, 0.03),
           bottom: '10%',
           left: '5%',
           width: 400,
           height: 400,
-          borderRadius: '50%',
-          bgcolor: alpha(theme.palette.primary.main, 0.03),
           filter: 'blur(100px)',
         }}
       />
@@ -101,135 +89,66 @@ export default function ContactSection() {
           zIndex: 1,
         }}
       >
-        {/* ── Left column ─────────────────────────────────────────────────────── */}
+        {/* Left column — branding */}
         <Box>
-          {/* Eyebrow */}
-          <Box
+          <Typography
             sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '6px',
-              px: '12px',
-              py: '5px',
-              mb: '24px',
-              borderRadius: '9999px',
-              fontSize: '10px',
               fontFamily: "'Rajdhani', sans-serif",
+              fontSize: '12px',
               fontWeight: 700,
-              letterSpacing: '0.15em',
+              letterSpacing: '0.22em',
               textTransform: 'uppercase',
               color: 'primary.main',
-              bgcolor: alpha(theme.palette.primary.main, 0.1),
-              border: `1px solid ${alpha(theme.palette.primary.main, 0.22)}`,
+              mb: '20px',
             }}
           >
             Get in touch
-          </Box>
+          </Typography>
 
-          {/* Headline */}
           <Typography
             component="h2"
             sx={{
               fontFamily: "'Ethnocentric Rg', sans-serif",
               fontSize: { xs: '42px', md: '56px' },
-              lineHeight: 1.0,
+              lineHeight: 1.05,
               letterSpacing: '1.5px',
               textTransform: 'uppercase',
               color: 'text.primary',
               mb: '20px',
             }}
           >
-            IGNITE
-            <br />
-            YOUR{' '}
-            <ShimmerText>VISION</ShimmerText>
+            IGNITE YOUR <ShimmerText>VISION</ShimmerText>
           </Typography>
 
-          {/* Body */}
           <Typography
             sx={{
               fontFamily: "'Rajdhani', sans-serif",
-              fontSize: '13px',
+              fontSize: '16px',
               color: 'text.secondary',
               lineHeight: 1.75,
               letterSpacing: '0.03em',
               mb: '40px',
+              maxWidth: 480,
             }}
           >
-            Tell us where you&apos;re headed. Whether it&apos;s high-performance VPS
-            architecture, striking UI/UX, or next-gen mobile experiences — we&apos;re
-            the launch crew.
+            Tell us where you&apos;re headed. Whether it&apos;s high-performance VPS architecture,
+            striking UI/UX, or next-gen mobile experiences — we&apos;re the launch crew.
           </Typography>
 
-          {/* Captcha placeholder */}
-          <Box
-            sx={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              gap: '10px',
-              px: '14px',
-              py: '11px',
-              borderRadius: '8px',
-              border: `1px solid ${alpha(theme.palette.text.primary as string, 0.12)}`,
-              bgcolor: theme.palette.background.elevated,
-              cursor: 'pointer',
-              userSelect: 'none',
-            }}
-          >
-            <Box
-              sx={{
-                width: 17,
-                height: 17,
-                borderRadius: '4px',
-                border: `1.5px solid ${alpha(theme.palette.text.primary as string, 0.25)}`,
-                flexShrink: 0,
-              }}
-            />
-            <Typography
-              sx={{
-                fontFamily: "'Rajdhani', sans-serif",
-                fontSize: '12px',
-                letterSpacing: '0.05em',
-                color: alpha(theme.palette.text.secondary as string, 0.7),
-              }}
-            >
-              I am not a robot
-            </Typography>
-          </Box>
+          <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} />
         </Box>
 
-        {/* ── Right column — Form ──────────────────────────────────────────────── */}
-        <Box>
-          {/* 01 — Service type */}
+        {/* Right column — form */}
+        <Box component="form" onSubmit={e => e.preventDefault()}>
           <StepLabel num="01" label="Select Service Type" />
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <ScrollArrow direction="left" onClick={() => scrollServices('left')} />
-            <Box
-              ref={scrollRef}
-              sx={{
-                display: 'flex',
-                gap: '12px',
-                overflowX: 'auto',
-                flex: 1,
-                scrollbarWidth: 'none',
-                '&::-webkit-scrollbar': { display: 'none' },
-              }}
-            >
-              {SERVICES.map(s => (
-                <ServiceCard
-                  key={s.id}
-                  service={s}
-                  selected={selectedService === s.id}
-                  onSelect={() => handleServiceSelect(s.id)}
-                />
-              ))}
-            </Box>
-            <ScrollArrow direction="right" onClick={() => scrollServices('right')} />
-          </Box>
+          <ServiceCarousel
+            services={SERVICES}
+            selectedService={selectedService}
+            onSelect={handleServiceSelect}
+          />
 
           <SectionDivider />
 
-          {/* 02 — Additional offerings */}
           <StepLabel num="02" label="Additional Offerings" />
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {availableOfferings.map(o => (
@@ -244,7 +163,6 @@ export default function ContactSection() {
 
           <SectionDivider />
 
-          {/* 03 — Your details */}
           <StepLabel num="03" label="Your Details" />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <Box
@@ -279,6 +197,7 @@ export default function ContactSection() {
               <FieldLabel>Specialty or Sector</FieldLabel>
               <InputField
                 placeholder="e.g. Fintech, Healthcare, E-commerce..."
+                icon={Briefcase}
                 value={sector}
                 onChange={setSector}
               />
@@ -287,15 +206,16 @@ export default function ContactSection() {
 
           <SectionDivider />
 
-          {/* 04 — Consultation setup */}
           <StepLabel num="04" label="Consultation Setup" />
           <Box sx={{ display: 'flex', gap: '10px', flexWrap: 'wrap', mb: '20px' }}>
             <RadioOption
+              name="consultation-type"
               label="Online Consultation"
               checked={consultationType === 'online'}
               onChange={() => setConsultationType('online')}
             />
             <RadioOption
+              name="consultation-type"
               label="On-site Consultation"
               checked={consultationType === 'onsite'}
               onChange={() => setConsultationType('onsite')}
@@ -317,13 +237,15 @@ export default function ContactSection() {
             >
               <Box>
                 <FieldLabel>Select Region — Restricted to Syria</FieldLabel>
-                <Box sx={{ display: 'flex', gap: '10px', mt: '10px' }}>
+                <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
                   <RadioOption
+                    name="region"
                     label="Syria"
                     checked={region === 'syria'}
                     onChange={() => setRegion('syria')}
                   />
                   <RadioOption
+                    name="region"
                     label="UAE"
                     checked={region === 'uae'}
                     onChange={() => setRegion('uae')}
@@ -333,7 +255,7 @@ export default function ContactSection() {
               <Box>
                 <FieldLabel>Location Address *</FieldLabel>
                 <InputField
-                  placeholder="Enter your address..."
+                  placeholder="Type your location"
                   icon={MapPin}
                   value={address}
                   onChange={setAddress}
@@ -344,52 +266,14 @@ export default function ContactSection() {
 
           <SectionDivider />
 
-          {/* Submit */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '16px', flexWrap: 'wrap' }}>
-            <Box
-              component="button"
-              disabled={!canSubmit}
-              sx={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                gap: '10px',
-                px: '30px',
-                py: '13px',
-                borderRadius: '9999px',
-                border: 'none',
-                cursor: canSubmit ? 'pointer' : 'default',
-                bgcolor: canSubmit
-                  ? theme.palette.primary.main
-                  : alpha(theme.palette.text.primary as string, 0.07),
-                color: canSubmit
-                  ? '#060E10'
-                  : alpha(theme.palette.text.primary as string, 0.2),
-                fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: 700,
-                fontSize: '13px',
-                letterSpacing: '0.14em',
-                textTransform: 'uppercase',
-                transition: 'all 0.25s',
-                boxShadow: canSubmit
-                  ? `0 0 28px ${alpha(theme.palette.primary.main, 0.4)}`
-                  : 'none',
-                '&:hover:not(:disabled)': {
-                  bgcolor: theme.palette.primary.light,
-                  boxShadow: `0 0 40px ${alpha(theme.palette.primary.main, 0.6)}`,
-                  transform: 'translateY(-1px)',
-                },
-              }}
-            >
-              Submit
-              <ArrowRight size={15} strokeWidth={2.5} />
-            </Box>
-
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            <ContactSubmitButton disabled={!canSubmit} />
             {!captchaDone && (
               <Typography
                 sx={{
                   fontFamily: "'Rajdhani', sans-serif",
-                  fontSize: '11px',
-                  color: alpha(theme.palette.text.secondary as string, 0.45),
+                  fontSize: '12px',
+                  color: alpha(theme.palette.text.secondary, 0.55),
                   letterSpacing: '0.04em',
                 }}
               >

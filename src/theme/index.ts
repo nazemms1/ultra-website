@@ -19,7 +19,7 @@ const theme = createTheme({
     dark: { palette: ultraDarkPalette },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 4,
     borderRadiusPill: 50,
   },
   breakpoints: {

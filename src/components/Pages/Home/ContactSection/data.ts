@@ -1,12 +1,13 @@
-import { Server, Palette, Smartphone } from 'lucide-react'
+import { Server, Palette, Smartphone, Cat } from 'lucide-react'
+import type { Service } from './types'
 
-export const SERVICES = [
+export const SERVICES: Service[] = [
   {
     id: 'vps',
     icon: Server,
     title: 'VPS Hosting',
     subtitle: 'High-performance infra',
-    offerings: ['Hosting Consultation', 'Server Management', 'DDoS Protection'],
+    offerings: ['Housing Consultation', 'Server Management', 'DDoS Protection'],
   },
   {
     id: 'uiux',
@@ -22,6 +23,13 @@ export const SERVICES = [
     subtitle: 'Native-feel apps',
     offerings: ['App Store Setup', 'Push Notifications', 'Admin Dashboard'],
   },
+  {
+    id: 'meow-cat',
+    icon: Cat,
+    title: 'Meow Cat',
+    subtitle: 'Meow Meow Meow',
+    offerings: ['Meow-1', 'Meow-2', 'Meow-3'],
+  },
 ]
 
-export const BASE_OFFERINGS = ['Hosting Consultation', 'Admin Dashboard']
+export const BASE_OFFERINGS = ['Housing Consultation', 'Admin Dashboard']

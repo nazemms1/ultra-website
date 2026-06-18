@@ -3,15 +3,9 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { SERVICES } from './data'
+import type { ServiceCardProps } from './types'
 
-type Props = {
-  service: (typeof SERVICES)[number]
-  selected: boolean
-  onSelect: () => void
-}
-
-export default function ServiceCard({ service, selected, onSelect }: Props) {
+export default function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
   const theme = useTheme()
   const Icon = service.icon
 
@@ -19,24 +13,21 @@ export default function ServiceCard({ service, selected, onSelect }: Props) {
     <Box
       onClick={onSelect}
       sx={{
-        flex: '1 1 0',
-        minWidth: 140,
+        border: `1px solid ${theme.palette.divider}`,
+        borderRadius: theme.shape.borderRadius,
+        backdropFilter: 'blur(12px)',
         cursor: 'pointer',
-        borderRadius: '12px',
+        height: '100%',
         p: '20px 18px',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
-        border: `1px solid ${
-          selected
-            ? theme.palette.primary.main
-            : alpha(theme.palette.text.primary as string, 0.12)
-        }`,
+        borderColor: selected ? 'primary.main' : alpha(theme.palette.common.white, 0.1),
         bgcolor: selected
-          ? alpha(theme.palette.primary.main, 0.1)
-          : theme.palette.background.elevated,
+          ? alpha(theme.palette.primary.main, 0.08)
+          : alpha(theme.palette.common.white, 0.03),
         boxShadow: selected ? `0 0 24px ${alpha(theme.palette.primary.main, 0.18)}` : 'none',
-        transition: 'all 0.22s',
+        transition: 'border-color 0.22s, background-color 0.22s, box-shadow 0.22s',
         userSelect: 'none',
         '&:hover': {
           borderColor: alpha(theme.palette.primary.main, 0.45),
@@ -53,7 +44,7 @@ export default function ServiceCard({ service, selected, onSelect }: Props) {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'all 0.22s',
+          transition: 'background-color 0.22s',
         }}
       >
         <Icon
