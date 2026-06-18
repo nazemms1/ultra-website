@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
+import OrbitalAccentRail from './OrbitalAccentRail'
 import OrbitalDeck from './OrbitalDeck'
 import ViewAllButton from './ViewAllButton'
 import { SERVICES } from './data'
@@ -131,33 +132,46 @@ export default function ServicesOrbital() {
                       animate="animate"
                       exit="exit"
                       transition={PANEL_TRANSITION}
-                      sx={{ mt: 2.5 }}
+                      sx={{ mt: 2.5, display: 'flex', flexDirection: 'column', gap: '12px' }}
                     >
-                      <Typography
-                        component="h3"
-                        sx={{
-                          mb: 1.5,
-                          fontSize: '20px',
-                          fontWeight: 500,
-                          letterSpacing: 0,
-                          color: 'text.primary',
-                        }}
-                      >
-                        {active.title}
-                      </Typography>
+                      <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: '31px' }}>
+                        <OrbitalAccentRail />
 
-                      <Typography
-                        sx={{
-                          fontSize: '15px',
-                          fontWeight: 400,
-                          lineHeight: 1.625,
-                          color: 'text.secondary',
-                        }}
-                      >
-                        {active.description}
-                      </Typography>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            minWidth: 0,
+                            flex: 1,
+                            flexDirection: 'column',
+                            gap: '11px',
+                          }}
+                        >
+                          <Typography
+                            component="h3"
+                            sx={{
+                              fontSize: '20px',
+                              fontWeight: 500,
+                              letterSpacing: 0,
+                              color: 'text.primary',
+                            }}
+                          >
+                            {active.title}
+                          </Typography>
 
-                      <Box sx={{ mt: 2.5, display: 'flex', flexWrap: 'wrap', gap: '9px' }}>
+                          <Typography
+                            sx={{
+                              fontSize: '15px',
+                              fontWeight: 400,
+                              lineHeight: 1.625,
+                              color: 'text.secondary',
+                            }}
+                          >
+                            {active.description}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Box sx={{ pl: '46px', display: 'flex', flexWrap: 'wrap', gap: '9px' }}>
                         {active.tags.map(tag => (
                           <Box
                             key={tag}
