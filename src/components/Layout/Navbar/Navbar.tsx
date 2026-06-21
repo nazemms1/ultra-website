@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme } from '@mui/material/styles'
+import { useTheme, alpha } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 import type { SxProps } from '@mui/material/styles'
 import Image from 'next/image'
@@ -13,7 +13,7 @@ import Link from 'next/link'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import UltraButton from '@/components/shared/UltraButton'
-import { glassPillSurface, glassSurface } from '@/lib/theme/surfaces'
+import { navGlassPillSurface, glassSurface } from '@/lib/theme/surfaces'
 import { navLinks, type NavLabels } from '@/components/Layout/navLinks'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { useNavbarScrollMode } from './useNavbarScrollMode'
@@ -30,14 +30,7 @@ const GROUPED_GAP = 17
 
 const lerp = (from: number, to: number, t: number) => from + (to - from) * t
 
-function navGlassPill(theme: Theme): SxProps<Theme> {
-  return {
-    ...glassPillSurface(theme),
-    boxShadow: ['0px 4px 30px 0px rgba(0, 0, 0, 0.1)', '0 8px 32px 0 rgba(0, 0, 0, 0.37)'].join(
-      ', ',
-    ),
-  }
-}
+const navGlassPill = navGlassPillSurface
 
 function easeInOutQuart(t: number) {
   return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2
@@ -158,7 +151,7 @@ export default function Navbar({ labels }: NavbarProps) {
     flexShrink: 0,
     transition: shapeTransition,
     opacity: splitOpacity,
-    transform: `scale(${lerp(0.97, 1, splitOpacity)}) translateY(${lerp(6, 0, splitOpacity)}px)`,
+    transform: `scale(${lerp(0.97, 1, splitOpacity)}) translateY(${lerp(-6, 0, splitOpacity)}px)`,
     visibility: splitOpacity < 0.02 ? 'hidden' : 'visible',
     ...(segment === 'logo' && { pl: '25px', pr: '25px', py: '13px' }),
     ...(segment === 'nav' && { px: '81px', py: '13px' }),
@@ -236,7 +229,7 @@ export default function Navbar({ labels }: NavbarProps) {
             px: '25px',
             py: '13px',
             opacity: isDesktop ? unifiedOpacity : 1,
-            transform: `scale(${lerp(0.97, 1, unifiedOpacity)}) translateY(${lerp(6, 0, unifiedOpacity)}px)`,
+            transform: `scale(${lerp(0.97, 1, unifiedOpacity)}) translateY(${lerp(-6, 0, unifiedOpacity)}px)`,
             visibility: isDesktop && unifiedOpacity < 0.02 ? 'hidden' : 'visible',
             pointerEvents: isDesktop && t < 0.55 ? 'none' : 'auto',
             transition: shapeTransition,

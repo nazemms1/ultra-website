@@ -61,9 +61,10 @@ export default function OrbitalCard({
   const strokeHoverId = `orbital-card-stroke-hover-${id}`
   const [hovered, setHovered] = useState(false)
 
-  const fillStart = alpha(theme.palette.background.paper, 0.55)
-  const fillMid = alpha(theme.palette.background.paper, 0.62)
-  const fillEnd = alpha(theme.palette.background.default, 0.7)
+  // Fully transparent fill — glass effect lives in border only
+  const fillStart = 'transparent'
+  const fillMid   = 'transparent'
+  const fillEnd   = 'transparent'
 
   // Combined synchronous variants
   const cardVariants = {
@@ -105,26 +106,10 @@ export default function OrbitalCard({
         width: CARD_W,
         height: CARD_H,
         transformOrigin: 'center center',
+        isolation: 'isolate',
         ...sx,
       }}
     >
-      {/* Background Neon Glow */}
-      <MotionBox
-        aria-hidden
-        variants={glowVariants}
-        transition={springTransition}
-        sx={{
-          pointerEvents: 'none',
-          position: 'absolute',
-          left: '18px',
-          top: '22px',
-          width: 210,
-          height: 112,
-          borderRadius: '32px',
-          bgcolor: alpha(primary, 0.25),
-          filter: 'blur(35px)',
-        }}
-      />
 
       {/* Morphing Background Plate */}
       <Box
@@ -139,6 +124,7 @@ export default function OrbitalCard({
           left: 0,
           top: '0.5px',
           overflow: 'visible',
+          filter: `drop-shadow(0 4px 76px rgba(0,0,0,0.76))`,
         }}
       >
         {/* Base Color Fill with Dynamic Path Morphing */}
@@ -187,12 +173,13 @@ export default function OrbitalCard({
         />
 
         <defs>
+          {/* Light -45° = 315deg → x1 top-right, y1 top, x2 bottom-left, y2 bottom */}
           <linearGradient
             id={fillId}
             x1="0"
-            y1="17"
-            x2="268"
-            y2="144"
+            y1={UNION_H}
+            x2={UNION_W}
+            y2="0"
             gradientUnits="userSpaceOnUse"
           >
             <stop stopColor={fillStart} stopOpacity="1" />
@@ -200,30 +187,39 @@ export default function OrbitalCard({
             <stop offset="1" stopColor={fillEnd} stopOpacity="1" />
           </linearGradient>
 
+          {/*
+            Stroke gradient: top-right visible, fades out in middle,
+            bottom-left visible again, top-right circle area transparent
+            Uses two-pass effect: visible → fade → visible → fade
+          */}
           <linearGradient
             id={strokeId}
-            x1="4"
-            y1="0"
+            x1="0"
+            y1={UNION_H}
             x2={UNION_W}
-            y2={UNION_H}
+            y2="0"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor={theme.palette.common.white} stopOpacity="0.15" />
-            <stop offset="0.5" stopColor={theme.palette.common.white} stopOpacity="0.05" />
-            <stop offset="1" stopColor={theme.palette.common.white} stopOpacity="0.12" />
+            <stop offset="0"    stopColor={theme.palette.common.white} stopOpacity="0" />
+            <stop offset="1.85" stopColor={theme.palette.common.white} stopOpacity="0.55" />
+            <stop offset="0.85" stopColor={theme.palette.common.white} stopOpacity="0.45" />
+            <stop offset="1"    stopColor={theme.palette.common.white} stopOpacity="0" />
           </linearGradient>
 
           <linearGradient
             id={strokeHoverId}
-            x1="4"
-            y1="0"
+            x1="0"
+            y1={UNION_H}
             x2={UNION_W}
-            y2={UNION_H}
+            y2="0"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stopColor={theme.palette.common.white} stopOpacity="0.4" />
-            <stop offset="0.45" stopColor={primary} stopOpacity="0.7" />
-            <stop offset="1" stopColor={primary} stopOpacity="0.4" />
+            <stop offset="0"    stopColor={primary} stopOpacity="0.7" />
+            <stop offset="0.15" stopColor={primary} stopOpacity="0" />
+            <stop offset="0.38" stopColor={primary} stopOpacity="0" />
+            <stop offset="0.62" stopColor={primary} stopOpacity="0" />
+            <stop offset="0.85" stopColor={primary} stopOpacity="0.7" />
+            <stop offset="1"    stopColor={primary} stopOpacity="0" />
           </linearGradient>
         </defs>
       </Box>
@@ -250,13 +246,14 @@ export default function OrbitalCard({
             justifyContent: 'center',
             borderRadius: '50%',
             border: '1px solid',
-            backdropFilter: 'blur(12px)',
-            backgroundColor: alpha(theme.palette.background.paper, 0.2),
+            backdropFilter: hovered ? 'blur(12px)' : 'none',
+            WebkitBackdropFilter: hovered ? 'blur(12px)' : 'none',
+            backgroundColor: hovered ? alpha(theme.palette.background.paper, 0.2) : 'transparent',
             borderColor: hovered ? alpha(primary, 0.7) : alpha(theme.palette.common.white, 0.12),
             boxShadow: hovered
               ? `inset 0px 3px 8px 0px ${alpha(theme.palette.common.white, 0.25)}, 0px 0px 32px 4px ${alpha(primary, 0.25)}`
-              : `inset 0px 3px 5px 0px ${alpha(theme.palette.common.white, 0.15)}, 0px 0px 16px 0px ${alpha(primaryDarker, 0.05)}`,
-            transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
+              : 'none',
+            transition: 'background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease',
           }}
         >
           <Box

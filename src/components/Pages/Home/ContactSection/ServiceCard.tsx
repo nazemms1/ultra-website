@@ -3,6 +3,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 import type { ServiceCardProps } from './types'
 
 export default function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
@@ -13,25 +14,41 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
     <Box
       onClick={onSelect}
       sx={{
-        border: `1px solid ${theme.palette.divider}`,
+        // Glass: Light -45°/80%, Refraction 80, Depth 76, Dispersion 50, Frost 38, Splay 38
+        background: `linear-gradient(315deg, ${alpha(theme.palette.common.white, 0.10)} 0%, ${alpha(theme.palette.background.paper, 0.08)} 55%, ${alpha(theme.palette.background.paper, 0.06)} 100%)`,
+        backdropFilter: 'blur(38px) brightness(1.08) saturate(1.2)',
+        WebkitBackdropFilter: 'blur(38px) brightness(1.08) saturate(1.2)',
+        border: '1px solid transparent',
+        backgroundClip: 'padding-box',
         borderRadius: theme.shape.borderRadius,
-        backdropFilter: 'blur(12px)',
+        boxShadow: [
+          `0 4px 76px 38px rgba(0, 0, 0, 0.76)`,
+          `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.50)}`,
+          `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
+        ].join(', '),
         cursor: 'pointer',
         height: '100%',
         p: '20px 18px',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
-        borderColor: selected ? 'primary.main' : alpha(theme.palette.common.white, 0.1),
-        bgcolor: selected
-          ? alpha(theme.palette.primary.main, 0.08)
-          : alpha(theme.palette.common.white, 0.03),
-        boxShadow: selected ? `0 0 24px ${alpha(theme.palette.primary.main, 0.18)}` : 'none',
-        transition: 'border-color 0.22s, background-color 0.22s, box-shadow 0.22s',
+        transition: 'box-shadow 0.22s',
         userSelect: 'none',
+        ...(selected && {
+          boxShadow: [
+            `0 0 24px ${alpha(theme.palette.primary.main, 0.25)}`,
+            `0 4px 76px 38px rgba(0, 0, 0, 0.76)`,
+            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.50)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
+          ].join(', '),
+        }),
         '&:hover': {
-          borderColor: alpha(theme.palette.primary.main, 0.45),
-          bgcolor: alpha(theme.palette.primary.main, 0.05),
+          boxShadow: [
+            `0 0 16px ${alpha(theme.palette.primary.main, 0.15)}`,
+            `0 4px 76px 38px rgba(0, 0, 0, 0.76)`,
+            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.50)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
+          ].join(', '),
         },
       }}
     >

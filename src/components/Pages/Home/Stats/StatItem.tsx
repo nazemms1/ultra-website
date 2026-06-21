@@ -30,11 +30,23 @@ export default function StatItem({ stat, active }: StatItemProps) {
             delay: stat.entranceDelay,
             ease: SMOOTH_EASE,
           },
+          whileHover: {
+            scale: 1.15,
+            y: -8,
+            transition: {
+              duration: 0.3,
+              ease: SMOOTH_EASE,
+            },
+          },
         })}
         sx={{
           width: '100%',
           maxWidth: 206.5,
           textAlign: 'center',
+          cursor: 'pointer',
+          padding: 2,
+          borderRadius: 2,
+          transition: 'all 0.3s ease',
         }}
       >
         <AnimatedNumber

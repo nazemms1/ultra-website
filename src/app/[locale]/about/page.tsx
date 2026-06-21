@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import PageHero, { ShimmerText } from '@/components/shared/PageHero'
 import CTASection from '@/components/Pages/Home/CTASection'
-import { cardSurface, glassSurface } from '@/lib/theme/surfaces'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -92,7 +92,7 @@ export default function AboutPage() {
               sx={{
                 position: 'relative',
                 p: 4,
-                ...glassSurface(theme, { tint: 0.02, radius: '30px' }),
+                ...cardGlassSurface(theme, { radius: '30px' }),
               }}
             >
               <Box
@@ -142,7 +142,7 @@ export default function AboutPage() {
                   component={motion.div}
                   variants={itemVariants}
                   sx={theme => ({
-                    ...cardSurface(theme),
+                    ...cardGlassSurface(theme),
                     p: 4,
                     height: '100%',
                     transition: 'border-color 0.3s ease, box-shadow 0.3s ease',

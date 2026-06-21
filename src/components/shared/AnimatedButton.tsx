@@ -3,6 +3,7 @@
 import Button, { type ButtonProps } from '@mui/material/Button'
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
+import { navGlassPillSurface } from '@/lib/theme/surfaces'
 import { motion, type Transition } from 'framer-motion'
 import { forwardRef, useMemo, useState, type MouseEvent } from 'react'
 
@@ -69,14 +70,16 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
             },
           }
         : {
-            bgcolor: 'transparent',
+            ...navGlassPillSurface(theme),
             color: 'text.primary',
-            border: `1px solid ${alpha(theme.palette.common.white, 0.35)}`,
-            backdropFilter: 'blur(4px)',
-            WebkitBackdropFilter: 'blur(4px)',
             '&:hover': {
               bgcolor: 'transparent',
-              borderColor: alpha(theme.palette.common.white, 0.45),
+              borderColor: alpha(theme.palette.common.white, 0.6),
+              boxShadow: [
+                '0 4px 41px 0 rgba(0, 0, 0, 0.5)',
+                `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.55)}`,
+                `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+              ].join(', '),
             },
           },
     [resolvedBaseColor, theme, variant],

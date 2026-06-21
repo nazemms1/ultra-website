@@ -4,8 +4,9 @@ import { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
+ import type { Theme } from '@mui/material/styles'
 import { Plus, Minus } from 'lucide-react'
-import { glassSurface } from '@/lib/theme/surfaces'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 import SectionHeader from '@/components/shared/SectionHeader'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 
@@ -39,64 +40,55 @@ const faqs = [
 
 function FAQCard({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
   const shimmerRef = useRef<HTMLDivElement>(null)
 
   const handleMouseEnter = () => {
     const shimmer = shimmerRef.current
-    const card = cardRef.current
-    if (!shimmer || !card) return
-
+    if (!shimmer) return
     shimmer.style.transition = 'none'
     shimmer.style.left = '-100%'
     shimmer.getBoundingClientRect()
-    shimmer.style.transition = 'left 3.5s ease'
+    shimmer.style.transition = 'left 2.8s ease'
     shimmer.style.left = '150%'
-
-    card.style.transition = 'transform 0.3s ease'
-    card.style.transform = 'translateY(-6px) scale(1.01)'
-    card.classList.add('ultra-faq-card-hover')
   }
 
   const handleMouseLeave = () => {
     const shimmer = shimmerRef.current
-    const card = cardRef.current
-    if (!shimmer || !card) return
+    if (!shimmer) return
     shimmer.style.transition = 'none'
     shimmer.style.left = '-100%'
-
-    card.classList.remove('ultra-faq-card-hover')
-    card.style.transition = 'transform 0.3s ease'
-    card.style.transform = 'translateY(0) scale(1)'
   }
 
   return (
     <Box
-      ref={cardRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       onClick={() => setOpen(v => !v)}
       sx={theme => ({
-        ...glassSurface(theme, { radius: '1.375rem' }),
+        ...(cardGlassSurface(theme, { radius: '1.375rem' })  as any),
         position: 'relative',
         overflow: 'hidden',
         cursor: 'pointer',
+        transition: 'box-shadow 0.3s ease',
+        '&:hover': {
+          boxShadow: `0 0 40px 8px ${alpha(theme.palette.primary.main, 0.35)}`,
+        },
       })}
     >
+      {/* shimmer sweep */}
       <Box
         ref={shimmerRef}
         sx={theme => ({
           position: 'absolute',
           top: 0,
           left: '-100%',
-          width: '60%',
+          width: '55%',
           height: '100%',
-          background: `linear-gradient(105deg, transparent 30%, ${alpha(theme.palette.common.white, 0.03)} 50%, transparent 70%)`,
+          background: `linear-gradient(105deg, transparent 20%, ${alpha(theme.palette.primary.main, 0.12)} 50%, transparent 80%)`,
           pointerEvents: 'none',
           zIndex: 0,
         })}
       />
-
       <Box
         sx={{
           position: 'relative',
