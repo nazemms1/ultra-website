@@ -3,7 +3,6 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { cardGlassSurface } from '@/lib/theme/surfaces'
 import type { ServiceCardProps } from './types'
 
 export default function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
@@ -14,43 +13,25 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
     <Box
       onClick={onSelect}
       sx={{
-        ...cardGlassSurface(theme, { radius: '16px' }),
         cursor: 'pointer',
         height: '100%',
         p: '20px 18px',
         display: 'flex',
         flexDirection: 'column',
         gap: '12px',
-        borderColor: selected ? 'primary.main' : 'transparent',
+        border: '1px solid',
+        borderColor: selected
+          ? alpha(theme.palette.primary.main, 0.5)
+          : alpha(theme.palette.common.white, 0.1),
         background: selected
           ? `radial-gradient(circle at 100% 0%, ${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 70%), ${alpha(theme.palette.common.white, 0.04)}`
-          : undefined,
-        boxShadow: selected
-          ? [
-              `0 0 24px ${alpha(theme.palette.primary.main, 0.25)}`,
-              `0 4px 76px 38px rgba(0, 0, 0, 0.76)`,
-              `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.5)}`,
-              `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
-            ].join(', ')
-          : undefined,
+          : alpha(theme.palette.common.white, 0.02),
+        borderRadius: '16px',
         transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         userSelect: 'none',
         '&:hover': {
           borderColor: selected ? 'primary.main' : alpha(theme.palette.primary.main, 0.45),
           bgcolor: selected ? undefined : alpha(theme.palette.common.white, 0.06),
-          boxShadow: selected
-            ? [
-                `0 0 32px ${alpha(theme.palette.primary.main, 0.35)}`,
-                `0 4px 76px 38px rgba(0, 0, 0, 0.76)`,
-                `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.5)}`,
-                `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
-              ].join(', ')
-            : [
-                `0 0 16px ${alpha(theme.palette.primary.main, 0.15)}`,
-                `0 4px 76px 38px rgba(0, 0, 0, 0.76)`,
-                `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.5)}`,
-                `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
-              ].join(', '),
         },
       }}
     >
