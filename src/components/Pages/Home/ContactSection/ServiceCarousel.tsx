@@ -118,67 +118,105 @@ export default function ServiceCarousel({
         }}
       />
 
-      {/* Navigation Buttons */}
+      {/* Previous Button (Left Arrow) */}
+      {/* Previous Button (Left Arrow) */}
       <AnimatePresence>
         {showPrev && (
           <MotionIconButton
-            initial={{ opacity: 0, x: -10, scale: 0.9 }}
-            animate={{
-              opacity: 1,
-              x: [-10, 10],
-              scale: 1,
-            }}
-            exit={{ opacity: 0, x: -10, scale: 0.9 }}
-            transition={{
-              x: {
-                repeat: Infinity,
-                repeatType: 'reverse',
-                duration: 1.2,
-                ease: 'easeInOut',
-              },
-              opacity: { duration: 0.2 },
-              scale: { duration: 0.2 },
-            }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
             onClick={() => emblaApi?.scrollPrev()}
             aria-label="Previous services"
             size="small"
             sx={{ ...navButtonSx, left: 10 }}
           >
-            <ChevronsLeft size={22} strokeWidth={2.5} />
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 24,
+                height: 24,
+                overflow: 'hidden',
+                position: 'relative',
+                maskImage:
+                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+                WebkitMaskImage:
+                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+              }}
+            >
+              <motion.div
+                animate={{
+                  // Constantly enters from right (24), passes center (0), exits left (-24), teleports back
+                  x: [24, 0, -24, 24],
+                }}
+                transition={{
+                  duration: 1.5,
+                  ease: 'linear',
+                  repeat: Infinity,
+                  // 0.0 to 0.99 is the smooth linear movement across the center.
+                  // 0.99 to 1.0 is the instant hidden teleport back to the start.
+                  times: [0, 0.5, 0.99, 1],
+                }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <ChevronsLeft size={22} strokeWidth={2.5} />
+              </motion.div>
+            </Box>
           </MotionIconButton>
         )}
       </AnimatePresence>
 
+      {/* Next Button (Right Arrow) */}
       <AnimatePresence>
         {showNext && (
           <MotionIconButton
-            initial={{ opacity: 0, x: 10, scale: 0.9 }}
-            animate={{
-              opacity: 1,
-              x: [10, -10],
-              scale: 1,
-            }}
-            exit={{ opacity: 0, x: 10, scale: 0.9 }}
-            transition={{
-              x: {
-                repeat: Infinity,
-                repeatType: 'reverse',
-                duration: 1.2,
-                ease: 'easeInOut',
-              },
-              opacity: { duration: 0.2 },
-              scale: { duration: 0.2 },
-            }}
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            transition={{ duration: 0.2 }}
             onClick={() => emblaApi?.scrollNext()}
             aria-label="Next services"
             size="small"
             sx={{ ...navButtonSx, right: 10 }}
           >
-            <ChevronsRight size={22} strokeWidth={2.5} />
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: 24,
+                height: 24,
+                overflow: 'hidden',
+                position: 'relative',
+                maskImage:
+                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+                WebkitMaskImage:
+                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+              }}
+            >
+              <motion.div
+                animate={{
+                  // Constantly enters from left (-24), passes center (0), exits right (24), teleports back
+                  x: [-24, 0, 24, -24],
+                }}
+                transition={{
+                  duration: 1.5,
+                  ease: 'linear',
+                  repeat: Infinity,
+                  // Perfectly timed distribution so it spends equal time on both sides of 0
+                  times: [0, 0.5, 0.99, 1],
+                }}
+                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+              >
+                <ChevronsRight size={22} strokeWidth={2.5} />
+              </motion.div>
+            </Box>
           </MotionIconButton>
         )}
       </AnimatePresence>
-
       {/* Carousel Track */}
       <Box ref={emblaRef} sx={{ overflow: 'hidden' }}>
         <Box sx={{ display: 'flex', gap: '12px' }}>
