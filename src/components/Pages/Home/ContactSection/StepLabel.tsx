@@ -3,8 +3,13 @@
 import IconButton from '@mui/material/IconButton'
 import Box from '@mui/material/Box'
 import Typography, { typographyClasses } from '@mui/material/Typography'
+import { useTheme } from '@mui/material/styles'
+import { alpha } from '@mui/material/styles'
 
 export default function StepLabel({ num, label }: { num: string; label: string }) {
+  const theme = useTheme()
+  const radius = theme.shape.borderRadius
+
   return (
     <Box
       sx={{
@@ -22,8 +27,16 @@ export default function StepLabel({ num, label }: { num: string; label: string }
         sx={{
           width: 32,
           height: 32,
-          border: '1px solid rgba(13, 241, 217, 0.40)',
-          background: 'rgba(13, 241, 217, 0.10)',
+          background: `linear-gradient(to top left, ${alpha(theme.palette.primary.main, 0.125)} 25%, ${alpha(theme.palette.primary.main, 0.125)} 15%)`,
+          backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+          WebkitBackdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+          backgroundClip: 'padding-box',
+          borderRadius: radius,
+          border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
+          boxShadow: [
+            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.5)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.5)}`,
+          ].join(', '),
         }}
       >
         <Typography
