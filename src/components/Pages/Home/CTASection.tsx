@@ -5,6 +5,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import AnimatedButton from '@/components/shared/AnimatedButton'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 export default function CTASection() {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -59,7 +60,7 @@ export default function CTASection() {
       sx={theme => ({
         position: 'relative',
         overflow: 'hidden',
-        height: '689px',
+        height: '698px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -110,7 +111,7 @@ export default function CTASection() {
         sx={theme => ({
           position: 'absolute',
           inset: 0,
-          background: alpha(theme.palette.background.default, 0.2),
+          // background: alpha(theme.palette.background.default, 0.2),
           zIndex: 1,
         })}
       />
@@ -131,15 +132,9 @@ export default function CTASection() {
           justifyContent: 'center',
           textAlign: 'center',
           willChange: 'transform',
-          background: alpha(theme.palette.background.default, 0.15),
-          backdropFilter: 'blur(12px) saturate(1.4)',
-          WebkitBackdropFilter: 'blur(12px) saturate(1.4)',
-          border: `1px solid ${alpha(theme.palette.primary.darker, 0.3)}`,
-          boxShadow: [
-            '0px 57px 80px -20px rgba(0,0,0,0.30)',
-            `inset 1px 1px 16px 0px ${alpha(theme.palette.common.white, 0.13)}`,
-            `inset -1px -1px 16px 0px ${alpha(theme.palette.common.white, 0.05)}`,
-          ].join(', '),
+           backdropFilter: 'blur(20px) saturate(1.4)',
+           border: `1px solid ${alpha(theme.palette.primary.darker, 0.3)}`,
+        ...cardGlassSurface
         })}
       >
         <Typography
