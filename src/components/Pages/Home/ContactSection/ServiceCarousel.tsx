@@ -51,7 +51,7 @@ export default function ServiceCarousel({
   const showPrev = isHovered && scrollState.canPrev
   const showNext = isHovered && scrollState.canNext
 
-   const navButtonSx = {
+  const navButtonSx = {
     position: 'absolute',
     top: 'calc(50% - 20px)',
     zIndex: 3,
@@ -71,7 +71,7 @@ export default function ServiceCarousel({
     },
   }
 
-   const shadowTransition = theme.transitions.create(['opacity', 'visibility'], {
+  const shadowTransition = theme.transitions.create(['opacity', 'visibility'], {
     duration: theme.transitions.duration.standard,
     easing: theme.transitions.easing.easeInOut,
   })
@@ -82,7 +82,7 @@ export default function ServiceCarousel({
       onMouseLeave={() => setIsHovered(false)}
       sx={{ position: 'relative' }}
     >
-       <Box
+      <Box
         sx={{
           pointerEvents: 'none',
           position: 'absolute',
@@ -98,7 +98,7 @@ export default function ServiceCarousel({
         }}
       />
 
-       <Box
+      <Box
         sx={{
           pointerEvents: 'none',
           position: 'absolute',
@@ -146,7 +146,7 @@ export default function ServiceCarousel({
                   x: [0, -24],
                 }}
                 transition={{
-                  duration: 0.8,  
+                  duration: 0.8,
                   ease: 'linear',
                   repeat: Infinity,
                 }}
