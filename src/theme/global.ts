@@ -5,9 +5,11 @@ const shimmer = keyframes`
   100% { background-position: 200% center; }
 `
 
-const faqGlowPulse = keyframes`
-  0%, 100% { box-shadow: 0 0 16px 2px var(--ultra-palette-primary-mainChannel, 13 241 217 / 0.25); }
-  50% { box-shadow: 0 0 32px 8px var(--ultra-palette-primary-mainChannel, 13 241 217 / 0.5); }
+const faqShimmerSweep = keyframes`
+  0%   { transform: translateX(-160%) skewX(-18deg); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(360%) skewX(-18deg); opacity: 0; }
 `
 
 const GlobalStyles = () => css`
@@ -73,8 +75,46 @@ const GlobalStyles = () => css`
     animation: ${shimmer} 3s linear infinite;
   }
 
-  .ultra-faq-card-hover {
-    animation: ${faqGlowPulse} 1.8s ease-in-out infinite;
+  /* FAQ card — steady Figma hover glow + one-shot diagonal shimmer sweep */
+  .ultra-faq-card {
+    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+
+  .ultra-faq-card .ultra-faq-card__sheen {
+    position: absolute;
+    top: -40%;
+    bottom: -40%;
+    left: 0;
+    width: 38%;
+    pointer-events: none;
+    z-index: 2;
+    opacity: 0;
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      color-mix(in srgb, var(--ultra-palette-primary-light) 22%, transparent) 48%,
+      color-mix(in srgb, var(--ultra-palette-primary-lighter) 42%, transparent) 50%,
+      color-mix(in srgb, var(--ultra-palette-primary-light) 22%, transparent) 52%,
+      transparent 100%
+    );
+    filter: blur(6px);
+  }
+
+  .ultra-faq-card:hover {
+    transform: translateY(-6px) scale(1.01);
+    border-color: color-mix(in srgb, var(--ultra-palette-primary-main) 55%, transparent);
+    box-shadow:
+      0 0 0 1px color-mix(in srgb, var(--ultra-palette-primary-main) 35%, transparent),
+      0 18px 40px -12px rgba(0, 0, 0, 0.55),
+      0 0 26px 0 color-mix(in srgb, var(--ultra-palette-primary-main) 28%, transparent),
+      0 0 60px -6px color-mix(in srgb, var(--ultra-palette-primary-main) 20%, transparent),
+      inset 1px 1px 0 0 rgba(255, 255, 255, 0.20),
+      inset -1px -1px 0 0 color-mix(in srgb, var(--ultra-palette-primary-main) 14%, transparent);
+  }
+
+  .ultra-faq-card:hover .ultra-faq-card__sheen {
+    animation: ${faqShimmerSweep} 1.5s ease-out;
   }
 `
 

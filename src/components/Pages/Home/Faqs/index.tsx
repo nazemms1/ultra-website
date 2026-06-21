@@ -1,13 +1,11 @@
 'use client'
 
-import { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
-import { Plus, Minus } from 'lucide-react'
-import { glassSurface } from '@/lib/theme/surfaces'
 import SectionHeader from '@/components/shared/SectionHeader'
 import AnimatedButton from '@/components/shared/AnimatedButton'
+import FAQCard from './FAQCard'
 
 const faqs = [
   {
@@ -36,157 +34,6 @@ const faqs = [
       'Absolutely. Our team is distributed across both regions, allowing us to serve clients locally while maintaining international delivery standards.',
   },
 ]
-
-function FAQCard({ question, answer }: { question: string; answer: string }) {
-  const [open, setOpen] = useState(false)
-  const cardRef = useRef<HTMLDivElement>(null)
-  const shimmerRef = useRef<HTMLDivElement>(null)
-
-  const handleMouseEnter = () => {
-    const shimmer = shimmerRef.current
-    const card = cardRef.current
-    if (!shimmer || !card) return
-
-    shimmer.style.transition = 'none'
-    shimmer.style.left = '-100%'
-    shimmer.getBoundingClientRect()
-    shimmer.style.transition = 'left 3.5s ease'
-    shimmer.style.left = '150%'
-
-    card.style.transition = 'transform 0.3s ease'
-    card.style.transform = 'translateY(-6px) scale(1.01)'
-    card.classList.add('ultra-faq-card-hover')
-  }
-
-  const handleMouseLeave = () => {
-    const shimmer = shimmerRef.current
-    const card = cardRef.current
-    if (!shimmer || !card) return
-    shimmer.style.transition = 'none'
-    shimmer.style.left = '-100%'
-
-    card.classList.remove('ultra-faq-card-hover')
-    card.style.transition = 'transform 0.3s ease'
-    card.style.transform = 'translateY(0) scale(1)'
-  }
-
-  return (
-    <Box
-      ref={cardRef}
-      onMouseEnter={handleMouseEnter}
-      onMouseLeave={handleMouseLeave}
-      onClick={() => setOpen(v => !v)}
-      sx={theme => ({
-        ...glassSurface(theme, { radius: '1.375rem' }),
-        position: 'relative',
-        overflow: 'hidden',
-        cursor: 'pointer',
-      })}
-    >
-      <Box
-        ref={shimmerRef}
-        sx={theme => ({
-          position: 'absolute',
-          top: 0,
-          left: '-100%',
-          width: '60%',
-          height: '100%',
-          background: `linear-gradient(105deg, transparent 30%, ${alpha(theme.palette.common.white, 0.03)} 50%, transparent 70%)`,
-          pointerEvents: 'none',
-          zIndex: 0,
-        })}
-      />
-
-      <Box
-        sx={{
-          position: 'relative',
-          zIndex: 1,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '1.5rem',
-          px: { xs: '1.25rem', md: '1.75rem' },
-          py: '1.375rem',
-        }}
-      >
-        <Typography
-          sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500,
-            fontSize: '15px',
-            lineHeight: '22px',
-            letterSpacing: '0.2px',
-            color: 'text.primary',
-          }}
-        >
-          {question}
-        </Typography>
-
-        <Box
-          sx={theme => ({
-            flexShrink: 0,
-            width: '30px',
-            height: '30px',
-            borderRadius: '9999px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: 'primary.main',
-            bgcolor: alpha(theme.palette.primary.main, 0.1),
-            border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
-            backdropFilter: 'blur(33px)',
-            WebkitBackdropFilter: 'blur(33px)',
-            boxShadow: [
-              `inset 1px 1px 16px 0px ${alpha(theme.palette.common.white, 0.13)}`,
-              `inset -1px -1px 16px 0px ${alpha(theme.palette.common.white, 0.05)}`,
-              '0px 57px 80px -20px rgba(0,0,0,0.30)',
-            ].join(', '),
-            transition: 'all 0.2s ease',
-          })}
-        >
-          {open ? (
-            <Minus size={13} color="currentColor" />
-          ) : (
-            <Plus size={13} color="currentColor" />
-          )}
-        </Box>
-      </Box>
-
-      <Box
-        sx={{
-          position: 'relative',
-          zIndex: 1,
-          maxHeight: open ? '300px' : '0px',
-          overflow: 'hidden',
-          transition: 'max-height 0.35s ease',
-        }}
-      >
-        <Box
-          sx={theme => ({
-            height: '1px',
-            background: alpha(theme.palette.common.white, 0.1),
-            margin: '0 1.75rem',
-          })}
-        />
-        <Typography
-          sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 400,
-            fontSize: '14px',
-            lineHeight: '22px',
-            letterSpacing: '0.2px',
-            color: 'text.tertiary',
-            px: { xs: '1.25rem', md: '1.75rem' },
-            pt: '1rem',
-            pb: '1.375rem',
-          }}
-        >
-          {answer}
-        </Typography>
-      </Box>
-    </Box>
-  )
-}
 
 export default function FAQSection() {
   return (
