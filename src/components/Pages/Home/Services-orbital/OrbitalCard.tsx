@@ -152,6 +152,7 @@ export default function OrbitalCard({
         {/* Base Color Fill with Dynamic Path Morphing */}
         <motion.path
           d={CARD_PATH}
+          initial={{ d: CARD_PATH }}
           animate={{ d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH }}
           transition={springTransition}
           fill={`url(#${fillId})`}
@@ -160,6 +161,7 @@ export default function OrbitalCard({
         {/* Hover Accent Glow Fill Overlay */}
         <motion.path
           d={CARD_PATH}
+          initial={{ d: CARD_PATH, opacity: 0 }}
           animate={{
             d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
             opacity: isDisplayingActive ? 0.04 : 0,
@@ -171,6 +173,7 @@ export default function OrbitalCard({
         {/* Default Border Path */}
         <motion.path
           d={CARD_PATH}
+          initial={{ d: CARD_PATH, opacity: 1 }}
           animate={{
             d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
             opacity: isDisplayingActive ? 0 : 1,
@@ -184,6 +187,7 @@ export default function OrbitalCard({
         {/* Active Hover Border Path */}
         <motion.path
           d={CARD_PATH}
+          initial={{ d: CARD_PATH, opacity: 0 }}
           animate={{
             d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
             opacity: isDisplayingActive ? 1 : 0,
@@ -257,6 +261,7 @@ export default function OrbitalCard({
         >
           <Box
             component={motion.div}
+            initial={{ scale: 1, opacity: 0.5 }}
             animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
             transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
             sx={{
