@@ -3,31 +3,81 @@ import { alpha } from '@mui/material/styles'
 import type { SxProps } from '@mui/material/styles'
 import { paletteAlpha } from './paletteAlpha'
 
-/** Figma Glass plugin — light -45°, frost blur, inner highlight */
+/**
+ * Figma Glass plugin — Light -45° / 80%, Refraction 80, Depth 41, Dispersion 45, Frost 26, Splay 0
+ *
+ * Frost 26        → blur(26px)
+ * Refraction 80   → brightness(1.08) in backdrop-filter
+ * Light -45°/80%  → linear-gradient(315deg, white 80% opacity) as top layer
+ * Depth 41        → box-shadow spread scaled from 41 → ~41px blur, 0.41 opacity
+ * Dispersion 45   → inner border highlights at ±45% intensity
+ */
 export function glassSurface(theme: Theme, opts?: { tint?: number; radius?: number | string }) {
-  const tint = opts?.tint ?? 0.1
+  const tint = opts?.tint ?? 0.08
   const radius = opts?.radius ?? theme.shape.borderRadius
 
+  // Light -45° at 80% → 315deg gradient using paper color at 80% opacity as light source
+  const lightAngle = '315deg' // −45° = 315°
+  const lightOpacity = 0.80
+  const paperColor = theme.vars?.palette.background.paper ?? theme.palette.background.paper
+
   return {
-    background: paletteAlpha(
-      theme.vars?.palette.background.paper ?? theme.palette.background.paper,
-      tint,
-    ),
-    backdropFilter: 'blur(24px) brightness(1.05)',
-    WebkitBackdropFilter: 'blur(24px) brightness(1.05)',
-    border: `1px solid`,
-    borderColor: 'divider',
+    background: `linear-gradient(${lightAngle}, ${alpha(theme.palette.common.white, lightOpacity * 0.12)} 0%, ${paletteAlpha(paperColor, tint)} 60%, ${paletteAlpha(paperColor, tint * 0.8)} 100%)`,
+    backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',   // Frost 26, Refraction ~80
+    WebkitBackdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+    border: '1px solid transparent',
+    backgroundClip: 'padding-box',
     borderRadius: radius,
     boxShadow: [
-      '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
-      `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.18)}`,
-      `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.05)}`,
+      // Depth 41 → deep shadow 41px blur, ~0.41 opacity
+      '0 4px 41px 0 rgba(0, 0, 0, 0.41)',
+      // Dispersion 45 → angled highlight at top-left (light source at -45°)
+      `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.45)}`,   // Dispersion 45
+      `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`, // shadow edge
     ].join(', '),
   } satisfies SxProps<Theme>
 }
 
 export function glassPillSurface(theme: Theme) {
   return glassSurface(theme, { radius: theme.shape.borderRadiusPill })
+}
+
+/**
+ * Figma Glass — card variant
+ * Light -45° / 80%, Refraction 80, Depth 96, Dispersion 71, Frost 20, Splay 0
+ */
+export function cardGlassSurface(
+  theme: Theme,
+  opts?: { radius?: number | string },
+): SxProps<Theme> {
+  const radius = opts?.radius ?? theme.shape.borderRadius
+  const paperColor = theme.vars?.palette.background.paper ?? theme.palette.background.paper
+
+  return {
+    // background: `linear-gradient(315deg, ${alpha(theme.palette.common.white, 0.10)} 0%, ${paletteAlpha(paperColor, 0.08)} 55%, ${paletteAlpha(paperColor, 0.06)} 100%)`,
+    backdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
+    WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
+    border: '1px solid transparent',
+    backgroundClip: 'padding-box',
+    borderRadius: radius,
+    boxShadow: [
+      '0 8px 96px 0 rgba(0, 0, 0, 0.55)',
+      `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.71)}`,
+      `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+    ].join(', '),
+  } satisfies SxProps<Theme>
+}
+
+/** Figma Glass pill — same style used in the Navbar pills. Safe to reuse across components. */
+export function navGlassPillSurface(theme: Theme): SxProps<Theme> {
+  return {
+    ...glassPillSurface(theme),
+    boxShadow: [
+      '0 4px 41px 0 rgba(0, 0, 0, 0.41)',
+      `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.45)}`,
+      `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
+    ].join(', '),
+  }
 }
 
 export function cardSurface(theme: Theme) {
@@ -66,11 +116,21 @@ export function glassButtonSx(theme: Theme) {
   return {
     ...glassPillSurface(theme),
     color: 'text.primary',
+    boxShadow: [
+      '0 4px 41px 0 rgba(0, 0, 0, 0.41)',
+      `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.45)}`,
+      `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
+    ].join(', '),
     '&:hover': {
       borderColor: alpha(theme.palette.primary.main, 0.5),
       color: 'primary.main',
       bgcolor: alpha(theme.palette.primary.main, 0.06),
       transform: 'translateY(-1px)',
+      boxShadow: [
+        '0 4px 41px 0 rgba(0, 0, 0, 0.5)',
+        `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.55)}`,
+        `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+      ].join(', '),
     },
   } satisfies SxProps<Theme>
 }

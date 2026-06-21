@@ -3,7 +3,6 @@ import { Rajdhani } from 'next/font/google'
 import { hasLocale } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
-import { InitColorSchemeScript } from '@mui/material'
 import AppShell from '@/components/Layout/AppShell'
 import AppProviders from '@/providers/AppProviders'
 import { routing, type AppLocale } from '@/i18n/routing'
@@ -82,8 +81,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={rajdhani.className}
       suppressHydrationWarning
     >
-      <body suppressHydrationWarning>
-        <InitColorSchemeScript attribute="class" defaultMode="dark" />
+<body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>
           <AppShell navLabels={navLabels}>{children}</AppShell>
         </AppProviders>

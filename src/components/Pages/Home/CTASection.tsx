@@ -58,7 +58,6 @@ export default function CTASection() {
       onMouseLeave={handleMouseLeave}
       sx={theme => ({
         position: 'relative',
-        width: '100%',
         overflow: 'hidden',
         height: '689px',
         display: 'flex',
@@ -71,7 +70,7 @@ export default function CTASection() {
           top: 0,
           left: 0,
           right: 0,
-          height: '140px',
+          height: '180px',
           background: `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
           zIndex: 2,
           pointerEvents: 'none',
@@ -83,7 +82,7 @@ export default function CTASection() {
           bottom: 0,
           left: 0,
           right: 0,
-          height: '140px',
+          height: '180px',
           background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
           zIndex: 2,
           pointerEvents: 'none',
@@ -111,7 +110,7 @@ export default function CTASection() {
         sx={theme => ({
           position: 'absolute',
           inset: 0,
-          background: alpha(theme.palette.background.default, 0.45),
+          background: alpha(theme.palette.background.default, 0.2),
           zIndex: 1,
         })}
       />
@@ -132,9 +131,9 @@ export default function CTASection() {
           justifyContent: 'center',
           textAlign: 'center',
           willChange: 'transform',
-          background: 'transparent',
-          backdropFilter: 'none',
-          WebkitBackdropFilter: 'none',
+          background: alpha(theme.palette.background.default, 0.15),
+          backdropFilter: 'blur(12px) saturate(1.4)',
+          WebkitBackdropFilter: 'blur(12px) saturate(1.4)',
           border: `1px solid ${alpha(theme.palette.primary.darker, 0.3)}`,
           boxShadow: [
             '0px 57px 80px -20px rgba(0,0,0,0.30)',

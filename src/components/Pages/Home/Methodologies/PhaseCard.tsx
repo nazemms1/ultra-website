@@ -2,7 +2,8 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 import { motion, useMotionTemplate, useTransform, type MotionValue } from 'framer-motion'
 import PhaseGlyph from './PhaseGlyph'
 import type { Phase } from './data'
@@ -49,42 +50,24 @@ export default function PhaseCard({ phase, index, total, progress }: PhaseCardPr
 }
 
 export function PhaseCardContent({ phase }: { phase: Phase }) {
+  const theme = useTheme()
   return (
     <Box
       component="article"
-      sx={theme => ({
+      sx={{
+        ...cardGlassSurface(theme, { radius: '24px' }),
         position: 'relative',
         display: 'grid',
         gridTemplateColumns: { xs: '1fr', md: '0.95fr 1fr' },
         overflow: 'hidden',
-        borderRadius: '24px',
-        boxShadow: `0 24px 64px -16px ${alpha(theme.palette.primary.darker || '#000', 0.45)}`,
-        backdropFilter: 'blur(16px)',
-      })}
+        boxShadow: [
+          `0 24px 64px -16px ${alpha(theme.palette.primary.darker || '#000', 0.45)}`,
+          `0 8px 96px 0 rgba(0, 0, 0, 0.55)`,
+          `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.71)}`,
+          `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+        ].join(', '),
+      }}
     >
-      {/* Background Glass Layer */}
-      <Box
-        aria-hidden
-        sx={theme => ({
-          pointerEvents: 'none',
-          position: 'absolute',
-          inset: 0,
-          borderRadius: '24px',
-          backgroundImage: `linear-gradient(154deg, ${alpha(theme.palette.primary.darker || '#001a1a', 0.25)} 0%, ${alpha(theme.palette.background.paper, 0.75)} 60%)`,
-        })}
-      />
-
-      {/* High-Tech Cyber Border */}
-      <Box
-        aria-hidden
-        sx={theme => ({
-          pointerEvents: 'none',
-          position: 'absolute',
-          inset: 0,
-          borderRadius: '24px',
-          boxShadow: `inset 0 0 0 1px ${alpha(theme.palette.primary.main, 0.2)}`,
-        })}
-      />
 
       {/* Visual Column */}
       <Box

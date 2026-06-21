@@ -5,7 +5,8 @@ import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 import ShimmerText from '@/components/shared/ShimmerText'
 
 const projects = [
@@ -134,24 +135,27 @@ export default function Portfolio() {
 }
 
 function ProjectCard({ project }: { project: (typeof projects)[number] }) {
+  const theme = useTheme()
   return (
     <Box
-      sx={theme => ({
+      sx={{
+        ...cardGlassSurface(theme, { radius: '16px' }),
         display: 'flex',
         flexDirection: 'column',
         height: '100%',
         overflow: 'hidden',
-        borderRadius: '16px',
-        bgcolor: 'background.card',
-        border: `1px solid ${alpha(theme.palette.primary.main, 0.12)}`,
         transition: 'all 0.3s',
         '&:hover': {
-          borderColor: alpha(theme.palette.primary.main, 0.4),
-          boxShadow: `0 0 35px ${alpha(theme.palette.primary.main, 0.12)}`,
+          boxShadow: [
+            `0 0 35px ${alpha(theme.palette.primary.main, 0.18)}`,
+            `0 8px 96px 0 rgba(0, 0, 0, 0.65)`,
+            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.80)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.10)}`,
+          ].join(', '),
           '& img': { transform: 'scale(1.05)', opacity: 0.9 },
-          '&:hover [data-portfolio-arrow]': { opacity: 1, transform: 'translate(2px, -2px)' },
+          '[data-portfolio-arrow]': { opacity: 1, transform: 'translate(2px, -2px)' },
         },
-      })}
+      }}
     >
       <Box
         sx={theme => ({

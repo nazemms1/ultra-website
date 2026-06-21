@@ -14,7 +14,7 @@ import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined'
 import SendOutlinedIcon from '@mui/icons-material/SendOutlined'
 import PageHero, { ShimmerText } from '@/components/shared/PageHero'
 import UltraButton from '@/components/shared/UltraButton'
-import FAQSection from '@/components/Pages/Home/FAQSection'
+import FAQSection from '@/components/Pages/Home/Faqs'
 import { glassSurface } from '@/lib/theme/surfaces'
 import { siteConfig } from '@/config'
 
