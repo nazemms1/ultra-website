@@ -6,6 +6,7 @@ import { alpha } from '@mui/material/styles'
 import SectionHeader from '@/components/shared/SectionHeader'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import FAQCard from './FAQCard'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 const faqs = [
   {
@@ -142,10 +143,9 @@ export default function FAQSection() {
             gap: '20px',
             flexWrap: 'wrap',
             width: { xs: '100%', sm: '663px' },
+            ...cardGlassSurface(theme, { radius: '1.375rem' }),
             px: '20px',
             py: '16px',
-            borderRadius: '12px',
-            border: `1px solid ${alpha(theme.palette.common.white, 0.07)}`,
             background: alpha(theme.palette.background.default, 0.6),
           })}
         >

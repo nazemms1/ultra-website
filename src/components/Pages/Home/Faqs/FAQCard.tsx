@@ -1,6 +1,6 @@
 import { alpha } from '@mui/material/styles'
 import { useState } from 'react'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Collapse } from '@mui/material'
 import { Minus, Plus } from 'lucide-react'
 import { cardGlassSurface } from '@/lib/theme/surfaces'
 
@@ -12,18 +12,14 @@ export default function FAQCard({ question, answer }: { question: string; answer
       onClick={() => setOpen(v => !v)}
       className="faq-card-root"
       sx={theme => ({
-        // ...glassSurface(theme, { radius: '1.375rem' }),
         ...cardGlassSurface(theme, { radius: '1.375rem' }),
         position: 'relative',
         overflow: 'hidden',
         cursor: 'pointer',
-        // borderColor: alpha(theme.palette.primary.main, 0.25),
-        // boxShadow: `0px 4px 20px 0px rgba(0, 0, 0, 0.4), 0px 0px 12px 0px ${alpha(theme.palette.primary.main, 0.1)}`,
         transition:
           'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease',
         '&:hover': {
           transform: 'translateY(-2px)',
-          //   borderColor: alpha(theme.palette.primary.main, 0.8),
           bgcolor: alpha(theme.palette.primary.main, 0.05),
           boxShadow: [
             `0px 0px 15px 0px ${alpha(theme.palette.primary.main, 0.5)}`,
@@ -85,25 +81,23 @@ export default function FAQCard({ question, answer }: { question: string; answer
             alignItems: 'center',
             justifyContent: 'center',
             color: 'primary.main',
+            border: '1px solid transparent',
             bgcolor: alpha(theme.palette.primary.main, 0.1),
-            border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
-            backdropFilter: 'blur(33px)',
-            WebkitBackdropFilter: 'blur(33px)',
+            backdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
+            WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
             boxShadow: [
-              `inset 1px 1px 16px 0px ${alpha(theme.palette.common.white, 0.13)}`,
-              `inset -1px -1px 16px 0px ${alpha(theme.palette.common.white, 0.05)}`,
-              '0px 57px 80px -20px rgba(0,0,0,0.30)',
+              `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
+              `inset -1px -1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
             ].join(', '),
             transition:
               'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease',
-
             '.faq-card-root:hover &': {
               transform: 'scale(1.08)',
-              bgcolor: alpha(theme.palette.primary.main, 0.35),
-              borderColor: alpha(theme.palette.primary.main, 1),
+              bgcolor: alpha(theme.palette.primary.main, 0.125),
               boxShadow: [
-                `0px 0px 15px 0px ${alpha(theme.palette.primary.main, 0.6)}`,
-                `inset 1px 1px 10px 0px ${alpha(theme.palette.common.white, 0.2)}`,
+                `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
+                `0 8px 96px 0 ${alpha(theme.palette.common.white, 0.25)}`,
+                `inset -1px -1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
               ].join(', '),
             },
           })}
@@ -116,42 +110,37 @@ export default function FAQCard({ question, answer }: { question: string; answer
         </Box>
       </Box>
 
-      <Box
-        sx={{
-          position: 'relative',
-          zIndex: 2,
-          maxHeight: open ? '300px' : '0px',
-          overflow: 'hidden',
-          transition: theme =>
-            theme.transitions.create('max-height', {
-              duration: theme.transitions.duration.short,
-              easing: theme.transitions.easing.sharp,
-            }),
-        }}
-      >
+      <Collapse in={open}>
         <Box
-          sx={theme => ({
-            height: '1px',
-            background: alpha(theme.palette.common.white, 0.1),
-            margin: '0 1.75rem',
-          })}
-        />
-        <Typography
           sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 400,
-            fontSize: '14px',
-            lineHeight: '22px',
-            letterSpacing: '0.2px',
-            color: 'text.tertiary',
-            px: { xs: '1.25rem', md: '1.75rem' },
-            pt: '1rem',
-            pb: '1.375rem',
+            position: 'relative',
+            zIndex: 2,
           }}
         >
-          {answer}
-        </Typography>
-      </Box>
+          <Box
+            sx={theme => ({
+              height: '1px',
+              background: alpha(theme.palette.common.white, 0.1),
+              margin: '0 1.75rem',
+            })}
+          />
+          <Typography
+            sx={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontWeight: 400,
+              fontSize: '14px',
+              lineHeight: '22px',
+              letterSpacing: '0.2px',
+              color: 'text.tertiary',
+              px: { xs: '1.25rem', md: '1.75rem' },
+              pt: '1rem',
+              pb: '1.375rem',
+            }}
+          >
+            {answer}
+          </Typography>
+        </Box>
+      </Collapse>
     </Box>
   )
 }
