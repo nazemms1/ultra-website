@@ -39,10 +39,13 @@ interface OrbitalCardProps {
   Icon: LucideIcon
   onHoverStart?: () => void
   onHoverEnd?: () => void
+  onClick?: () => void
+  selected?: boolean
+  active?: boolean
   sx?: SxProps<Theme>
 }
 
-const MotionBox = motion(Box)
+const MotionBox = motion.create(Box)
 
 export default function OrbitalCard({
   title,
@@ -50,6 +53,9 @@ export default function OrbitalCard({
   Icon,
   onHoverStart,
   onHoverEnd,
+  onClick,
+  selected = false,
+  active = false,
   sx,
 }: OrbitalCardProps) {
   const theme = useTheme()
@@ -60,6 +66,7 @@ export default function OrbitalCard({
   const strokeId = `orbital-card-stroke-${id}`
   const strokeHoverId = `orbital-card-stroke-hover-${id}`
   const [hovered, setHovered] = useState(false)
+  const isDisplayingActive = active || hovered
 
   const fillStart = alpha(theme.palette.background.paper, 0.55)
   const fillMid = alpha(theme.palette.background.paper, 0.62)
@@ -94,11 +101,12 @@ export default function OrbitalCard({
   return (
     <MotionBox
       initial="rest"
-      animate={hovered ? 'hover' : 'rest'}
+      animate={isDisplayingActive ? 'hover' : 'rest'}
       variants={cardVariants}
       transition={springTransition}
       onMouseEnter={handleHoverStart}
       onMouseLeave={handleHoverEnd}
+      onClick={onClick}
       sx={{
         position: 'relative',
         cursor: 'pointer',
@@ -144,7 +152,7 @@ export default function OrbitalCard({
         {/* Base Color Fill with Dynamic Path Morphing */}
         <motion.path
           d={CARD_PATH}
-          animate={{ d: hovered ? HOVER_CARD_PATH : CARD_PATH }}
+          animate={{ d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH }}
           transition={springTransition}
           fill={`url(#${fillId})`}
         />
@@ -153,8 +161,8 @@ export default function OrbitalCard({
         <motion.path
           d={CARD_PATH}
           animate={{
-            d: hovered ? HOVER_CARD_PATH : CARD_PATH,
-            opacity: hovered ? 0.04 : 0,
+            d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
+            opacity: isDisplayingActive ? 0.04 : 0,
           }}
           transition={springTransition}
           fill={primary}
@@ -164,8 +172,8 @@ export default function OrbitalCard({
         <motion.path
           d={CARD_PATH}
           animate={{
-            d: hovered ? HOVER_CARD_PATH : CARD_PATH,
-            opacity: hovered ? 0 : 1,
+            d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
+            opacity: isDisplayingActive ? 0 : 1,
           }}
           transition={springTransition}
           stroke={`url(#${strokeId})`}
@@ -177,8 +185,8 @@ export default function OrbitalCard({
         <motion.path
           d={CARD_PATH}
           animate={{
-            d: hovered ? HOVER_CARD_PATH : CARD_PATH,
-            opacity: hovered ? 1 : 0,
+            d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
+            opacity: isDisplayingActive ? 1 : 0,
           }}
           transition={springTransition}
           stroke={`url(#${strokeHoverId})`}
@@ -228,6 +236,39 @@ export default function OrbitalCard({
         </defs>
       </Box>
 
+      {/* Persistent Selection Indicator (Pulse Dot) */}
+      {selected && (
+        <MotionBox
+          layoutId="selection-indicator"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={springTransition}
+          sx={{
+            position: 'absolute',
+            left: 20,
+            top: 20,
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            bgcolor: 'primary.main',
+            boxShadow: `0 0 10px 2px ${alpha(primary, 0.6)}`,
+            zIndex: 10,
+          }}
+        >
+          <Box
+            component={motion.div}
+            animate={{ scale: [1, 1.5, 1], opacity: [0.5, 0.2, 0.5] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            sx={{
+              position: 'absolute',
+              inset: -4,
+              borderRadius: '50%',
+              border: `2px solid ${primary}`,
+            }}
+          />
+        </MotionBox>
+      )}
+
       {/* Floating Top-Right Badge (Inner Circle) */}
       <MotionBox
         variants={iconContainerVariants}
@@ -252,8 +293,10 @@ export default function OrbitalCard({
             border: '1px solid',
             backdropFilter: 'blur(12px)',
             backgroundColor: alpha(theme.palette.background.paper, 0.2),
-            borderColor: hovered ? alpha(primary, 0.7) : alpha(theme.palette.common.white, 0.12),
-            boxShadow: hovered
+            borderColor: isDisplayingActive
+              ? alpha(primary, 0.7)
+              : alpha(theme.palette.common.white, 0.12),
+            boxShadow: isDisplayingActive
               ? `inset 0px 3px 8px 0px ${alpha(theme.palette.common.white, 0.25)}, 0px 0px 32px 4px ${alpha(primary, 0.25)}`
               : `inset 0px 3px 5px 0px ${alpha(theme.palette.common.white, 0.15)}, 0px 0px 16px 0px ${alpha(primaryDarker, 0.05)}`,
             transition: 'border-color 0.3s ease, box-shadow 0.3s ease',
@@ -264,7 +307,7 @@ export default function OrbitalCard({
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              color: hovered ? primary : alpha(primary, 0.85),
+              color: isDisplayingActive ? primary : alpha(primary, 0.85),
               transition: 'color 0.25s ease',
             }}
           >

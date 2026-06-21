@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -15,7 +15,6 @@ import { useOrbitalPointerParallax } from './useOrbitalPointerParallax'
 const EASE = [0.22, 1, 0.36, 1] as const
 const PANEL_TRANSITION = { duration: 0.48, ease: EASE } as const
 const LAYOUT_TRANSITION = { layout: { duration: 0.55, ease: EASE } } as const
-const DEACTIVATE_DELAY_MS = 200
 
 const panelVariants = {
   initial: { opacity: 0, y: 18 },
@@ -25,34 +24,24 @@ const panelVariants = {
 
 export default function ServicesOrbital() {
   const sectionRef = useRef<HTMLElement>(null)
-  const [activeIndex, setActiveIndex] = useState<number | null>(null)
-  const deactivateTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
-  const active = activeIndex !== null ? SERVICES[activeIndex] : null
+  const [selectedIndex, setSelectedIndex] = useState<number>(0)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+
+  const activeIndex = hoveredIndex ?? selectedIndex
+  const active = SERVICES[activeIndex]
   const { offsetX, offsetY } = useOrbitalPointerParallax(sectionRef)
 
   const handleActivate = useCallback((index: number | null) => {
-    if (deactivateTimerRef.current) {
-      clearTimeout(deactivateTimerRef.current)
-      deactivateTimerRef.current = null
-    }
-
     if (index !== null) {
-      setActiveIndex(index)
-      return
+      setSelectedIndex(index)
     }
-
-    deactivateTimerRef.current = setTimeout(() => {
-      setActiveIndex(null)
-      deactivateTimerRef.current = null
-    }, DEACTIVATE_DELAY_MS)
   }, [])
 
-  useEffect(
-    () => () => {
-      if (deactivateTimerRef.current) clearTimeout(deactivateTimerRef.current)
-    },
-    [],
-  )
+  const handleHover = useCallback((index: number | null) => {
+    setHoveredIndex(index)
+  }, [])
+
+  // Removed timer cleanup
 
   return (
     <Box
@@ -237,7 +226,14 @@ export default function ServicesOrbital() {
                 },
               }}
             >
-              <OrbitalDeck onActivate={handleActivate} eyeOffsetX={offsetX} eyeOffsetY={offsetY} />
+              <OrbitalDeck
+                onActivate={handleActivate}
+                onHover={handleHover}
+                activeIndex={activeIndex}
+                selectedIndex={selectedIndex}
+                eyeOffsetX={offsetX}
+                eyeOffsetY={offsetY}
+              />
             </Box>
           </Box>
         </Grid>
