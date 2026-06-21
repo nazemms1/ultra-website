@@ -1,9 +1,11 @@
 'use client'
 
 import Box from '@mui/material/Box'
+import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import { captchaBoxSx } from './constants'
+import { ColoredSvg } from '@/components/shared/ColoredSvg'
 
 type CaptchaBoxProps = {
   checked: boolean
@@ -14,41 +16,34 @@ export default function CaptchaBox({ checked, onToggle }: CaptchaBoxProps) {
   const theme = useTheme()
 
   return (
-    <Box component="button" type="button" onClick={onToggle} sx={captchaBoxSx(theme)}>
-      <Box
+    <Box component="label" sx={captchaBoxSx(theme, checked)}>
+      <Checkbox
+        checked={checked}
+        onChange={() => onToggle()}
+        disableRipple
+        size="small"
+        checkedIcon={
+          <ColoredSvg
+            src="/images/contact/check-3.svg"
+            sx={{ color: 'primary.main' }}
+            glyphPx={20}
+          />
+        }
         sx={{
-          width: 18,
-          height: 18,
-          borderRadius: '4px',
-          border: `1.5px solid ${
-            checked ? theme.palette.primary.main : alpha(theme.palette.common.white, 0.25)
-          }`,
-          bgcolor: checked ? theme.palette.primary.main : 'transparent',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          flexShrink: 0,
-          transition: 'all 0.2s',
+          p: 0,
+          color: alpha(theme.palette.common.white, 0.25),
+          '&.Mui-checked': {
+            color: 'primary.main',
+          },
         }}
-      >
-        {checked && (
-          <svg width="10" height="8" viewBox="0 0 10 8" fill="none" aria-hidden>
-            <polyline
-              points="1,4 3.5,6.5 9,1"
-              stroke={theme.palette.primary.contrastText}
-              strokeWidth="1.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            />
-          </svg>
-        )}
-      </Box>
+      />
       <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",
           fontSize: '13px',
           letterSpacing: '0.05em',
-          color: alpha(theme.palette.text.secondary, 0.75),
+          color: checked ? 'text.primary' : alpha(theme.palette.text.secondary, 0.75),
+          transition: 'color 0.2s',
         }}
       >
         I am not a robot

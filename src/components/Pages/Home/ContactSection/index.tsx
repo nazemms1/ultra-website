@@ -218,16 +218,52 @@ export default function ContactSection() {
               name="consultation-type"
               label="On-site Consultation"
               checked={consultationType === 'onsite'}
-              onChange={() => setConsultationType('onsite')}
+              onChange={() => {
+                setConsultationType('onsite')
+                setRegion('syria')
+              }}
             />
           </Box>
+
+          {consultationType === 'online' && (
+            <Box
+              sx={{
+                borderRadius: '12px',
+                border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+                bgcolor: alpha(theme.palette.common.white, 0.03),
+                p: '20px 22px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '18px',
+                mb: '4px',
+              }}
+            >
+              <Box>
+                <FieldLabel>Select Region</FieldLabel>
+                <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
+                  <RadioOption
+                    name="region"
+                    label="syria"
+                    checked={region === 'syria'}
+                    onChange={() => setRegion('syria')}
+                  />
+                  <RadioOption
+                    name="region"
+                    label="UAE"
+                    checked={region === 'uae'}
+                    onChange={() => setRegion('uae')}
+                  />
+                </Box>
+              </Box>
+            </Box>
+          )}
 
           {consultationType === 'onsite' && (
             <Box
               sx={{
                 borderRadius: '12px',
-                border: `1px solid ${alpha(theme.palette.primary.main, 0.18)}`,
-                bgcolor: alpha(theme.palette.primary.main, 0.04),
+                border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+                bgcolor: alpha(theme.palette.common.white, 0.03),
                 p: '20px 22px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -239,16 +275,17 @@ export default function ContactSection() {
                 <FieldLabel>Select Region — Restricted to Syria</FieldLabel>
                 <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
                   <RadioOption
-                    name="region"
-                    label="Syria"
+                    name="onsite-region"
+                    label="syria"
                     checked={region === 'syria'}
                     onChange={() => setRegion('syria')}
                   />
                   <RadioOption
-                    name="region"
+                    name="onsite-region"
                     label="UAE"
                     checked={region === 'uae'}
                     onChange={() => setRegion('uae')}
+                    disabled
                   />
                 </Box>
               </Box>

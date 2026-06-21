@@ -117,8 +117,6 @@ export default function ServiceCarousel({
           transition: shadowTransition,
         }}
       />
-
-      {/* Previous Button (Left Arrow) */}
       {/* Previous Button (Left Arrow) */}
       <AnimatePresence>
         {showPrev && (
@@ -149,20 +147,30 @@ export default function ServiceCarousel({
             >
               <motion.div
                 animate={{
-                  // Constantly enters from right (24), passes center (0), exits left (-24), teleports back
-                  x: [24, 0, -24, 24],
+                  x: [0, -24],
                 }}
                 transition={{
-                  duration: 1.5,
+                  duration: 0.8, // Faster, snappier loop speed
                   ease: 'linear',
                   repeat: Infinity,
-                  // 0.0 to 0.99 is the smooth linear movement across the center.
-                  // 0.99 to 1.0 is the instant hidden teleport back to the start.
-                  times: [0, 0.5, 0.99, 1],
                 }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                style={{
+                  display: 'flex',
+                  width: 48,
+                  position: 'absolute',
+                  left: 0,
+                }}
               >
-                <ChevronsLeft size={22} strokeWidth={2.5} />
+                <ChevronsLeft
+                  size={22}
+                  strokeWidth={2.5}
+                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
+                />
+                <ChevronsLeft
+                  size={22}
+                  strokeWidth={2.5}
+                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
+                />
               </motion.div>
             </Box>
           </MotionIconButton>
@@ -199,19 +207,30 @@ export default function ServiceCarousel({
             >
               <motion.div
                 animate={{
-                  // Constantly enters from left (-24), passes center (0), exits right (24), teleports back
-                  x: [-24, 0, 24, -24],
+                  x: [-24, 0],
                 }}
                 transition={{
-                  duration: 1.5,
+                  duration: 0.8, // Faster, snappier loop speed
                   ease: 'linear',
                   repeat: Infinity,
-                  // Perfectly timed distribution so it spends equal time on both sides of 0
-                  times: [0, 0.5, 0.99, 1],
                 }}
-                style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                style={{
+                  display: 'flex',
+                  width: 48,
+                  position: 'absolute',
+                  left: 0,
+                }}
               >
-                <ChevronsRight size={22} strokeWidth={2.5} />
+                <ChevronsRight
+                  size={22}
+                  strokeWidth={2.5}
+                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
+                />
+                <ChevronsRight
+                  size={22}
+                  strokeWidth={2.5}
+                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
+                />
               </motion.div>
             </Box>
           </MotionIconButton>

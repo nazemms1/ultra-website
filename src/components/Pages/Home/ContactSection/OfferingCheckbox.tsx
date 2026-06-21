@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Checkbox from '@mui/material/Checkbox'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
+import { ColoredSvg } from '@/components/shared/ColoredSvg'
 import { selectionPillSx } from './constants'
 import type { OfferingCheckboxProps } from './types'
 
@@ -24,7 +25,19 @@ export default function OfferingCheckbox({ label, checked, onChange }: OfferingC
         },
       }}
     >
-      <Checkbox checked={checked} onChange={onChange} disableRipple size="small" />
+      <Checkbox
+        checked={checked}
+        onChange={onChange}
+        disableRipple
+        size="small"
+        checkedIcon={
+          <ColoredSvg
+            src="/images/contact/check-2.svg"
+            sx={{ color: 'primary.main' }}
+            glyphPx={16}
+          />
+        }
+      />
       <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",

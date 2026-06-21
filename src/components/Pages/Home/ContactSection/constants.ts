@@ -56,7 +56,23 @@ export function contactFieldSx(theme: Theme): SxProps<Theme> {
   }
 }
 
-export function captchaBoxSx(theme: Theme): SxProps<Theme> {
+export function outlineGlassCheckedSx(theme: Theme): SxProps<Theme> {
+  const primary = theme.palette.primary.main
+
+  return {
+    border: `1px solid ${alpha(primary, 0.8)}`,
+    bgcolor: alpha(theme.palette.common.white, 0.05),
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    boxShadow: [
+      `0 0 22px ${alpha(primary, 0.32)}`,
+      `inset 1px 1px 0 0 ${alpha(primary, 0.55)}`,
+      `inset -1px -1px 0 0 ${alpha(primary, 0.12)}`,
+    ].join(', '),
+  }
+}
+
+export function captchaBoxSx(theme: Theme, checked: boolean): SxProps<Theme> {
   return {
     display: 'inline-flex',
     alignItems: 'center',
@@ -64,14 +80,20 @@ export function captchaBoxSx(theme: Theme): SxProps<Theme> {
     px: '18px',
     py: '14px',
     borderRadius: '10px',
-    border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-    bgcolor: alpha(theme.palette.common.white, 0.03),
-    backdropFilter: 'blur(12px)',
     cursor: 'pointer',
     userSelect: 'none',
-    transition: 'border-color 0.2s',
-    '&:hover': {
-      borderColor: alpha(theme.palette.primary.main, 0.3),
-    },
+    transition: 'border-color 0.2s, background-color 0.2s, box-shadow 0.2s',
+    minWidth: 300,
+    ...(checked
+      ? outlineGlassCheckedSx(theme)
+      : {
+          border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+          bgcolor: alpha(theme.palette.common.white, 0.03),
+          backdropFilter: 'blur(12px)',
+          WebkitBackdropFilter: 'blur(12px)',
+          '&:hover': {
+            borderColor: alpha(theme.palette.primary.main, 0.3),
+          },
+        }),
   }
 }
