@@ -106,7 +106,14 @@ export default function HeroSection() {
           }}
         >
           <motion.div variants={itemVariants}>
-            <Typography variant="h1" sx={{ mb: '10px', fontSize: 50, lineHeight: '78px' }}>
+            <Typography
+              variant="h1"
+              sx={theme => ({
+                mb: '10px',
+                fontSize: { lg: theme.typography.pxToRem(50) },
+                lineHeight: '78px',
+              })}
+            >
               WITH <ShimmerText sx={{ color: 'primary.main' }}>ULTRAWARES</ShimmerText>
               <br />
               COMES ULTRA

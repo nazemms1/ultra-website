@@ -27,6 +27,9 @@ const CENTER = DECK / 2
 interface OrbitalDeckProps {
   baseSpeed?: number
   onActivate: (index: number | null) => void
+  onHover: (index: number | null) => void
+  activeIndex: number | null
+  selectedIndex: number | null
   eyeOffsetX: MotionValue<number>
   eyeOffsetY: MotionValue<number>
 }
@@ -34,6 +37,9 @@ interface OrbitalDeckProps {
 export default function OrbitalDeck({
   baseSpeed = 7,
   onActivate,
+  onHover,
+  activeIndex,
+  selectedIndex,
   eyeOffsetX,
   eyeOffsetY,
 }: OrbitalDeckProps) {
@@ -99,12 +105,15 @@ export default function OrbitalDeck({
           key={service.title}
           spin={spin}
           service={service}
+          isSelected={i === selectedIndex}
+          isActive={i === activeIndex}
+          onSelect={() => onActivate(i)}
           onHoverStart={() => {
-            onActivate(i)
+            onHover(i)
             pause()
           }}
           onHoverEnd={() => {
-            onActivate(null)
+            onHover(null)
             resume()
           }}
         />
@@ -128,11 +137,22 @@ export default function OrbitalDeck({
 interface OrbitalSpokeProps {
   spin: MotionValue<number>
   service: ServiceItem
+  isSelected: boolean
+  isActive: boolean
+  onSelect: () => void
   onHoverStart: () => void
   onHoverEnd: () => void
 }
 
-function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeProps) {
+function OrbitalSpoke({
+  spin,
+  service,
+  isSelected,
+  isActive,
+  onSelect,
+  onHoverStart,
+  onHoverEnd,
+}: OrbitalSpokeProps) {
   const theme = useTheme()
   const primary = theme.palette.primary.main
   const { baseAngle } = service
@@ -212,6 +232,9 @@ function OrbitalSpoke({ spin, service, onHoverStart, onHoverEnd }: OrbitalSpokeP
               title={service.title}
               description={service.cardDescription}
               Icon={service.Icon}
+              selected={isSelected}
+              active={isActive}
+              onClick={onSelect}
               onHoverStart={onHoverStart}
               onHoverEnd={onHoverEnd}
             />

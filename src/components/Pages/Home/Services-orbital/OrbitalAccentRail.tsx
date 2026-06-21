@@ -8,7 +8,7 @@ const EASE = [0.22, 1, 0.36, 1] as const
 const DOT_TRANSITION = { duration: 0.35, ease: EASE } as const
 const LINE_TRANSITION = { duration: 0.48, ease: EASE, delay: 0.06 } as const
 
-const MotionBox = motion(Box)
+const MotionBox = motion.create(Box)
 
 export default function OrbitalAccentRail() {
   const theme = useTheme()
