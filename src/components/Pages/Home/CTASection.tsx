@@ -108,12 +108,12 @@ export default function CTASection() {
       </video>
 
       <Box
-        sx={theme => ({
+        sx={{
           position: 'absolute',
           inset: 0,
-          // background: alpha(theme.palette.background.default, 0.2),
+          // background: alpha(theme.palettepalette.background.default, 0.2),
           zIndex: 1,
-        })}
+        }}
       />
 
       <Box
@@ -132,9 +132,9 @@ export default function CTASection() {
           justifyContent: 'center',
           textAlign: 'center',
           willChange: 'transform',
-           backdropFilter: 'blur(20px) saturate(1.4)',
-           border: `1px solid ${alpha(theme.palette.primary.darker, 0.3)}`,
-        ...cardGlassSurface
+          backdropFilter: 'blur(20px) saturate(1.4)',
+          border: `1px solid ${alpha(theme.palette.primary.darker, 0.3)}`,
+          ...cardGlassSurface,
         })}
       >
         <Typography

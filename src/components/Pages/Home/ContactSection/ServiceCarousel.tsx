@@ -18,8 +18,13 @@ export default function ServiceCarousel({
   onSelect,
 }: ServiceCarouselProps) {
   const theme = useTheme()
+
   const [isHovered, setIsHovered] = useState(false)
-  const [scrollState, setScrollState] = useState({ canPrev: false, canNext: false })
+
+  const [scrollState, setScrollState] = useState({
+    canPrev: false,
+    canNext: false,
+  })
 
   const [emblaRef, emblaApi] = useEmblaCarousel({
     align: 'start',
@@ -36,6 +41,10 @@ export default function ServiceCarousel({
         canNext: emblaApi.canScrollNext(),
       })
     }
+
+    // IMPORTANT:
+    // Calculate immediately so arrows show on first hover
+    onSnapChange()
 
     emblaApi.on('init', onSnapChange)
     emblaApi.on('select', onSnapChange)
@@ -68,6 +77,10 @@ export default function ServiceCarousel({
     },
     '& svg': {
       filter: `drop-shadow(0 0 8px ${alpha(theme.palette.primary.main, 0.4)})`,
+      transform: 'translate(-50%, -50%)',
+      position: 'absolute',
+      top: '50%',
+      left: '50%',
     },
   }
 
@@ -82,6 +95,7 @@ export default function ServiceCarousel({
       onMouseLeave={() => setIsHovered(false)}
       sx={{ position: 'relative' }}
     >
+      {/* Left Shadow */}
       <Box
         sx={{
           pointerEvents: 'none',
@@ -98,6 +112,7 @@ export default function ServiceCarousel({
         }}
       />
 
+      {/* Right Shadow */}
       <Box
         sx={{
           pointerEvents: 'none',
@@ -113,7 +128,8 @@ export default function ServiceCarousel({
           transition: shadowTransition,
         }}
       />
-      {/* Previous Button (Left Arrow) */}
+
+      {/* Previous Button */}
       <AnimatePresence>
         {showPrev && (
           <MotionIconButton
@@ -124,56 +140,30 @@ export default function ServiceCarousel({
             onClick={() => emblaApi?.scrollPrev()}
             aria-label="Previous services"
             size="small"
-            sx={{ ...navButtonSx, left: 10 }}
+            sx={{
+              ...navButtonSx,
+              left: 12,
+            }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 24,
-                height: 24,
-                overflow: 'hidden',
-                position: 'relative',
-                maskImage:
-                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
-                WebkitMaskImage:
-                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+            <motion.div
+              animate={{
+                x: [12, -12, -12, 12],
+                opacity: [1, 0.25, 0, 0],
+              }}
+              transition={{
+                duration: 1.125,
+                times: [0, 0.375, 0.625, 1],
+                repeat: Infinity,
+                ease: 'easeInOut',
               }}
             >
-              <motion.div
-                animate={{
-                  x: [0, -24],
-                }}
-                transition={{
-                  duration: 0.8,
-                  ease: 'linear',
-                  repeat: Infinity,
-                }}
-                style={{
-                  display: 'flex',
-                  width: 48,
-                  position: 'absolute',
-                  left: 0,
-                }}
-              >
-                <ChevronsLeft
-                  size={22}
-                  strokeWidth={2.5}
-                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
-                />
-                <ChevronsLeft
-                  size={22}
-                  strokeWidth={2.5}
-                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
-                />
-              </motion.div>
-            </Box>
+              <ChevronsLeft size={22} strokeWidth={2.5} />
+            </motion.div>
           </MotionIconButton>
         )}
       </AnimatePresence>
 
-      {/* Next Button (Right Arrow) */}
+      {/* Next Button */}
       <AnimatePresence>
         {showNext && (
           <MotionIconButton
@@ -184,55 +174,30 @@ export default function ServiceCarousel({
             onClick={() => emblaApi?.scrollNext()}
             aria-label="Next services"
             size="small"
-            sx={{ ...navButtonSx, right: 10 }}
+            sx={{
+              ...navButtonSx,
+              right: 12,
+            }}
           >
-            <Box
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: 24,
-                height: 24,
-                overflow: 'hidden',
-                position: 'relative',
-                maskImage:
-                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
-                WebkitMaskImage:
-                  'linear-gradient(to right, transparent 0%, black 25%, black 75%, transparent 100%)',
+            <motion.div
+              animate={{
+                x: [-12, 12, 12, -12],
+                opacity: [1, 0.25, 0, 0],
+              }}
+              transition={{
+                duration: 1.125,
+                times: [0, 0.375, 0.625, 1],
+                repeat: Infinity,
+                ease: 'easeInOut',
               }}
             >
-              <motion.div
-                animate={{
-                  x: [-24, 0],
-                }}
-                transition={{
-                  duration: 0.8, // Faster, snappier loop speed
-                  ease: 'linear',
-                  repeat: Infinity,
-                }}
-                style={{
-                  display: 'flex',
-                  width: 48,
-                  position: 'absolute',
-                  left: 0,
-                }}
-              >
-                <ChevronsRight
-                  size={22}
-                  strokeWidth={2.5}
-                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
-                />
-                <ChevronsRight
-                  size={22}
-                  strokeWidth={2.5}
-                  style={{ width: 24, display: 'flex', justifyContent: 'center' }}
-                />
-              </motion.div>
-            </Box>
+              <ChevronsRight size={22} strokeWidth={2.5} />
+            </motion.div>
           </MotionIconButton>
         )}
       </AnimatePresence>
-      {/* Carousel Track */}
+
+      {/* Carousel */}
       <Box ref={emblaRef} sx={{ overflow: 'hidden' }}>
         <Box sx={{ display: 'flex', gap: '12px' }}>
           {services.map(service => (
