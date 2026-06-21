@@ -13,8 +13,8 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
     <Box
       onClick={onSelect}
       sx={{
-        border: `1px solid ${theme.palette.divider}`,
-        borderRadius: theme.shape.borderRadius,
+        border: '1px solid',
+        borderRadius: '16px',
         backdropFilter: 'blur(12px)',
         cursor: 'pointer',
         height: '100%',
@@ -23,34 +23,42 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
         flexDirection: 'column',
         gap: '12px',
         borderColor: selected ? 'primary.main' : alpha(theme.palette.common.white, 0.1),
-        bgcolor: selected
-          ? alpha(theme.palette.primary.main, 0.08)
+        background: selected
+          ? `radial-gradient(circle at 100% 0%, ${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 70%), ${alpha(theme.palette.common.white, 0.04)}`
           : alpha(theme.palette.common.white, 0.03),
-        boxShadow: selected ? `0 0 24px ${alpha(theme.palette.primary.main, 0.18)}` : 'none',
-        transition: 'border-color 0.22s, background-color 0.22s, box-shadow 0.22s',
+        boxShadow: selected
+          ? `0 0 24px -4px ${alpha(theme.palette.primary.main, 0.4)}, inset 0 0 12px ${alpha(theme.palette.primary.main, 0.15)}`
+          : 'none',
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
         userSelect: 'none',
         '&:hover': {
-          borderColor: alpha(theme.palette.primary.main, 0.45),
-          bgcolor: alpha(theme.palette.primary.main, 0.05),
+          borderColor: selected ? 'primary.main' : alpha(theme.palette.primary.main, 0.45),
+          bgcolor: selected ? undefined : alpha(theme.palette.common.white, 0.06),
+          boxShadow: selected
+            ? `0 0 32px -4px ${alpha(theme.palette.primary.main, 0.5)}, inset 0 0 16px ${alpha(theme.palette.primary.main, 0.2)}`
+            : `0 0 12px -4px ${alpha(theme.palette.primary.main, 0.2)}`,
         },
       }}
     >
       <Box
         sx={{
-          width: 48,
-          height: 48,
+          width: 44,
+          height: 44,
           borderRadius: '10px',
-          bgcolor: alpha(theme.palette.primary.main, selected ? 0.18 : 0.08),
+          bgcolor: selected
+            ? alpha(theme.palette.primary.main, 0.08)
+            : alpha(theme.palette.common.white, 0.05),
+          border: `1px solid ${selected ? alpha(theme.palette.primary.main, 0.4) : alpha(theme.palette.common.white, 0.1)}`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          transition: 'background-color 0.22s',
+          transition: 'all 0.25s ease',
         }}
       >
         <Icon
-          size={22}
+          size={20}
           color={selected ? theme.palette.primary.main : (theme.palette.text.secondary as string)}
-          strokeWidth={1.5}
+          strokeWidth={selected ? 2 : 1.5}
         />
       </Box>
       <Box>

@@ -54,19 +54,21 @@ export default function ServiceCarousel({
   // Shared Navigation Button Styles
   const navButtonSx = {
     position: 'absolute',
-    top: 'calc(50% - 18px)',
+    top: 'calc(50% - 20px)',
     zIndex: 3,
-    width: 36,
-    height: 36,
-    bgcolor: alpha(theme.palette.background.default, 0.25),
+    width: 40,
+    height: 40,
+    bgcolor: 'transparent',
     color: 'primary.main',
-    backdropFilter: 'blur(8px)',
     transition: theme.transitions.create(['background-color', 'opacity'], {
       duration: theme.transitions.duration.short,
       easing: theme.transitions.easing.easeInOut,
     }),
     '&:hover': {
-      bgcolor: alpha(theme.palette.primary.main, 0.12),
+      bgcolor: alpha(theme.palette.primary.main, 0.08),
+    },
+    '& svg': {
+      filter: `drop-shadow(0 0 8px ${alpha(theme.palette.primary.main, 0.4)})`,
     },
   }
 
@@ -90,10 +92,9 @@ export default function ServiceCarousel({
           left: 0,
           top: 0,
           bottom: 0,
-          width: 56,
+          width: 80,
           zIndex: 2,
-          background: `linear-gradient(to right, ${alpha(theme.palette.background.default, 0.95)} 50%, transparent 100%)`,
-          // UPDATED: Dynamic opacity & visibility based on scroll availability
+          background: `linear-gradient(to right, ${theme.palette.background.default} 15%, transparent 100%)`,
           opacity: scrollState.canPrev ? 1 : 0,
           visibility: scrollState.canPrev ? 'visible' : 'hidden',
           transition: shadowTransition,
@@ -108,10 +109,9 @@ export default function ServiceCarousel({
           right: 0,
           top: 0,
           bottom: 0,
-          width: 56,
+          width: 80,
           zIndex: 2,
-          background: `linear-gradient(to left, ${alpha(theme.palette.background.default, 0.95)} 50%, transparent 100%)`,
-          // UPDATED: Dynamic opacity & visibility based on scroll availability
+          background: `linear-gradient(to left, ${theme.palette.background.default} 15%, transparent 100%)`,
           opacity: scrollState.canNext ? 1 : 0,
           visibility: scrollState.canNext ? 'visible' : 'hidden',
           transition: shadowTransition,
@@ -122,16 +122,29 @@ export default function ServiceCarousel({
       <AnimatePresence>
         {showPrev && (
           <MotionIconButton
-            initial={{ opacity: 0, x: -8, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: -8, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            initial={{ opacity: 0, x: -10, scale: 0.9 }}
+            animate={{
+              opacity: 1,
+              x: [-10, 10],
+              scale: 1,
+            }}
+            exit={{ opacity: 0, x: -10, scale: 0.9 }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: 'reverse',
+                duration: 1.2,
+                ease: 'easeInOut',
+              },
+              opacity: { duration: 0.2 },
+              scale: { duration: 0.2 },
+            }}
             onClick={() => emblaApi?.scrollPrev()}
             aria-label="Previous services"
             size="small"
-            sx={{ ...navButtonSx, left: 4 }}
+            sx={{ ...navButtonSx, left: 10 }}
           >
-            <ChevronsLeft size={18} strokeWidth={2} />
+            <ChevronsLeft size={22} strokeWidth={2.5} />
           </MotionIconButton>
         )}
       </AnimatePresence>
@@ -139,16 +152,29 @@ export default function ServiceCarousel({
       <AnimatePresence>
         {showNext && (
           <MotionIconButton
-            initial={{ opacity: 0, x: 8, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            exit={{ opacity: 0, x: 8, scale: 0.95 }}
-            transition={{ duration: 0.2, ease: 'easeOut' }}
+            initial={{ opacity: 0, x: 10, scale: 0.9 }}
+            animate={{
+              opacity: 1,
+              x: [10, -10],
+              scale: 1,
+            }}
+            exit={{ opacity: 0, x: 10, scale: 0.9 }}
+            transition={{
+              x: {
+                repeat: Infinity,
+                repeatType: 'reverse',
+                duration: 1.2,
+                ease: 'easeInOut',
+              },
+              opacity: { duration: 0.2 },
+              scale: { duration: 0.2 },
+            }}
             onClick={() => emblaApi?.scrollNext()}
             aria-label="Next services"
             size="small"
-            sx={{ ...navButtonSx, right: 4 }}
+            sx={{ ...navButtonSx, right: 10 }}
           >
-            <ChevronsRight size={18} strokeWidth={2} />
+            <ChevronsRight size={22} strokeWidth={2.5} />
           </MotionIconButton>
         )}
       </AnimatePresence>
@@ -162,7 +188,9 @@ export default function ServiceCarousel({
               sx={{
                 flex: '0 0 auto',
                 minWidth: { xs: '68%', sm: 160 },
-                maxWidth: 180,
+                maxWidth: 190,
+                width: 190,
+                maxHeight: 150,
               }}
             >
               <ServiceCard

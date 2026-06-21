@@ -22,9 +22,11 @@ export default function FAQCard({ question, answer }: { question: string; answer
           'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease',
         '&:hover': {
           transform: 'translateY(-2px)',
+          borderColor: alpha(theme.palette.primary.main, 0.8),
+          bgcolor: alpha(theme.palette.primary.main, 0.05),
           boxShadow: [
-            `0px 0px 8px 0px ${alpha(theme.palette.primary.main, 0.45)}`,
-            `0px 0px 24px 4px ${alpha(theme.palette.primary.main, 0.25)}`,
+            `0px 0px 15px 0px ${alpha(theme.palette.primary.main, 0.5)}`,
+            `0px 0px 30px 2px ${alpha(theme.palette.primary.main, 0.2)}`,
             `0px 12px 40px -10px rgba(0, 0, 0, 0.7)`,
           ].join(', '),
         },
@@ -95,11 +97,11 @@ export default function FAQCard({ question, answer }: { question: string; answer
               'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease',
 
             '.faq-card-root:hover &': {
-              transform: 'scale(1.04)',
-              bgcolor: alpha(theme.palette.primary.main, 0.25),
-              borderColor: alpha(theme.palette.primary.main, 0.7),
+              transform: 'scale(1.08)',
+              bgcolor: alpha(theme.palette.primary.main, 0.35),
+              borderColor: alpha(theme.palette.primary.main, 1),
               boxShadow: [
-                `0px 0px 10px 0px ${alpha(theme.palette.primary.main, 0.5)}`,
+                `0px 0px 15px 0px ${alpha(theme.palette.primary.main, 0.6)}`,
                 `inset 1px 1px 10px 0px ${alpha(theme.palette.common.white, 0.2)}`,
               ].join(', '),
             },
