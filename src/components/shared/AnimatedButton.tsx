@@ -63,10 +63,20 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
         ? {
             bgcolor: resolvedBaseColor,
             color: theme.palette.primary.contrastText,
-            boxShadow: `0 0 23px ${alpha(theme.palette.primary.darker, 0.5)}`,
+            boxShadow: [
+              `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.71)}`,
+              `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+            ].join(', '),
+            transition: theme.transitions.create('box-shadow', {
+              duration: theme.transitions.duration.standard,
+              easing: theme.transitions.easing.easeOut,
+            }),
             '&:hover': {
               bgcolor: resolvedBaseColor,
-              boxShadow: `0 0 36px ${alpha(theme.palette.primary.darker, 0.8)}`,
+              boxShadow: [
+                `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.4)}`,
+                `inset -1px -1px 0 0 ${alpha(theme.palette.primary.main, 0.4)}`,
+              ].join(', '),
             },
           }
         : {
@@ -75,11 +85,6 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
             '&:hover': {
               bgcolor: 'transparent',
               borderColor: alpha(theme.palette.common.white, 0.6),
-              boxShadow: [
-                '0 4px 41px 0 rgba(0, 0, 0, 0.5)',
-                `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.55)}`,
-                `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
-              ].join(', '),
             },
           },
     [resolvedBaseColor, theme, variant],
@@ -113,8 +118,8 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
           textTransform: 'uppercase',
           fontWeight: 600,
           letterSpacing: '0.7px',
-          minHeight: 42,
-          maxHeight: 42,
+          minHeight: 52,
+          maxHeight: 52,
           fontSize: 18,
           p: theme => theme.spacing(1, 2.5),
           transition: 'transform 0.2s ease, box-shadow 0.3s ease',

@@ -8,9 +8,9 @@ import { alpha } from '@mui/material/styles'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import OrbitalAccentRail from './OrbitalAccentRail'
 import OrbitalDeck from './OrbitalDeck'
-import ViewAllButton from './ViewAllButton'
 import { SERVICES } from './data'
 import { useOrbitalPointerParallax } from './useOrbitalPointerParallax'
+import AnimatedButton from '@/components/shared/AnimatedButton'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 const PANEL_TRANSITION = { duration: 0.48, ease: EASE } as const
@@ -194,7 +194,16 @@ export default function ServicesOrbital() {
                 </AnimatePresence>
 
                 <Box component={motion.div} layout transition={LAYOUT_TRANSITION} sx={{ mt: 2 }}>
-                  <ViewAllButton />
+                  <AnimatedButton
+                    variant="secondary"
+                    href="#services"
+                    sx={{
+                      px: { xs: 2, md: 4 },
+                      fontSize: { xs: 12, md: 18 },
+                    }}
+                  >
+                    View all services
+                  </AnimatedButton>
                 </Box>
               </Box>
             </LayoutGroup>

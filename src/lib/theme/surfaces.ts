@@ -106,7 +106,6 @@ export function navGlassPillSurface(theme: Theme): SxProps<Theme> {
   return {
     ...glassPillSurface(theme),
     boxShadow: [
-      '0 4px 41px 0 rgba(0, 0, 0, 0.41)',
       `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.45)}`,
       `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
     ].join(', '),
