@@ -244,10 +244,10 @@ export default function ServiceCarousel({
               key={service.id}
               sx={{
                 flex: '0 0 auto',
-                minWidth: { xs: '68%', sm: 160 },
-                maxWidth: 190,
-                width: 190,
-                maxHeight: 150,
+                minWidth: { xs: '68%', sm: 191 },
+                width: 191,
+                maxWidth: 191,
+                height: 147.5,
               }}
             >
               <ServiceCard

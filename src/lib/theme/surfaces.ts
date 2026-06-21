@@ -42,6 +42,44 @@ export function glassPillSurface(theme: Theme) {
   return glassSurface(theme, { radius: theme.shape.borderRadiusPill })
 }
 
+/** Figma Phase Card — node 335-2987 */
+export const PHASE_CARD_RADIUS = '32px'
+
+/** Cyan outer glow — animate via opacity on a dedicated layer, not box-shadow transition. */
+export function phaseCardOuterGlow(theme: Theme): string {
+  const { primary } = theme.palette
+
+  return [
+    `0 0 40px 0 ${alpha(primary.lighter, 0.3)}`,
+    `0 -10px 48px ${alpha(primary.lighter, 0.18)}`,
+    `14px 0 48px ${alpha(primary.lighter, 0.22)}`,
+    `0 24px 64px -16px ${alpha(primary.darker, 0.45)}`,
+  ].join(', ')
+}
+
+/**
+ * Figma Phase Card — node 335-2987 (Methodologies)
+ * 154° dark teal → near-black fill + left radial bloom; inset edge highlights.
+ */
+export function phaseCardSurface(theme: Theme, opts?: { radius?: number | string }) {
+  const radius = opts?.radius ?? PHASE_CARD_RADIUS
+  const { primary, background } = theme.palette
+
+  return {
+    borderRadius: radius,
+    background: [
+      `radial-gradient(ellipse 85% 110% at 20% 50%, ${alpha(primary.main, 0.24)} 0%, ${alpha(primary.main, 0.07)} 42%, transparent 68%)`,
+      `linear-gradient(154deg, ${alpha(primary.darker, 0.42)} 0%, ${alpha(background.default, 0.94)} 55%, ${alpha(background.default, 1)} 100%)`,
+    ].join(', '),
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    boxShadow: [
+      `inset 1px 1px 0 0 ${alpha(primary.main, 0.4)}`,
+      `inset -1px -1px 0 0 ${alpha(primary.main, 0.4)}`,
+    ].join(', '),
+  } satisfies SxProps<Theme>
+}
+
 /**
  * Figma Glass — card variant
  * Light -45° / 80%, Refraction 80, Depth 96, Dispersion 71, Frost 20, Splay 0

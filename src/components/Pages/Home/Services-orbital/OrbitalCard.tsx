@@ -45,7 +45,7 @@ interface OrbitalCardProps {
   sx?: SxProps<Theme>
 }
 
-const MotionBox = motion(Box)
+const MotionBox = motion.create(Box)
 
 export default function OrbitalCard({
   title,

@@ -118,6 +118,7 @@ export default function Methodologies() {
             flexShrink: 0,
             pt: { xs: 11, sm: 12 },
             pb: { xs: 1, sm: 1.25 },
+            pointerEvents: 'none',
           }}
         >
           <Header />
@@ -171,6 +172,7 @@ function Header() {
     <SectionHeader
       align="center"
       sx={{
+        pointerEvents: 'auto',
         px: 3,
         mb: 0,
         '& h2': {
