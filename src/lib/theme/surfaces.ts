@@ -18,12 +18,12 @@ export function glassSurface(theme: Theme, opts?: { tint?: number; radius?: numb
 
   // Light -45° at 80% → 315deg gradient using paper color at 80% opacity as light source
   const lightAngle = '315deg' // −45° = 315°
-  const lightOpacity = 0.80
+  const lightOpacity = 0.8
   const paperColor = theme.vars?.palette.background.paper ?? theme.palette.background.paper
 
   return {
     background: `linear-gradient(${lightAngle}, ${alpha(theme.palette.common.white, lightOpacity * 0.12)} 0%, ${paletteAlpha(paperColor, tint)} 60%, ${paletteAlpha(paperColor, tint * 0.8)} 100%)`,
-    backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',   // Frost 26, Refraction ~80
+    backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)', // Frost 26, Refraction ~80
     WebkitBackdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
     border: '1px solid transparent',
     backgroundClip: 'padding-box',
@@ -32,7 +32,7 @@ export function glassSurface(theme: Theme, opts?: { tint?: number; radius?: numb
       // Depth 41 → deep shadow 41px blur, ~0.41 opacity
       '0 4px 41px 0 rgba(0, 0, 0, 0.41)',
       // Dispersion 45 → angled highlight at top-left (light source at -45°)
-      `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.45)}`,   // Dispersion 45
+      `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.45)}`, // Dispersion 45
       `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`, // shadow edge
     ].join(', '),
   } satisfies SxProps<Theme>
@@ -46,15 +46,10 @@ export function glassPillSurface(theme: Theme) {
  * Figma Glass — card variant
  * Light -45° / 80%, Refraction 80, Depth 96, Dispersion 71, Frost 20, Splay 0
  */
-export function cardGlassSurface(
-  theme: Theme,
-  opts?: { radius?: number | string },
-): SxProps<Theme> {
+export function cardGlassSurface(theme: Theme, opts?: { radius?: number | string }) {
   const radius = opts?.radius ?? theme.shape.borderRadius
-  const paperColor = theme.vars?.palette.background.paper ?? theme.palette.background.paper
 
   return {
-    // background: `linear-gradient(315deg, ${alpha(theme.palette.common.white, 0.10)} 0%, ${paletteAlpha(paperColor, 0.08)} 55%, ${paletteAlpha(paperColor, 0.06)} 100%)`,
     backdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
     WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
     border: '1px solid transparent',

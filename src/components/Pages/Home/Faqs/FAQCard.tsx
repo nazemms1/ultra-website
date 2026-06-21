@@ -2,7 +2,7 @@ import { alpha } from '@mui/material/styles'
 import { useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { Minus, Plus } from 'lucide-react'
-import { glassSurface } from '@/lib/theme/surfaces'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 export default function FAQCard({ question, answer }: { question: string; answer: string }) {
   const [open, setOpen] = useState(false)
@@ -12,17 +12,18 @@ export default function FAQCard({ question, answer }: { question: string; answer
       onClick={() => setOpen(v => !v)}
       className="faq-card-root"
       sx={theme => ({
-        ...glassSurface(theme, { radius: '1.375rem' }),
+        // ...glassSurface(theme, { radius: '1.375rem' }),
+        ...cardGlassSurface(theme, { radius: '1.375rem' }),
         position: 'relative',
         overflow: 'hidden',
         cursor: 'pointer',
-        borderColor: alpha(theme.palette.primary.main, 0.25),
-        boxShadow: `0px 4px 20px 0px rgba(0, 0, 0, 0.4), 0px 0px 12px 0px ${alpha(theme.palette.primary.main, 0.1)}`,
+        // borderColor: alpha(theme.palette.primary.main, 0.25),
+        // boxShadow: `0px 4px 20px 0px rgba(0, 0, 0, 0.4), 0px 0px 12px 0px ${alpha(theme.palette.primary.main, 0.1)}`,
         transition:
           'transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.5s ease',
         '&:hover': {
           transform: 'translateY(-2px)',
-          borderColor: alpha(theme.palette.primary.main, 0.8),
+          //   borderColor: alpha(theme.palette.primary.main, 0.8),
           bgcolor: alpha(theme.palette.primary.main, 0.05),
           boxShadow: [
             `0px 0px 15px 0px ${alpha(theme.palette.primary.main, 0.5)}`,
