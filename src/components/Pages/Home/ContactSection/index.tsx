@@ -19,7 +19,7 @@ import InputField from './InputField'
 import CaptchaBox from './CaptchaBox'
 import ContactSubmitButton from './ContactSubmitButton'
 
-export default function ContactSection() {
+export default function() {
   const theme = useTheme()
 
   const [selectedService, setSelectedService] = useState<string | null>(null)
