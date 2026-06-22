@@ -128,6 +128,7 @@ export default function OrbitalCard({
         }}
       >
         <motion.path
+          initial={false}
           d={CARD_PATH}
           animate={{ d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH }}
           transition={springTransition}
@@ -135,6 +136,7 @@ export default function OrbitalCard({
         />
 
         <motion.path
+          initial={false}
           d={CARD_PATH}
           animate={{
             d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
@@ -145,6 +147,7 @@ export default function OrbitalCard({
         />
 
         <motion.path
+          initial={false}
           d={CARD_PATH}
           animate={{
             d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
@@ -157,6 +160,7 @@ export default function OrbitalCard({
         />
 
         <motion.path
+          initial={false}
           d={CARD_PATH}
           animate={{
             d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,

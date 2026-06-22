@@ -20,7 +20,6 @@ export default function PartnersSection() {
       sx={{
         position: 'relative',
         width: '100%',
-        bgcolor: 'background.default',
         py: { xs: 5, md: '42px' },
         px: { xs: 3, sm: 5, md: '80px' },
         overflow: 'hidden',
