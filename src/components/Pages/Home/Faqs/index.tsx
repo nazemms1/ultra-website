@@ -182,8 +182,7 @@ export default function FAQSection() {
                   fontSize: '17px',
                   color: 'text.primary',
                   lineHeight: '25.50px',
-                  wordWrap: 'break-word'
-
+                  wordWrap: 'break-word',
                 }}
               >
                 Still have questions?

@@ -149,7 +149,7 @@ export default function FooterSection() {
                   '&:hover': {
                     transform: 'scale(1.05)',
                     filter: `drop-shadow(0 0 12px ${alpha(theme.palette.primary.main, 0.6)}) brightness(1.2)`,
-                  }
+                  },
                 }}
               >
                 <Image
@@ -205,7 +205,9 @@ export default function FooterSection() {
             </Stack>
 
             <Stack spacing={2} sx={{ width: { md: 192 } }}>
-              <Typography variant='h5' sx={footerSectionTitleSx}>Useful Links</Typography>
+              <Typography variant="h5" sx={footerSectionTitleSx}>
+                Useful Links
+              </Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {usefulLinks.map(link => (
                   <Box key={link.href} component="li">
@@ -227,7 +229,9 @@ export default function FooterSection() {
             </Stack>
 
             <Stack spacing={2} sx={{ width: { md: 174 } }}>
-              <Typography variant='h5'sx={footerSectionTitleSx}>Services</Typography>
+              <Typography variant="h5" sx={footerSectionTitleSx}>
+                Services
+              </Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {serviceItems.map(item => (
                   <Typography
@@ -284,8 +288,8 @@ export default function FooterSection() {
                         },
                         '& .stat-label': {
                           color: 'primary.main',
-                        }
-                      }
+                        },
+                      },
                     }}
                   >
                     <Typography

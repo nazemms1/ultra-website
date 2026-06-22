@@ -77,8 +77,10 @@ const GlobalStyles = () => css`
 
   /* FAQ card — steady Figma hover glow + one-shot diagonal shimmer sweep */
   .ultra-faq-card {
-    transition: transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
-      border-color 0.35s ease, box-shadow 0.35s ease;
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      border-color 0.35s ease,
+      box-shadow 0.35s ease;
   }
 
   .ultra-faq-card .ultra-faq-card__sheen {
@@ -109,7 +111,7 @@ const GlobalStyles = () => css`
       0 18px 40px -12px rgba(0, 0, 0, 0.55),
       0 0 26px 0 color-mix(in srgb, var(--ultra-palette-primary-main) 28%, transparent),
       0 0 60px -6px color-mix(in srgb, var(--ultra-palette-primary-main) 20%, transparent),
-      inset 1px 1px 0 0 rgba(255, 255, 255, 0.20),
+      inset 1px 1px 0 0 rgba(255, 255, 255, 0.2),
       inset -1px -1px 0 0 color-mix(in srgb, var(--ultra-palette-primary-main) 14%, transparent);
   }
 

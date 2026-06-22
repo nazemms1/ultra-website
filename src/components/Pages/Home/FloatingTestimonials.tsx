@@ -1,7 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
-import { alpha, useTheme } from '@mui/material/styles'
+import Image from 'next/image'
 import OrbitalCard from './Services-orbital/OrbitalCard'
 
 interface TestimonialData {
@@ -34,9 +34,6 @@ const TESTIMONIALS: TestimonialData[] = [
 ]
 
 export default function FloatingTestimonials() {
-  const theme = useTheme()
-  const primary = theme.palette.primary.main
-
   return (
     <Box
       sx={{
@@ -51,12 +48,16 @@ export default function FloatingTestimonials() {
       }}
     >
       {TESTIMONIALS.map((t, i) => {
-        const AvatarIcon = ({ size }: any) => (
-          <img 
-            src={t.avatar} 
+        const AvatarIcon = ({ size = 48 }: { size?: number }) => (
+          <Image
+            src={t.avatar}
             alt="avatar"
-            style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' }} 
-            onError={(e: any) => { e.target.style.display = 'none' }}
+            width={size}
+            height={size}
+            style={{ borderRadius: '50%', objectFit: 'cover' }}
+            onError={e => {
+              ;(e.target as HTMLImageElement).style.display = 'none'
+            }}
           />
         )
 
@@ -72,11 +73,7 @@ export default function FloatingTestimonials() {
               zIndex: 0,
             }}
           >
-            <OrbitalCard
-              title=""
-              description={`"${t.text}"`}
-              Icon={AvatarIcon as any}
-            />
+            <OrbitalCard title="" description={`"${t.text}"`} Icon={AvatarIcon} />
           </Box>
         )
       })}

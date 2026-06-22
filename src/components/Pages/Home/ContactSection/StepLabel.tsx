@@ -22,7 +22,7 @@ export default function StepLabel({ imageSrc, label }: { imageSrc: string; label
         src={imageSrc}
         alt={label}
         sx={{
-          width: 32,  
+          width: 32,
           height: 32,
           objectFit: 'contain',
         }}
@@ -31,7 +31,7 @@ export default function StepLabel({ imageSrc, label }: { imageSrc: string; label
         sx={{
           fontSize: 11,
           fontWeight: 700,
-          fontFamily:"Nulshock",
+          fontFamily: 'Nulshock',
           letterSpacing: '0.22em',
           textTransform: 'uppercase',
           color: 'primary.main',

@@ -34,6 +34,7 @@ export function useSplashDismissTiming(options: UseSplashDismissTimingOptions = 
 
   useEffect(() => {
     if (!assetsReady) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPostReadyHoldComplete(false)
       return
     }

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
-import type { LucideIcon } from 'lucide-react'
+import type { ElementType } from 'react'
 import { motion } from 'framer-motion'
 
 export const CARD_W = 270
@@ -36,7 +36,7 @@ const springTransition = {
 interface OrbitalCardProps {
   title: string
   description: string
-  Icon: LucideIcon
+  Icon: ElementType<{ size?: number; color?: string; strokeWidth?: number }>
   onHoverStart?: () => void
   onHoverEnd?: () => void
   onClick?: () => void

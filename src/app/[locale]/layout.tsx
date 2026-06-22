@@ -81,7 +81,7 @@ export default async function LocaleLayout({ children, params }: Props) {
       className={rajdhani.className}
       suppressHydrationWarning
     >
-<body suppressHydrationWarning>
+      <body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>
           <AppShell navLabels={navLabels}>{children}</AppShell>
         </AppProviders>

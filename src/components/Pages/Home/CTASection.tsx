@@ -57,16 +57,14 @@ export default function CTASection() {
       component="section"
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
-      sx={theme => ({
+      sx={{
         position: 'relative',
         overflow: 'hidden',
         height: '698px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-
-     
-      })}
+      }}
     >
       <video
         autoPlay

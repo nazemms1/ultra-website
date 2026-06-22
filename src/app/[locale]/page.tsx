@@ -7,8 +7,8 @@ import Methodologies from '@/components/Pages/Home/Methodologies/Methodologies'
 import Projects from '@/components/Pages/Home/Projects/Projects'
 import HeroSection from '@/components/Pages/Home/HeroSection'
 import ContactSection from '@/components/Pages/Home/ContactSection'
-import FloatingTestimonials from '@/components/Pages/Home/FloatingTestimonials'
-import Box from '@mui/material/Box'
+// import FloatingTestimonials from '@/components/Pages/Home/FloatingTestimonials'
+// import Box from '@mui/material/Box'
 
 export default function HomePage() {
   return (

@@ -149,8 +149,8 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
           boxShadow: [
             `0 0 35px ${alpha(theme.palette.primary.main, 0.18)}`,
             `0 8px 96px 0 rgba(0, 0, 0, 0.65)`,
-            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.80)}`,
-            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.10)}`,
+            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.8)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.1)}`,
           ].join(', '),
           '& img': { transform: 'scale(1.05)', opacity: 0.9 },
           '[data-portfolio-arrow]': { opacity: 1, transform: 'translate(2px, -2px)' },

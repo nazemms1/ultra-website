@@ -63,7 +63,7 @@ export function phaseCardOuterGlow(theme: Theme): string {
  */
 export function phaseCardSurface(theme: Theme, opts?: { radius?: number | string }) {
   const radius = opts?.radius ?? PHASE_CARD_RADIUS
-  const { primary, background } = theme.palette
+  const { primary } = theme.palette
 
   return {
     borderRadius: radius,

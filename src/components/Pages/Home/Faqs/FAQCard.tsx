@@ -63,7 +63,7 @@ export default function FAQCard({ question, answer }: { question: string; answer
             fontFamily: "'Rajdhani', sans-serif",
             fontWeight: 600,
             fontSize: '19px',
-            lineHeight: '22px', 
+            lineHeight: '22px',
             letterSpacing: '0.2px',
             color: 'text.primary',
           }}
