@@ -1,4 +1,5 @@
 import { SPLASH_CRITICAL_IMAGES, SPLASH_CRITICAL_VIDEOS } from './criticalAssets'
+import { preloadScrollFramesForSplash } from '@/components/Pages/Home/ScrollVideoStack/frameLoader'
 
 type WaitForPageMediaOptions = {
   /** Minimum time the splash stays visible even if assets resolve instantly. */
@@ -111,6 +112,7 @@ function waitForCriticalAssets(timeoutMs: number): Promise<void> {
   const tasks = [
     ...SPLASH_CRITICAL_VIDEOS.map(src => preloadVideo(src, timeoutMs)),
     ...SPLASH_CRITICAL_IMAGES.map(src => preloadImage(src, timeoutMs)),
+    withTimeout(preloadScrollFramesForSplash(), timeoutMs),
   ]
   return Promise.all(tasks).then(() => undefined)
 }

@@ -6,6 +6,7 @@ export type FrameManifest = {
   /** Zero-pad width for frame filenames (e.g. 6 → frame-000042.webp). */
   padLength?: number
   hasAlpha?: boolean
+  quality?: number
   width?: number
   height?: number
 }
@@ -13,9 +14,4 @@ export type FrameManifest = {
 export type FrameSize = {
   width: number
   height: number
-}
-
-export type FrameIndices = {
-  base: number
-  overlay: number
 }

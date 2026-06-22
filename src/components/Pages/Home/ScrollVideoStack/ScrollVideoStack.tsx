@@ -17,13 +17,14 @@ const frameSx = {
   objectFit: 'cover' as const,
   pointerEvents: 'none' as const,
   userSelect: 'none' as const,
+  backgroundColor: 'transparent',
   transform: 'translateZ(0)',
+  backfaceVisibility: 'hidden' as const,
 }
 
 export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const baseRef = useRef<HTMLImageElement>(null)
-  const overlayRef = useRef<HTMLImageElement>(null)
+  const frameRef = useRef<HTMLImageElement>(null)
   const reduceMotion = useReducedMotion()
   const disabled = reduceMotion ?? false
 
@@ -32,10 +33,9 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
     offset: ['start start', 'end end'],
   })
 
-  const { isReady, blendOpacity, showOverlay } = useScrollVideoScrub({
+  const { isReady, layerOpacity } = useScrollVideoScrub({
     progress: scrollYProgress,
-    baseRef,
-    overlayRef,
+    frameRef,
     disabled,
   })
 
@@ -52,37 +52,29 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
             zIndex: 0,
             overflow: 'hidden',
             pointerEvents: 'none',
+            bgcolor: 'transparent',
           }}
         >
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              visibility: isReady ? 'visible' : 'hidden',
-            }}
-          >
+          {isReady && (
             <Box
-              component="img"
-              ref={baseRef}
-              alt=""
-              draggable={false}
-              fetchPriority="high"
-              decoding="async"
-              sx={frameSx}
-            />
-
-            {showOverlay && (
+              component={motion.div}
+              style={{ opacity: layerOpacity }}
+              sx={{
+                position: 'absolute',
+                inset: 0,
+              }}
+            >
               <Box
-                component={motion.img}
-                ref={overlayRef}
+                component="img"
+                ref={frameRef}
                 alt=""
                 draggable={false}
+                fetchPriority="high"
                 decoding="async"
-                style={{ opacity: blendOpacity }}
                 sx={frameSx}
               />
-            )}
-          </Box>
+            </Box>
+          )}
         </Box>
       )}
 

@@ -1,14 +1,18 @@
 'use client'
 
-import { useEffect, useRef, useState, type RefObject } from 'react'
+import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { useMotionValueEvent, useTransform, type MotionValue } from 'framer-motion'
-import { preloadFrameWindow, resetFramePreloadCache, tryLoadStaticFrameUrls } from './frameLoader'
-import type { FrameIndices } from './types'
+import { SCROLL_VIDEO_CONTENT_OPACITY, SCROLL_VIDEO_EDGE_FADE } from './constants'
+import {
+  ensureFrameDecoded,
+  getCachedScrollFrameUrls,
+  preloadFrameWindow,
+  tryLoadStaticFrameUrls,
+} from './frameLoader'
 
 type UseScrollVideoScrubOptions = {
   progress: MotionValue<number>
-  baseRef: RefObject<HTMLImageElement | null>
-  overlayRef: RefObject<HTMLImageElement | null>
+  frameRef: RefObject<HTMLImageElement | null>
   disabled?: boolean
 }
 
@@ -16,19 +20,27 @@ function clampProgress(value: number) {
   return Math.min(Math.max(value, 0), 1)
 }
 
-function indicesFromProgress(value: number, count: number): FrameIndices {
-  if (count <= 1) {
-    return { base: 0, overlay: 0 }
+function edgeFadeFactor(value: number) {
+  if (value < 0 || value > 1) return 0
+
+  if (value < SCROLL_VIDEO_EDGE_FADE) {
+    return value / SCROLL_VIDEO_EDGE_FADE
   }
 
-  const scaled = clampProgress(value) * (count - 1)
-  const base = Math.min(Math.floor(scaled), count - 1)
-  const overlay = Math.min(base + 1, count - 1)
+  if (value > 1 - SCROLL_VIDEO_EDGE_FADE) {
+    return (1 - value) / SCROLL_VIDEO_EDGE_FADE
+  }
 
-  return { base, overlay }
+  return 1
 }
 
-function setImageSrc(image: HTMLImageElement | null, url: string) {
+function frameIndexFromProgress(value: number, count: number) {
+  if (count <= 1) return 0
+  const scaled = clampProgress(value) * (count - 1)
+  return Math.min(Math.round(scaled), count - 1)
+}
+
+function assignFrameSrc(image: HTMLImageElement | null, url: string) {
   if (!image || !url) return
   if (image.src.endsWith(url)) return
   image.src = url
@@ -36,42 +48,51 @@ function setImageSrc(image: HTMLImageElement | null, url: string) {
 
 export function useScrollVideoScrub({
   progress,
-  baseRef,
-  overlayRef,
+  frameRef,
   disabled = false,
 }: UseScrollVideoScrubOptions) {
   const [isReady, setIsReady] = useState(false)
-  const [hasMultipleFrames, setHasMultipleFrames] = useState(false)
   const frameCountRef = useRef(0)
   const frameUrlsRef = useRef<string[]>([])
-  const lastBaseRef = useRef(-1)
+  const displayedIndexRef = useRef(-1)
+  const pendingIndexRef = useRef(-1)
 
-  const blendOpacity = useTransform(progress, value => {
-    const count = frameCountRef.current
-    if (count < 2) return 0
-    const scaled = clampProgress(value) * (count - 1)
-    return scaled - Math.floor(scaled)
-  })
+  const layerOpacity = useTransform(
+    progress,
+    value => edgeFadeFactor(value) * SCROLL_VIDEO_CONTENT_OPACITY,
+  )
 
-  const applyFramePair = (base: number, overlay: number) => {
-    const urls = frameUrlsRef.current
-    if (!urls.length) return
+  const showFrame = useCallback(
+    async (index: number) => {
+      const urls = frameUrlsRef.current
+      const url = urls[index]
+      if (!url) return
 
-    setImageSrc(baseRef.current, urls[base] ?? '')
-    setImageSrc(overlayRef.current, urls[overlay] ?? urls[base] ?? '')
-    preloadFrameWindow(urls, base)
-  }
+      pendingIndexRef.current = index
+      preloadFrameWindow(urls, index)
 
-  const syncToProgress = (value: number) => {
-    const count = frameCountRef.current
-    if (count < 1) return
+      await ensureFrameDecoded(url)
 
-    const { base, overlay } = indicesFromProgress(value, count)
-    if (base === lastBaseRef.current) return
+      if (pendingIndexRef.current !== index) return
 
-    lastBaseRef.current = base
-    applyFramePair(base, overlay)
-  }
+      assignFrameSrc(frameRef.current, url)
+      displayedIndexRef.current = index
+    },
+    [frameRef],
+  )
+
+  const syncToProgress = useCallback(
+    (value: number) => {
+      const count = frameCountRef.current
+      if (count < 1) return
+
+      const index = frameIndexFromProgress(value, count)
+      if (index === displayedIndexRef.current) return
+
+      void showFrame(index)
+    },
+    [showFrame],
+  )
 
   useEffect(() => {
     if (disabled) return
@@ -79,16 +100,17 @@ export function useScrollVideoScrub({
     let cancelled = false
 
     const bootstrap = async () => {
-      const urls = await tryLoadStaticFrameUrls()
+      const cached = getCachedScrollFrameUrls()
+      const urls = cached?.length ? cached : await tryLoadStaticFrameUrls()
       if (cancelled || !urls?.length) return
 
       frameCountRef.current = urls.length
       frameUrlsRef.current = urls
-      setHasMultipleFrames(urls.length > 1)
-      lastBaseRef.current = -1
+      displayedIndexRef.current = -1
+      pendingIndexRef.current = -1
 
-      setIsReady(true)
-      syncToProgress(progress.get())
+      await showFrame(frameIndexFromProgress(progress.get(), urls.length))
+      if (!cancelled) setIsReady(true)
     }
 
     void bootstrap()
@@ -97,18 +119,13 @@ export function useScrollVideoScrub({
       cancelled = true
       frameCountRef.current = 0
       frameUrlsRef.current = []
-      setHasMultipleFrames(false)
-      lastBaseRef.current = -1
-      resetFramePreloadCache()
+      displayedIndexRef.current = -1
+      pendingIndexRef.current = -1
       setIsReady(false)
     }
-  }, [disabled, progress, baseRef, overlayRef])
+  }, [disabled, progress, frameRef, showFrame])
 
   useMotionValueEvent(progress, 'change', syncToProgress)
 
-  return {
-    isReady,
-    blendOpacity,
-    showOverlay: hasMultipleFrames,
-  }
+  return { isReady, layerOpacity }
 }

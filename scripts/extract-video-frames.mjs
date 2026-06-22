@@ -1,8 +1,14 @@
 #!/usr/bin/env node
 /**
- * Extract every frame from bg-video.webm with alpha preserved (transparent background).
+ * Extract every frame from bg-video.webm as transparent WebP masks (no background).
  *
  * Usage: pnpm video:frames
+ *
+ * Env overrides:
+ *   VIDEO_FRAME_QUALITY=92
+ *   VIDEO_FRAME_WIDTH=1280
+ *   VIDEO_COLORKEY_SIM=0.18   — black removal sensitivity (0–1)
+ *   VIDEO_COLORKEY_BLEND=0.06 — edge softness (0–1)
  */
 
 import { spawnSync } from 'node:child_process'
@@ -17,8 +23,29 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const root = path.resolve(__dirname, '..')
 const input = path.join(root, 'public/videos/bg-video.webm')
 const outputDir = path.join(root, 'public/videos/frames')
-const width = 640
 const padLength = 6
+
+/** WebP quality 0–100 */
+const QUALITY = clampInt(process.env.VIDEO_FRAME_QUALITY ?? 90, 40, 100)
+
+/** Output width in px */
+const WIDTH = clampInt(process.env.VIDEO_FRAME_WIDTH ?? 960, 320, 1920)
+
+/** Remove near-black pixels so only the mask artwork remains. */
+const COLORKEY_SIM = clampFloat(process.env.VIDEO_COLORKEY_SIM ?? 0.18, 0.01, 0.5)
+const COLORKEY_BLEND = clampFloat(process.env.VIDEO_COLORKEY_BLEND ?? 0.06, 0.01, 0.3)
+
+function clampInt(value, min, max) {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return min
+  return Math.min(max, Math.max(min, Math.round(parsed)))
+}
+
+function clampFloat(value, min, max) {
+  const parsed = Number(value)
+  if (!Number.isFinite(parsed)) return min
+  return Math.min(max, Math.max(min, parsed))
+}
 
 function resolveFfmpegPath() {
   let bundledPath = require('ffmpeg-static')
@@ -68,6 +95,15 @@ function countExtractedFrames() {
     })
 }
 
+function buildVideoFilter() {
+  return [
+    `scale=${WIDTH}:-2:flags=lanczos`,
+    'setsar=1',
+    'format=rgba',
+    `colorkey=0x000000:${COLORKEY_SIM}:${COLORKEY_BLEND}`,
+  ].join(',')
+}
+
 function runFfmpeg() {
   const ffmpegPath = resolveFfmpegPath()
 
@@ -89,7 +125,7 @@ function runFfmpeg() {
     '-start_number',
     '0',
     '-vf',
-    `scale=${width}:-2:flags=lanczos,setsar=1,format=rgba`,
+    buildVideoFilter(),
     '-fps_mode',
     'passthrough',
     '-c:v',
@@ -97,13 +133,15 @@ function runFfmpeg() {
     '-lossless',
     '0',
     '-quality',
-    '82',
+    String(QUALITY),
     '-preset',
     'picture',
     outputPattern,
   ]
 
-  console.log('Extracting all frames with alpha (transparent background)…')
+  console.log(
+    `Extracting mask frames (quality=${QUALITY}, width=${WIDTH}px, colorkey sim=${COLORKEY_SIM})…`,
+  )
   console.log(`Binary: ${ffmpegPath}`)
 
   const result = spawnSync(ffmpegPath, args, { stdio: 'inherit' })
@@ -125,12 +163,15 @@ function runFfmpeg() {
     indexStart: 0,
     padLength,
     hasAlpha: true,
-    width,
-    height: Math.round(width * (9 / 16)),
+    width: WIDTH,
+    height: Math.round(WIDTH * (9 / 16)),
+    quality: QUALITY,
+    colorkeySim: COLORKEY_SIM,
+    colorkeyBlend: COLORKEY_BLEND,
   }
 
   fs.writeFileSync(path.join(outputDir, 'manifest.json'), `${JSON.stringify(manifest, null, 2)}\n`)
-  console.log(`Done — ${frameCount} transparent WebP frames + manifest.json`)
+  console.log(`Done — ${frameCount} transparent mask frames + manifest.json`)
 }
 
 runFfmpeg()
