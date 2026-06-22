@@ -124,10 +124,13 @@ export default function OrbitalDeck({
         sx={{
           pointerEvents: 'none',
           position: 'absolute',
-          inset: '0 0 0 auto',
+          inset: '0 0 -120px auto',
           zIndex: 20,
           width: '40%',
-          background: `linear-gradient(to right, transparent 0%, rgba(18,18,18,0.65) 55%, rgba(18,18,18,0.95) 100%)`,
+          background: theme =>
+            `linear-gradient(to right, transparent 0%, ${alpha(theme.palette.background.default, 0.65)} 55%, ${alpha(theme.palette.background.default, 0.95)} 100%)`,
+          maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
         }}
       />
     </Box>

@@ -52,7 +52,8 @@ export default function ServicesOrbital() {
         return {
           position: 'relative',
           py: { xs: 12, lg: 16 },
-          overflow: 'clip',
+          pb: { xs: 14, lg: 20 },
+          overflow: 'hidden',
         }
       }}
     >

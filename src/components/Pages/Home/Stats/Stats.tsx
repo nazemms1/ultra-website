@@ -20,9 +20,10 @@ export default function Stats() {
         return {
           position: 'relative',
           width: '100%',
-          pt: { xs: 5, md: '60px' },
+          mt: { xs: -6, md: -8 },
+          pt: { xs: 7, md: '52px' },
           pb: { xs: 6, md: 8 },
-          overflow: 'hidden',
+          overflow: 'visible',
         }
       }}
     >

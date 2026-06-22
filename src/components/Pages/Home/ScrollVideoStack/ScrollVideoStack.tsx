@@ -41,7 +41,7 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
   })
 
   return (
-    <Box ref={containerRef} sx={{ position: 'relative', isolation: 'isolate' }}>
+    <Box ref={containerRef} sx={{ position: 'relative' }}>
       {!disabled && (
         <Box
           ref={viewportRef}
@@ -52,7 +52,6 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
             height: '100vh',
             width: '100%',
             zIndex: 0,
-            overflow: 'hidden',
             pointerEvents: 'none',
             bgcolor: 'transparent',
           }}
@@ -75,6 +74,7 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
         sx={{
           position: 'relative',
           zIndex: 1,
+          overflow: 'visible',
           ...(!disabled && { mt: '-100vh' }),
         }}
       >
