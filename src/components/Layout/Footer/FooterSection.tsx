@@ -140,13 +140,27 @@ export default function FooterSection() {
             }}
           >
             <Stack spacing={2.5} sx={{ maxWidth: { md: 260 }, width: '100%' }}>
-              <Image
-                src="/images/logo/logo-ultra.svg"
-                alt="Ultrawares"
-                width={83}
-                height={42}
-                priority
-              />
+              <Box
+                component={Link}
+                href="/"
+                sx={{
+                  display: 'inline-block',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'scale(1.05)',
+                    filter: `drop-shadow(0 0 12px ${alpha(theme.palette.primary.main, 0.6)}) brightness(1.2)`,
+                  }
+                }}
+              >
+                <Image
+                  src="/images/logo/logo-ultra.svg"
+                  alt="Ultrawares"
+                  width={83}
+                  height={42}
+                  priority
+                  style={{ display: 'block' }}
+                />
+              </Box>
               <Typography
                 sx={{
                   ...footerBodySx,
@@ -174,10 +188,13 @@ export default function FooterSection() {
                       bgcolor: alpha(theme.palette.common.white, 0.03),
                       border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
                       color: 'text.secondary',
-                      transition: 'all 0.2s',
+                      transition: 'all 0.3s ease',
                       '&:hover': {
                         borderColor: 'primary.main',
                         color: 'primary.main',
+                        transform: 'translateY(-3px) scale(1.05)',
+                        boxShadow: `0 4px 14px ${alpha(theme.palette.primary.main, 0.4)}`,
+                        bgcolor: alpha(theme.palette.primary.main, 0.08),
                       },
                     }}
                   >
@@ -188,7 +205,7 @@ export default function FooterSection() {
             </Stack>
 
             <Stack spacing={2} sx={{ width: { md: 192 } }}>
-              <Typography sx={footerSectionTitleSx}>Useful Links</Typography>
+              <Typography variant='h5' sx={footerSectionTitleSx}>Useful Links</Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {usefulLinks.map(link => (
                   <Box key={link.href} component="li">
@@ -210,7 +227,7 @@ export default function FooterSection() {
             </Stack>
 
             <Stack spacing={2} sx={{ width: { md: 174 } }}>
-              <Typography sx={footerSectionTitleSx}>Services</Typography>
+              <Typography variant='h5'sx={footerSectionTitleSx}>Services</Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {serviceItems.map(item => (
                   <Typography
@@ -257,25 +274,41 @@ export default function FooterSection() {
                       flexDirection: 'column',
                       alignItems: 'center',
                       justifyContent: 'center',
+                      transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                      cursor: 'default',
+                      '&:hover': {
+                        transform: 'translateY(-4px)',
+                        '& .stat-number': {
+                          textShadow: `0 0 24px ${alpha(theme.palette.primary.main, 0.6)}`,
+                          transform: 'scale(1.05)',
+                        },
+                        '& .stat-label': {
+                          color: 'primary.main',
+                        }
+                      }
                     }}
                   >
                     <Typography
+                      className="stat-number"
                       component="span"
                       sx={{
                         ...statNumberSx,
                         fontSize: { xs: 28, md: 36 },
                         lineHeight: { xs: '32px', md: '36px' },
+                        transition: 'all 0.3s ease',
                       }}
                     >
                       {stat.value}
                     </Typography>
                     <Typography
+                      className="stat-label"
                       sx={{
                         ...statLabelSx,
                         mt: 1,
                         fontSize: '12px',
                         lineHeight: '18px',
                         letterSpacing: '2px',
+                        transition: 'color 0.3s ease',
                       }}
                     >
                       {stat.label}

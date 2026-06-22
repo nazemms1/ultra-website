@@ -67,10 +67,7 @@ export function phaseCardSurface(theme: Theme, opts?: { radius?: number | string
 
   return {
     borderRadius: radius,
-    background: [
-      `radial-gradient(ellipse 85% 110% at 20% 50%, ${alpha(primary.main, 0.24)} 0%, ${alpha(primary.main, 0.07)} 42%, transparent 68%)`,
-      `linear-gradient(154deg, ${alpha(primary.darker, 0.42)} 0%, ${alpha(background.default, 0.94)} 55%, ${alpha(background.default, 1)} 100%)`,
-    ].join(', '),
+    background: `linear-gradient(135deg, rgba(13, 241, 217, 0.35) 0%, rgba(18, 18, 18, 0.95) 60%)`,
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
     boxShadow: [

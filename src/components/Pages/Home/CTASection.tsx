@@ -65,29 +65,7 @@ export default function CTASection() {
         alignItems: 'center',
         justifyContent: 'center',
 
-        '&::before': {
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          height: '180px',
-          background: `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
-          zIndex: 2,
-          pointerEvents: 'none',
-        },
-
-        '&::after': {
-          content: '""',
-          position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          height: '180px',
-          background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
-          zIndex: 2,
-          pointerEvents: 'none',
-        },
+     
       })}
     >
       <video
@@ -108,12 +86,30 @@ export default function CTASection() {
       </video>
 
       <Box
-        sx={{
+        sx={theme => ({
           position: 'absolute',
           inset: 0,
-          // background: alpha(theme.palettepalette.background.default, 0.2),
           zIndex: 1,
-        }}
+          pointerEvents: 'none',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '180px',
+            background: `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
+          },
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '180px',
+            background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
+          },
+        })}
       />
 
       <Box

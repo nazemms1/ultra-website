@@ -83,14 +83,14 @@ export default function ContactSection() {
           maxWidth: 1280,
           mx: 'auto',
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: '1fr 600px' },
+          gridTemplateColumns: { xs: '1fr', lg: '1fr 600px' },
           gap: { xs: '48px', md: '60px' },
           position: 'relative',
           zIndex: 1,
         }}
       >
         {/* Left column — branding */}
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
           <Typography
             sx={{
               fontFamily: "'Rajdhani', sans-serif",
@@ -109,7 +109,7 @@ export default function ContactSection() {
             component="h2"
             sx={{
               fontFamily: "'Ethnocentric Rg', sans-serif",
-              fontSize: { xs: '42px', md: '56px' },
+              fontSize: { xs: '32px', sm: '42px', md: '56px' },
               lineHeight: 1.05,
               letterSpacing: '1.5px',
               textTransform: 'uppercase',
@@ -139,8 +139,8 @@ export default function ContactSection() {
         </Box>
 
         {/* Right column — form */}
-        <Box component="form" onSubmit={e => e.preventDefault()}>
-          <StepLabel num="01" label="Select Service Type" />
+        <Box component="form" onSubmit={e => e.preventDefault()} sx={{ minWidth: 0 }}>
+          <StepLabel imageSrc="/images/contact/step-01.svg" label="Select Service Type" />
           <ServiceCarousel
             services={SERVICES}
             selectedService={selectedService}
@@ -149,7 +149,7 @@ export default function ContactSection() {
 
           <SectionDivider />
 
-          <StepLabel num="02" label="Additional Offerings" />
+          <StepLabel imageSrc="/images/contact/step-02.svg" label="Additional Offerings" />
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {availableOfferings.map(o => (
               <OfferingCheckbox
@@ -163,7 +163,7 @@ export default function ContactSection() {
 
           <SectionDivider />
 
-          <StepLabel num="03" label="Your Details" />
+          <StepLabel imageSrc="/images/contact/step-03.svg" label="Your Details" />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <Box
               sx={{
@@ -206,7 +206,7 @@ export default function ContactSection() {
 
           <SectionDivider />
 
-          <StepLabel num="04" label="Consultation Setup" />
+          <StepLabel imageSrc="/images/contact/step-04.svg" label="Consultation Setup" />
           <Box sx={{ display: 'flex', gap: '10px', flexWrap: 'wrap', mb: '20px' }}>
             <RadioOption
               name="consultation-type"
@@ -309,8 +309,10 @@ export default function ContactSection() {
               <Typography
                 sx={{
                   fontFamily: "'Rajdhani', sans-serif",
-                  fontSize: '12px',
-                  color: alpha(theme.palette.text.secondary, 0.55),
+                  fontSize: '14px',
+                  fontWeight: 400,
+                  lineHeight: '21px',
+                  color: 'rgba(255, 255, 255, 0.40)',
                   letterSpacing: '0.04em',
                 }}
               >

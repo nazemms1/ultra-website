@@ -179,9 +179,11 @@ export default function FAQSection() {
                 sx={{
                   fontFamily: "'Rajdhani', sans-serif",
                   fontWeight: 600,
-                  fontSize: '14px',
+                  fontSize: '17px',
                   color: 'text.primary',
-                  lineHeight: '20px',
+                  lineHeight: '25.50px',
+                  wordWrap: 'break-word'
+
                 }}
               >
                 Still have questions?
@@ -190,8 +192,8 @@ export default function FAQSection() {
                 sx={{
                   fontFamily: "'Rajdhani', sans-serif",
                   fontWeight: 400,
-                  fontSize: '12px',
-                  color: 'text.tertiary',
+                  fontSize: '14px',
+                  color: 'rgba(255, 255, 255, 0.55)',
                   lineHeight: '18px',
                 }}
               >

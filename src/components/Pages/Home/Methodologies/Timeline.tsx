@@ -153,6 +153,7 @@ function TimelineTick({
           fontSize: '11px',
           letterSpacing: '0.18em',
           color: 'text.primary',
+          capitalize: 'uppercase',
           transition: 'color 0.2s',
         }}
       >

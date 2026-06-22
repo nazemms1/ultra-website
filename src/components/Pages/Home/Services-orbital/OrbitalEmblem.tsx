@@ -43,8 +43,8 @@ export default function OrbitalEmblem({ offsetX, offsetY }: OrbitalEmblemProps) 
     >
       <Box
         component={motion.svg}
-        width={64}
-        height={66}
+        width={85}
+        height={85}
         viewBox="0 0 35 36"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"

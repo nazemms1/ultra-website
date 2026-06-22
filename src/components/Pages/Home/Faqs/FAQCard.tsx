@@ -61,9 +61,9 @@ export default function FAQCard({ question, answer }: { question: string; answer
         <Typography
           sx={{
             fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500,
-            fontSize: '15px',
-            lineHeight: '22px',
+            fontWeight: 600,
+            fontSize: '19px',
+            lineHeight: '22px', 
             letterSpacing: '0.2px',
             color: 'text.primary',
           }}
@@ -128,10 +128,10 @@ export default function FAQCard({ question, answer }: { question: string; answer
             sx={{
               fontFamily: "'Rajdhani', sans-serif",
               fontWeight: 400,
-              fontSize: '14px',
-              lineHeight: '22px',
+              fontSize: '16px',
+              lineHeight: '27.20px',
               letterSpacing: '0.2px',
-              color: 'text.tertiary',
+              color: 'rgba(255, 255, 255, 0.70)',
               px: { xs: '1.25rem', md: '1.75rem' },
               pt: '1rem',
               pb: '1.375rem',

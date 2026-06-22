@@ -81,7 +81,8 @@ export function captchaBoxSx(theme: Theme, checked: boolean): SxProps<Theme> {
     cursor: 'pointer',
     userSelect: 'none',
     transition: 'border-color 0.2s, background-color 0.2s, box-shadow 0.2s',
-    minWidth: 300,
+    width: '100%',
+    maxWidth: { xs: '100%', sm: 300 },
     bgcolor: alpha(theme.palette.common.white, 0.03),
     boxShadow: [
       `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.45)}`,
