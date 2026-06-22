@@ -1,7 +1,4 @@
-export type FrameSize = {
-  width: number
-  height: number
-}
+import type { FrameSize } from './types'
 
 export function computeFrameSize(
   videoWidth: number,
@@ -23,54 +20,58 @@ export function computeFrameSize(
   }
 }
 
-export function waitForVideoFrame(video: HTMLVideoElement): Promise<void> {
-  return new Promise(resolve => {
-    if (
-      'requestVideoFrameCallback' in video &&
-      typeof video.requestVideoFrameCallback === 'function'
-    ) {
-      video.requestVideoFrameCallback(() => resolve())
-      return
-    }
-
-    const onSeeked = () => resolve()
-    if (video.seeking) {
-      video.addEventListener('seeked', onSeeked, { once: true })
-      return
-    }
-
-    video.addEventListener('seeked', onSeeked, { once: true })
+export function getCanvasContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const ctx = canvas.getContext('2d', {
+    alpha: false,
+    desynchronized: true,
   })
-}
 
-export async function captureVideoFrame(
-  video: HTMLVideoElement,
-  time: number,
-  size: FrameSize,
-): Promise<ImageBitmap> {
-  video.currentTime = time
-  await waitForVideoFrame(video)
-
-  const scratch = document.createElement('canvas')
-  scratch.width = size.width
-  scratch.height = size.height
-
-  const ctx = scratch.getContext('2d')
   if (!ctx) {
     throw new Error('Canvas 2D context unavailable')
   }
 
-  ctx.drawImage(video, 0, 0, size.width, size.height)
-  return createImageBitmap(scratch)
+  return ctx
+}
+
+export function syncCanvasToViewport(
+  canvas: HTMLCanvasElement,
+  viewport: HTMLElement,
+  dpr: number,
+): { width: number; height: number } | null {
+  const width = Math.round(viewport.clientWidth * dpr)
+  const height = Math.round(viewport.clientHeight * dpr)
+
+  if (width <= 0 || height <= 0) {
+    return null
+  }
+
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width
+    canvas.height = height
+  }
+
+  return { width, height }
+}
+
+function getSourceDimensions(source: ImageBitmap | HTMLVideoElement) {
+  if (source instanceof HTMLVideoElement) {
+    return { width: source.videoWidth, height: source.videoHeight }
+  }
+
+  return { width: source.width, height: source.height }
 }
 
 export function drawCoverFrame(
   ctx: CanvasRenderingContext2D,
-  bitmap: ImageBitmap,
+  source: ImageBitmap | HTMLVideoElement,
   canvasWidth: number,
   canvasHeight: number,
 ) {
-  const imgRatio = bitmap.width / bitmap.height
+  const { width: sourceWidth, height: sourceHeight } = getSourceDimensions(source)
+
+  if (sourceWidth <= 0 || sourceHeight <= 0) return
+
+  const imgRatio = sourceWidth / sourceHeight
   const canvasRatio = canvasWidth / canvasHeight
 
   let drawWidth: number
@@ -90,39 +91,46 @@ export function drawCoverFrame(
     offsetY = (canvasHeight - drawHeight) / 2
   }
 
-  ctx.drawImage(bitmap, offsetX, offsetY, drawWidth, drawHeight)
+  ctx.drawImage(source, offsetX, offsetY, drawWidth, drawHeight)
 }
 
-export function drawCrossfadedFrames(
-  ctx: CanvasRenderingContext2D,
-  frames: ImageBitmap[],
-  progress: number,
-  canvasWidth: number,
-  canvasHeight: number,
-) {
-  if (frames.length === 0) return
-
-  const lastIndex = frames.length - 1
-  const scaled = progress * lastIndex
-  const indexA = Math.min(Math.floor(scaled), lastIndex)
-  const indexB = Math.min(indexA + 1, lastIndex)
-  const blend = scaled - indexA
-
-  ctx.clearRect(0, 0, canvasWidth, canvasHeight)
-
-  const frameA = frames[indexA]
-  if (!frameA) return
-
-  ctx.globalAlpha = 1 - blend
-  drawCoverFrame(ctx, frameA, canvasWidth, canvasHeight)
-
-  if (blend > 0 && indexB !== indexA) {
-    const frameB = frames[indexB]
-    if (frameB) {
-      ctx.globalAlpha = blend
-      drawCoverFrame(ctx, frameB, canvasWidth, canvasHeight)
+export function waitForVideoFrame(video: HTMLVideoElement): Promise<void> {
+  return new Promise(resolve => {
+    if (
+      'requestVideoFrameCallback' in video &&
+      typeof video.requestVideoFrameCallback === 'function'
+    ) {
+      video.requestVideoFrameCallback(() => resolve())
+      return
     }
-  }
 
-  ctx.globalAlpha = 1
+    if (!video.seeking && video.readyState >= HTMLMediaElement.HAVE_CURRENT_DATA) {
+      resolve()
+      return
+    }
+
+    video.addEventListener('seeked', () => resolve(), { once: true })
+  })
+}
+
+export async function captureVideoFrame(
+  video: HTMLVideoElement,
+  time: number,
+  size: FrameSize,
+): Promise<ImageBitmap> {
+  video.currentTime = time
+  await waitForVideoFrame(video)
+
+  const scratch = document.createElement('canvas')
+  scratch.width = size.width
+  scratch.height = size.height
+
+  const ctx = getCanvasContext(scratch)
+  ctx.drawImage(video, 0, 0, size.width, size.height)
+
+  return createImageBitmap(scratch)
+}
+
+export function closeFrameBitmaps(frames: ImageBitmap[]) {
+  frames.forEach(frame => frame.close())
 }

@@ -1,0 +1,9 @@
+{
+  "frameCount": 192,
+  "basePath": "/videos/frames",
+  "indexStart": 0,
+  "padLength": 6,
+  "hasAlpha": true,
+  "width": 640,
+  "height": 360
+}

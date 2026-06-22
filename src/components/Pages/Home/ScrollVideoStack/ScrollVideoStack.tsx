@@ -2,21 +2,29 @@
 
 import { useRef, type ReactNode } from 'react'
 import Box from '@mui/material/Box'
-import { useTheme } from '@mui/material/styles'
-import { useReducedMotion, useScroll } from 'framer-motion'
-import { SCROLL_VIDEO_SRC } from './constants'
-import { useScrollVideoCanvas } from './useScrollVideoCanvas'
+import { motion, useReducedMotion, useScroll } from 'framer-motion'
+import { useScrollVideoScrub } from './useScrollVideoScrub'
 
 type ScrollVideoStackProps = {
   children: ReactNode
 }
 
+const frameSx = {
+  position: 'absolute' as const,
+  inset: 0,
+  width: '100%',
+  height: '100%',
+  objectFit: 'cover' as const,
+  pointerEvents: 'none' as const,
+  userSelect: 'none' as const,
+  transform: 'translateZ(0)',
+}
+
 export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const baseRef = useRef<HTMLImageElement>(null)
+  const overlayRef = useRef<HTMLImageElement>(null)
   const reduceMotion = useReducedMotion()
-  const theme = useTheme()
   const disabled = reduceMotion ?? false
 
   const { scrollYProgress } = useScroll({
@@ -24,10 +32,10 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
     offset: ['start start', 'end end'],
   })
 
-  const { isReady } = useScrollVideoCanvas({
+  const { isReady, blendOpacity, showOverlay } = useScrollVideoScrub({
     progress: scrollYProgress,
-    videoRef,
-    canvasRef,
+    baseRef,
+    overlayRef,
     disabled,
   })
 
@@ -44,50 +52,37 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
             zIndex: 0,
             overflow: 'hidden',
             pointerEvents: 'none',
-            transform: 'translateZ(0)',
-            bgcolor: 'background.default',
           }}
         >
           <Box
-            component="video"
-            ref={videoRef}
-            src={SCROLL_VIDEO_SRC}
-            muted
-            playsInline
-            preload="auto"
-            sx={{
-              position: 'absolute',
-              width: 1,
-              height: 1,
-              opacity: 0,
-              pointerEvents: 'none',
-              visibility: 'hidden',
-            }}
-          />
-
-          <Box
-            component="canvas"
-            ref={canvasRef}
             sx={{
               position: 'absolute',
               inset: 0,
-              width: '100%',
-              height: '100%',
-              opacity: isReady ? 1 : 0,
-              transition: theme.transitions.create('opacity', {
-                duration: theme.transitions.duration.standard,
-              }),
-              transform: 'translateZ(0)',
+              visibility: isReady ? 'visible' : 'hidden',
             }}
-          />
+          >
+            <Box
+              component="img"
+              ref={baseRef}
+              alt=""
+              draggable={false}
+              fetchPriority="high"
+              decoding="async"
+              sx={frameSx}
+            />
 
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              pointerEvents: 'none',
-            }}
-          />
+            {showOverlay && (
+              <Box
+                component={motion.img}
+                ref={overlayRef}
+                alt=""
+                draggable={false}
+                decoding="async"
+                style={{ opacity: blendOpacity }}
+                sx={frameSx}
+              />
+            )}
+          </Box>
         </Box>
       )}
 

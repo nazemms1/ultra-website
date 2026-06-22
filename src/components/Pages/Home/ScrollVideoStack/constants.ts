@@ -1,10 +1,7 @@
-export const SCROLL_VIDEO_SRC = '/videos/bg-video.webm'
+export const SCROLL_VIDEO_MANIFEST = '/videos/frames/manifest.json'
 
-/** Pre-extracted frames — crossfade between them removes decode lag during scroll. */
-export const SCROLL_VIDEO_FRAME_COUNT = 36
+/** How many frames to prefetch on each side of the current index. */
+export const SCROLL_VIDEO_PRELOAD_RADIUS = 4
 
-/** Cap extraction width to keep memory and decode time reasonable. */
-export const SCROLL_VIDEO_MAX_FRAME_WIDTH = 960
-
-/** Device pixel ratio cap for the display canvas. */
-export const SCROLL_VIDEO_MAX_DPR = 2
+/** Parallel static frame fetches during preload. */
+export const SCROLL_VIDEO_FRAME_LOAD_CONCURRENCY = 6
