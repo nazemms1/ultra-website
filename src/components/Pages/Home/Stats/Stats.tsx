@@ -16,12 +16,14 @@ export default function Stats() {
       ref={sectionRef}
       component="section"
       id="stats"
-      sx={{
-        position: 'relative',
-        width: '100%',
-        pt: { xs: 5, md: '60px' },
-        pb: { xs: 6, md: 8 },
-        overflow: 'hidden',
+      sx={() => {
+        return {
+          position: 'relative',
+          width: '100%',
+          pt: { xs: 5, md: '60px' },
+          pb: { xs: 6, md: 8 },
+          overflow: 'hidden',
+        }
       }}
     >
       <Grid

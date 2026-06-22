@@ -4,9 +4,9 @@
   "indexStart": 0,
   "padLength": 6,
   "hasAlpha": true,
-  "width": 960,
-  "height": 540,
-  "quality": 90,
+  "width": 1280,
+  "height": 720,
+  "quality": 95,
   "colorkeySim": 0.18,
   "colorkeyBlend": 0.06
 }

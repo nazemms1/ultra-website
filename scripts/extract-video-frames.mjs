@@ -26,10 +26,10 @@ const outputDir = path.join(root, 'public/videos/frames')
 const padLength = 6
 
 /** WebP quality 0–100 */
-const QUALITY = clampInt(process.env.VIDEO_FRAME_QUALITY ?? 90, 40, 100)
+const QUALITY = clampInt(process.env.VIDEO_FRAME_QUALITY ?? 95, 40, 100) // 90
 
 /** Output width in px */
-const WIDTH = clampInt(process.env.VIDEO_FRAME_WIDTH ?? 960, 320, 1920)
+const WIDTH = clampInt(process.env.VIDEO_FRAME_WIDTH ?? 1280, 320, 1920) // 1200
 
 /** Remove near-black pixels so only the mask artwork remains. */
 const COLORKEY_SIM = clampFloat(process.env.VIDEO_COLORKEY_SIM ?? 0.18, 0.01, 0.5)

@@ -48,10 +48,12 @@ export default function ServicesOrbital() {
       ref={sectionRef}
       component="section"
       id="services"
-      sx={{
-        position: 'relative',
-        py: { xs: 12, lg: 16 },
-        overflow: 'clip',
+      sx={() => {
+        return {
+          position: 'relative',
+          py: { xs: 12, lg: 16 },
+          overflow: 'clip',
+        }
       }}
     >
       <Grid
