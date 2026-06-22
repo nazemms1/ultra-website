@@ -35,7 +35,7 @@ function withTimeout<T>(promise: Promise<T>, timeoutMs: number): Promise<T | voi
   return Promise.race([promise, delay(timeoutMs)])
 }
 
-function isImageReady(img: HTMLImageElement): boolean {
+async function isImageReady(img: HTMLImageElement): Promise<boolean> {
   if (!img.complete) return false
   if (img.naturalWidth === 0 && img.naturalHeight === 0) {
     return Boolean(img.currentSrc || img.src)
@@ -43,12 +43,12 @@ function isImageReady(img: HTMLImageElement): boolean {
   return true
 }
 
-function isVideoReady(video: HTMLVideoElement): boolean {
+async function isVideoReady(video: HTMLVideoElement): Promise<boolean> {
   return video.readyState >= VIDEO_READY_STATE || video.error !== null
 }
 
-function waitForImageElement(img: HTMLImageElement, timeoutMs: number): Promise<void> {
-  if (isImageReady(img)) return Promise.resolve()
+async function waitForImageElement(img: HTMLImageElement, timeoutMs: number): Promise<void> {
+  if (await isImageReady(img)) return Promise.resolve()
 
   return withTimeout(
     new Promise<void>(resolve => {
@@ -60,8 +60,8 @@ function waitForImageElement(img: HTMLImageElement, timeoutMs: number): Promise<
   ).then(() => undefined)
 }
 
-function waitForVideoElement(video: HTMLVideoElement, timeoutMs: number): Promise<void> {
-  if (isVideoReady(video)) return Promise.resolve()
+async function waitForVideoElement(video: HTMLVideoElement, timeoutMs: number): Promise<void> {
+  if (await isVideoReady(video)) return Promise.resolve()
 
   return withTimeout(
     new Promise<void>(resolve => {
@@ -77,7 +77,7 @@ function waitForVideoElement(video: HTMLVideoElement, timeoutMs: number): Promis
   ).then(() => undefined)
 }
 
-function preloadImage(src: string, timeoutMs: number): Promise<void> {
+async function preloadImage(src: string, timeoutMs: number): Promise<void> {
   return withTimeout(
     new Promise<void>(resolve => {
       const img = new Image()
@@ -90,7 +90,7 @@ function preloadImage(src: string, timeoutMs: number): Promise<void> {
   ).then(() => undefined)
 }
 
-function preloadVideo(src: string, timeoutMs: number): Promise<void> {
+async function preloadVideo(src: string, timeoutMs: number): Promise<void> {
   return withTimeout(
     new Promise<void>(resolve => {
       const video = document.createElement('video')
@@ -108,7 +108,7 @@ function preloadVideo(src: string, timeoutMs: number): Promise<void> {
   ).then(() => undefined)
 }
 
-function waitForCriticalAssets(timeoutMs: number): Promise<void> {
+async function waitForCriticalAssets(timeoutMs: number): Promise<void> {
   const tasks = [
     ...SPLASH_CRITICAL_VIDEOS.map(src => preloadVideo(src, timeoutMs)),
     ...SPLASH_CRITICAL_IMAGES.map(src => preloadImage(src, timeoutMs)),

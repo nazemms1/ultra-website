@@ -2,17 +2,25 @@
 
 import { useCallback, useEffect, useRef, useState, type RefObject } from 'react'
 import { useMotionValueEvent, useTransform, type MotionValue } from 'framer-motion'
-import { SCROLL_VIDEO_CONTENT_OPACITY, SCROLL_VIDEO_EDGE_FADE } from './constants'
+import { drawCoverFrame, getMaskCanvasContext, syncCanvasToViewport } from './canvasUtils'
 import {
-  ensureFrameDecoded,
+  SCROLL_VIDEO_CONTENT_OPACITY,
+  SCROLL_VIDEO_EDGE_FADE,
+  SCROLL_VIDEO_PRELOAD_RADIUS,
+} from './constants'
+import {
+  ensureFrameImage,
+  getCachedFrameImage,
   getCachedScrollFrameUrls,
+  preloadFrameRange,
   preloadFrameWindow,
   tryLoadStaticFrameUrls,
 } from './frameLoader'
 
 type UseScrollVideoScrubOptions = {
   progress: MotionValue<number>
-  frameRef: RefObject<HTMLImageElement | null>
+  canvasRef: RefObject<HTMLCanvasElement | null>
+  viewportRef: RefObject<HTMLElement | null>
   disabled?: boolean
 }
 
@@ -36,62 +44,87 @@ function edgeFadeFactor(value: number) {
 
 function frameIndexFromProgress(value: number, count: number) {
   if (count <= 1) return 0
-  const scaled = clampProgress(value) * (count - 1)
-  return Math.min(Math.round(scaled), count - 1)
+  return Math.min(Math.floor(clampProgress(value) * (count - 1)), count - 1)
 }
 
-function assignFrameSrc(image: HTMLImageElement | null, url: string) {
-  if (!image || !url) return
-  if (image.src.endsWith(url)) return
-  image.src = url
+function readDevicePixelRatio() {
+  if (typeof window === 'undefined') return 1
+  return Math.min(window.devicePixelRatio || 1, 2)
 }
 
 export function useScrollVideoScrub({
   progress,
-  frameRef,
+  canvasRef,
+  viewportRef,
   disabled = false,
 }: UseScrollVideoScrubOptions) {
   const [isReady, setIsReady] = useState(false)
   const frameCountRef = useRef(0)
   const frameUrlsRef = useRef<string[]>([])
-  const displayedIndexRef = useRef(-1)
-  const pendingIndexRef = useRef(-1)
+  const paintedIndexRef = useRef(-1)
+  const latestProgressRef = useRef(0)
+  const rafRef = useRef<number | null>(null)
+  const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
 
   const layerOpacity = useTransform(
     progress,
     value => edgeFadeFactor(value) * SCROLL_VIDEO_CONTENT_OPACITY,
   )
 
-  const showFrame = useCallback(
-    async (index: number) => {
-      const urls = frameUrlsRef.current
-      const url = urls[index]
-      if (!url) return
+  const paintFrame = useCallback(
+    (value: number, force = false) => {
+      const canvas = canvasRef.current
+      const viewport = viewportRef.current
+      if (!canvas || !viewport) return
 
-      pendingIndexRef.current = index
-      preloadFrameWindow(urls, index)
-
-      await ensureFrameDecoded(url)
-
-      if (pendingIndexRef.current !== index) return
-
-      assignFrameSrc(frameRef.current, url)
-      displayedIndexRef.current = index
-    },
-    [frameRef],
-  )
-
-  const syncToProgress = useCallback(
-    (value: number) => {
       const count = frameCountRef.current
+      const urls = frameUrlsRef.current
       if (count < 1) return
 
       const index = frameIndexFromProgress(value, count)
-      if (index === displayedIndexRef.current) return
+      if (!force && index === paintedIndexRef.current) return
 
-      void showFrame(index)
+      const url = urls[index]
+      const image = url ? getCachedFrameImage(url) : null
+      if (!image) {
+        preloadFrameWindow(urls, index)
+        void ensureFrameImage(url).then(loaded => {
+          if (!loaded) return
+          if (frameIndexFromProgress(latestProgressRef.current, count) === index) {
+            // eslint-disable-next-line react-hooks/immutability
+            paintFrame(latestProgressRef.current, true)
+          }
+        })
+        return
+      }
+
+      const dpr = readDevicePixelRatio()
+      const size = syncCanvasToViewport(canvas, viewport, dpr)
+      if (!size) return
+
+      if (!ctxRef.current) {
+        ctxRef.current = getMaskCanvasContext(canvas)
+      }
+
+      drawCoverFrame(ctxRef.current, image, size.width, size.height)
+      paintedIndexRef.current = index
+      preloadFrameWindow(urls, index)
     },
-    [showFrame],
+    [canvasRef, viewportRef],
+  )
+
+  const schedulePaint = useCallback(
+    (value: number) => {
+      latestProgressRef.current = value
+
+      if (rafRef.current !== null) return
+
+      rafRef.current = requestAnimationFrame(() => {
+        rafRef.current = null
+        paintFrame(latestProgressRef.current)
+      })
+    },
+    [paintFrame],
   )
 
   useEffect(() => {
@@ -106,10 +139,18 @@ export function useScrollVideoScrub({
 
       frameCountRef.current = urls.length
       frameUrlsRef.current = urls
-      displayedIndexRef.current = -1
-      pendingIndexRef.current = -1
+      paintedIndexRef.current = -1
 
-      await showFrame(frameIndexFromProgress(progress.get(), urls.length))
+      const initialIndex = frameIndexFromProgress(progress.get(), urls.length)
+      await preloadFrameRange(
+        urls,
+        initialIndex - SCROLL_VIDEO_PRELOAD_RADIUS,
+        initialIndex + SCROLL_VIDEO_PRELOAD_RADIUS,
+      )
+
+      if (cancelled) return
+
+      latestProgressRef.current = progress.get()
       if (!cancelled) setIsReady(true)
     }
 
@@ -119,13 +160,39 @@ export function useScrollVideoScrub({
       cancelled = true
       frameCountRef.current = 0
       frameUrlsRef.current = []
-      displayedIndexRef.current = -1
-      pendingIndexRef.current = -1
+      paintedIndexRef.current = -1
+      ctxRef.current = null
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current)
+        rafRef.current = null
+      }
       setIsReady(false)
     }
-  }, [disabled, progress, frameRef, showFrame])
+  }, [disabled, progress])
 
-  useMotionValueEvent(progress, 'change', syncToProgress)
+  useEffect(() => {
+    if (disabled || !isReady) return
+
+    paintedIndexRef.current = -1
+    paintFrame(progress.get(), true)
+  }, [disabled, isReady, paintFrame, progress])
+
+  useEffect(() => {
+    if (disabled) return
+
+    const viewport = viewportRef.current
+    if (!viewport) return
+
+    const observer = new ResizeObserver(() => {
+      paintedIndexRef.current = -1
+      paintFrame(latestProgressRef.current, true)
+    })
+
+    observer.observe(viewport)
+    return () => observer.disconnect()
+  }, [disabled, viewportRef, paintFrame])
+
+  useMotionValueEvent(progress, 'change', schedulePaint)
 
   return { isReady, layerOpacity }
 }

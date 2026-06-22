@@ -9,12 +9,11 @@ type ScrollVideoStackProps = {
   children: ReactNode
 }
 
-const frameSx = {
+const canvasSx = {
   position: 'absolute' as const,
   inset: 0,
   width: '100%',
   height: '100%',
-  objectFit: 'cover' as const,
   pointerEvents: 'none' as const,
   userSelect: 'none' as const,
   backgroundColor: 'transparent',
@@ -24,7 +23,8 @@ const frameSx = {
 
 export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
   const containerRef = useRef<HTMLDivElement>(null)
-  const frameRef = useRef<HTMLImageElement>(null)
+  const viewportRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
   const reduceMotion = useReducedMotion()
   const disabled = reduceMotion ?? false
 
@@ -35,7 +35,8 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
 
   const { isReady, layerOpacity } = useScrollVideoScrub({
     progress: scrollYProgress,
-    frameRef,
+    canvasRef,
+    viewportRef,
     disabled,
   })
 
@@ -43,6 +44,7 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
     <Box ref={containerRef} sx={{ position: 'relative', isolation: 'isolate' }}>
       {!disabled && (
         <Box
+          ref={viewportRef}
           aria-hidden
           sx={{
             position: 'sticky',
@@ -55,26 +57,17 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
             bgcolor: 'transparent',
           }}
         >
-          {isReady && (
-            <Box
-              component={motion.div}
-              style={{ opacity: layerOpacity }}
-              sx={{
-                position: 'absolute',
-                inset: 0,
-              }}
-            >
-              <Box
-                component="img"
-                ref={frameRef}
-                alt=""
-                draggable={false}
-                fetchPriority="high"
-                decoding="async"
-                sx={frameSx}
-              />
-            </Box>
-          )}
+          <Box
+            component={motion.div}
+            style={{ opacity: layerOpacity }}
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              visibility: isReady ? 'visible' : 'hidden',
+            }}
+          >
+            <Box component="canvas" ref={canvasRef} sx={canvasSx} />
+          </Box>
         </Box>
       )}
 

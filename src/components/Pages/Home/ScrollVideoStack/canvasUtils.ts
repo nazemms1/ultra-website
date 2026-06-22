@@ -1,5 +1,14 @@
 import type { FrameSize } from './types'
 
+type CoverSource = CanvasImageSource & {
+  width?: number
+  height?: number
+  naturalWidth?: number
+  naturalHeight?: number
+  videoWidth?: number
+  videoHeight?: number
+}
+
 export function computeFrameSize(
   videoWidth: number,
   videoHeight: number,
@@ -18,6 +27,19 @@ export function computeFrameSize(
     width: maxWidth,
     height: Math.round(videoHeight * scale),
   }
+}
+
+export function getMaskCanvasContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
+  const ctx = canvas.getContext('2d', {
+    alpha: true,
+    desynchronized: true,
+  })
+
+  if (!ctx) {
+    throw new Error('Canvas 2D context unavailable')
+  }
+
+  return ctx
 }
 
 export function getCanvasContext(canvas: HTMLCanvasElement): CanvasRenderingContext2D {
@@ -53,23 +75,32 @@ export function syncCanvasToViewport(
   return { width, height }
 }
 
-function getSourceDimensions(source: ImageBitmap | HTMLVideoElement) {
+function getSourceDimensions(source: CoverSource) {
   if (source instanceof HTMLVideoElement) {
     return { width: source.videoWidth, height: source.videoHeight }
   }
 
-  return { width: source.width, height: source.height }
+  if (source instanceof HTMLImageElement) {
+    return { width: source.naturalWidth, height: source.naturalHeight }
+  }
+
+  return { width: source.width ?? 0, height: source.height ?? 0 }
 }
 
 export function drawCoverFrame(
   ctx: CanvasRenderingContext2D,
-  source: ImageBitmap | HTMLVideoElement,
+  source: CoverSource,
   canvasWidth: number,
   canvasHeight: number,
+  options?: { clear?: boolean },
 ) {
   const { width: sourceWidth, height: sourceHeight } = getSourceDimensions(source)
 
   if (sourceWidth <= 0 || sourceHeight <= 0) return
+
+  if (options?.clear !== false) {
+    ctx.clearRect(0, 0, canvasWidth, canvasHeight)
+  }
 
   const imgRatio = sourceWidth / sourceHeight
   const canvasRatio = canvasWidth / canvasHeight

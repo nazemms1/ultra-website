@@ -1,7 +1,7 @@
 export const SCROLL_VIDEO_MANIFEST = '/videos/frames/manifest.json'
 
 /** How many frames to prefetch on each side of the current index while scrolling. */
-export const SCROLL_VIDEO_PRELOAD_RADIUS = 6
+export const SCROLL_VIDEO_PRELOAD_RADIUS = 10
 
 /** Parallel decode jobs during splash preload. */
 export const SCROLL_VIDEO_SPLASH_CONCURRENCY = 10

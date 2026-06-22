@@ -42,8 +42,8 @@ export async function loadStaticFrameManifest(): Promise<FrameManifest | null> {
 
 let cachedUrls: string[] | null = null
 let splashPreloadPromise: Promise<string[] | null> | null = null
-const decodedUrls = new Set<string>()
-const decodeWaiters = new Map<string, Promise<void>>()
+const frameImages = new Map<string, HTMLImageElement>()
+const decodeWaiters = new Map<string, Promise<HTMLImageElement>>()
 
 async function mapWithConcurrency<T, R>(
   items: T[],
@@ -66,49 +66,70 @@ async function mapWithConcurrency<T, R>(
   return results
 }
 
-export function isFrameDecoded(url: string) {
-  return decodedUrls.has(url)
-}
+async function decodeImage(url: string): Promise<HTMLImageElement> {
+  const image = new Image()
+  image.decoding = 'async'
+  image.src = url
 
-/** Decode a frame into the browser cache before displaying — prevents flash on src swap. */
-export function ensureFrameDecoded(url: string): Promise<void> {
-  if (!url || decodedUrls.has(url)) return Promise.resolve()
-
-  const pending = decodeWaiters.get(url)
-  if (pending) return pending
-
-  const task = (async () => {
-    const image = new Image()
-    image.decoding = 'async'
-    image.src = url
-
-    if (typeof image.decode === 'function') {
-      try {
-        await image.decode()
-      } catch {
-        await new Promise<void>(resolve => {
-          image.addEventListener('load', () => resolve(), { once: true })
-          image.addEventListener('error', () => resolve(), { once: true })
-        })
-      }
-    } else {
+  if (typeof image.decode === 'function') {
+    try {
+      await image.decode()
+    } catch {
       await new Promise<void>(resolve => {
-        if (image.complete) {
-          resolve()
-          return
-        }
         image.addEventListener('load', () => resolve(), { once: true })
         image.addEventListener('error', () => resolve(), { once: true })
       })
     }
+  } else {
+    await new Promise<void>(resolve => {
+      if (image.complete) {
+        resolve()
+        return
+      }
+      image.addEventListener('load', () => resolve(), { once: true })
+      image.addEventListener('error', () => resolve(), { once: true })
+    })
+  }
 
-    decodedUrls.add(url)
-  })().finally(() => {
-    decodeWaiters.delete(url)
-  })
+  return image
+}
+
+/** Returns a decoded image element cached in memory — safe for synchronous canvas draws. */
+export function getCachedFrameImage(url: string): HTMLImageElement | null {
+  return frameImages.get(url) ?? null
+}
+
+export function isFrameDecoded(url: string) {
+  return frameImages.has(url)
+}
+
+export function ensureFrameImage(url: string): Promise<HTMLImageElement> {
+  if (!url) {
+    return Promise.reject(new Error('Missing frame url'))
+  }
+
+  const cached = frameImages.get(url)
+  if (cached) return Promise.resolve(cached)
+
+  const pending = decodeWaiters.get(url)
+  if (pending) return pending
+
+  const task = decodeImage(url)
+    .then(image => {
+      frameImages.set(url, image)
+      return image
+    })
+    .finally(() => {
+      decodeWaiters.delete(url)
+    })
 
   decodeWaiters.set(url, task)
   return task
+}
+
+/** @deprecated Use getCachedFrameImage / ensureFrameImage */
+export function ensureFrameDecoded(url: string): Promise<void> {
+  return ensureFrameImage(url).then(() => undefined)
 }
 
 export function getCachedScrollFrameUrls(): string[] | null {
@@ -118,7 +139,7 @@ export function getCachedScrollFrameUrls(): string[] | null {
 export function resetFramePreloadCache() {
   cachedUrls = null
   splashPreloadPromise = null
-  decodedUrls.clear()
+  frameImages.clear()
   decodeWaiters.clear()
 }
 
@@ -139,10 +160,10 @@ export async function preloadScrollFramesForSplash(): Promise<string[] | null> {
     const priorityUrls = [...priority].map(index => urls[index]).filter(Boolean)
 
     await mapWithConcurrency(priorityUrls, SCROLL_VIDEO_SPLASH_CONCURRENCY, url =>
-      ensureFrameDecoded(url),
+      ensureFrameImage(url),
     )
 
-    void mapWithConcurrency(urls, SCROLL_VIDEO_SPLASH_CONCURRENCY, url => ensureFrameDecoded(url))
+    void mapWithConcurrency(urls, SCROLL_VIDEO_SPLASH_CONCURRENCY, url => ensureFrameImage(url))
 
     return urls
   })()
@@ -159,8 +180,16 @@ export function preloadFrameWindow(urls: string[], centerIndex: number) {
   for (let index = start; index <= end; index += 1) {
     const url = urls[index]
     if (!url) continue
-    void ensureFrameDecoded(url)
+    void ensureFrameImage(url)
   }
+}
+
+export async function preloadFrameRange(urls: string[], startIndex: number, endIndex: number) {
+  const start = Math.max(0, startIndex)
+  const end = Math.min(urls.length - 1, endIndex)
+
+  const slice = urls.slice(start, end + 1)
+  await mapWithConcurrency(slice, SCROLL_VIDEO_SPLASH_CONCURRENCY, url => ensureFrameImage(url))
 }
 
 export async function tryLoadStaticFrameUrls(): Promise<string[] | null> {
