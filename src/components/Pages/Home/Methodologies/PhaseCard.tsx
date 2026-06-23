@@ -211,20 +211,20 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
               </Typography>
             </Box>
 
-          {/* Title */}
-          <Typography
-            component="h3"
-            sx={{
-fontFamily: 'Nulshock, sans-serif',    
-          fontSize: { xs: '1.5rem', sm: '1.75rem' },
-              textTransform: 'uppercase',
-              lineHeight: 1.15,
-              letterSpacing: '0.02em',
-              color: 'text.primary',
-            }}
-          >
-            {phase.title}
-          </Typography>
+            {/* Title */}
+            <Typography
+              component="h3"
+              sx={{
+                fontFamily: 'Nulshock, sans-serif',
+                fontSize: { xs: '1.5rem', sm: '1.75rem' },
+                textTransform: 'uppercase',
+                lineHeight: 1.15,
+                letterSpacing: '0.02em',
+                color: 'text.primary',
+              }}
+            >
+              {phase.title}
+            </Typography>
 
             {/* Description Copy */}
             <Typography
