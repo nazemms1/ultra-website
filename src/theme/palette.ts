@@ -6,7 +6,7 @@ export const ultraDarkPalette = {
   divider: 'rgba(13, 241, 217, 0.14)',
   primary: {
     lighter: '#7FFFF4',
-    light: '#3DF5E8',
+    light: '#0DF1D9',
     main: '#01B1B1',
     dark: '#04C4AE',
     darker: '#01B1B1',

@@ -15,6 +15,9 @@ export const TITLE_RISE: readonly [number, number] = [0, 0.1]
 /** Title fades back out as the first project collapses open over it. */
 export const TITLE_FADE_OUT: readonly [number, number] = [0.12, 0.26]
 
+/** "Our Portfolio" label slides from the title block to the pinned section top. */
+export const LABEL_PIN: readonly [number, number] = TITLE_FADE_OUT
+
 /** Point at which the first project begins to reveal — projects own [START, 1]. */
 const TIMELINE_START = 0.12
 
