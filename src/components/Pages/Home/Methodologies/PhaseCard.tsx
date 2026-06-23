@@ -129,7 +129,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
               flexDirection: 'column',
               justifyContent: 'space-between',
               height: { xs: 280, sm: 320, md: 'auto' },
-              minHeight: { md: 392 },
+              minHeight: { md: 365 },
               overflow: 'hidden',
             }}
           >
@@ -146,7 +146,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 overflow: 'hidden',
-                pt: { xs: 2, md: 2.5 },
+                pt: { xs: 2, md: 0 },
               }}
             >
               <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />
@@ -159,7 +159,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
                 flex: '0 0 auto',
                 flexShrink: 0,
                 px: { xs: 3, sm: 4 },
-                pb: { xs: 2.5, sm: 3.5 },
+                pb: { xs: 2.5, sm: 0.5 },
               }}
             >
               <Typography

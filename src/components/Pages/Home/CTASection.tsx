@@ -5,7 +5,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import AnimatedButton from '@/components/shared/AnimatedButton'
-import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 export default function CTASection() {
   const cardRef = useRef<HTMLDivElement>(null)
@@ -116,75 +115,98 @@ export default function CTASection() {
           position: 'relative',
           zIndex: 3,
           mx: { xs: 3, md: 'auto' },
-          width: { xs: '100%', md: '922px' },
-          height: { md: '418px' },
-          borderRadius: '50px',
-          px: { xs: '40px', md: '80px' },
+          width: '100%',
+          maxWidth: 922,
+          height: { xs: 'auto', md: 418 },
+          minHeight: { xs: 320, md: 418 },
+          overflow: 'hidden',
+          px: { xs: 4, md: 10 },
+          py: { xs: 6, md: 0 },
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
+          gap: { xs: 2, md: 3 },
           textAlign: 'center',
           willChange: 'transform',
-          backdropFilter: 'blur(10px) saturate(1.0)',
-          WebkitBackdropFilter: 'blur(24px) saturate(0.0)',
-          backgroundColor: alpha(theme.palette.common.white, 0.01),
-          // border: `1px solid ${alpha(theme.palette.common.white, 0.08)}`,
-          boxShadow: [
-            `0 24px 64px -16px rgba(0, 0, 0, 0.4)`,
-            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.15)}`,
-            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.02)}`,
-          ].join(', '),
+          boxShadow: `inset 0 0 24px ${alpha(theme.palette.common.black, 0.03)}`,
+          border: `1px solid ${alpha(theme.palette.primary.main, 0.3)}`,
+          backdropFilter: 'blur(10px) brightness(1.08) saturate(1.15)',
+          WebkitBackdropFilter: 'blur(10px) brightness(1.08) saturate(1.15)',
+          backgroundClip: 'padding-box',
+          borderRadius: '50px',
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 'inherit',
+            pointerEvents: 'none',
+            background: `linear-gradient(160deg, ${alpha(theme.palette.common.white, 0.025)} 0%, transparent 45%)`,
+          },
         })}
       >
-        <Typography
+        <Box
           sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500,
-            fontSize: '12px',
-            letterSpacing: '4px',
-            textTransform: 'uppercase',
-            color: 'primary.main',
-            mb: '10px',
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: { xs: 1.5, md: 2 },
+            width: '100%',
           }}
         >
-          Let&apos;s build together
-        </Typography>
+          <Typography
+            component="h2"
+            sx={{
+              fontFamily: "'Ethnocentric Rg', sans-serif",
+              fontWeight: 700,
+              fontSize: { xs: '28px', sm: '34px', md: '40px' },
+              lineHeight: 1.15,
+              letterSpacing: { xs: '1px', md: '1.5px' },
+              textTransform: 'uppercase',
+              color: 'text.primary',
+              m: 0,
+            }}
+          >
+            READY TO BUILD SOMETHING{' '}
+            <Box component="span" sx={{ color: 'primary.main' }}>
+              ULTRA?
+            </Box>
+          </Typography>
 
-        <Typography
+          <Typography
+            sx={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontWeight: 400,
+              fontSize: { xs: '15px', md: '16px' },
+              lineHeight: 1.5,
+              letterSpacing: '0.3px',
+              color: 'text.secondary',
+              maxWidth: 520,
+              mx: 'auto',
+              m: 0,
+            }}
+          >
+            Let&apos;s talk about your product, your users, and how Ultrawares can help you ship it.
+          </Typography>
+        </Box>
+
+        <Box
           sx={{
-            fontFamily: "'Ethnocentric Rg', sans-serif",
-            fontWeight: 400,
-            fontSize: { xs: '28px', md: '40px' },
-            lineHeight: 1.1,
-            letterSpacing: '1.5px',
-            color: 'text.primary',
-            mb: '12px',
+            position: 'relative',
+            zIndex: 1,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            mt: { xs: 1, md: 2 },
           }}
         >
-          READY TO BUILD SOMETHING{' '}
-          <Box component="span" sx={{ color: 'primary.main' }}>
-            ULTRA?
-          </Box>
-        </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 400,
-            fontSize: '14px',
-            letterSpacing: '0.3px',
-            color: 'text.secondary',
-            mb: '36px',
-            mx: 'auto',
-          }}
-        >
-          Let&apos;s talk about your product, your users, and how Ultrawares can help you ship it.
-        </Typography>
-
-        <AnimatedButton variant="primary" href="#contact">
-          Start a Project
-        </AnimatedButton>
+          <AnimatedButton variant="primary" href="#contact">
+            Start a Project
+          </AnimatedButton>
+        </Box>
       </Box>
     </Box>
   )
