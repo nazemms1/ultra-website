@@ -50,10 +50,9 @@ export function phaseCardOuterGlow(theme: Theme): string {
   const { primary } = theme.palette
 
   return [
-    `0 0 40px 0 ${alpha(primary.lighter, 0.3)}`,
-    `0 -10px 48px ${alpha(primary.lighter, 0.18)}`,
-    `14px 0 48px ${alpha(primary.lighter, 0.22)}`,
-    `0 24px 64px -16px ${alpha(primary.darker, 0.45)}`,
+    `0 0 56px 8px ${alpha(primary.lighter, 0.14)}`,
+    `0 0 96px 16px ${alpha(primary.lighter, 0.08)}`,
+    `0 20px 48px -12px ${alpha(primary.darker, 0.18)}`,
   ].join(', ')
 }
 
