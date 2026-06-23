@@ -42,37 +42,106 @@ export function glassPillSurface(theme: Theme) {
   return glassSurface(theme, { radius: theme.shape.borderRadiusPill })
 }
 
-/** Figma Phase Card — node 335-2987 */
-export const PHASE_CARD_RADIUS = '32px'
+/** Figma StepCard — node 358-5781 / 1625-3075 */
+export const PHASE_CARD_RADIUS = '22px'
 
-/** Cyan outer glow — animate via opacity on a dedicated layer, not box-shadow transition. */
+const PHASE_CARD_FILL_ANGLE = '135.906deg'
+
+/** Diagonal fill — rgba(1,177,177,0.18) → rgba(18,18,18,0.95) at 60%. */
+export function phaseCardFill(theme: Theme): string {
+  const { primary, background } = theme.palette
+
+  return `linear-gradient(${PHASE_CARD_FILL_ANGLE}, ${alpha(primary.main, 0.18)} 40%, ${alpha(background.default, 0.18)} 60%)`
+}
+
+/** Resting elevation — 0 24px 63px -16px rgba(1,177,177,0.35). */
+export function phaseCardDropShadow(theme: Theme): string {
+  return `0px 24px 63px -16px ${alpha(theme.palette.primary.main, 0.35)}`
+}
+
+/** Uniform inset stroke — inset 0 0 0 1px rgba(13,241,217,0.25). */
+export function phaseCardInsetBorder(theme: Theme): string {
+  return `inset 0px 0px 0px 1px ${alpha(theme.palette.primary.light, 0.25)}`
+}
+
+/** Hover outer glow — animate via opacity on a dedicated layer. */
 export function phaseCardOuterGlow(theme: Theme): string {
   const { primary } = theme.palette
 
   return [
+    phaseCardDropShadow(theme),
     `0 0 56px 8px ${alpha(primary.lighter, 0.14)}`,
     `0 0 96px 16px ${alpha(primary.lighter, 0.08)}`,
-    `0 20px 48px -12px ${alpha(primary.darker, 0.18)}`,
   ].join(', ')
 }
 
-/**
- * Figma Phase Card — node 335-2987 (Methodologies)
- * 154° dark teal → near-black fill + left radial bloom; inset edge highlights.
- */
-export function phaseCardSurface(theme: Theme, opts?: { radius?: number | string }) {
-  const radius = opts?.radius ?? PHASE_CARD_RADIUS
+/** Left-column radial bloom behind the isometric illustration. */
+export function phaseCardVisualBloom(theme: Theme): SxProps<Theme> {
   const { primary } = theme.palette
 
   return {
+    pointerEvents: 'none',
+    position: 'absolute',
+    left: '-8%',
+    top: '-9%',
+    width: '116%',
+    height: '116%',
+    background: `radial-gradient(ellipse 70% 65% at 35% 28%, ${alpha(primary.main, 0.25)} 0%, ${alpha(primary.main, 0.125)} 32.5%, transparent 65%)`,
+  }
+}
+
+/** Figma left-column wash at 30% opacity over the bloom. */
+export function phaseCardVisualWash(theme: Theme): SxProps<Theme> {
+  return {
+    pointerEvents: 'none',
+    position: 'absolute',
+    inset: 0,
+    opacity: 0.3,
+    background: phaseCardFill(theme),
+  }
+}
+
+/** Large phase number — vertical gradient text clip. */
+export function phaseCardNumberGradient(theme: Theme): SxProps<Theme> {
+  const accent = theme.palette.primary.light
+
+  return {
+    background: `linear-gradient(to bottom, ${alpha(accent, 0.95)}, ${alpha(accent, 0.1)})`,
+    WebkitBackgroundClip: 'text',
+    backgroundClip: 'text',
+    color: 'transparent',
+    WebkitTextFillColor: 'transparent',
+  }
+}
+
+/** Tag pill — fill rgba(13,241,217,0.06) + 1px border at 0.4. */
+export function phaseCardTagSurface(theme: Theme): SxProps<Theme> {
+  const accent = theme.palette.primary.light
+
+  return {
+    borderRadius: '9999px',
+    bgcolor: alpha(accent, 0.06),
+    border: `1px solid ${alpha(accent, 0.4)}`,
+    px: 1.25,
+    py: 0.625,
+    fontSize: theme.typography.pxToRem(10),
+    fontWeight: 500,
+    fontFamily: "'Rajdhani', sans-serif",
+    textTransform: 'uppercase',
+    letterSpacing: '0.16em',
+    color: accent,
+  }
+}
+
+/** Card shell — radius, clip, resting drop shadow (fill + inset border are separate layers). */
+export function phaseCardSurface(theme: Theme, opts?: { radius?: number | string }) {
+  const radius = opts?.radius ?? PHASE_CARD_RADIUS
+
+  return {
+    position: 'relative',
     borderRadius: radius,
-    background: `linear-gradient(135deg, rgba(13, 241, 217, 0.35) 0%, rgba(18, 18, 18, 0.95) 60%)`,
-    backdropFilter: 'blur(12px)',
-    WebkitBackdropFilter: 'blur(12px)',
-    boxShadow: [
-      `inset 1px 1px 0 0 ${alpha(primary.main, 0.4)}`,
-      `inset -1px -1px 0 0 ${alpha(primary.main, 0.4)}`,
-    ].join(', '),
+    overflow: 'hidden',
+    boxShadow: phaseCardDropShadow(theme),
   } satisfies SxProps<Theme>
 }
 

@@ -3,7 +3,17 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { PHASE_CARD_RADIUS, phaseCardOuterGlow, phaseCardSurface } from '@/lib/theme/surfaces'
+import {
+  PHASE_CARD_RADIUS,
+  phaseCardFill,
+  phaseCardInsetBorder,
+  phaseCardNumberGradient,
+  phaseCardOuterGlow,
+  phaseCardSurface,
+  phaseCardTagSurface,
+  phaseCardVisualBloom,
+  phaseCardVisualWash,
+} from '@/lib/theme/surfaces'
 import { motion, useMotionTemplate, useTransform, type MotionValue } from 'framer-motion'
 import PhaseGlyph from './PhaseGlyph'
 import type { Phase } from './data'
@@ -87,78 +97,119 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
       <Box
         sx={{
           ...phaseCardSurface(theme),
-          position: 'relative',
           zIndex: 1,
           width: '100%',
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: '0.95fr 1fr' },
-          overflow: 'hidden',
         }}
       >
-        {/* Visual Column */}
+        <Box
+          aria-hidden
+          sx={{
+            pointerEvents: 'none',
+            position: 'absolute',
+            inset: 0,
+            borderRadius: PHASE_CARD_RADIUS,
+            background: phaseCardFill(theme),
+          }}
+        />
+
         <Box
           sx={{
             position: 'relative',
             zIndex: 1,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: { xs: 200, sm: 240, md: 'auto' },
-            minHeight: { md: 380 },
+            width: '100%',
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1.1fr 1fr' },
           }}
         >
-          <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />
-
-          {/* Large Decorative Phase Number */}
-          <Typography
-            component="span"
-            aria-hidden
+          {/* Visual Column — image and number occupy isolated vertical zones */}
+          <Box
             sx={{
-              pointerEvents: 'none',
-              position: 'absolute',
-              bottom: 16,
-              left: 24,
-              userSelect: 'none',
-              fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-              fontSize: { xs: '54px', sm: '72px' },
-              lineHeight: 1,
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              color: 'primary.main',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: { xs: 280, sm: 320, md: 'auto' },
+              minHeight: { md: 392 },
+              overflow: 'hidden',
             }}
           >
-            {phase.number}
-          </Typography>
-        </Box>
+            <Box aria-hidden sx={phaseCardVisualBloom(theme)} />
+            <Box aria-hidden sx={phaseCardVisualWash(theme)} />
 
-        {/* Copy/Content Column */}
-        <Box
-          sx={{
-            position: 'relative',
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            gap: 2,
-            p: { xs: 3.5, sm: 4.5 },
-          }}
-        >
-          {/* Phase Subtitle Tracker */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-            <Box sx={{ height: '1px', width: 24, bgcolor: 'primary.main' }} />
-            <Typography
+            <Box
               sx={{
-                fontFamily: "'Rajdhani', sans-serif",
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.35em',
-                color: 'primary.main',
-                textTransform: 'uppercase',
+                position: 'relative',
+                zIndex: 1,
+                flex: '1 1 auto',
+                minHeight: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                overflow: 'hidden',
+                pt: { xs: 2, md: 2.5 },
               }}
             >
-              Phase {phase.number}
-            </Typography>
+              <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />
+            </Box>
+
+            <Box
+              sx={{
+                position: 'relative',
+                zIndex: 1,
+                flex: '0 0 auto',
+                flexShrink: 0,
+                px: { xs: 3, sm: 4 },
+                pb: { xs: 2.5, sm: 3.5 },
+              }}
+            >
+              <Typography
+                component="span"
+                aria-hidden
+                sx={{
+                  pointerEvents: 'none',
+                  display: 'block',
+                  userSelect: 'none',
+                  fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+                  fontSize: { xs: '54px', sm: '64px', md: '72px' },
+                  lineHeight: 1,
+                  fontWeight: 900,
+                  letterSpacing: '-0.022em',
+                  ...phaseCardNumberGradient(theme),
+                }}
+              >
+                {phase.number}
+              </Typography>
+            </Box>
           </Box>
+
+          {/* Copy/Content Column */}
+          <Box
+            sx={{
+              position: 'relative',
+              zIndex: 1,
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              gap: 2.375,
+              p: { xs: 3.5, sm: 4.5, md: 5.5 },
+            }}
+          >
+            {/* Phase Subtitle Tracker */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+              <Box sx={{ height: '1px', width: 32, bgcolor: 'primary.light' }} />
+              <Typography
+                sx={{
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontSize: theme.typography.pxToRem(11),
+                  fontWeight: 400,
+                  letterSpacing: '0.32em',
+                  color: 'primary.light',
+                  textTransform: 'uppercase',
+                }}
+              >
+                Phase {phase.number}
+              </Typography>
+            </Box>
 
           {/* Title */}
           <Typography
@@ -175,46 +226,41 @@ fontFamily: 'Nulshock, sans-serif',
             {phase.title}
           </Typography>
 
-          {/* Description Copy */}
-          <Typography
-            sx={{
-              maxWidth: '38ch',
-              fontSize: '14px',
-              lineHeight: 1.6,
-              color: 'text.secondary',
-            }}
-          >
-            {phase.description}
-          </Typography>
+            {/* Description Copy */}
+            <Typography
+              sx={{
+                maxWidth: '38ch',
+                fontSize: theme.typography.pxToRem(15),
+                lineHeight: 1.58,
+                color: theme => alpha(theme.palette.common.white, 0.78),
+                textAlign: 'justify',
+              }}
+            >
+              {phase.description}
+            </Typography>
 
-          {/* Tags */}
-          <Box sx={{ mt: 0.5, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
-            {phase.tags.map(tag => (
-              <Box
-                key={tag}
-                sx={theme => ({
-                  borderRadius: '9999px',
-                  bgcolor: 'transparent',
-                  px: 1.75,
-                  py: 0.5,
-                  fontSize: '10px',
-                  fontWeight: 600,
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.15em',
-                  color: 'primary.main',
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  boxShadow: [
-                    `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.4)}`,
-                    `inset -1px -1px 0 0 ${alpha(theme.palette.primary.main, 0.4)}`,
-                  ].join(', '),
-                })}
-              >
-                {tag}
-              </Box>
-            ))}
+            {/* Tags */}
+            <Box sx={{ mt: 0.5, display: 'flex', flexWrap: 'wrap', gap: 1 }}>
+              {phase.tags.map(tag => (
+                <Box key={tag} sx={phaseCardTagSurface(theme)}>
+                  {tag}
+                </Box>
+              ))}
+            </Box>
           </Box>
         </Box>
+
+        <Box
+          aria-hidden
+          sx={{
+            pointerEvents: 'none',
+            position: 'absolute',
+            inset: 0,
+            borderRadius: PHASE_CARD_RADIUS,
+            boxShadow: phaseCardInsetBorder(theme),
+            zIndex: 2,
+          }}
+        />
       </Box>
     </Box>
   )

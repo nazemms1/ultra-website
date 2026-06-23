@@ -44,7 +44,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
   const [isHovered, setIsHovered] = useState(false)
 
   const resolvedBaseColor = baseColor ?? theme.palette.primary.main
-  const resolvedSweepColor = sweepColor ?? theme.palette.common.white
+  const resolvedSweepColor = sweepColor ?? alpha(theme.palette.common.white, 0.8)
   const secondaryFill = alpha(theme.palette.common.white, 0.18)
 
   const backgroundVariants = useMemo(
