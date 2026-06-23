@@ -19,6 +19,9 @@ import InputField from './InputField'
 import CaptchaBox from './CaptchaBox'
 import ContactSubmitButton from './ContactSubmitButton'
 
+/** Clears fixed navbar (68px) + top padding when the left column pins on scroll */
+const STICKY_TOP_OFFSET = '100px'
+
 export default function ContactSection() {
   const theme = useTheme()
 
@@ -54,92 +57,128 @@ export default function ContactSection() {
         position: 'relative',
         py: { xs: 10, md: 14 },
         px: { xs: '20px', md: '40px', lg: '80px' },
-        overflow: 'hidden',
+        overflow: 'visible',
       }}
     >
       <Box
+        aria-hidden
         sx={{
-          ...glowOrb(theme, 0.04),
-          top: '20%',
-          right: '5%',
-          width: 600,
-          height: 600,
-          filter: 'blur(140px)',
+          pointerEvents: 'none',
+          position: 'absolute',
+          inset: 0,
+          overflow: 'visible',
         }}
-      />
-      <Box
-        sx={{
-          ...glowOrb(theme, 0.03),
-          bottom: '10%',
-          left: '5%',
-          width: 400,
-          height: 400,
-          filter: 'blur(100px)',
-        }}
-      />
+      >
+        <Box
+          sx={{
+            ...glowOrb(theme, 0.04),
+            top: '20%',
+            right: '5%',
+            width: 600,
+            height: 600,
+            filter: 'blur(140px)',
+          }}
+        />
+        <Box
+          sx={{
+            ...glowOrb(theme, 0.03),
+            bottom: '10%',
+            left: '5%',
+            width: 400,
+            height: 400,
+            filter: 'blur(100px)',
+          }}
+        />
+      </Box>
 
       <Box
         sx={{
           maxWidth: 1280,
           mx: 'auto',
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', lg: '1fr 600px' },
+          display: 'flex',
+          flexDirection: { xs: 'column', lg: 'row' },
+          alignItems: 'stretch',
           gap: { xs: '48px', md: '60px' },
           position: 'relative',
           zIndex: 1,
+          overflow: 'visible',
         }}
       >
-        {/* Left column — branding */}
-        <Box sx={{ minWidth: 0 }}>
-          <Typography
+        {/* Left column — tall track; inner block pins while the form scrolls */}
+        <Box
+          sx={{
+            flex: { lg: '1 1 0' },
+            minWidth: 0,
+            overflow: 'visible',
+          }}
+        >
+          <Box
             sx={{
-              fontFamily: "'Rajdhani', sans-serif",
-              fontSize: '12px',
-              fontWeight: 700,
-              letterSpacing: '0.22em',
-              textTransform: 'uppercase',
-              color: 'primary.main',
-              mb: '20px',
+              position: { xs: 'static', lg: 'sticky' },
+              top: STICKY_TOP_OFFSET,
+              height: 'fit-content',
+              overflow: 'visible',
             }}
           >
-            Get in touch
-          </Typography>
+            <Typography
+              sx={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: '12px',
+                fontWeight: 700,
+                letterSpacing: '0.22em',
+                textTransform: 'uppercase',
+                color: 'primary.main',
+                mb: '20px',
+              }}
+            >
+              Get in touch
+            </Typography>
 
-          <Typography
-            component="h2"
-            sx={{
-              fontFamily: "'Ethnocentric Rg', sans-serif",
-              fontSize: { xs: '32px', sm: '42px', md: '56px' },
-              lineHeight: 1.05,
-              letterSpacing: '1.5px',
-              textTransform: 'uppercase',
-              color: 'text.primary',
-              mb: '20px',
-            }}
-          >
-            IGNITE YOUR <ShimmerText>VISION</ShimmerText>
-          </Typography>
+            <Typography
+              component="h2"
+              sx={{
+                fontFamily: "'Ethnocentric Rg', sans-serif",
+                fontSize: { xs: '32px', sm: '42px', md: '56px' },
+                lineHeight: 1.05,
+                letterSpacing: '1.5px',
+                textTransform: 'uppercase',
+                color: 'text.primary',
+                mb: '20px',
+              }}
+            >
+              IGNITE YOUR <ShimmerText>VISION</ShimmerText>
+            </Typography>
 
-          <Typography
-            sx={{
-              fontFamily: "'Rajdhani', sans-serif",
-              fontSize: '16px',
-              color: 'text.secondary',
-              lineHeight: 1.75,
-              letterSpacing: '0.03em',
-              mb: '40px',
-              maxWidth: 480,
-            }}
-          >
-            Tell us where you&apos;re headed. Whether it&apos;s high-performance VPS architecture,
-            striking UI/UX, or next-gen mobile experiences — we&apos;re the launch crew.
-          </Typography>
+            <Typography
+              sx={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: '16px',
+                color: 'text.secondary',
+                lineHeight: 1.75,
+                letterSpacing: '0.03em',
+                mb: '40px',
+                maxWidth: 480,
+              }}
+            >
+              Tell us where you&apos;re headed. Whether it&apos;s high-performance VPS architecture,
+              striking UI/UX, or next-gen mobile experiences — we&apos;re the launch crew.
+            </Typography>
 
-          <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} />
+            <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} />
+          </Box>
         </Box>
 
-        {/* Right column — form */}
-        <Box component="form" onSubmit={e => e.preventDefault()} sx={{ minWidth: 0 }}>
+        {/* Right column — scrollable form (drives section height) */}
+        <Box
+          component="form"
+          onSubmit={e => e.preventDefault()}
+          sx={{
+            flex: { lg: '0 0 600px' },
+            width: { xs: '100%', lg: 600 },
+            minWidth: 0,
+            overflow: 'visible',
+          }}
+        >
           <StepLabel imageSrc="/images/contact/step-01.svg" label="Select Service Type" />
           <ServiceCarousel
             services={SERVICES}
