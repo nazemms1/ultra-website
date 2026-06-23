@@ -12,7 +12,7 @@ export default function StepLabel({ imageSrc, label }: { imageSrc: string; label
         gap: '12px',
         mb: '20px',
         [`.${typographyClasses.root}`]: {
-          fontFamily: "'Ethnocentric Rg', sans-serif !important",
+          fontFamily: "'Nulshock', sans-serif !important",
           textTransform: 'uppercase',
         },
       }}

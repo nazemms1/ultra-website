@@ -129,7 +129,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                 <Typography
                   component="h2"
                   sx={{
-                    fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+                    fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                     fontSize: { xs: '2.1rem', sm: '2.6rem', lg: '2.85rem' },
                     textTransform: 'uppercase',
                     lineHeight: 1.18,

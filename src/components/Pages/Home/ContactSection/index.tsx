@@ -134,20 +134,20 @@ export default function ContactSection() {
               Get in touch
             </Typography>
 
-            <Typography
-              component="h2"
-              sx={{
-                fontFamily: "'Ethnocentric Rg', sans-serif",
-                fontSize: { xs: '32px', sm: '42px', md: '56px' },
-                lineHeight: 1.05,
-                letterSpacing: '1.5px',
-                textTransform: 'uppercase',
-                color: 'text.primary',
-                mb: '20px',
-              }}
-            >
-              IGNITE YOUR <ShimmerText>VISION</ShimmerText>
-            </Typography>
+          <Typography
+            component="h2"
+            sx={{
+              fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+              fontSize: { xs: '32px', sm: '42px', md: '56px' },
+              lineHeight: 1.05,
+              letterSpacing: '1.5px',
+              textTransform: 'uppercase',
+              color: 'text.primary',
+              mb: '20px',
+            }}
+          >
+            IGNITE YOUR <ShimmerText>VISION</ShimmerText>
+          </Typography>
 
             <Typography
               sx={{

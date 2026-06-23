@@ -21,6 +21,14 @@ const GlobalStyles = () => css`
     src: url('/fonts/Ethnocentric-Regular.otf') format('opentype');
   }
 
+  @font-face {
+    font-family: 'Nulshock';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/Nulshock Bd.otf') format('opentype');
+  }
+
   ::-webkit-scrollbar {
     height: 6px;
     width: 6px;

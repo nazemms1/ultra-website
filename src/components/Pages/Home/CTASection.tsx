@@ -157,10 +157,24 @@ export default function CTASection() {
           }}
         >
           <Typography
+            sx={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontWeight: 500,
+              fontSize: '12px',
+              letterSpacing: '4px',
+              textTransform: 'uppercase',
+              color: 'primary.main',
+              m: 0,
+            }}
+          >
+            Let&apos;s build together
+          </Typography>
+
+          <Typography
             component="h2"
             sx={{
-              fontFamily: "'Ethnocentric Rg', sans-serif",
-              fontWeight: 700,
+              fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+              fontWeight: 400,
               fontSize: { xs: '28px', sm: '34px', md: '40px' },
               lineHeight: 1.15,
               letterSpacing: { xs: '1px', md: '1.5px' },
@@ -179,7 +193,7 @@ export default function CTASection() {
             sx={{
               fontFamily: "'Rajdhani', sans-serif",
               fontWeight: 400,
-              fontSize: { xs: '15px', md: '16px' },
+              fontSize: '14px',
               lineHeight: 1.5,
               letterSpacing: '0.3px',
               color: 'text.secondary',

@@ -94,7 +94,7 @@ export default function Portfolio() {
             <Typography
               component="h2"
               sx={{
-                fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+                fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                 fontSize: { xs: '1.875rem', md: '3rem' },
                 letterSpacing: '0.02em',
                 lineHeight: 1.2,

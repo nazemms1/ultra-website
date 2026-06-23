@@ -142,7 +142,7 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
             <Typography
               component="h3"
               sx={{
-                fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+                fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                 fontSize: { xs: '1rem', sm: '1.5rem', md: '1.875rem' },
                 lineHeight: 1.1,
                 letterSpacing: '0.02em',
