@@ -104,7 +104,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
             alignItems: 'center',
             justifyContent: 'center',
             height: { xs: 200, sm: 240, md: 'auto' },
-            minHeight: { md: 340 },
+            minHeight: { md: 380 },
           }}
         >
           <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />
