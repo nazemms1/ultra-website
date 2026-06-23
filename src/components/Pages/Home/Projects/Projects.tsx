@@ -177,6 +177,7 @@ export default function Projects() {
               pointerEvents: 'none',
             }}
           >
+            <PortfolioLabel />
             <MainTitle />
           </MotionBox>
 

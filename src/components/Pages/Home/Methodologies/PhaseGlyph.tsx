@@ -40,11 +40,11 @@ export default function PhaseGlyph({ imageUrl, index, compact = false, sx }: Pha
           position: 'absolute',
           left: '50%',
           top: '50%',
-          width: '85%',
-          height: '85%',
+          width: compact ? '75%' : '85%',
+          height: compact ? '75%' : '85%',
           transform: 'translate(-50%, -50%)',
           borderRadius: '50%',
-          background: `radial-gradient(circle, ${alpha(primary, 0.22)} 0%, ${alpha(primary, 0.04)} 55%, transparent 75%)`,
+          background: `radial-gradient(circle, ${alpha(primary, 0.18)} 0%, ${alpha(primary, 0.03)} 55%, transparent 75%)`,
           filter: 'blur(10px)',
         }}
       />
@@ -77,7 +77,7 @@ export default function PhaseGlyph({ imageUrl, index, compact = false, sx }: Pha
             objectFit: 'contain',
             width: '100%',
             height: 'auto',
-            maxWidth: compact ? 280 : 335,
+            maxWidth: compact ? 325 : 335,
             maxHeight: compact ? 'min(220px, 100%)' : undefined,
           }}
           priority={index === 0}
