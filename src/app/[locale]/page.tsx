@@ -8,8 +8,7 @@ import Projects from '@/components/Pages/Home/Projects/Projects'
 import HeroSection from '@/components/Pages/Home/HeroSection'
 import ContactSection from '@/components/Pages/Home/ContactSection'
 import ScrollVideoStack from '@/components/Pages/Home/ScrollVideoStack'
-// import FloatingTestimonials from '@/components/Pages/Home/FloatingTestimonials'
-// import Box from '@mui/material/Box'
+import TestimonialsSection from '@/components/Pages/Home/TestimonialsSection'
 
 export default function HomePage() {
   return (
@@ -22,9 +21,7 @@ export default function HomePage() {
         <Projects />
         <Methodologies />
       </ScrollVideoStack>
-      {/* <Box sx={{ position: 'relative', width: '100%', height: 0, zIndex: 2 }}>
-        <FloatingTestimonials />
-      </Box> */}
+      <TestimonialsSection />
       <CTASection />
       <FAQSection />
       <ContactSection />
