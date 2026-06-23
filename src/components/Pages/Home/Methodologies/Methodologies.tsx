@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import Box from '@mui/material/Box'
 import { alpha } from '@mui/material/styles'
 import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
 import SectionHeader from '@/components/shared/SectionHeader'
 import PhaseCard, { PhaseCardContent } from './PhaseCard'
 import Timeline from './Timeline'
@@ -116,7 +117,7 @@ export default function Methodologies() {
             position: 'relative',
             zIndex: 2,
             flexShrink: 0,
-            pt: { xs: 11, sm: 12 },
+            pt: SECTION_HEADER_INSET,
             pb: { xs: 1, sm: 1.25 },
             pointerEvents: 'none',
           }}

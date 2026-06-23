@@ -1,20 +1,48 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { alpha, useTheme } from '@mui/material/styles'
 import { useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
 import ShimmerText from '@/components/shared/ShimmerText'
 import ProjectPanel from './ProjectPanel'
 import { StaticProjectRow } from './StaticProjectRow'
 import { MotionBox } from './MotionBox'
 import { PROJECTS } from './data'
-import { SECTION_FADE_IN, TITLE_FADE_OUT, TITLE_RISE } from './constants'
+import { LABEL_PIN, SECTION_FADE_IN, TITLE_FADE_OUT, TITLE_RISE } from './constants'
+
+/** Smooth 0→1 easing for the label pin transition. */
+function smoothstep(t: number) {
+  const x = Math.max(0, Math.min(1, t))
+  return x * x * (3 - 2 * x)
+}
+
+function useViewportHeight() {
+  const [height, setHeight] = useState(typeof window !== 'undefined' ? window.innerHeight : 900)
+
+  useEffect(() => {
+    const onResize = () => setHeight(window.innerHeight)
+    onResize()
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  return height
+}
 
 export default function Projects() {
   const trackRef = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  const theme = useTheme()
+  const isSmUp = useMediaQuery(theme.breakpoints.up('sm'))
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'))
+  const viewportHeight = useViewportHeight()
+  const headerInsetPx = Number.parseFloat(
+    theme.spacing(isSmUp ? SECTION_HEADER_INSET.sm : SECTION_HEADER_INSET.xs),
+  )
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
@@ -28,6 +56,10 @@ export default function Projects() {
     restDelta: 0.0005,
   })
 
+  // Hero label sits above the main title; pinned label rests in the header band (y = 0).
+  const heroLabelY = viewportHeight * 0.5 - (isMdUp ? 100 : 76)
+  const labelHeroOffset = heroLabelY - headerInsetPx
+
   // Whole wrapper fades in on entry and back out when scrolled off the top.
   const wrapperOpacity = useTransform(progress, [...SECTION_FADE_IN], [0, 1])
   // Phase 0 — title rises + fades in, then fades out under the first card.
@@ -37,6 +69,34 @@ export default function Projects() {
     [TITLE_RISE[0], 0.06, TITLE_FADE_OUT[0], TITLE_FADE_OUT[1]],
     [0, 1, 1, 0],
   )
+
+  const labelY = useTransform(progress, p => {
+    const [riseStart, riseEnd] = TITLE_RISE
+    const [pinStart, pinEnd] = LABEL_PIN
+
+    if (p <= riseEnd) {
+      const riseT = smoothstep((p - riseStart) / (riseEnd - riseStart))
+      return labelHeroOffset + 40 * (1 - riseT)
+    }
+
+    if (p < pinStart) {
+      return labelHeroOffset
+    }
+
+    if (p <= pinEnd) {
+      const pinT = smoothstep((p - pinStart) / (pinEnd - pinStart))
+      return labelHeroOffset * (1 - pinT)
+    }
+
+    return 0
+  })
+
+  const labelOpacity = useTransform(progress, p => {
+    const [riseStart] = TITLE_RISE
+    if (p < riseStart) return 0
+    if (p < 0.06) return smoothstep((p - riseStart) / (0.06 - riseStart))
+    return 1
+  })
 
   if (reduce) {
     return (
@@ -73,41 +133,63 @@ export default function Projects() {
         sx={{
           position: 'sticky',
           top: 0,
+          display: 'flex',
           height: '100vh',
           width: '100%',
+          flexDirection: 'column',
           overflow: 'hidden',
         }}
       >
         <AmbientGlow />
 
-        {/* Phase 0 — section title, sits behind the project panels */}
+        {/* Header band — same inset as Methodologies; label animates within it */}
         <MotionBox
-          style={{ y: titleY, opacity: titleOpacity }}
+          style={{ opacity: labelOpacity }}
           sx={{
-            position: 'absolute',
-            inset: 0,
-            zIndex: 1,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
+            position: 'relative',
+            zIndex: 30,
+            flexShrink: 0,
+            pt: SECTION_HEADER_INSET,
+            pb: { xs: 1, sm: 1.25 },
             textAlign: 'center',
             px: 3,
             pointerEvents: 'none',
           }}
         >
-          <SectionHeading />
+          <MotionBox style={{ y: labelY, willChange: 'transform' }}>
+            <PortfolioLabel />
+          </MotionBox>
         </MotionBox>
 
-        {PROJECTS.map((project, index) => (
-          <ProjectPanel
-            key={project.id}
-            project={project}
-            index={index}
-            total={PROJECTS.length}
-            progress={progress}
-          />
-        ))}
+        {/* Project stage */}
+        <Box sx={{ position: 'relative', zIndex: 1, flex: 1, minHeight: 0 }}>
+          <MotionBox
+            style={{ y: titleY, opacity: titleOpacity }}
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              textAlign: 'center',
+              px: 3,
+              pointerEvents: 'none',
+            }}
+          >
+            <MainTitle />
+          </MotionBox>
+
+          {PROJECTS.map((project, index) => (
+            <ProjectPanel
+              key={project.id}
+              project={project}
+              index={index}
+              total={PROJECTS.length}
+              progress={progress}
+            />
+          ))}
+        </Box>
       </MotionBox>
     </Box>
   )
@@ -116,34 +198,47 @@ export default function Projects() {
 function SectionHeading() {
   return (
     <Box sx={{ textAlign: 'center' }}>
-      <Typography
-        sx={{
-          fontFamily: "'Rajdhani', sans-serif",
-          fontSize: { xs: '11px', sm: '13px' },
-          letterSpacing: '0.5em',
-          textTransform: 'uppercase',
-          color: 'primary.main',
-          mb: { xs: 2, md: 3 },
-        }}
-      >
-        Our Portfolio
-      </Typography>
-      <Typography
-        component="h2"
-        sx={{
-          fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-          fontSize: { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
-          lineHeight: 1.1,
-          letterSpacing: '0.01em',
-          textTransform: 'uppercase',
-          color: 'text.primary',
-        }}
-      >
-        Explore Our
-        <br />
-        Projects in <ShimmerText sx={{ color: 'primary.main' }}>Action</ShimmerText>
-      </Typography>
+      <PortfolioLabel />
+      <MainTitle />
     </Box>
+  )
+}
+
+function PortfolioLabel() {
+  return (
+    <Typography
+      component="p"
+      sx={{
+        fontFamily: "'Rajdhani', sans-serif",
+        fontSize: { xs: '11px', sm: '13px' },
+        letterSpacing: '0.5em',
+        textTransform: 'uppercase',
+        color: 'primary.main',
+      }}
+    >
+      Our Portfolio
+    </Typography>
+  )
+}
+
+function MainTitle() {
+  return (
+    <Typography
+      component="h2"
+      sx={{
+        fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+        fontSize: { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
+        lineHeight: 1.1,
+        letterSpacing: '0.01em',
+        textTransform: 'uppercase',
+        color: 'text.primary',
+        mt: { xs: 2, md: 3 },
+      }}
+    >
+      Explore Our
+      <br />
+      Projects in <ShimmerText sx={{ color: 'primary.main' }}>Action</ShimmerText>
+    </Typography>
   )
 }
 

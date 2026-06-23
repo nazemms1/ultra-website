@@ -95,40 +95,59 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           overflow: 'hidden',
         }}
       >
-        {/* Visual Column */}
+        {/* Visual Column — image and number occupy isolated vertical zones */}
         <Box
           sx={{
             position: 'relative',
             zIndex: 1,
             display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            height: { xs: 200, sm: 240, md: 'auto' },
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: { xs: 280, sm: 320, md: 'auto' },
             minHeight: { md: 365 },
+            overflow: 'hidden',
           }}
         >
-          <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />
-
-          {/* Large Decorative Phase Number */}
-          <Typography
-            component="span"
-            aria-hidden
+          <Box
             sx={{
-              pointerEvents: 'none',
-              position: 'absolute',
-              bottom: 16,
-              left: 24,
-              userSelect: 'none',
-              fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-              fontSize: { xs: '54px', sm: '72px' },
-              lineHeight: 1,
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              color: 'primary.main',
+              flex: '1 1 auto',
+              minHeight: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              overflow: 'hidden',
             }}
           >
-            {phase.number}
-          </Typography>
+            <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />
+          </Box>
+
+          <Box
+            sx={{
+              flex: '0 0 auto',
+              flexShrink: 0,
+              px: { xs: 2.5, sm: 3 },
+              pb: { xs: 1.5, sm: 2 },
+              // pt: { xs: 0.5, sm: 1 },
+            }}
+          >
+            <Typography
+              component="span"
+              aria-hidden
+              sx={{
+                pointerEvents: 'none',
+                display: 'block',
+                userSelect: 'none',
+                fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+                fontSize: { xs: '54px', sm: '72px' },
+                lineHeight: 1,
+                fontWeight: 900,
+                letterSpacing: '-0.04em',
+                color: 'primary.main',
+              }}
+            >
+              {phase.number}
+            </Typography>
+          </Box>
         </Box>
 
         {/* Copy/Content Column */}
