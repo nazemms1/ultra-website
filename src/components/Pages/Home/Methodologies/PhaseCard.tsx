@@ -104,7 +104,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
             alignItems: 'center',
             justifyContent: 'center',
             height: { xs: 200, sm: 240, md: 'auto' },
-            minHeight: { md: 380 },
+            minHeight: { md: 365 },
           }}
         >
           <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />
@@ -165,7 +165,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
             component="h3"
             sx={{
               fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-              fontSize: { xs: '1.5rem', sm: '1.75rem' },
+              fontSize: { xs: '1.5rem', sm: theme.typography.pxToRem(32) },
               textTransform: 'uppercase',
               lineHeight: 1.15,
               letterSpacing: '0.02em',
@@ -179,9 +179,10 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           <Typography
             sx={{
               maxWidth: '38ch',
-              fontSize: '14px',
+              fontSize: theme.typography.pxToRem(15),
               lineHeight: 1.6,
               color: 'text.secondary',
+              textAlign: 'justify',
             }}
           >
             {phase.description}
@@ -197,7 +198,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
                   bgcolor: 'transparent',
                   px: 1.75,
                   py: 0.5,
-                  fontSize: '10px',
+                  fontSize: theme.typography.pxToRem(11),
                   fontWeight: 600,
                   textTransform: 'uppercase',
                   letterSpacing: '0.15em',

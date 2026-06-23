@@ -53,7 +53,7 @@ export default function PhaseGlyph({ imageUrl, index, sx }: PhaseGlyphProps) {
           display: 'flex',
           width: '100%',
           justifyContent: 'center',
-          alignItems: 'center',
+          alignItems: 'start',
           // Smooth floating animation mimicking a high-tech hologram
           animation: 'phaseFloat 6s ease-in-out infinite',
           '@keyframes phaseFloat': {
@@ -66,13 +66,14 @@ export default function PhaseGlyph({ imageUrl, index, sx }: PhaseGlyphProps) {
         <Image
           src={imageUrl}
           alt="Phase Illustration"
-          width={320}
-          height={240}
+          width={335}
+          height={250}
           style={{
-            objectFit: 'contain',
+            objectFit: 'cover',
             width: '100%',
             height: 'auto',
-            maxWidth: '280px', // Matches your "Reality" visual balance
+            maxWidth: 335,
+            minHeight: 250,
           }}
           priority={index === 0}
         />
