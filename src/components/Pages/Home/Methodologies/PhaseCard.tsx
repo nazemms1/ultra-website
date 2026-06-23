@@ -164,8 +164,8 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           <Typography
             component="h3"
             sx={{
-              fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-              fontSize: { xs: '1.5rem', sm: '1.75rem' },
+fontFamily: 'Nulshock, sans-serif',    
+          fontSize: { xs: '1.5rem', sm: '1.75rem' },
               textTransform: 'uppercase',
               lineHeight: 1.15,
               letterSpacing: '0.02em',

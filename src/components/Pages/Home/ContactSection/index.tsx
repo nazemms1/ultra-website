@@ -108,7 +108,7 @@ export default function ContactSection() {
           <Typography
             component="h2"
             sx={{
-              fontFamily: "'Ethnocentric Rg', sans-serif",
+              fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
               fontSize: { xs: '32px', sm: '42px', md: '56px' },
               lineHeight: 1.05,
               letterSpacing: '1.5px',

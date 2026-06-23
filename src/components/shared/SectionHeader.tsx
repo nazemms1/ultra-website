@@ -54,6 +54,7 @@ export default function SectionHeader({
           color: 'text.primary',
           fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.625rem' },
           lineHeight: 1.15,
+fontFamily: 'Nulshock, sans-serif',    
           letterSpacing: '0.02em',
           textTransform: 'uppercase',
         }}

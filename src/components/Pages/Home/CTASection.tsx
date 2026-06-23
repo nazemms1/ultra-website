@@ -153,7 +153,7 @@ export default function CTASection() {
 
         <Typography
           sx={{
-            fontFamily: "'Ethnocentric Rg', sans-serif",
+            fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
             fontWeight: 400,
             fontSize: { xs: '28px', md: '40px' },
             lineHeight: 1.1,

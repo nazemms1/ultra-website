@@ -131,7 +131,7 @@ function SectionHeading() {
       <Typography
         component="h2"
         sx={{
-          fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+          fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
           fontSize: { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
           lineHeight: 1.1,
           letterSpacing: '0.01em',

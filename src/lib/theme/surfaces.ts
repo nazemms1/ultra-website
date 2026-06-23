@@ -204,7 +204,7 @@ export const sectionMaxWidthSx: SxProps<Theme> = {
 }
 
 export const statNumberSx: SxProps<Theme> = {
-  fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+  fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
   fontSize: { xs: '40px', sm: '48px', md: '54.85px' },
   lineHeight: { xs: '48px', sm: '60px', md: '82.275px' },
   color: 'primary.main',
