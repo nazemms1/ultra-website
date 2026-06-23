@@ -126,7 +126,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                   What we do
                 </Typography>
 
-            <Typography
+                <Typography
                   component="h2"
                   sx={{
                     fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
