@@ -12,6 +12,7 @@ type AnimatedNumberProps = {
   active: boolean
   duration: number
   delay: number
+  clickTrigger?: number
 }
 
 export default function AnimatedNumber({
@@ -20,6 +21,7 @@ export default function AnimatedNumber({
   active,
   duration,
   delay,
+  clickTrigger = 0,
 }: AnimatedNumberProps) {
   const reduce = useReducedMotion()
   const count = useMotionValue(0)
@@ -39,7 +41,7 @@ export default function AnimatedNumber({
       ease: SMOOTH_EASE,
     })
     return () => controls.stop()
-  }, [active, count, delay, duration, reduce, value])
+  }, [active, count, delay, duration, reduce, value, clickTrigger])
 
   if (reduce) {
     return (

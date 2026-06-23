@@ -22,13 +22,43 @@ const panelVariants = {
   exit: { opacity: 0, y: -10 },
 }
 
-export default function ServicesOrbital() {
+interface ServicesOrbitalProps {
+  data?: {
+    is_shown?: boolean
+    title?: string
+    description?: string | null
+    button_is_shown?: boolean
+    button_text?: string
+    items?: Array<{
+      id: number
+      title: string
+      description: string | null
+      show_in_homepage: boolean
+      icon: { url: string }
+    }>
+  }
+}
+
+export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
   const sectionRef = useRef<HTMLElement>(null)
-  const [selectedIndex, setSelectedIndex] = useState<number>(0)
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
+  const itemsData = data?.items?.filter(item => item.show_in_homepage) || []
+  const mappedItems = itemsData.map((item, i) => ({
+    title: item.title,
+    cardDescription: item.description || '',
+    description: item.description || '',
+    Icon: item.icon?.url,
+    tags: [], // Tags can be populated later if added to API
+    baseAngle: 112 + i * (360 / itemsData.length),
+  }))
+
+  // If no mappedItems, fallback to SERVICES from data or empty
+  const orbitalItems = mappedItems.length > 0 ? mappedItems : SERVICES
+
   const activeIndex = hoveredIndex ?? selectedIndex
-  const active = SERVICES[activeIndex]
+  const active = activeIndex !== null ? orbitalItems[activeIndex] : null
   const { offsetX, offsetY } = useOrbitalPointerParallax(sectionRef)
 
   const handleActivate = useCallback((index: number | null) => {
@@ -41,7 +71,7 @@ export default function ServicesOrbital() {
     setHoveredIndex(index)
   }, [])
 
-  // Removed timer cleanup
+  if (data?.is_shown === false) return null
 
   return (
     <Box
@@ -96,7 +126,7 @@ export default function ServicesOrbital() {
                   What we do
                 </Typography>
 
-                <Typography
+            <Typography
                   component="h2"
                   sx={{
                     fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
@@ -107,11 +137,15 @@ export default function ServicesOrbital() {
                     color: 'text.primary',
                   }}
                 >
-                  Services built for{' '}
-                  <Box component="span" sx={{ color: 'primary.main' }}>
-                    ultra
-                  </Box>{' '}
-                  outcomes
+                  {data?.title || (
+                    <>
+                      Services built for{' '}
+                      <Box component="span" sx={{ color: 'primary.main' }}>
+                        ultra
+                      </Box>{' '}
+                      outcomes
+                    </>
+                  )}
                 </Typography>
 
                 <AnimatePresence initial={false} mode="popLayout">
@@ -164,7 +198,7 @@ export default function ServicesOrbital() {
                       </Box>
 
                       <Box sx={{ pl: '46px', display: 'flex', flexWrap: 'wrap', gap: '9px' }}>
-                        {active.tags.map(tag => (
+                        {active.tags?.map((tag: string) => (
                           <Box
                             key={tag}
                             sx={theme => ({
@@ -196,18 +230,20 @@ export default function ServicesOrbital() {
                   )}
                 </AnimatePresence>
 
-                <Box component={motion.div} layout transition={LAYOUT_TRANSITION} sx={{ mt: 2 }}>
-                  <AnimatedButton
-                    variant="secondary"
-                    href="#services"
-                    sx={{
-                      px: { xs: 2, md: 4 },
-                      fontSize: { xs: 12, md: 18 },
-                    }}
-                  >
-                    View all services
-                  </AnimatedButton>
-                </Box>
+                {data?.button_is_shown !== false && (
+                  <Box component={motion.div} layout transition={LAYOUT_TRANSITION} sx={{ mt: 2 }}>
+                    <AnimatedButton
+                      variant="secondary"
+                      href="#services"
+                      sx={{
+                        px: { xs: 2, md: 4 },
+                        fontSize: { xs: 12, md: 18 },
+                      }}
+                    >
+                      {data?.button_text || 'View all services'}
+                    </AnimatedButton>
+                  </Box>
+                )}
               </Box>
             </LayoutGroup>
           </Box>
@@ -231,14 +267,15 @@ export default function ServicesOrbital() {
               sx={{
                 transformOrigin: { xs: 'center', lg: 'center right' },
                 transform: {
-                  xs: 'scale(0.56)',
-                  sm: 'scale(0.74)',
-                  lg: 'scale(0.9)',
-                  xl: 'scale(1)',
+                  xs: 'scale(0.56) translateX(50px)',
+                  sm: 'scale(0.74) translateX(50px)',
+                  lg: 'scale(0.9) translateX(50px)',
+                  xl: 'scale(1) translateX(80px)',
                 },
               }}
             >
               <OrbitalDeck
+                items={orbitalItems}
                 onActivate={handleActivate}
                 onHover={handleHover}
                 activeIndex={activeIndex}

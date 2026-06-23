@@ -77,7 +77,7 @@ export default function CTASection() {
           width: '100%',
           height: '100%',
           objectFit: 'cover',
-          zIndex: 0,
+          zIndex: 1,
         }}
       >
         <source src="/videos/colorflow-animation.mp4" type="video/mp4" />
@@ -87,7 +87,7 @@ export default function CTASection() {
         sx={theme => ({
           position: 'absolute',
           inset: 0,
-          zIndex: 1,
+          zIndex: 2,
           pointerEvents: 'none',
           '&::before': {
             content: '""',
@@ -126,9 +126,15 @@ export default function CTASection() {
           justifyContent: 'center',
           textAlign: 'center',
           willChange: 'transform',
-          backdropFilter: 'blur(20px) saturate(1.4)',
-          border: `1px solid ${alpha(theme.palette.primary.darker, 0.3)}`,
-          ...cardGlassSurface,
+          backdropFilter: 'blur(10px) saturate(1.0)',
+          WebkitBackdropFilter: 'blur(24px) saturate(0.0)',
+          backgroundColor: alpha(theme.palette.common.white, 0.01),
+          // border: `1px solid ${alpha(theme.palette.common.white, 0.08)}`,
+          boxShadow: [
+            `0 24px 64px -16px rgba(0, 0, 0, 0.4)`,
+            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.15)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.02)}`,
+          ].join(', '),
         })}
       >
         <Typography

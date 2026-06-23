@@ -18,7 +18,7 @@ export interface ServiceItem {
   /** Long-form copy shown in the left active panel. */
   description: string
   /** Glyph rendered inside the card's circular glass icon well. */
-  Icon: LucideIcon
+  Icon: LucideIcon | string
   /** Tech / discipline chips shown beneath the active description. */
   tags: string[]
   /**

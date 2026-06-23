@@ -1,5 +1,6 @@
 'use client'
 
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
@@ -15,11 +16,13 @@ type StatItemProps = {
 
 export default function StatItem({ stat, active }: StatItemProps) {
   const reduce = useReducedMotion()
+  const [clickTrigger, setClickTrigger] = useState(0)
 
   return (
     <Grid size={{ xs: 6, md: 3 }} sx={{ display: 'flex', justifyContent: 'center' }}>
       <Box
         component={reduce ? 'div' : motion.div}
+        onClick={() => setClickTrigger(prev => prev + 1)}
         {...(!reduce && {
           initial: { opacity: 0, y: 28, filter: 'blur(6px)' },
           animate: active
@@ -54,7 +57,8 @@ export default function StatItem({ stat, active }: StatItemProps) {
           suffix={stat.suffix}
           active={active}
           duration={stat.countDuration}
-          delay={stat.entranceDelay + stat.entranceDuration * 0.35}
+          delay={clickTrigger > 0 ? 0 : stat.entranceDelay + stat.entranceDuration * 0.35}
+          clickTrigger={clickTrigger}
         />
 
         <Typography sx={statLabelSx}>{stat.label}</Typography>

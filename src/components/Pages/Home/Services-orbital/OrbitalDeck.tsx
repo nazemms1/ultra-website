@@ -17,14 +17,15 @@ import {
 } from 'framer-motion'
 import OrbitalCard, { CARD_H, CARD_W } from './OrbitalCard'
 import OrbitalEmblem from './OrbitalEmblem'
-import { SERVICES, type ServiceItem } from './data'
+import { type ServiceItem } from './data'
 
-const R_DOT = 134
+const R_DOT = 140
 const R_CARD = R_DOT + 8 + CARD_W / 2
 const DECK = (R_CARD + CARD_H / 2 + 40) * 2
 const CENTER = DECK / 2
 
 interface OrbitalDeckProps {
+  items: ServiceItem[]
   baseSpeed?: number
   onActivate: (index: number | null) => void
   onHover: (index: number | null) => void
@@ -35,6 +36,7 @@ interface OrbitalDeckProps {
 }
 
 export default function OrbitalDeck({
+  items,
   baseSpeed = 7,
   onActivate,
   onHover,
@@ -100,7 +102,7 @@ export default function OrbitalDeck({
 
       <OrbitalCenter offsetX={eyeOffsetX} offsetY={eyeOffsetY} />
 
-      {SERVICES.map((service, i) => (
+      {items.map((service, i) => (
         <OrbitalSpoke
           key={service.title}
           spin={spin}
@@ -124,9 +126,9 @@ export default function OrbitalDeck({
         sx={{
           pointerEvents: 'none',
           position: 'absolute',
-          inset: '0 0 -120px auto',
+          inset: '0 0 -10px auto',
           zIndex: 20,
-          width: '40%',
+          width: '0%',
           background: theme =>
             `linear-gradient(to right, transparent 0%, ${alpha(theme.palette.background.default, 0.65)} 55%, ${alpha(theme.palette.background.default, 0.95)} 100%)`,
           maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
@@ -218,7 +220,7 @@ function OrbitalSpoke({
             top: 0,
             width: CARD_W,
             height: CARD_H,
-            ml: `${-CARD_W / 2}px`,
+            ml: `${-CARD_W / 2.5}px`,
             mt: `${-CARD_H / 2}px`,
           }}
           style={{ pointerEvents: cardPointer }}
@@ -265,13 +267,13 @@ function OrbitalCenter({ offsetX, offsetY }: OrbitalCenterProps) {
         height: 0,
       }}
     >
-      <Ring diameter={320} sx={{ borderColor: '#244D59' }} />
-      <Ring diameter={268} sx={{ borderColor: '#2A5A68' }} />
+      <Ring diameter={384} sx={{ borderColor: '#244D59' }} />
+      <Ring diameter={280} sx={{ borderColor: '#2A5A68' }} />
       <Ring
         diameter={200}
         sx={{
           borderColor: '#00E6D2',
-          boxShadow: `inset 0 0 30px ${alpha('#00E6D2', 0.14)}`,
+          boxShadow: `inset 0 0 30px ${alpha('#00E6D2', 0.2)}, 0 0 40px ${alpha('#00E6D2', 0.2)}`,
         }}
       />
 

@@ -36,7 +36,7 @@ const springTransition = {
 interface OrbitalCardProps {
   title: string
   description: string
-  Icon: ElementType<{ size?: number; color?: string; strokeWidth?: number }>
+  Icon: ElementType<{ size?: number; color?: string; strokeWidth?: number }> | string
   onHoverStart?: () => void
   onHoverEnd?: () => void
   onClick?: () => void
@@ -295,7 +295,20 @@ export default function OrbitalCard({
               transition: 'color 0.25s ease',
             }}
           >
-            <Icon size={24} color="currentColor" strokeWidth={1.75} />
+            {typeof Icon === 'string' ? (
+              <Box
+                component="img"
+                src={Icon}
+                alt=""
+                sx={{
+                  width: 24,
+                  height: 24,
+                  objectFit: 'contain',
+                }}
+              />
+            ) : (
+              <Icon size={24} color="currentColor" strokeWidth={1.75} />
+            )}
           </Box>
         </Box>
       </MotionBox>

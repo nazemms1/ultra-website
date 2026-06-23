@@ -10,13 +10,24 @@ import ContactSection from '@/components/Pages/Home/ContactSection'
 import ScrollVideoStack from '@/components/Pages/Home/ScrollVideoStack'
 import TestimonialsSection from '@/components/Pages/Home/TestimonialsSection'
 
-export default function HomePage() {
+import { getLocale } from 'next-intl/server'
+import { fetchAPI } from '@/lib/api'
+
+export default async function HomePage() {
+  const locale = await getLocale()
+
+  const [heroData, partnersData, servicesData] = await Promise.all([
+    fetchAPI('/api/hero-section', locale),
+    fetchAPI('/api/partners-data', locale),
+    fetchAPI('/api/services-data', locale),
+  ])
+
   return (
     <>
-      <HeroSection />
+      <HeroSection data={heroData} />
       <ScrollVideoStack>
-        <PartnersSection />
-        <ServicesOrbital />
+        <PartnersSection data={partnersData} />
+        <ServicesOrbital data={servicesData} />
         <Stats />
         <Projects />
         <Methodologies />

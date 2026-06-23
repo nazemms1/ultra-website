@@ -35,7 +35,19 @@ const itemVariants: Variants = {
   },
 }
 
-export default function HeroSection() {
+interface HeroSectionProps {
+  data?: {
+    title?: string
+    description?: string | null
+    explore_button_label?: string
+    get_in_touch_button_label?: string
+    background_video?: {
+      url: string
+    }
+  }
+}
+
+export default function HeroSection({ data }: HeroSectionProps) {
   const splashComplete = useSplashComplete()
 
   return (
@@ -63,7 +75,7 @@ export default function HeroSection() {
           zIndex: 0,
         }}
       >
-        <Box component="source" src="/videos/hero.mp4" type="video/mp4" />
+        <Box component="source" src={data?.background_video?.url || "/videos/hero.mp4"} type="video/mp4" />
       </Box>
 
       <Box
@@ -114,11 +126,15 @@ export default function HeroSection() {
                 lineHeight: '78px',
               })}
             >
-              WITH <ShimmerText sx={{ color: 'primary.main' }}>ULTRAWARES</ShimmerText>
-              <br />
-              COMES ULTRA
-              <br />
-              SOLUTIONS
+              {data?.title || (
+                <>
+                  WITH <ShimmerText sx={{ color: 'primary.main' }}>ULTRAWARES</ShimmerText>
+                  <br />
+                  COMES ULTRA
+                  <br />
+                  SOLUTIONS
+                </>
+              )}
             </Typography>
           </motion.div>
 
@@ -127,8 +143,7 @@ export default function HeroSection() {
               variant="body1"
               sx={{ mb: 5, maxWidth: 625, color: 'text.secondary', fontSize: 25 }}
             >
-              Ultrawares provides cutting-edge solutions for businesses wanting to optimize their
-              operations and gain a competitive edge in an increasingly digital world.
+              {data?.description || 'Ultrawares provides cutting-edge solutions for businesses wanting to optimize their operations and gain a competitive edge in an increasingly digital world.'}
             </Typography>
           </motion.div>
 
@@ -142,14 +157,14 @@ export default function HeroSection() {
               }}
             >
               <AnimatedButton variant="primary" href="#services">
-                Explore Services
+                {data?.explore_button_label || 'Explore Services'}
               </AnimatedButton>
               <AnimatedButton
                 variant="secondary"
                 href="#contact"
                 endIcon={<ArrowRight size={14} />}
               >
-                Get In Touch
+                {data?.get_in_touch_button_label || 'Get In Touch'}
               </AnimatedButton>
             </Box>
           </motion.div>
