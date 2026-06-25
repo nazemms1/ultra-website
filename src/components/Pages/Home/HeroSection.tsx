@@ -46,9 +46,67 @@ interface HeroSectionProps {
     }
   }
 }
-
 export default function HeroSection({ data }: HeroSectionProps) {
   const splashComplete = useSplashComplete()
+
+  const renderTitle = (title?: string) => {
+    if (!title) {
+      return (
+        <>
+          WITH <ShimmerText sx={{ color: 'primary.light' }}>ULTRAWARES</ShimmerText>
+          <br />
+          COMES ULTRA
+          <br />
+          SOLUTIONS
+        </>
+      )
+    }
+
+    const upperTitle = title.toUpperCase().trim()
+
+    // English Match
+    if (upperTitle.includes('WITH ULTRAWARES COMES ULTRA SOLUTIONS') || upperTitle === 'WITH ULTRAWARES COMES ULTRA SOLUTIONS') {
+      return (
+        <>
+          WITH <ShimmerText sx={{ color: 'primary.light' }}>ULTRAWARES</ShimmerText>
+          <br />
+          COMES ULTRA
+          <br />
+          SOLUTIONS
+        </>
+      )
+    }
+
+    // Arabic Match (e.g. if title has ULTRAWARES and solutions/comes)
+    if (title.includes('ULTRAWARES') && (title.includes('الحلول') || title.includes('تأتي'))) {
+      return (
+        <>
+          مع <ShimmerText sx={{ color: 'primary.light' }}>ULTRAWARES</ShimmerText>
+          <br />
+          تأتي الحلول
+          <br />
+          القصوى
+        </>
+      )
+    }
+
+    // Generic formatter for titles containing ULTRAWARES
+    if (upperTitle.includes('ULTRAWARES')) {
+      const parts = title.split(/(ULTRAWARES)/i)
+      return (
+        <>
+          {parts.map((part, index) => {
+            if (part.toUpperCase() === 'ULTRAWARES') {
+              return <ShimmerText key={index} sx={{ color: 'primary.light' }}>{part}</ShimmerText>
+            }
+            return part
+          })}
+        </>
+      )
+    }
+
+    return title
+  }
 
   return (
     <Box
@@ -61,22 +119,24 @@ export default function HeroSection({ data }: HeroSectionProps) {
         overflow: 'hidden',
       }}
     >
-      <Box
-        component="video"
-        autoPlay
-        muted
-        loop
-        style={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: 0,
-        }}
-      >
-        <Box component="source" src={data?.background_video?.url || "/videos/hero.mp4"} type="video/mp4" />
-      </Box>
+      {(!data || data.background_video?.url) && (
+        <Box
+          component="video"
+          autoPlay
+          muted
+          loop
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 0,
+          }}
+        >
+          <Box component="source" src={data?.background_video?.url || "/videos/hero.mp4"} type="video/mp4" />
+        </Box>
+      )}
 
       <Box
         sx={theme => ({
@@ -117,57 +177,59 @@ export default function HeroSection({ data }: HeroSectionProps) {
             textAlign: 'left',
           }}
         >
-          <motion.div variants={itemVariants}>
-            <Typography
-              variant="h1"
-              sx={theme => ({
-                mb: '10px',
-                fontSize: { lg: theme.typography.pxToRem(50) },
-                lineHeight: '78px',
-              })}
-            >
-              {data?.title || (
-                <>
-                  WITH <ShimmerText sx={{ color: 'primary.main' }}>ULTRAWARES</ShimmerText>
-                  <br />
-                  COMES ULTRA
-                  <br />
-                  SOLUTIONS
-                </>
-              )}
-            </Typography>
-          </motion.div>
-
-          <motion.div variants={itemVariants}>
-            <Typography
-              variant="body1"
-              sx={{ mb: 5, maxWidth: 625, color: 'text.secondary', fontSize: 25 }}
-            >
-              {data?.description || 'Ultrawares provides cutting-edge solutions for businesses wanting to optimize their operations and gain a competitive edge in an increasingly digital world.'}
-            </Typography>
-          </motion.div>
-
-          <motion.div variants={itemVariants}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexWrap: 'wrap',
-                alignItems: 'center',
-                gap: '16px',
-              }}
-            >
-              <AnimatedButton variant="primary" href="#services">
-                {data?.explore_button_label || 'Explore Services'}
-              </AnimatedButton>
-              <AnimatedButton
-                variant="secondary"
-                href="#contact"
-                endIcon={<ArrowRight size={14} />}
+          {(!data || data.title) && (
+            <motion.div variants={itemVariants}>
+              <Typography
+                variant="h1"
+                sx={theme => ({
+                  mb: '10px',
+                  fontSize: { lg: theme.typography.pxToRem(50) },
+                  lineHeight: '78px',
+                })}
               >
-                {data?.get_in_touch_button_label || 'Get In Touch'}
-              </AnimatedButton>
-            </Box>
-          </motion.div>
+                {renderTitle(data?.title)}
+              </Typography>
+            </motion.div>
+          )}
+
+          {(!data || data.description) && (
+            <motion.div variants={itemVariants}>
+              <Typography
+                variant="body1"
+                sx={{ mb: 5, maxWidth: 625, color: 'text.secondary', fontSize: 25 }}
+              >
+                {data ? data.description : 'Ultrawares provides cutting-edge solutions for businesses wanting to optimize their operations and gain a competitive edge in an increasingly digital world.'}
+              </Typography>
+            </motion.div>
+          )}
+
+          {(!data || data.explore_button_label || data.get_in_touch_button_label) && (
+            <motion.div variants={itemVariants}>
+              <Box
+                sx={{
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  alignItems: 'center',
+                  gap: '16px',
+                }}
+              >
+                {(!data || data.explore_button_label) && (
+                  <AnimatedButton variant="primary" href="#services">
+                    {data ? data.explore_button_label : 'Explore Services'}
+                  </AnimatedButton>
+                )}
+                {(!data || data.get_in_touch_button_label) && (
+                  <AnimatedButton
+                    variant="secondary"
+                    href="#contact"
+                    endIcon={<ArrowRight size={14} />}
+                  >
+                    {data ? data.get_in_touch_button_label : 'Get In Touch'}
+                  </AnimatedButton>
+                )}
+              </Box>
+            </motion.div>
+          )}
         </Box>
       </Box>
     </Box>

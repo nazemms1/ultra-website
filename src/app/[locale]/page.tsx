@@ -12,14 +12,21 @@ import TestimonialsSection from '@/components/Pages/Home/TestimonialsSection'
 
 import { getLocale } from 'next-intl/server'
 import { fetchAPI } from '@/lib/api'
-
 export default async function HomePage() {
   const locale = await getLocale()
 
-  const [heroData, partnersData, servicesData] = await Promise.all([
+  const [heroData, partnersData, servicesData, statsData, ctaData, faqsData, stillHaveQuestionsData, methodologiesData, reviewsData, portfoliosData, contactUsData] = await Promise.all([
     fetchAPI('/api/hero-section', locale),
     fetchAPI('/api/partners-data', locale),
     fetchAPI('/api/services-data', locale),
+    fetchAPI('/api/statisitcs-data', locale),
+    fetchAPI('/api/start-project-data', locale),
+    fetchAPI('/api/faqs-data', locale),
+    fetchAPI('/api/still-have-questions-data', locale),
+    fetchAPI('/api/methodologies-data', locale),
+    fetchAPI('/api/reviews-data', locale),
+    fetchAPI('/api/portfolios-data', locale),
+    fetchAPI('/api/contact-us-data', locale),
   ])
 
   return (
@@ -28,14 +35,14 @@ export default async function HomePage() {
       <ScrollVideoStack>
         <PartnersSection data={partnersData} />
         <ServicesOrbital data={servicesData} />
-        <Stats />
-        <Projects />
-        <Methodologies />
+        <Stats data={statsData} />
+        <Projects data={portfoliosData} />
+        <Methodologies data={methodologiesData} />
       </ScrollVideoStack>
-      <TestimonialsSection />
-      <CTASection />
-      <FAQSection />
-      <ContactSection />
+      <TestimonialsSection data={reviewsData} />
+      <CTASection data={ctaData} />
+      <FAQSection data={faqsData} stillHaveQuestionsData={stillHaveQuestionsData} />
+      <ContactSection data={contactUsData} />
     </>
   )
 }

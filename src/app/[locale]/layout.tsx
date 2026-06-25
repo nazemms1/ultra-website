@@ -7,6 +7,7 @@ import AppShell from '@/components/Layout/AppShell'
 import AppProviders from '@/providers/AppProviders'
 import { routing, type AppLocale } from '@/i18n/routing'
 import { host, siteConfig } from '@/config'
+import { fetchAPI } from '@/lib/api'
 
 const rajdhani = Rajdhani({
   subsets: ['latin'],
@@ -74,6 +75,8 @@ export default async function LocaleLayout({ children, params }: Props) {
     contact: tNav('contact'),
   }
 
+  const footerData = await fetchAPI('/api/footer-data', locale)
+
   return (
     <html
       lang={locale}
@@ -83,7 +86,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     >
       <body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>
-          <AppShell navLabels={navLabels}>{children}</AppShell>
+          <AppShell navLabels={navLabels} footerData={footerData}>{children}</AppShell>
         </AppProviders>
       </body>
     </html>

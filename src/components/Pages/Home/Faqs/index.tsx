@@ -36,7 +36,39 @@ const faqs = [
   },
 ]
 
-export default function FAQSection() {
+interface FAQSectionProps {
+  data?: {
+    is_shown?: boolean
+    title?: string | null
+    subtitle?: string | null
+    description?: string | null
+    items?: Array<{
+      id: number
+      order: number
+      question: string
+      answer: string
+    }>
+  }
+  stillHaveQuestionsData?: {
+    is_shown?: boolean
+    title?: string | null
+    description?: string | null
+    button_text?: string | null
+  } | null
+}
+
+export default function FAQSection({ data, stillHaveQuestionsData }: FAQSectionProps) {
+  if (data?.is_shown === false) return null
+
+  const items = data?.items || []
+  const sortedItems = [...items].sort((a, b) => a.order - b.order)
+  const mappedFaqs = sortedItems.map(item => ({
+    question: item.question,
+    answer: item.answer,
+  }))
+
+  const finalFaqs = mappedFaqs.length > 0 ? mappedFaqs : faqs
+
   return (
     <Box
       component="section"
@@ -89,29 +121,35 @@ export default function FAQSection() {
         <SectionHeader
           align="center"
           title={
-            <>
-              <Box
-                component="span"
-                sx={{
-                  display: 'block',
-                  mb: 1.25,
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontWeight: 500,
-                  fontSize: '12px',
-                  letterSpacing: '4px',
-                  textTransform: 'uppercase',
-                  color: 'primary.main',
-                }}
-              >
-                FAQ
-              </Box>
-              FREQUENTLY{' '}
-              <Box component="span" sx={{ color: 'primary.main' }}>
-                ASKED
-              </Box>
-            </>
+            data?.title ? (
+              data.title
+            ) : (
+              <>
+                <Box
+                  component="span"
+                  sx={{
+                    display: 'block',
+                    mb: 1.25,
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontWeight: 500,
+                    fontSize: '12px',
+                    letterSpacing: '4px',
+                    textTransform: 'uppercase',
+                    color: 'primary.main',
+                  }}
+                >
+                  FAQ
+                </Box>
+                FREQUENTLY{' '}
+                <Box component="span" sx={{ color: 'primary.main' }}>
+                  ASKED
+                </Box>
+              </>
+            )
           }
-          subtitle="Everything you need to know before we plug into your stack."
+          subtitle={
+            data ? (data.subtitle || undefined) : "Everything you need to know before we plug into your stack."
+          }
           sx={{
             mb: 6,
             '& h2': {
@@ -128,83 +166,89 @@ export default function FAQSection() {
         />
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
-          {faqs.map(faq => (
+          {finalFaqs.map(faq => (
             <FAQCard key={faq.question} question={faq.question} answer={faq.answer} />
           ))}
         </Box>
 
-        <Box
-          sx={theme => ({
-            mt: '40px',
-            mx: 'auto',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '20px',
-            flexWrap: 'wrap',
-            width: { xs: '100%', sm: '663px' },
-            ...cardGlassSurface(theme, { radius: '1.375rem' }),
-            px: '20px',
-            py: '16px',
-            background: alpha(theme.palette.background.default, 0.6),
-          })}
-        >
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-            <Box
-              sx={theme => ({
-                width: 38,
-                height: 38,
-                borderRadius: '50%',
-                background: alpha(theme.palette.primary.main, 0.08),
-                border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                flexShrink: 0,
-                color: 'primary.main',
-              })}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                <path
-                  d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
-                  stroke="currentColor"
-                  strokeWidth="1.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </Box>
-            <Box>
-              <Typography
-                sx={{
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontWeight: 600,
-                  fontSize: '17px',
-                  color: 'text.primary',
-                  lineHeight: '25.50px',
-                  wordWrap: 'break-word',
-                }}
+        {(!stillHaveQuestionsData || stillHaveQuestionsData.is_shown !== false) && (
+          <Box
+            sx={theme => ({
+              mt: '40px',
+              mx: 'auto',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '20px',
+              flexWrap: 'wrap',
+              width: { xs: '100%', sm: '663px' },
+              ...cardGlassSurface(theme, { radius: '1.375rem' }),
+              px: '20px',
+              py: '16px',
+              background: alpha(theme.palette.background.default, 0.6),
+            })}
+          >
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Box
+                sx={theme => ({
+                  width: 38,
+                  height: 38,
+                  borderRadius: '50%',
+                  background: alpha(theme.palette.primary.main, 0.08),
+                  border: `1px solid ${alpha(theme.palette.primary.main, 0.2)}`,
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  color: 'primary.main',
+                })}
               >
-                Still have questions?
-              </Typography>
-              <Typography
-                sx={{
-                  fontFamily: "'Rajdhani', sans-serif",
-                  fontWeight: 400,
-                  fontSize: '14px',
-                  color: 'rgba(255, 255, 255, 0.55)',
-                  lineHeight: '18px',
-                }}
-              >
-                Contact us now and we will answer you as soon as possible.
-              </Typography>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                  <path
+                    d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </Box>
+              <Box>
+                <Typography
+                  sx={{
+                    fontFamily: "'Rajdhani', sans-serif",
+                    fontWeight: 600,
+                    fontSize: '17px',
+                    color: 'text.primary',
+                    lineHeight: '25.50px',
+                    wordWrap: 'break-word',
+                  }}
+                >
+                  {stillHaveQuestionsData ? stillHaveQuestionsData.title : 'Still have questions?'}
+                </Typography>
+                {(!stillHaveQuestionsData || stillHaveQuestionsData.description) && (
+                  <Typography
+                    sx={{
+                      fontFamily: "'Rajdhani', sans-serif",
+                      fontWeight: 400,
+                      fontSize: '14px',
+                      color: 'rgba(255, 255, 255, 0.55)',
+                      lineHeight: '18px',
+                    }}
+                  >
+                    {stillHaveQuestionsData ? stillHaveQuestionsData.description : 'Contact us now and we will answer you as soon as possible.'}
+                  </Typography>
+                )}
+              </Box>
             </Box>
-          </Box>
 
-          <AnimatedButton variant="primary" href="#contact">
-            Contact Us
-          </AnimatedButton>
-        </Box>
+            {(!stillHaveQuestionsData || stillHaveQuestionsData.button_text) && (
+              <AnimatedButton variant="primary" href="#contact">
+                {stillHaveQuestionsData ? stillHaveQuestionsData.button_text : 'Contact Us'}
+              </AnimatedButton>
+            )}
+          </Box>
+        )}
       </Box>
     </Box>
   )

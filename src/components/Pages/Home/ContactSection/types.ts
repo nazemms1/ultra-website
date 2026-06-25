@@ -2,10 +2,11 @@ import type { LucideIcon } from 'lucide-react'
 
 export interface Service {
   id: string
-  icon: LucideIcon
+  icon: any
   title: string
   subtitle: string
-  offerings: string[]
+  offerings?: string[]
+  sub_services?: Array<{ id: number; title: string }>
 }
 
 export type ConsultationType = 'online' | 'onsite'

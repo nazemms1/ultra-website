@@ -24,6 +24,63 @@ const alignSx: Record<SectionHeaderAlign, SxProps<Theme>> = {
   right: { textAlign: 'right' },
 }
 
+export function highlightKeywords(text: string) {
+  if (!text) return ''
+  const parts = text.split(/(ultra|الترا)/gi)
+  return parts.map((part, index) => {
+    const lower = part.toLowerCase()
+    if (lower === 'ultra' || part === 'الترا') {
+      return (
+        <Box component="span" key={index} sx={{ color: 'primary.main' }}>
+          {part}
+        </Box>
+      )
+    }
+    return part
+  })
+}
+
+export function formatHeadingText(text: string) {
+  if (!text) return ''
+  const words = text.trim().split(/\s+/)
+  if (words.length === 0) return ''
+
+  const highlightWords = (str: string) => {
+    const parts = str.split(/(ultrawares|ultra|الترا)/gi)
+    return parts.map((part, index) => {
+      const lower = part.toLowerCase()
+      if (lower === 'ultra' || lower === 'ultrawares' || part === 'الترا') {
+        return (
+          <Box component="span" key={index} sx={{ color: 'primary.main' }}>
+            {part}
+          </Box>
+        )
+      }
+      return part
+    })
+  }
+
+  if (words.length === 1) {
+    return (
+      <Box component="span" sx={{ color: 'primary.main' }}>
+        {words[0]}
+      </Box>
+    )
+  }
+
+  const lastWord = words.pop() || ''
+  const prefix = words.join(' ')
+
+  return (
+    <>
+      {highlightWords(prefix)}{' '}
+      <Box component="span" sx={{ color: 'primary.main' }}>
+        {lastWord}
+      </Box>
+    </>
+  )
+}
+
 export default function SectionHeader({
   title,
   subtitle,
@@ -54,12 +111,12 @@ export default function SectionHeader({
           color: 'text.primary',
           fontSize: { xs: '1.75rem', sm: '2.25rem', md: '2.625rem' },
           lineHeight: 1.15,
-fontFamily: 'Nulshock, sans-serif',    
+          fontFamily: 'Nulshock, sans-serif',    
           letterSpacing: '0.02em',
           textTransform: 'uppercase',
         }}
       >
-        {title}
+        {typeof title === 'string' ? formatHeadingText(title) : title}
       </Typography>
 
       {subtitle ? (
@@ -72,7 +129,7 @@ fontFamily: 'Nulshock, sans-serif',
             mx: align === 'center' ? 'auto' : undefined,
           }}
         >
-          {subtitle}
+          {typeof subtitle === 'string' ? highlightKeywords(subtitle) : subtitle}
         </Typography>
       ) : null}
     </Box>

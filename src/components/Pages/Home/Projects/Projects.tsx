@@ -8,10 +8,12 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
 import ShimmerText from '@/components/shared/ShimmerText'
+import { formatHeadingText, highlightKeywords } from '@/components/shared/SectionHeader'
 import ProjectPanel from './ProjectPanel'
 import { StaticProjectRow } from './StaticProjectRow'
 import { MotionBox } from './MotionBox'
 import { PROJECTS } from './data'
+import type { ProjectItem } from './types'
 import { LABEL_PIN, SECTION_FADE_IN, TITLE_FADE_OUT, TITLE_RISE } from './constants'
 
 /** Smooth 0→1 easing for the label pin transition. */
@@ -33,7 +35,11 @@ function useViewportHeight() {
   return height
 }
 
-export default function Projects() {
+export default function Projects({ data }: { data?: any }) {
+  if (data && data.is_shown === false) {
+    return null
+  }
+
   const trackRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
@@ -106,6 +112,38 @@ export default function Projects() {
     restDelta: 0.0005,
   })
 
+  // Process API portfolios items or fall back to local dataset
+  const hasApiData = !!data
+  const rawProjects = hasApiData ? (data.items || []) : PROJECTS
+  
+  const processedProjects: ProjectItem[] = rawProjects.map((item: any, index: number): ProjectItem => {
+    if (item.mockup) return item
+    const title = item.title || ''
+    const description = item.description || ''
+    const coverImageUrl = item.cover_image?.url || item.cover_image || ''
+    const isMobile = title.toLowerCase().includes('mobile') || 
+                     title.toLowerCase().includes('app') || 
+                     description.toLowerCase().includes('mobile') || 
+                     description.toLowerCase().includes('app')
+    return {
+      id: String(item.id),
+      title,
+      description,
+      href: item.href || '#projects',
+      mockup: {
+        src: coverImageUrl,
+        alt: title,
+        kind: isMobile ? 'mobile' : 'desktop',
+      },
+      imageSide: index % 2 === 0 ? 'left' : 'right',
+    }
+  })
+
+  // If there are no projects to render, collapse the section
+  if (processedProjects.length === 0) {
+    return null
+  }
+
   // Whole wrapper fades in on entry and back out when scrolled off the top.
   const wrapperOpacity = useTransform(progress, [...SECTION_FADE_IN], [0, 1])
   // Phase 0 — title rises + fades in, then fades out under the first card.
@@ -141,7 +179,7 @@ export default function Projects() {
   if (reduce) {
     return (
       <Box component="section" id="projects" sx={{ position: 'relative', px: 3, py: 12 }}>
-        <SectionHeading />
+        <SectionHeading data={data} />
         <Box
           sx={{
             mx: 'auto',
@@ -152,7 +190,7 @@ export default function Projects() {
             gap: 10,
           }}
         >
-          {PROJECTS.map(project => (
+          {processedProjects.map(project => (
             <StaticProjectRow key={project.id} project={project} />
           ))}
         </Box>
@@ -197,7 +235,7 @@ export default function Projects() {
           }}
         >
           <MotionBox style={{ y: labelY, willChange: 'transform' }}>
-            <PortfolioLabel labelRef={labelRef} />
+            <PortfolioLabel data={data} labelRef={labelRef} />
           </MotionBox>
         </Box>
 
@@ -217,15 +255,15 @@ export default function Projects() {
               pointerEvents: 'none',
             }}
           >
-            <MainTitle titleRef={titleRef} />
+            <MainTitle data={data} titleRef={titleRef} />
           </MotionBox>
 
-          {PROJECTS.map((project, index) => (
+          {processedProjects.map((project, index) => (
             <ProjectPanel
               key={project.id}
               project={project}
               index={index}
-              total={PROJECTS.length}
+              total={processedProjects.length}
               progress={progress}
             />
           ))}
@@ -235,16 +273,17 @@ export default function Projects() {
   )
 }
 
-function SectionHeading() {
+function SectionHeading({ data }: { data?: any }) {
   return (
     <Box sx={{ textAlign: 'center' }}>
-      <PortfolioLabel />
-      <MainTitle />
+      <PortfolioLabel data={data} />
+      <MainTitle data={data} />
     </Box>
   )
 }
 
-function PortfolioLabel({ labelRef }: { labelRef?: React.RefObject<HTMLParagraphElement | null> }) {
+function PortfolioLabel({ data, labelRef }: { data?: any; labelRef?: React.RefObject<HTMLParagraphElement | null> }) {
+  const title = data?.title || "Our Portfolio"
   return (
     <Typography
       ref={labelRef}
@@ -257,12 +296,32 @@ function PortfolioLabel({ labelRef }: { labelRef?: React.RefObject<HTMLParagraph
         color: 'primary.main',
       }}
     >
-      Our Portfolio
+      {highlightKeywords(title)}
     </Typography>
   )
 }
 
-function MainTitle({ titleRef }: { titleRef?: React.RefObject<HTMLHeadingElement | null> }) {
+function MainTitle({ data, titleRef }: { data?: any; titleRef?: React.RefObject<HTMLHeadingElement | null> }) {
+  if (data?.description) {
+    return (
+      <Typography
+        ref={titleRef}
+        component="h2"
+        sx={{
+          fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
+          fontSize: { xs: '1.5rem', sm: '2.25rem', md: '3.25rem' },
+          lineHeight: 1.15,
+          letterSpacing: '0.01em',
+          textTransform: 'uppercase',
+          color: 'text.primary',
+          mt: { xs: 2, md: 3 },
+        }}
+      >
+        {formatHeadingText(data.description)}
+      </Typography>
+    )
+  }
+
   return (
     <Typography
       ref={titleRef}

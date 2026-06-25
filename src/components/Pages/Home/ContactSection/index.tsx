@@ -1,14 +1,14 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { Briefcase, Mail, MapPin, Phone } from 'lucide-react'
+import { Briefcase, Mail, MapPin, Phone, Server, Palette, Smartphone } from 'lucide-react'
 import ShimmerText from '@/components/shared/ShimmerText'
 import { glowOrb } from '@/lib/theme/surfaces'
 import { SERVICES, BASE_OFFERINGS } from './data'
-import type { ConsultationType, Region } from './types'
+import type { ConsultationType, Service } from './types'
 import StepLabel from './StepLabel'
 import SectionDivider from './SectionDivider'
 import ServiceCarousel from './ServiceCarousel'
@@ -22,32 +22,201 @@ import ContactSubmitButton from './ContactSubmitButton'
 /** Clears fixed navbar (68px) + top padding when the left column pins on scroll */
 const STICKY_TOP_OFFSET = '100px'
 
-export default function ContactSection() {
+export default function ContactSection({ data }: { data?: any }) {
   const theme = useTheme()
 
+  const hasApiData = !!data
+
+  const highlightKeywords = (text: string) => {
+    if (!text) return ''
+    const parts = text.split(/(ultra|الترا)/gi)
+    return parts.map((part, index) => {
+      const lower = part.toLowerCase()
+      if (lower === 'ultra' || part === 'الترا') {
+        return (
+          <Box component="span" key={index} sx={{ color: 'primary.main' }}>
+            {part}
+          </Box>
+        )
+      }
+      return part
+    })
+  }
+
+  const formatHeadingText = (text: string) => {
+    if (!text) return ''
+    const words = text.trim().split(/\s+/)
+    if (words.length === 0) return ''
+
+    const highlightWords = (str: string) => {
+      const parts = str.split(/(ultrawares|ultra|الترا)/gi)
+      return parts.map((part, index) => {
+        const lower = part.toLowerCase()
+        if (lower === 'ultra' || lower === 'ultrawares' || part === 'الترا') {
+          return (
+            <Box component="span" key={index} sx={{ color: 'primary.main' }}>
+              {part}
+            </Box>
+          )
+        }
+        return part
+      })
+    }
+
+    if (words.length === 1) {
+      return <ShimmerText>{words[0]}</ShimmerText>
+    }
+
+    const lastWord = words.pop() || ''
+    const prefix = words.join(' ')
+
+    return (
+      <>
+        {highlightWords(prefix)}{' '}
+        <ShimmerText>{lastWord}</ShimmerText>
+      </>
+    )
+  }
+
+  // Captcha configuration
+  const isCaptchaShown = hasApiData ? !!data.header?.is_captcha_shown : true
+
+  // Header configs
+  const categoryLabel = hasApiData ? (data.header?.title || "Get in touch") : "Get in touch"
+  const mainTitle = hasApiData ? (data.header?.subtitle || "IGNITE YOUR VISION") : "IGNITE YOUR VISION"
+  const descriptionText = hasApiData ? data.header?.description : "Tell us where you're headed. Whether it's high-performance VPS architecture, striking UI/UX, or next-gen mobile experiences — we're the launch crew."
+
+  // Consultation setups
+  const isOnlineShown = hasApiData ? !!data.consultation?.setup?.is_online_consultation_shown : true
+  const isOnsiteShown = hasApiData ? !!data.consultation?.setup?.is_onsite_consultation_shown : true
+  const addressPlaceholder = hasApiData ? (data.consultation?.setup?.onsite_location_address || "Type your location") : "Type your location"
+  
+  // Regions list
+  const onlineRegionsList = hasApiData ? (data.consultation?.online_regions || []) : [
+    { id: 'syria', title: 'syria' },
+    { id: 'uae', title: 'UAE' }
+  ]
+
+  // States
   const [selectedService, setSelectedService] = useState<string | null>(null)
-  const [offerings, setOfferings] = useState<string[]>([])
+  const [selectedSubServices, setSelectedSubServices] = useState<any[]>([])
   const [email, setEmail] = useState('')
   const [phone, setPhone] = useState('')
   const [sector, setSector] = useState('')
   const [consultationType, setConsultationType] = useState<ConsultationType>('online')
-  const [region, setRegion] = useState<Region>('syria')
+  const [region, setRegion] = useState<string>('')
   const [address, setAddress] = useState('')
   const [captchaDone, setCaptchaDone] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  const [submitSuccess, setSubmitSuccess] = useState<boolean | null>(null)
 
-  const activeService = SERVICES.find(s => s.id === selectedService)
-  const availableOfferings = activeService ? activeService.offerings : BASE_OFFERINGS
+  // Sync default consultation type and region when API data loads
+  useEffect(() => {
+    if (hasApiData) {
+      if (isOnlineShown) {
+        setConsultationType('online')
+      } else if (isOnsiteShown) {
+        setConsultationType('onsite')
+      }
+      if (onlineRegionsList.length > 0) {
+        setRegion(String(onlineRegionsList[0].id))
+      }
+    } else {
+      setRegion('syria')
+    }
+  }, [data, isOnlineShown, isOnsiteShown])
+
+  // Dynamic services resolving
+  const getServiceIcon = (id: string, title: string) => {
+    const text = (id + ' ' + title).toLowerCase()
+    if (text.includes('vps') || text.includes('host') || text.includes('infra') || text.includes('server')) return Server
+    if (text.includes('design') || text.includes('ui') || text.includes('ux') || text.includes('art') || text.includes('palette')) return Palette
+    if (text.includes('mobile') || text.includes('app') || text.includes('phone') || text.includes('android') || text.includes('ios')) return Smartphone
+    return Briefcase
+  }
+
+  const apiServices = data?.services || []
+  const processedServices: Service[] = hasApiData
+    ? apiServices.map((item: any) => ({
+        id: String(item.id || item.title),
+        title: item.title,
+        subtitle: item.description || item.subtitle || '',
+        icon: item.icon || getServiceIcon(String(item.id || ''), item.title || ''),
+        sub_services: item.sub_services || [],
+      }))
+    : SERVICES
+
+  const activeService = processedServices.find(s => s.id === selectedService)
+  const availableOfferings = activeService 
+    ? (activeService.sub_services || activeService.offerings || []).map((o: any) => {
+        if (typeof o === 'string') {
+          return { id: o, title: o }
+        }
+        return { id: o.id, title: o.title }
+      })
+    : []
 
   const handleServiceSelect = (id: string) => {
     setSelectedService(id)
-    setOfferings([])
+    setSelectedSubServices([])
   }
 
-  const toggleOffering = (label: string) => {
-    setOfferings(prev => (prev.includes(label) ? prev.filter(o => o !== label) : [...prev, label]))
+  const toggleOffering = (offeringId: any) => {
+    setSelectedSubServices(prev =>
+      prev.includes(offeringId) ? prev.filter(id => id !== offeringId) : [...prev, offeringId]
+    )
   }
 
-  const canSubmit = captchaDone && !!selectedService && !!email
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!canSubmit || submitting) return
+
+    setSubmitting(true)
+    setSubmitSuccess(null)
+
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:8000'
+    const url = `${baseUrl}/api/contact-us-request`
+
+    try {
+      const response = await fetch(url, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify({
+          service_ids: !isNaN(Number(selectedService)) ? [Number(selectedService)] : [],
+          sub_service_ids: selectedSubServices.map(id => !isNaN(Number(id)) ? Number(id) : id),
+          email,
+          phone,
+          specialty: sector,
+          consultation_type: consultationType,
+          consultation_region_id: !isNaN(Number(region)) ? Number(region) : null,
+          ...(consultationType === 'onsite' ? { address } : {})
+        }),
+      })
+
+      if (response.ok) {
+        setSubmitSuccess(true)
+        setEmail('')
+        setPhone('')
+        setSector('')
+        setAddress('')
+        setSelectedService(null)
+        setSelectedSubServices([])
+        setCaptchaDone(false)
+      } else {
+        setSubmitSuccess(false)
+      }
+    } catch (err) {
+      console.error('Error submitting contact request', err)
+      setSubmitSuccess(false)
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  const canSubmit = (!isCaptchaShown || captchaDone) && !!selectedService && !!email && !submitting
 
   return (
     <Box
@@ -131,7 +300,7 @@ export default function ContactSection() {
                 mb: '20px',
               }}
             >
-              Get in touch
+              {highlightKeywords(categoryLabel)}
             </Typography>
 
             <Typography
@@ -146,32 +315,35 @@ export default function ContactSection() {
                 mb: '20px',
               }}
             >
-              IGNITE YOUR <ShimmerText>VISION</ShimmerText>
+              {formatHeadingText(mainTitle)}
             </Typography>
 
-            <Typography
-              sx={{
-                fontFamily: "'Rajdhani', sans-serif",
-                fontSize: '16px',
-                color: 'text.secondary',
-                lineHeight: 1.75,
-                letterSpacing: '0.03em',
-                mb: '40px',
-                maxWidth: 480,
-              }}
-            >
-              Tell us where you&apos;re headed. Whether it&apos;s high-performance VPS architecture,
-              striking UI/UX, or next-gen mobile experiences — we&apos;re the launch crew.
-            </Typography>
+            {descriptionText && (
+              <Typography
+                sx={{
+                  fontFamily: "'Rajdhani', sans-serif",
+                  fontSize: '16px',
+                  color: 'text.secondary',
+                  lineHeight: 1.75,
+                  letterSpacing: '0.03em',
+                  mb: '40px',
+                  maxWidth: 480,
+                }}
+              >
+                {highlightKeywords(descriptionText)}
+              </Typography>
+            )}
 
-            <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} />
+            {isCaptchaShown && (
+              <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} />
+            )}
           </Box>
         </Box>
 
         {/* Right column — scrollable form (drives section height) */}
         <Box
           component="form"
-          onSubmit={e => e.preventDefault()}
+          onSubmit={handleSubmit}
           sx={{
             flex: { lg: '0 0 600px' },
             width: { xs: '100%', lg: 600 },
@@ -181,7 +353,7 @@ export default function ContactSection() {
         >
           <StepLabel imageSrc="/images/contact/step-01.svg" label="Select Service Type" />
           <ServiceCarousel
-            services={SERVICES}
+            services={processedServices}
             selectedService={selectedService}
             onSelect={handleServiceSelect}
           />
@@ -192,10 +364,10 @@ export default function ContactSection() {
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {availableOfferings.map(o => (
               <OfferingCheckbox
-                key={o}
-                label={o}
-                checked={offerings.includes(o)}
-                onChange={() => toggleOffering(o)}
+                key={o.id}
+                label={o.title}
+                checked={selectedSubServices.includes(o.id)}
+                onChange={() => toggleOffering(o.id)}
               />
             ))}
           </Box>
@@ -243,108 +415,127 @@ export default function ContactSection() {
             </Box>
           </Box>
 
-          <SectionDivider />
-
-          <StepLabel imageSrc="/images/contact/step-04.svg" label="Consultation Setup" />
-          <Box sx={{ display: 'flex', gap: '10px', flexWrap: 'wrap', mb: '20px' }}>
-            <RadioOption
-              name="consultation-type"
-              label="Online Consultation"
-              checked={consultationType === 'online'}
-              onChange={() => setConsultationType('online')}
-            />
-            <RadioOption
-              name="consultation-type"
-              label="On-site Consultation"
-              checked={consultationType === 'onsite'}
-              onChange={() => {
-                setConsultationType('onsite')
-                setRegion('syria')
-              }}
-            />
-          </Box>
-
-          {consultationType === 'online' && (
-            <Box
-              sx={{
-                borderRadius: '12px',
-                border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-                bgcolor: alpha(theme.palette.common.white, 0.03),
-                p: '20px 22px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '18px',
-                mb: '4px',
-              }}
-            >
-              <Box>
-                <FieldLabel>Select Region</FieldLabel>
-                <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
+          {(isOnlineShown || isOnsiteShown) && (
+            <>
+              <SectionDivider />
+              <StepLabel imageSrc="/images/contact/step-04.svg" label="Consultation Setup" />
+              {isOnlineShown && isOnsiteShown && (
+                <Box sx={{ display: 'flex', gap: '10px', flexWrap: 'wrap', mb: '20px' }}>
                   <RadioOption
-                    name="region"
-                    label="syria"
-                    checked={region === 'syria'}
-                    onChange={() => setRegion('syria')}
+                    name="consultation-type"
+                    label="Online Consultation"
+                    checked={consultationType === 'online'}
+                    onChange={() => setConsultationType('online')}
                   />
                   <RadioOption
-                    name="region"
-                    label="UAE"
-                    checked={region === 'uae'}
-                    onChange={() => setRegion('uae')}
+                    name="consultation-type"
+                    label="On-site Consultation"
+                    checked={consultationType === 'onsite'}
+                    onChange={() => {
+                      setConsultationType('onsite')
+                      if (hasApiData) {
+                        setRegion(String(onlineRegionsList[0]?.id || ''))
+                      } else {
+                        setRegion('syria')
+                      }
+                    }}
                   />
                 </Box>
-              </Box>
-            </Box>
-          )}
+              )}
 
-          {consultationType === 'onsite' && (
-            <Box
-              sx={{
-                borderRadius: '12px',
-                border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
-                bgcolor: alpha(theme.palette.common.white, 0.03),
-                p: '20px 22px',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: '18px',
-                mb: '4px',
-              }}
-            >
-              <Box>
-                <FieldLabel>Select Region — Restricted to Syria</FieldLabel>
-                <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
-                  <RadioOption
-                    name="onsite-region"
-                    label="syria"
-                    checked={region === 'syria'}
-                    onChange={() => setRegion('syria')}
-                  />
-                  <RadioOption
-                    name="onsite-region"
-                    label="UAE"
-                    checked={region === 'uae'}
-                    onChange={() => setRegion('uae')}
-                    disabled
-                  />
+              {consultationType === 'online' && isOnlineShown && (
+                <Box
+                  sx={{
+                    borderRadius: '12px',
+                    border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+                    bgcolor: alpha(theme.palette.common.white, 0.03),
+                    p: '20px 22px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '18px',
+                    mb: '4px',
+                  }}
+                >
+                  {onlineRegionsList.length > 0 && (
+                    <Box>
+                      <FieldLabel>Select Region</FieldLabel>
+                      <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
+                        {onlineRegionsList.map((reg: any) => (
+                          <RadioOption
+                            key={reg.id}
+                            name="region"
+                            label={reg.title}
+                            checked={region === String(reg.id)}
+                            onChange={() => setRegion(String(reg.id))}
+                          />
+                        ))}
+                      </Box>
+                    </Box>
+                  )}
                 </Box>
-              </Box>
-              <Box>
-                <FieldLabel>Location Address *</FieldLabel>
-                <InputField
-                  placeholder="Type your location"
-                  icon={MapPin}
-                  value={address}
-                  onChange={setAddress}
-                />
-              </Box>
-            </Box>
+              )}
+
+              {consultationType === 'onsite' && isOnsiteShown && (
+                <Box
+                  sx={{
+                    borderRadius: '12px',
+                    border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
+                    bgcolor: alpha(theme.palette.common.white, 0.03),
+                    p: '20px 22px',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: '18px',
+                    mb: '4px',
+                  }}
+                >
+                  <Box>
+                    <FieldLabel>Select Region</FieldLabel>
+                    <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
+                      {onlineRegionsList.map((reg: any) => {
+                        const titleLower = String(reg.title || reg.id).toLowerCase();
+                        const isSyria = titleLower.includes('syria') || titleLower.includes('سوريا');
+                        return (
+                          <RadioOption
+                            key={reg.id}
+                            name="onsite-region"
+                            label={reg.title}
+                            checked={region === String(reg.id)}
+                            onChange={() => setRegion(String(reg.id))}
+                            disabled={!isSyria}
+                          />
+                        );
+                      })}
+                    </Box>
+                  </Box>
+                  <Box>
+                    <FieldLabel>Location Address *</FieldLabel>
+                    <InputField
+                      placeholder={addressPlaceholder}
+                      icon={MapPin}
+                      value={address}
+                      onChange={setAddress}
+                    />
+                  </Box>
+                </Box>
+              )}
+            </>
           )}
 
           <SectionDivider />
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <ContactSubmitButton disabled={!canSubmit} />
-            {!captchaDone && (
+            {submitSuccess === true && (
+              <Typography sx={{ color: 'success.main', mt: 1, fontFamily: "'Rajdhani', sans-serif" }}>
+                Thank you! Your request has been submitted successfully.
+              </Typography>
+            )}
+            {submitSuccess === false && (
+              <Typography sx={{ color: 'error.main', mt: 1, fontFamily: "'Rajdhani', sans-serif" }}>
+                Failed to submit. Please try again later.
+              </Typography>
+            )}
+            {!captchaDone && isCaptchaShown && (
               <Typography
                 sx={{
                   fontFamily: "'Rajdhani', sans-serif",

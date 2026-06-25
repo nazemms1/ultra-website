@@ -12,9 +12,38 @@ import { PHASES } from './data'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
-export default function Methodologies() {
+interface MethodologiesProps {
+  data?: {
+    is_shown?: boolean
+    title?: string | null
+    description?: string | null
+    items?: Array<{
+      id: number
+      phase_number: number
+      title: string
+      description: string
+      mechanisms: string[]
+      image: {
+        url: string
+      }
+    }>
+  }
+}
+
+export default function Methodologies({ data }: MethodologiesProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+
+  const items = data?.items || []
+  const mappedPhases = items.map(item => ({
+    number: String(item.phase_number).padStart(2, '0'),
+    title: item.title,
+    description: item.description,
+    tags: item.mechanisms || [],
+    imageUrl: item.image?.url || '',
+  }))
+
+  const phasesList = mappedPhases.length > 0 ? mappedPhases : PHASES
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
@@ -34,9 +63,11 @@ export default function Methodologies() {
     const rect = el.getBoundingClientRect()
     const trackTop = window.scrollY + rect.top
     const scrollable = el.offsetHeight - window.innerHeight
-    const target = trackTop + (index / (PHASES.length - 1)) * scrollable
+    const target = trackTop + (index / (phasesList.length - 1)) * scrollable
     window.scrollTo({ top: target, behavior: 'smooth' })
   }
+
+  if (data?.is_shown === false) return null
 
   if (reduce) {
     return (
@@ -45,7 +76,7 @@ export default function Methodologies() {
         id="methodologies"
         sx={{ position: 'relative', overflow: 'hidden', px: 3, py: 12 }}
       >
-        <Header />
+        <Header title={data?.title} />
         <Box
           sx={{
             mx: 'auto',
@@ -56,7 +87,7 @@ export default function Methodologies() {
             gap: 4,
           }}
         >
-          {PHASES.map(phase => (
+          {phasesList.map(phase => (
             <PhaseCardContent key={phase.number} phase={phase} />
           ))}
         </Box>
@@ -122,7 +153,7 @@ export default function Methodologies() {
             pointerEvents: 'none',
           }}
         >
-          <Header />
+          <Header title={data?.title} />
         </Box>
 
         <Box sx={{ position: 'relative', zIndex: 1, flex: 1, minHeight: 0 }}>
@@ -139,12 +170,12 @@ export default function Methodologies() {
               transformStyle: 'preserve-3d',
             }}
           >
-            {PHASES.map((phase, i) => (
+            {phasesList.map((phase, i) => (
               <PhaseCard
                 key={phase.number}
                 phase={phase}
                 index={i}
-                total={PHASES.length}
+                total={phasesList.length}
                 progress={progress}
               />
             ))}
@@ -161,14 +192,14 @@ export default function Methodologies() {
             pb: 3,
           }}
         >
-          <Timeline labels={PHASES.map(p => p.title)} progress={progress} onSeek={seekToPhase} />
+          <Timeline labels={phasesList.map(p => p.title)} progress={progress} onSeek={seekToPhase} />
         </Box>
       </Box>
     </Box>
   )
 }
 
-function Header() {
+function Header({ title }: { title?: string | null }) {
   return (
     <SectionHeader
       align="center"
@@ -183,26 +214,30 @@ function Header() {
         },
       }}
       title={
-        <>
-          <Box
-            component="span"
-            sx={{
-              display: 'block',
-              mb: { xs: 1.25, sm: 1.5 },
-              fontFamily: "'Rajdhani', sans-serif",
-              fontSize: { xs: '12px', sm: '13px' },
-              letterSpacing: '0.45em',
-              textTransform: 'none',
-              color: 'primary.main',
-            }}
-          >
-            Our methodologies
-          </Box>
-          How we turn ideas into{' '}
-          <Box component="span" sx={{ color: 'primary.main' }}>
-            reality
-          </Box>
-        </>
+        title ? (
+          title
+        ) : (
+          <>
+            <Box
+              component="span"
+              sx={{
+                display: 'block',
+                mb: { xs: 1.25, sm: 1.5 },
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: { xs: '12px', sm: '13px' },
+                letterSpacing: '0.45em',
+                textTransform: 'none',
+                color: 'primary.main',
+              }}
+            >
+              Our methodologies
+            </Box>
+            How we turn ideas into{' '}
+            <Box component="span" sx={{ color: 'primary.main' }}>
+              reality
+            </Box>
+          </>
+        )
       }
     />
   )

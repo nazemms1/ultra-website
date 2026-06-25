@@ -26,6 +26,7 @@ interface ServicesOrbitalProps {
   data?: {
     is_shown?: boolean
     title?: string
+    subtitle?: string | null
     description?: string | null
     button_is_shown?: boolean
     button_text?: string
@@ -44,7 +45,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
 
-  const itemsData = data?.items?.filter(item => item.show_in_homepage) || []
+  const itemsData = data?.items || []
   const mappedItems = itemsData.map((item, i) => ({
     title: item.title,
     cardDescription: item.description || '',
@@ -112,41 +113,92 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           >
             <LayoutGroup>
               <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                <Typography
-                  sx={{
-                    mb: 3,
-                    fontFamily: "'Rajdhani', sans-serif",
-                    fontSize: '14px',
-                    fontWeight: 400,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.5em',
-                    color: 'primary.main',
-                  }}
-                >
-                  What we do
-                </Typography>
+                {data ? (
+                  <>
+                    {data.title && (
+                      <Typography
+                        sx={{
+                          mb: 3,
+                          fontFamily: "'Rajdhani', sans-serif",
+                          fontSize: '14px',
+                          fontWeight: 400,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.5em',
+                          color: 'primary.main',
+                        }}
+                      >
+                        {data.title}
+                      </Typography>
+                    )}
 
-                <Typography
-                  component="h2"
-                  sx={{
-                    fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                    fontSize: { xs: '2.1rem', sm: '2.6rem', lg: '2.85rem' },
-                    textTransform: 'uppercase',
-                    lineHeight: 1.18,
-                    letterSpacing: '0.02em',
-                    color: 'text.primary',
-                  }}
-                >
-                  {data?.title || (
-                    <>
+                    {data.subtitle && (
+                      <Typography
+                        component="h2"
+                        sx={{
+                          mb: 1.5,
+                          fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+                          fontSize: { xs: '2.1rem', sm: '2.6rem', lg: '2.85rem' },
+                          textTransform: 'uppercase',
+                          lineHeight: 1.18,
+                          letterSpacing: '0.02em',
+                          color: 'text.primary',
+                        }}
+                      >
+                        {data.subtitle}
+                      </Typography>
+                    )}
+
+                    {data.description && (
+                      <Typography
+                        sx={{
+                          mb: 3,
+                          fontFamily: "'Rajdhani', sans-serif",
+                          fontSize: { xs: '18px', md: '22px' },
+                          fontWeight: 500,
+                          textTransform: 'uppercase',
+                          letterSpacing: '0.2em',
+                          color: 'primary.main',
+                        }}
+                      >
+                        {data.description}
+                      </Typography>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <Typography
+                      sx={{
+                        mb: 3,
+                        fontFamily: "'Rajdhani', sans-serif",
+                        fontSize: '14px',
+                        fontWeight: 400,
+                        textTransform: 'uppercase',
+                        letterSpacing: '0.5em',
+                        color: 'primary.main',
+                      }}
+                    >
+                      What we do
+                    </Typography>
+
+                    <Typography
+                      component="h2"
+                      sx={{
+                        fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+                        fontSize: { xs: '2.1rem', sm: '2.6rem', lg: '2.85rem' },
+                        textTransform: 'uppercase',
+                        lineHeight: 1.18,
+                        letterSpacing: '0.02em',
+                        color: 'text.primary',
+                      }}
+                    >
                       Services built for{' '}
                       <Box component="span" sx={{ color: 'primary.main' }}>
                         ultra
                       </Box>{' '}
                       outcomes
-                    </>
-                  )}
-                </Typography>
+                    </Typography>
+                  </>
+                )}
 
                 <AnimatePresence initial={false} mode="popLayout">
                   {active && (

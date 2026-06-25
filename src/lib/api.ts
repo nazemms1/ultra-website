@@ -8,7 +8,7 @@ export async function fetchAPI(endpoint: string, locale: string) {
         'Accept-Language': locale,
         'Content-Type': 'application/json',
       },
-      next: { revalidate: 60 }, // Cache for 60 seconds, or adjust as needed
+      cache: 'no-store',
     })
 
     if (!response.ok) {

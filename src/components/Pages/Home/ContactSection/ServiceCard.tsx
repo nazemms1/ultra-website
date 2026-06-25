@@ -56,25 +56,48 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
     >
       <Box
         sx={{
-          width: 44,
-          height: 44,
+          width: 48,
+          height: 48,
           flexShrink: 0,
-          borderRadius: '12px',
-          bgcolor: selected ? alpha(primary, 0.08) : alpha(theme.palette.common.white, 0.04),
-          border: `1px solid ${
-            selected ? alpha(primary, 0.4) : alpha(theme.palette.common.white, 0.06)
-          }`,
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'border-color 0.25s ease, background-color 0.25s ease',
+          ...(typeof service.icon === 'string' ? {
+            bgcolor: 'transparent',
+            border: 'none',
+          } : {
+            borderRadius: '12px',
+            bgcolor: selected ? alpha(primary, 0.08) : alpha(theme.palette.common.white, 0.04),
+            border: `1px solid ${
+              selected ? alpha(primary, 0.4) : alpha(theme.palette.common.white, 0.06)
+            }`,
+          })
         }}
       >
-        <Icon
-          size={20}
-          color={selected ? primary : (theme.palette.text.secondary as string)}
-          strokeWidth={selected ? 2 : 1.5}
-        />
+        {typeof service.icon === 'string' ? (
+          <Box
+            component="img"
+            src={service.icon}
+            alt={service.title}
+            sx={{
+              width: 44,
+              height: 44,
+              objectFit: 'contain',
+            }}
+          />
+        ) : (
+          (() => {
+            const Icon = service.icon
+            return (
+              <Icon
+                size={20}
+                color={selected ? primary : (theme.palette.text.secondary as string)}
+                strokeWidth={selected ? 2 : 1.5}
+              />
+            )
+          })()
+        )}
       </Box>
 
       <Typography

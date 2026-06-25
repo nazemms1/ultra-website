@@ -6,9 +6,10 @@ import type { NavLabels } from './navLinks'
 type AppShellProps = {
   children: React.ReactNode
   navLabels: NavLabels
+  footerData?: any
 }
 
-export default function AppShell({ children, navLabels }: AppShellProps) {
+export default function AppShell({ children, navLabels, footerData }: AppShellProps) {
   return (
     <Box
       sx={{
@@ -23,7 +24,7 @@ export default function AppShell({ children, navLabels }: AppShellProps) {
       <Box component="main" sx={{ flex: 1, pb: 6 }}>
         {children}
       </Box>
-      <FooterSection />
+      <FooterSection data={footerData} />
     </Box>
   )
 }

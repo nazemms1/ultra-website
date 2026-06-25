@@ -347,6 +347,11 @@ export default function OrbitalCard({
             lineHeight: 1.45,
             color: 'text.secondary',
             opacity: 0.85,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
           }}
         >
           {description}
