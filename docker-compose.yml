@@ -1,0 +1,21 @@
+services:
+  frontend:
+    container_name: ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG}
+    build:
+      context: ./
+      dockerfile: ./Dockerfile
+    ports:
+      - '8124:3000'
+    env_file:
+      - $envfile_dev
+    restart: unless-stopped
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    networks:
+      ultrawares-net:
+networks:
+  ultrawares-net:
+    external: true

@@ -1,0 +1,11 @@
+stages:
+  - Staging
+deploy_staging:
+  stage: Staging
+  only:
+    - dev
+  tags:
+    - server17
+  script:
+    - docker compose  -p ${CI_PROJECT_NAME}-${CI_COMMIT_REF_SLUG} up -d --build
+    - docker image prune -f
