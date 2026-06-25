@@ -175,6 +175,7 @@ export default function ContactSection({ data }: { data?: any }) {
     setSubmitSuccess(null)
 
     const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:8000'
+    console.log('Contact Form Base URL:', baseUrl)
     const url = `${baseUrl}/api/contact-us-request`
 
     try {
