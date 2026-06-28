@@ -12,6 +12,8 @@ RUN pnpm i --frozen-lockfile
 
 COPY . .
 
+ARG NEXT_PUBLIC_BASE_URL
+ENV NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
 
 RUN pnpm build
 
