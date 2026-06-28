@@ -29,6 +29,22 @@ const GlobalStyles = () => css`
     src: url('/fonts/Nulshock Bd.otf') format('opentype');
   }
 
+  @font-face {
+    font-family: 'Almarai';
+    font-style: normal;
+    font-weight: 700;
+    font-display: swap;
+    src: url('/fonts/Almarai-Bold.ttf') format('truetype');
+  }
+
+  @font-face {
+    font-family: 'Changa';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('/fonts/Changa-Regular.ttf') format('truetype');
+  }
+
   ::-webkit-scrollbar {
     height: 6px;
     width: 6px;
@@ -68,9 +84,15 @@ const GlobalStyles = () => css`
 
   /* ─── Arabic / RTL overrides ─────────────────────────────────────────────── */
 
-  /* 1. Arabic font — prevents browser fallback with mismatched vertical metrics */
-  [dir='rtl'] body {
-    font-family: var(--font-arabic, 'Noto Sans Arabic'), sans-serif;
+  /* 1. Arabic font — force Changa on every element in RTL, overriding sx props */
+  [dir='rtl'] * {
+    font-family: 'Changa', sans-serif !important;
+  }
+
+  /* Stat numbers — always use Ethnocentric Rg regardless of direction */
+  [dir='rtl'] .stat-number,
+  [dir='rtl'] .stat-number * {
+    font-family: 'Ethnocentric Rg', sans-serif !important;
   }
 
   /* 2. Clip horizontal overflow at the html level only — avoids breaking
@@ -79,23 +101,54 @@ const GlobalStyles = () => css`
     overflow-x: hidden;
   }
 
-  /* 3. Headings: remove Latin letter-spacing, keep natural Arabic line-height  */
+  /* 3. Headings — Almarai Bold, override any inline fontFamily from sx props  */
   [dir='rtl'] h1,
   [dir='rtl'] h2,
   [dir='rtl'] h3,
   [dir='rtl'] h4,
   [dir='rtl'] h5,
-  [dir='rtl'] h6 {
+  [dir='rtl'] h6,
+  [dir='rtl'] .MuiTypography-h1,
+  [dir='rtl'] .MuiTypography-h2,
+  [dir='rtl'] .MuiTypography-h3,
+  [dir='rtl'] .MuiTypography-h4,
+  [dir='rtl'] .MuiTypography-h5,
+  [dir='rtl'] .MuiTypography-h6 {
+    font-family: 'Almarai', sans-serif !important;
     letter-spacing: 0;
     line-height: 1.4;
   }
 
-  /* 4. Body text: normalise line-height to match LTR section proportions       */
+  /* 4. Body text — Changa Regular, override any inline fontFamily from sx props */
   [dir='rtl'] p,
   [dir='rtl'] span,
   [dir='rtl'] li,
-  [dir='rtl'] label {
+  [dir='rtl'] label,
+  [dir='rtl'] button,
+  [dir='rtl'] .MuiTypography-body1,
+  [dir='rtl'] .MuiTypography-body2,
+  [dir='rtl'] .MuiTypography-caption,
+  [dir='rtl'] .MuiTypography-overline,
+  [dir='rtl'] .MuiTypography-subtitle1,
+  [dir='rtl'] .MuiTypography-subtitle2,
+  [dir='rtl'] .MuiButton-root,
+  [dir='rtl'] .MuiButtonBase-root {
+    font-family: 'Changa', sans-serif !important;
     line-height: 1.65;
+  }
+
+  /* 6. Remove Latin letter-spacing from all RTL text — Arabic doesn't use tracking */
+  [dir='rtl'] * {
+    letter-spacing: 0 !important;
+  }
+
+  /* 7. Small section labels — clamp font-size so Arabic glyphs are never
+        rendered below 15px (Latin labels are typically 11-13px which is
+        unreadable in Arabic). max() keeps larger text untouched. */
+  [dir='rtl'] p,
+  [dir='rtl'] .MuiTypography-caption,
+  [dir='rtl'] .MuiTypography-overline {
+    font-size: max(15px, 1em) !important;
   }
 
   /* 5. Buttons: remove uppercase + wide letter-spacing (Latin-only styles)     */

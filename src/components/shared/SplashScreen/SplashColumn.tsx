@@ -15,6 +15,7 @@ export default function SplashColumn({
   const { scaleY, crestY, glowOpacity } = useColumnWaveMotion(index)
   const primaryMain = theme.palette.primary.main
   const primaryDark = theme.palette.primary.darker
+  const isRtl = theme.direction === 'rtl'
 
   return (
     <Box
@@ -24,7 +25,8 @@ export default function SplashColumn({
         position: 'relative',
         overflow: 'hidden',
         ...(showDivider && {
-          borderRight: '1px solid',
+          // In RTL the flex row is mirrored, so the divider goes on the left side
+          ...(isRtl ? { borderLeft: '1px solid' } : { borderRight: '1px solid' }),
           borderColor: 'background.divider',
         }),
       }}
@@ -38,8 +40,12 @@ export default function SplashColumn({
         sx={{
           position: 'absolute',
           bottom: 0,
-          left: '-8%',
-          width: '116%',
+          // Extend 8% beyond each side symmetrically — use inset 0 + negative
+          // margin instead of left/right so stylis-plugin-rtl doesn't flip it.
+          left: 0,
+          right: 0,
+          mx: '-8%',
+          width: 'auto',
           height: `${heightPercent}%`,
           willChange: 'transform',
           background: `linear-gradient(to top,

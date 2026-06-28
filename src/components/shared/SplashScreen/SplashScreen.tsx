@@ -38,7 +38,6 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
             height: '100vh',
             overflow: 'hidden',
             zIndex: SPLASH_Z_INDEX,
-            bgcolor: 'transparent',
           }}
         >
           <SplashBackdropVeil />
@@ -95,6 +94,19 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
               ))}
             </Box>
           </Box>
+
+          {/* Frosted overlay on top of columns — same filter values as SplashBackdropVeil */}
+          <Box
+            aria-hidden
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              zIndex: 1,
+              pointerEvents: 'none',
+              backdropFilter: 'blur(28px) saturate(1.08) brightness(0.88)',
+              WebkitBackdropFilter: 'blur(28px) saturate(1.08) brightness(0.88)',
+            }}
+          />
 
           <Box
             component={motion.div}

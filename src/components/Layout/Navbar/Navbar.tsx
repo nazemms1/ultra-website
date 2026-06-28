@@ -26,7 +26,7 @@ const shapeTransition = `opacity ${SHAPE_MS}ms ${SHAPE_EASE}, transform ${SHAPE_
 
 const NAV_HEIGHT = 68
 const SPLIT_MAX_WIDTH = 1298
-const UNIFIED_MAX_WIDTH = 1318
+const UNIFIED_MAX_WIDTH = 1800
 const GROUPED_GAP = 17
 
 const lerp = (from: number, to: number, t: number) => from + (to - from) * t
@@ -196,7 +196,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
         flexDirection: 'column',
         alignItems: 'center',
         pt: 2.5,
-        px: 2,
+        px: { xs: 2, md: 'max(16px, calc((100vw - 1920px) / 2 + 10px))' },
       }}
     >
       <Box

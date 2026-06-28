@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { useTranslations } from 'next-intl'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
@@ -24,6 +25,7 @@ const STICKY_TOP_OFFSET = '100px'
 
 export default function ContactSection({ data }: { data?: any }) {
   const theme = useTheme()
+  const t = useTranslations('Contact')
 
   const hasApiData = !!data
 
@@ -89,7 +91,7 @@ export default function ContactSection({ data }: { data?: any }) {
   // Consultation setups
   const isOnlineShown = hasApiData ? !!data.consultation?.setup?.is_online_consultation_shown : true
   const isOnsiteShown = hasApiData ? !!data.consultation?.setup?.is_onsite_consultation_shown : true
-  const addressPlaceholder = hasApiData ? (data.consultation?.setup?.onsite_location_address || "Type your location") : "Type your location"
+  const addressPlaceholder = hasApiData ? (data.consultation?.setup?.onsite_location_address || t('locationPlaceholder')) : t('locationPlaceholder')
   
   // Regions list
   const onlineRegionsList = hasApiData ? (data.consultation?.online_regions || []) : [
@@ -226,7 +228,7 @@ export default function ContactSection({ data }: { data?: any }) {
       sx={{
         position: 'relative',
         py: { xs: 10, md: 14 },
-        px: { xs: '20px', md: '40px', lg: '80px' },
+        px: { xs: '20px', md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
         overflow: 'visible',
         '&::before': {
           content: '""',
@@ -289,7 +291,7 @@ export default function ContactSection({ data }: { data?: any }) {
 
       <Box
         sx={{
-          maxWidth: 1280,
+          maxWidth: '100%',
           mx: 'auto',
           display: 'flex',
           flexDirection: { xs: 'column', lg: 'row' },
@@ -362,7 +364,7 @@ export default function ContactSection({ data }: { data?: any }) {
             )}
 
             {isCaptchaShown && (
-              <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} />
+              <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} label={t('captchaLabel')} />
             )}
           </Box>
         </Box>
@@ -378,7 +380,7 @@ export default function ContactSection({ data }: { data?: any }) {
             overflow: 'visible',
           }}
         >
-          <StepLabel imageSrc="/images/contact/step-01.svg" label="Select Service Type" />
+          <StepLabel imageSrc="/images/contact/step-01.svg" label={t('step1')} />
           <ServiceCarousel
             services={processedServices}
             selectedService={selectedService}
@@ -387,7 +389,7 @@ export default function ContactSection({ data }: { data?: any }) {
 
           <SectionDivider />
 
-          <StepLabel imageSrc="/images/contact/step-02.svg" label="Additional Offerings" />
+          <StepLabel imageSrc="/images/contact/step-02.svg" label={t('step2')} />
           <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
             {availableOfferings.map(o => (
               <OfferingCheckbox
@@ -401,7 +403,7 @@ export default function ContactSection({ data }: { data?: any }) {
 
           <SectionDivider />
 
-          <StepLabel imageSrc="/images/contact/step-03.svg" label="Your Details" />
+          <StepLabel imageSrc="/images/contact/step-03.svg" label={t('step3')} />
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <Box
               sx={{
@@ -411,9 +413,9 @@ export default function ContactSection({ data }: { data?: any }) {
               }}
             >
               <Box>
-                <FieldLabel>Email Address *</FieldLabel>
+                <FieldLabel>{t('emailLabel')}</FieldLabel>
                 <InputField
-                  placeholder="hello@company.com"
+                  placeholder={t('emailPlaceholder')}
                   icon={Mail}
                   type="email"
                   value={email}
@@ -421,9 +423,9 @@ export default function ContactSection({ data }: { data?: any }) {
                 />
               </Box>
               <Box>
-                <FieldLabel>Phone Number *</FieldLabel>
+                <FieldLabel>{t('phoneLabel')}</FieldLabel>
                 <InputField
-                  placeholder="+1 (555) 000-0000"
+                  placeholder={t('phonePlaceholder')}
                   icon={Phone}
                   type="tel"
                   value={phone}
@@ -432,9 +434,9 @@ export default function ContactSection({ data }: { data?: any }) {
               </Box>
             </Box>
             <Box>
-              <FieldLabel>Specialty or Sector</FieldLabel>
+              <FieldLabel>{t('sectorLabel')}</FieldLabel>
               <InputField
-                placeholder="e.g. Fintech, Healthcare, E-commerce..."
+                placeholder={t('sectorPlaceholder')}
                 icon={Briefcase}
                 value={sector}
                 onChange={setSector}
@@ -445,18 +447,18 @@ export default function ContactSection({ data }: { data?: any }) {
           {(isOnlineShown || isOnsiteShown) && (
             <>
               <SectionDivider />
-              <StepLabel imageSrc="/images/contact/step-04.svg" label="Consultation Setup" />
+              <StepLabel imageSrc="/images/contact/step-04.svg" label={t('step4')} />
               {isOnlineShown && isOnsiteShown && (
                 <Box sx={{ display: 'flex', gap: '10px', flexWrap: 'wrap', mb: '20px' }}>
                   <RadioOption
                     name="consultation-type"
-                    label="Online Consultation"
+                    label={t('onlineConsultation')}
                     checked={consultationType === 'online'}
                     onChange={() => setConsultationType('online')}
                   />
                   <RadioOption
                     name="consultation-type"
-                    label="On-site Consultation"
+                    label={t('onsiteConsultation')}
                     checked={consultationType === 'onsite'}
                     onChange={() => {
                       setConsultationType('onsite')
@@ -485,7 +487,7 @@ export default function ContactSection({ data }: { data?: any }) {
                 >
                   {onlineRegionsList.length > 0 && (
                     <Box>
-                      <FieldLabel>Select Region</FieldLabel>
+                      <FieldLabel>{t('selectRegion')}</FieldLabel>
                       <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
                         {onlineRegionsList.map((reg: any) => (
                           <RadioOption
@@ -516,7 +518,7 @@ export default function ContactSection({ data }: { data?: any }) {
                   }}
                 >
                   <Box>
-                    <FieldLabel>Select Region</FieldLabel>
+                    <FieldLabel>{t('selectRegion')}</FieldLabel>
                     <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
                       {onlineRegionsList.map((reg: any) => {
                         const titleLower = String(reg.title || reg.id).toLowerCase();
@@ -535,7 +537,7 @@ export default function ContactSection({ data }: { data?: any }) {
                     </Box>
                   </Box>
                   <Box>
-                    <FieldLabel>Location Address *</FieldLabel>
+                    <FieldLabel>{t('locationLabel')}</FieldLabel>
                     <InputField
                       placeholder={addressPlaceholder}
                       icon={MapPin}
@@ -551,21 +553,20 @@ export default function ContactSection({ data }: { data?: any }) {
           <SectionDivider />
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
-            <ContactSubmitButton disabled={!canSubmit} />
+            <ContactSubmitButton disabled={!canSubmit} label={t('submitButton')} />
             {submitSuccess === true && (
-              <Typography sx={{ color: 'success.main', mt: 1, fontFamily: "'Rajdhani', sans-serif" }}>
-                Thank you! Your request has been submitted successfully.
+              <Typography sx={{ color: 'success.main', mt: 1 }}>
+                {t('successMessage')}
               </Typography>
             )}
             {submitSuccess === false && (
-              <Typography sx={{ color: 'error.main', mt: 1, fontFamily: "'Rajdhani', sans-serif" }}>
-                Failed to submit. Please try again later.
+              <Typography sx={{ color: 'error.main', mt: 1 }}>
+                {t('errorMessage')}
               </Typography>
             )}
             {!captchaDone && isCaptchaShown && (
               <Typography
                 sx={{
-                  fontFamily: "'Rajdhani', sans-serif",
                   fontSize: '14px',
                   fontWeight: 400,
                   lineHeight: '21px',
@@ -573,7 +574,7 @@ export default function ContactSection({ data }: { data?: any }) {
                   letterSpacing: '0.04em',
                 }}
               >
-                Complete the verification in order to submit.
+                {t('captchaHint')}
               </Typography>
             )}
           </Box>

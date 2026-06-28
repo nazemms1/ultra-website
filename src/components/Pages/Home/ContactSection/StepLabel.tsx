@@ -12,7 +12,6 @@ export default function StepLabel({ imageSrc, label }: { imageSrc: string; label
         gap: '12px',
         mb: '20px',
         [`.${typographyClasses.root}`]: {
-          fontFamily: "'Nulshock', sans-serif !important",
           textTransform: 'uppercase',
         },
       }}
@@ -29,10 +28,9 @@ export default function StepLabel({ imageSrc, label }: { imageSrc: string; label
       />
       <Typography
         sx={{
-          fontSize: 11,
+          fontSize: '14px',
           fontWeight: 700,
-          fontFamily: 'Nulshock',
-          letterSpacing: '0.22em',
+           letterSpacing: '0.22em',
           textTransform: 'uppercase',
           color: 'primary.main',
         }}

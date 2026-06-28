@@ -2,8 +2,9 @@
 
 import { useRef } from 'react'
 import Box from '@mui/material/Box'
-import { alpha } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
 import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
 import SectionHeader from '@/components/shared/SectionHeader'
 import PhaseCard, { PhaseCardContent } from './PhaseCard'
@@ -33,6 +34,8 @@ interface MethodologiesProps {
 export default function Methodologies({ data }: MethodologiesProps) {
   const trackRef = useRef<HTMLDivElement>(null)
   const reduce = useReducedMotion()
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
 
   const items = data?.items || []
   const mappedPhases = items.map(item => ({
@@ -76,7 +79,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
         id="methodologies"
         sx={{ position: 'relative', overflow: 'hidden', px: 3, py: 12 }}
       >
-        <Header title={data?.title} />
+        <Header title={data?.title} description={data?.description} />
         <Box
           sx={{
             mx: 'auto',
@@ -100,7 +103,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
       component="section"
       id="methodologies"
       ref={trackRef}
-      aria-label="How we turn ideas into reality"
+      // aria-label="How we turn ideas into reality"
       sx={{ position: 'relative', height: '500vh' }}
     >
       <Box
@@ -153,20 +156,20 @@ export default function Methodologies({ data }: MethodologiesProps) {
             pointerEvents: 'none',
           }}
         >
-          <Header title={data?.title} />
+          <Header title={data?.title} description={data?.description} />
         </Box>
 
         <Box sx={{ position: 'relative', zIndex: 1, flex: 1, minHeight: 0 }}>
           <Box
             component={motion.div}
-            initial={{ opacity: 0, x: 180 }}
+            initial={{ opacity: 0, x: isRtl ? -180 : 180 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.9, ease: EASE }}
             sx={{
               position: 'absolute',
               inset: 0,
-              perspective: '1400px',
+              perspective: '1450px',
               transformStyle: 'preserve-3d',
             }}
           >
@@ -199,7 +202,8 @@ export default function Methodologies({ data }: MethodologiesProps) {
   )
 }
 
-function Header({ title }: { title?: string | null }) {
+function Header({ title, description }: { title?: string | null; description?: string | null }) {
+  const t = useTranslations('Methodologies')
   return (
     <SectionHeader
       align="center"
@@ -210,31 +214,15 @@ function Header({ title }: { title?: string | null }) {
         '& h2': {
           mx: 'auto',
           maxWidth: 720,
-          fontSize: { xs: '1.375rem', sm: '1.75rem', lg: '2rem' },
         },
       }}
+      subtitle={title ?? t('label')}
       title={
-        title ? (
-          title
-        ) : (
+        description ?? (
           <>
-            <Box
-              component="span"
-              sx={{
-                display: 'block',
-                mb: { xs: 1.25, sm: 1.5 },
-                fontFamily: "'Rajdhani', sans-serif",
-                fontSize: { xs: '12px', sm: '13px' },
-                letterSpacing: '0.45em',
-                textTransform: 'none',
-                color: 'primary.main',
-              }}
-            >
-              Our methodologies
-            </Box>
-            How we turn ideas into{' '}
+            {t('heading')}{' '}
             <Box component="span" sx={{ color: 'primary.main' }}>
-              reality
+              {t('headingHighlight')}
             </Box>
           </>
         )

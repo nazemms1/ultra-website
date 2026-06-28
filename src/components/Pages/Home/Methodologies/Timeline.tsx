@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import { motion, useMotionTemplate, useTransform, type MotionValue } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 
 interface TimelineProps {
   labels: string[]
@@ -12,13 +13,14 @@ interface TimelineProps {
 }
 
 export default function Timeline({ labels, progress, onSeek }: TimelineProps) {
+  const t = useTranslations('Methodologies')
   const theme = useTheme()
   const primary = theme.palette.primary.main
   const total = labels.length
   const fillWidth = useMotionTemplate`${useTransform(progress, p => p * 100)}%`
 
   return (
-    <Box sx={{ mx: 'auto', width: '100%', maxWidth: 1280, px: 1 }}>
+    <Box sx={{ width: '100%', px: 'max(8px, calc((100vw - 1920px) / 2 + 160px))' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography
           sx={{
@@ -28,7 +30,7 @@ export default function Timeline({ labels, progress, onSeek }: TimelineProps) {
             color: 'text.secondary',
           }}
         >
-          Scroll to advance
+          {t('scrollToAdvance')}
         </Typography>
         <Typography
           sx={{
@@ -38,7 +40,7 @@ export default function Timeline({ labels, progress, onSeek }: TimelineProps) {
             color: 'text.secondary',
           }}
         >
-          {total} Phases
+          {t('phases', { total })}
         </Typography>
       </Box>
 
@@ -84,6 +86,7 @@ export default function Timeline({ labels, progress, onSeek }: TimelineProps) {
             total={total}
             progress={progress}
             onSeek={onSeek}
+            ariaLabel={t('goToPhase', { label })}
           />
         ))}
       </Box>
@@ -97,12 +100,14 @@ function TimelineTick({
   total,
   progress,
   onSeek,
+  ariaLabel,
 }: {
   label: string
   index: number
   total: number
   progress: MotionValue<number>
   onSeek: (index: number) => void
+  ariaLabel: string
 }) {
   const theme = useTheme()
   const primary = theme.palette.primary.main
@@ -133,7 +138,7 @@ function TimelineTick({
         p: 0,
         '&:hover [data-timeline-label]': { color: 'primary.main' },
       }}
-      aria-label={`Go to ${label} phase`}
+      aria-label={ariaLabel}
     >
       <Box
         component={motion.span}

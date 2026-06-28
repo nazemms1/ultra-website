@@ -12,5 +12,39 @@
   "Common": {
     "exploreServices": "Explore Services",
     "getInTouch": "Get In Touch"
+  },
+  "Projects": {
+    "label": "Our Portfolio",
+    "heading": "Explore Our\nProjects in Action"
+  },
+  "Methodologies": {
+    "label": "Our methodologies",
+    "heading": "How we turn ideas into",
+    "headingHighlight": "reality",
+    "scrollToAdvance": "Scroll to advance",
+    "phases": "{total} Phases",
+    "goToPhase": "Go to {label} phase"
+  },
+  "Contact": {
+    "step1": "Select Service Type",
+    "step2": "Additional Offerings",
+    "step3": "Your Details",
+    "step4": "Consultation Setup",
+    "emailLabel": "Email Address *",
+    "phoneLabel": "Phone Number *",
+    "sectorLabel": "Specialty or Sector",
+    "emailPlaceholder": "hello@company.com",
+    "phonePlaceholder": "+1 (555) 000-0000",
+    "sectorPlaceholder": "e.g. Fintech, Healthcare, E-commerce...",
+    "selectRegion": "Select Region",
+    "locationLabel": "Location Address *",
+    "locationPlaceholder": "Type your location",
+    "onlineConsultation": "Online Consultation",
+    "onsiteConsultation": "On-site Consultation",
+    "submitButton": "Submit",
+    "successMessage": "Thank you! Your request has been submitted successfully.",
+    "errorMessage": "Failed to submit. Please try again later.",
+    "captchaLabel": "I am not a robot",
+    "captchaHint": "Complete the verification in order to submit."
   }
 }

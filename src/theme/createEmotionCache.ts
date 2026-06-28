@@ -6,5 +6,6 @@ export function getEmotionCacheOptions(direction: 'ltr' | 'rtl'): Partial<Emotio
   return {
     key: direction === 'rtl' ? 'mui-rtl' : 'mui',
     stylisPlugins: direction === 'rtl' ? [prefixer, rtlPlugin] : [prefixer],
+    prepend: true,
   }
 }

@@ -28,7 +28,7 @@ const theme = createTheme({
       sm: 600,
       md: 900,
       lg: 1200,
-      xl: 1440,
+      xl: 1920,
     },
   },
   components: {
@@ -60,7 +60,9 @@ const theme = createTheme({
     MuiContainer: {
       styleOverrides: {
         maxWidthXl: {
-          maxWidth: 1440,
+          maxWidth: 1920,
+          paddingLeft: 80,
+          paddingRight: 80,
         },
       },
     },
@@ -87,22 +89,23 @@ export default appTheme as Theme & CssVarsTheme
 
 export function createAppTheme(direction: 'ltr' | 'rtl' = 'ltr') {
   if (direction === 'rtl') {
-    const arabicFontFamily = "var(--font-arabic, 'Noto Sans Arabic'), 'Rajdhani', sans-serif"
+    const arabicDisplayFont = "'Almarai', sans-serif"
+    const arabicBodyFont = "'Changa', sans-serif"
     return createTheme(appTheme, {
       direction,
       typography: {
-        fontFamily: arabicFontFamily,
-        h1: { fontFamily: arabicFontFamily },
-        h2: { fontFamily: arabicFontFamily },
-        h3: { fontFamily: arabicFontFamily },
-        h4: { fontFamily: arabicFontFamily },
-        h5: { fontFamily: arabicFontFamily },
-        h6: { fontFamily: arabicFontFamily },
-        body1: { fontFamily: arabicFontFamily },
-        body2: { fontFamily: arabicFontFamily },
-        caption: { fontFamily: arabicFontFamily },
-        overline: { fontFamily: arabicFontFamily },
-        button: { fontFamily: arabicFontFamily },
+        fontFamily: arabicBodyFont,
+        h1: { fontFamily: arabicDisplayFont },
+        h2: { fontFamily: arabicDisplayFont },
+        h3: { fontFamily: arabicDisplayFont },
+        h4: { fontFamily: arabicDisplayFont },
+        h5: { fontFamily: arabicDisplayFont },
+        h6: { fontFamily: arabicDisplayFont },
+        body1: { fontFamily: arabicBodyFont },
+        body2: { fontFamily: arabicBodyFont },
+        caption: { fontFamily: arabicBodyFont },
+        overline: { fontFamily: arabicBodyFont },
+        button: { fontFamily: arabicBodyFont },
       },
     }) as Theme & CssVarsTheme
   }

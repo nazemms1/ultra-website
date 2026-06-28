@@ -141,57 +141,16 @@ export default function FAQSection({ data, stillHaveQuestionsData }: FAQSectionP
         sx={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: 1440,
-          mx: 'auto',
-          px: { xs: 3, sm: 5, md: '80px' },
           width: '100%',
+          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
         }}
       >
         <SectionHeader
           align="center"
-          title={
-            data?.title ? (
-              data.title
-            ) : (
-              <>
-                <Box
-                  component="span"
-                  sx={{
-                    display: 'block',
-                    mb: 1.25,
-                    fontFamily: "'Rajdhani', sans-serif",
-                    fontWeight: 500,
-                    fontSize: '12px',
-                    letterSpacing: '4px',
-                    textTransform: 'uppercase',
-                    color: 'primary.main',
-                  }}
-                >
-                  FAQ
-                </Box>
-                FREQUENTLY{' '}
-                <Box component="span" sx={{ color: 'primary.main' }}>
-                  ASKED
-                </Box>
-              </>
-            )
-          }
-          subtitle={
-            data ? (data.subtitle || undefined) : "Everything you need to know before we plug into your stack."
-          }
-          sx={{
-            mb: 6,
-            '& h2': {
-              fontSize: { xs: '30px', md: '42px' },
-              lineHeight: 1.1,
-              letterSpacing: '1.5px',
-            },
-            '& .MuiTypography-body1': {
-              color: 'text.tertiary',
-              fontSize: '14px',
-              letterSpacing: '0.3px',
-            },
-          }}
+          subtitle={data?.title ?? "Frequently Asked"}
+          title={data?.subtitle ?? "FREQUENTLY ASKED"}
+          description={data?.description ?? undefined}
+         
         />
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>

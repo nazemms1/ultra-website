@@ -49,4 +49,5 @@ export interface InputFieldProps {
 export interface ContactSubmitButtonProps {
   disabled: boolean
   onClick?: () => void
+  label: string
 }

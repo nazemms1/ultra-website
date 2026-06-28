@@ -4,13 +4,43 @@
     "description": "Ultrawares provides cutting-edge solutions for businesses wanting to optimize their operations and gain a competitive edge."
   },
   "Navigation": {
-    "about": "About us",
-    "services": "Our services",
-    "projects": "Our projects",
-    "contact": "Contact Us"
+    "about": "من نحن",
+    "services": "خدماتنا",
+    "projects": "مشاريعنا",
+    "contact": "تواصل معنا"
   },
   "Common": {
-    "exploreServices": "Explore Services",
-    "getInTouch": "Get In Touch"
+    "exploreServices": "استعرض الخدمات",
+    "getInTouch": "تواصل معنا"
+  },
+  "Methodologies": {
+    "label": "منهجياتنا",
+    "heading": "كيف نحوّل الأفكار إلى",
+    "headingHighlight": "واقع",
+    "scrollToAdvance": "مرر للتقدم",
+    "phases": "{total} مراحل",
+    "goToPhase": "الانتقال إلى مرحلة {label}"
+  },
+  "Contact": {
+    "step1": "اختر نوع الخدمة",
+    "step2": "الخدمات الإضافية",
+    "step3": "بياناتك",
+    "step4": "إعداد الاستشارة",
+    "emailLabel": "البريد الإلكتروني *",
+    "phoneLabel": "رقم الهاتف *",
+    "sectorLabel": "التخصص أو القطاع",
+    "emailPlaceholder": "hello@company.com",
+    "phonePlaceholder": "+1 (555) 000-0000",
+    "sectorPlaceholder": "مثال: تقنية مالية، رعاية صحية، تجارة إلكترونية...",
+    "selectRegion": "اختر المنطقة",
+    "locationLabel": "عنوان الموقع *",
+    "locationPlaceholder": "أدخل موقعك",
+    "onlineConsultation": "استشارة عبر الإنترنت",
+    "onsiteConsultation": "استشارة في الموقع",
+    "submitButton": "إرسال",
+    "successMessage": "شكراً! تم إرسال طلبك بنجاح.",
+    "errorMessage": "فشل الإرسال. يرجى المحاولة مرة أخرى لاحقاً.",
+    "captchaLabel": "لست روبوتاً",
+    "captchaHint": "أكمل التحقق لتتمكن من الإرسال."
   }
 }

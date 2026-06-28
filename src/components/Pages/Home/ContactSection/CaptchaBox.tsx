@@ -10,9 +10,10 @@ import { ColoredSvg } from '@/components/shared/ColoredSvg'
 type CaptchaBoxProps = {
   checked: boolean
   onToggle: () => void
+  label: string
 }
 
-export default function CaptchaBox({ checked, onToggle }: CaptchaBoxProps) {
+export default function CaptchaBox({ checked, onToggle, label }: CaptchaBoxProps) {
   const theme = useTheme()
 
   return (
@@ -46,7 +47,7 @@ export default function CaptchaBox({ checked, onToggle }: CaptchaBoxProps) {
           transition: 'color 0.2s',
         }}
       >
-        I am not a robot
+        {label}
       </Typography>
     </Box>
   )

@@ -10,7 +10,9 @@ import Grid from '@mui/material/Grid'
 import { alpha, useTheme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import { useParams } from 'next/navigation'
-import { glassSurface, statLabelSx, statNumberSx } from '@/lib/theme/surfaces'
+import { glassSurface } from '@/lib/theme/surfaces'
+import StatItem from '@/components/Pages/Home/Stats/StatItem'
+import type { StatConfig } from '@/components/Pages/Home/Stats/types'
 import { footerStats, legalLinks, serviceItems, usefulLinks } from './data'
 import { footerBodySx, footerLinkSx, footerSectionTitleSx } from './constants'
 
@@ -66,13 +68,17 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
   const showStats = statsData?.is_shown !== false
 
   const statsItems = statsData?.items || []
-  const mappedFooterStats = statsItems.map((item: any) => ({
-    value: `${item.value}${item.symbol || ''}`,
+  const mappedFooterStats: StatConfig[] = statsItems.map((item: any, i: number) => ({
+    value: Number(item.value) || 0,
+    suffix: item.symbol || '',
     label: item.title,
+    entranceDelay: i * 0.12,
+    entranceDuration: 0.55,
+    countDuration: Math.max(1.2, 2.0 - i * 0.3),
   }))
 
-  const finalFooterStats: { value: string; label: string }[] =
-    mappedFooterStats.length > 0 ? mappedFooterStats : [...footerStats]
+  const finalFooterStats: StatConfig[] =
+    mappedFooterStats.length > 0 ? mappedFooterStats : footerStats
   
   const publicDataMap = data?.['public-data']?.reduce((acc: Record<string, any>, item: any) => {
     acc[item.key] = item.value;
@@ -229,11 +235,11 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
           width: '100%',
           minHeight: { xs: 'auto', md: 695 },
           pt: { xs: 6, md: '72px' },
-          px: { xs: 3, md: '80px' },
+          px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
           pb: { xs: 4, md: '40px' },
         }}
       >
-        <Box sx={{ width: '100%', maxWidth: CONTENT_MAX_WIDTH, mx: 'auto', pt: { md: '64px' } }}>
+        <Box sx={{ width: '100%', maxWidth: '100%', mx: 'auto', pt: { md: '64px' } }}>
           <Box
             sx={{
               height: '1px',
@@ -246,7 +252,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
 
         <Stack
           spacing={{ xs: 5, md: '36px' }}
-          sx={{ width: '100%', maxWidth: CONTENT_MAX_WIDTH, mx: 'auto', flex: 1 }}
+          sx={{ width: '100%', maxWidth: '100%', mx: 'auto', flex: 1 }}
         >
           <Stack
             direction={{ xs: 'column', md: 'row' }}
@@ -454,66 +460,23 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, margin: '-40px' }}
                 transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                // style bypasses stylis-plugin-rtl so backdropFilter is never stripped in RTL
+                style={{
+                  backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+                  WebkitBackdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+                }}
                 sx={{
                   ...glassSurface(theme, { radius: '16px' }),
                   width: '100%',
-                  maxWidth: CONTENT_MAX_WIDTH,
+                  color: '#0DF1D9',
+                  maxWidth: '100%',
                   minHeight: { xs: 'auto', md: 120 },
                   overflow: 'hidden',
                 }}
               >
-                <Grid container>
+                <Grid container sx={{ width: '100%' }}>
                   {finalFooterStats.map(stat => (
-                    <Grid
-                      key={stat.label}
-                      size={{ xs: 6, md: 3 }}
-                      sx={{
-                        py: { xs: 2.5, md: '28px' },
-                        textAlign: 'center',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                        cursor: 'default',
-                        '&:hover': {
-                          transform: 'translateY(-4px)',
-                          '& .stat-number': {
-                            textShadow: `0 0 24px ${alpha(theme.palette.primary.main, 0.6)}`,
-                            transform: 'scale(1.05)',
-                          },
-                          '& .stat-label': {
-                            color: 'primary.main',
-                          },
-                        },
-                      }}
-                    >
-                      <Typography
-                        className="stat-number"
-                        component="span"
-                        sx={{
-                          ...statNumberSx,
-                          fontSize: { xs: 28, md: 36 },
-                          lineHeight: { xs: '32px', md: '36px' },
-                          transition: 'all 0.3s ease',
-                        }}
-                      >
-                        {stat.value}
-                      </Typography>
-                      <Typography
-                        className="stat-label"
-                        sx={{
-                          ...statLabelSx,
-                          mt: 1,
-                          fontSize: '12px',
-                          lineHeight: '18px',
-                          letterSpacing: '2px',
-                          transition: 'color 0.3s ease',
-                        }}
-                      >
-                        {stat.label}
-                      </Typography>
-                    </Grid>
+                    <StatItem key={stat.label} stat={stat} active />
                   ))}
                 </Grid>
               </Box>
@@ -521,7 +484,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
           )}
         </Stack>
 
-        <Box sx={{ width: '100%', maxWidth: CONTENT_MAX_WIDTH, mx: 'auto', pt: { md: '48px' } }}>
+        <Box sx={{ width: '100%', maxWidth: '100%', mx: 'auto', pt: { md: '48px' } }}>
           <Box
             sx={{
               height: '1px',
@@ -537,7 +500,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
             alignItems: { xs: 'flex-start', sm: 'center' },
             justifyContent: 'space-between',
             width: '100%',
-            maxWidth: CONTENT_MAX_WIDTH,
+            maxWidth: '100%',
             mx: 'auto',
             pt: { xs: 3, md: '28px' },
             gap: 2,

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Noto_Sans_Arabic, Rajdhani } from 'next/font/google'
+import { Rajdhani } from 'next/font/google'
 import { hasLocale } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -15,12 +15,6 @@ const rajdhani = Rajdhani({
   display: 'swap',
 })
 
-const notoSansArabic = Noto_Sans_Arabic({
-  subsets: ['arabic'],
-  weight: ['400', '500', '600', '700'],
-  display: 'swap',
-  variable: '--font-arabic',
-})
 
 export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }))
@@ -96,7 +90,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     <html
       lang={locale}
       dir={isArabic ? 'rtl' : 'ltr'}
-      className={isArabic ? `${rajdhani.className} ${notoSansArabic.variable}` : rajdhani.className}
+      className={rajdhani.className}
       suppressHydrationWarning
       style={{ scrollBehavior: 'smooth' }}
     >

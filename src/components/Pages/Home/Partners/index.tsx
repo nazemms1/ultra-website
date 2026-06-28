@@ -38,7 +38,7 @@ export default function PartnersSection({ data }: PartnersSectionProps) {
         position: 'relative',
         width: '100%',
         py: { xs: 5, md: '42px' },
-        px: { xs: 3, sm: 5, md: '80px' },
+        px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
         overflow: 'hidden',
       }}
     >

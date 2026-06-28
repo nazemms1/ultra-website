@@ -2,19 +2,17 @@
 
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
-import Typography from '@mui/material/Typography'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { alpha, useTheme } from '@mui/material/styles'
 import { useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
-import ShimmerText from '@/components/shared/ShimmerText'
-import { formatHeadingText, highlightKeywords } from '@/components/shared/SectionHeader'
+import SectionHeader, { formatHeadingText } from '@/components/shared/SectionHeader'
 import ProjectPanel from './ProjectPanel'
 import { StaticProjectRow } from './StaticProjectRow'
 import { MotionBox } from './MotionBox'
 import { PROJECTS } from './data'
 import type { ProjectItem } from './types'
-import { LABEL_PIN, SECTION_FADE_IN, TITLE_FADE_OUT, TITLE_RISE } from './constants'
+import { LABEL_PIN, SECTION_FADE_IN, TITLE_RISE } from './constants'
 
 /** Smooth 0→1 easing for the label pin transition. */
 function smoothstep(t: number) {
@@ -146,14 +144,6 @@ export default function Projects({ data }: { data?: any }) {
 
   // Whole wrapper fades in on entry and back out when scrolled off the top.
   const wrapperOpacity = useTransform(progress, [...SECTION_FADE_IN], [0, 1])
-  // Phase 0 — title rises + fades in, then fades out under the first card.
-  const titleY = useTransform(progress, [...TITLE_RISE], [50, 0])
-  const titleOpacity = useTransform(
-    progress,
-    [TITLE_RISE[0], 0.06, TITLE_FADE_OUT[0], TITLE_FADE_OUT[1]],
-    [0, 1, 1, 0],
-  )
-
   const labelY = useTransform([progress, labelHeroOffsetMV], ([p, offset]: number[]) => {
     const heroOffset = typeof offset === 'number' ? offset : 0
     const [riseStart, riseEnd] = TITLE_RISE
@@ -178,14 +168,14 @@ export default function Projects({ data }: { data?: any }) {
 
   if (reduce) {
     return (
-      <Box component="section" id="projects" sx={{ position: 'relative', px: 3, py: 12 }}>
+      <Box component="section" id="projects" sx={{ position: 'relative', px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' }, py: 12 }}>
         <SectionHeading data={data} />
         <Box
           sx={{
             mx: 'auto',
             mt: 8,
             display: 'flex',
-            maxWidth: 1180,
+            maxWidth: 1480,
             flexDirection: 'column',
             gap: 10,
           }}
@@ -235,29 +225,12 @@ export default function Projects({ data }: { data?: any }) {
           }}
         >
           <MotionBox style={{ y: labelY, willChange: 'transform' }}>
-            <PortfolioLabel data={data} labelRef={labelRef} />
+            <PortfolioLabel data={data} labelRef={labelRef} titleRef={titleRef} />
           </MotionBox>
         </Box>
 
         {/* Project stage */}
         <Box ref={stageRef} sx={{ position: 'relative', zIndex: 1, flex: 1, minHeight: 0 }}>
-          <MotionBox
-            style={{ y: titleY, opacity: titleOpacity }}
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              textAlign: 'center',
-              px: 3,
-              pointerEvents: 'none',
-            }}
-          >
-            <MainTitle data={data} titleRef={titleRef} />
-          </MotionBox>
-
           {processedProjects.map((project, index) => (
             <ProjectPanel
               key={project.id}
@@ -274,72 +247,27 @@ export default function Projects({ data }: { data?: any }) {
 }
 
 function SectionHeading({ data }: { data?: any }) {
+  const subtitle = data?.title || 'Our Portfolio'
+  const title = data?.subtitle || data?.description
   return (
-    <Box sx={{ textAlign: 'center' }}>
-      <PortfolioLabel data={data} />
-      <MainTitle data={data} />
-    </Box>
+    <SectionHeader
+      align="center"
+      subtitle={subtitle}
+      title={title ?? undefined}
+    />
   )
 }
 
-function PortfolioLabel({ data, labelRef }: { data?: any; labelRef?: React.RefObject<HTMLParagraphElement | null> }) {
-  const title = data?.title || "Our Portfolio"
+function PortfolioLabel({ data, labelRef, titleRef }: { data?: any; labelRef?: React.RefObject<HTMLParagraphElement | null>; titleRef?: React.RefObject<HTMLHeadingElement | null> }) {
+  const subtitle = data?.title || 'Our Portfolio'
+  const title = data?.subtitle || data?.description
   return (
-    <Typography
-      ref={labelRef}
-      component="p"
-      sx={{
-        fontFamily: "'Rajdhani', sans-serif",
-        fontSize: { xs: '11px', sm: '13px' },
-        letterSpacing: '0.5em',
-        textTransform: 'uppercase',
-        color: 'primary.main',
-      }}
-    >
-      {highlightKeywords(title)}
-    </Typography>
-  )
-}
-
-function MainTitle({ data, titleRef }: { data?: any; titleRef?: React.RefObject<HTMLHeadingElement | null> }) {
-  if (data?.description) {
-    return (
-      <Typography
-        ref={titleRef}
-        component="h2"
-        sx={{
-          fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-          fontSize: { xs: '1.5rem', sm: '2.25rem', md: '3.25rem' },
-          lineHeight: 1.15,
-          letterSpacing: '0.01em',
-          textTransform: 'uppercase',
-          color: 'text.primary',
-          mt: { xs: 2, md: 3 },
-        }}
-      >
-        {formatHeadingText(data.description)}
-      </Typography>
-    )
-  }
-
-  return (
-    <Typography
-      ref={titleRef}
-      component="h2"
-      sx={{
-        fontFamily: "'Ethnocentric Rg', 'Rajdhani', sans-serif",
-        fontSize: { xs: '1.75rem', sm: '2.75rem', md: '3.75rem' },
-        lineHeight: 1.1,
-        letterSpacing: '0.01em',
-        textTransform: 'uppercase',
-        color: 'text.primary',
-        mt: { xs: 2, md: 3 },
-      }}
-    >
-      Explore Our
-      <br />
-      Projects in <ShimmerText sx={{ color: 'primary.main' }}>Action</ShimmerText>
-    </Typography>
+    <SectionHeader
+      align="center"
+      subtitle={<span ref={labelRef}>{subtitle}</span>}
+      title={title ? <span ref={titleRef}>{formatHeadingText(title)}</span> : undefined}
+      sx={{ mb: 0, pointerEvents: 'none' }}
+    />
   )
 }
 

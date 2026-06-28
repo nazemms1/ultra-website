@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import type { ContactSubmitButtonProps } from './types'
 
-export default function ContactSubmitButton({ disabled, onClick }: ContactSubmitButtonProps) {
+export default function ContactSubmitButton({ disabled, onClick, label }: ContactSubmitButtonProps) {
   const theme = useTheme()
 
   return (
@@ -55,7 +55,7 @@ export default function ContactSubmitButton({ disabled, onClick }: ContactSubmit
             textTransform: 'inherit',
           }}
         >
-          Submit
+          {label}
         </Typography>
         <ArrowRight
           size={19}

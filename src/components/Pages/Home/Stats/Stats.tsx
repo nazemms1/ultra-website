@@ -56,13 +56,13 @@ export default function Stats({ data }: StatsProps) {
       <Grid
         container
         spacing={{ xs: 4, md: 4 }}
-        sx={{
-          maxWidth: 1440,
+        sx={theme => ({
+          maxWidth: theme.breakpoints.values.xl,
           mx: 'auto',
-          px: { xs: 3, sm: 5, md: '80px' },
+          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
           justifyContent: 'center',
           alignItems: 'flex-start',
-        }}
+        })}
       >
         {statsList.map(stat => (
           <StatItem key={stat.label} stat={stat} active={isInView} />

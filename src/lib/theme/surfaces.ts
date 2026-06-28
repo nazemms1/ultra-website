@@ -45,13 +45,13 @@ export function glassPillSurface(theme: Theme) {
 /** Figma StepCard — node 358-5781 / 1625-3075 */
 export const PHASE_CARD_RADIUS = '22px'
 
-const PHASE_CARD_FILL_ANGLE = '135.906deg'
-
 /** Diagonal fill — rgba(1,177,177,0.18) → rgba(18,18,18,0.95) at 60%. */
 export function phaseCardFill(theme: Theme): string {
   const { primary, background } = theme.palette
+  // Mirror angle for RTL so the teal accent stays on the visual/left column side
+  const angle = theme.direction === 'rtl' ? '315.906deg' : '135.906deg'
 
-  return `linear-gradient(${PHASE_CARD_FILL_ANGLE}, ${alpha(primary.main, 0.18)} 40%, ${alpha(background.default, 0.18)} 60%)`
+  return `linear-gradient(${angle}, ${alpha(primary.main, 0.18)} 40%, ${alpha(background.default, 0.18)} 60%)`
 }
 
 /** Resting elevation — 0 24px 63px -16px rgba(1,177,177,0.35). */
@@ -272,14 +272,14 @@ export const sectionMaxWidthSx: SxProps<Theme> = {
   zIndex: 1,
 }
 
-export const statNumberSx: SxProps<Theme> = {
-  fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+export const statNumberSx: SxProps<Theme> = (theme: Theme) => ({
+  fontFamily: "'Ethnocentric Rg', sans-serif !important",
   fontSize: { xs: '40px', sm: '48px', md: '54.85px' },
   lineHeight: { xs: '48px', sm: '60px', md: '82.275px' },
   color: 'primary.main',
   display: 'block',
   fontVariantNumeric: 'tabular-nums',
-}
+})
 
 export const statLabelSx: SxProps<Theme> = {
   mt: 1,

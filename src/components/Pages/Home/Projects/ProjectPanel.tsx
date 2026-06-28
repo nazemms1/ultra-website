@@ -89,9 +89,9 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
           gridTemplateColumns: 'repeat(2, 1fr)',
           alignItems: 'center',
           width: '100%',
-          maxWidth: 1180,
+          maxWidth: '1920px',
           mx: 'auto',
-          px: { xs: 2.5, sm: 4, md: 8 },
+          px: { xs: 2.5, sm: 4, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
           gap: { xs: 2.5, sm: 5, md: 8 },
         }}
       >
