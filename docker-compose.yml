@@ -5,7 +5,7 @@ services:
       context: ./
       dockerfile: ./Dockerfile
       args:
-        - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL}
+        - NEXT_PUBLIC_BASE_URL=https://newwebsite-dev-back.ultrawares.com
     ports:
       - '8124:3000'
     env_file:
