@@ -6,7 +6,6 @@ import Typography from '@mui/material/Typography'
 import { motion, AnimatePresence } from 'framer-motion'
 import { alpha, useTheme } from '@mui/material/styles'
 import Image from 'next/image'
- 
 
 interface TestimonialItem {
   id: number
@@ -17,52 +16,7 @@ interface TestimonialItem {
   rating?: number | null
 }
 
- const TESTIMONIALS: TestimonialItem[] = [
-  {
-    id: 1,
-    name: 'SOPHIA ORTEGA',
-    role: 'CHIEF DESIGN OFFICER · HALCYON',
-    text: 'Pixel-tight, performance-obsessed, and remarkably calm under pressure. They turned our roadmap into a real product faster than we thought was possible.',
-    avatar: 'https://i.pravatar.cc/150?img=47',
-  },
-  {
-    id: 2,
-    name: 'MARCUS CHEN',
-    role: 'CTO · NEXUS CORP',
-    text: 'Working with Ultrawares was a game-changer. Their technical expertise and attention to detail ensured our platform launched flawlessly.',
-    avatar: 'https://i.pravatar.cc/150?img=11',
-  },
-  {
-    id: 3,
-    name: 'ELENA RODRIGUEZ',
-    role: 'FOUNDER · SPARK INNOVATION',
-    text: 'The team at Ultrawares doesn’t just build software; they build exceptional digital experiences. Truly a partner in every sense.',
-    avatar: 'https://i.pravatar.cc/150?img=5',
-  },
-  {
-    id: 4,
-    name: 'JAMES WILSON',
-    role: 'VP ENGINEERING · ACME INC',
-    text: 'Unparalleled dedication to quality. The communication was transparent, and the delivery was on time and exceeded our expectations.',
-    avatar: 'https://i.pravatar.cc/150?img=33',
-  },
-  {
-    id: 5,
-    name: 'AISHA PATEL',
-    role: 'PRODUCT MANAGER · ZENITH',
-    text: 'Their design-driven approach and engineering rigor resulted in a product that our users absolutely love. Highly recommended!',
-    avatar: 'https://i.pravatar.cc/150?img=20',
-  },
-  {
-    id: 6,
-    name: 'LUCAS VANT',
-    role: 'HEAD OF GROWTH · LUMINA',
-    text: 'Working with Ultrawares was the best decision for our rebranding. They seamlessly blended aesthetics with top-tier performance.',
-    avatar: 'https://i.pravatar.cc/150?img=60',
-  },
-]
-
- const ORBIT_RADIUS = 280
+const ORBIT_RADIUS = 280
 const INNER_RADIUS = 200
 
 interface TestimonialsSectionProps {
@@ -103,7 +57,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     rating: item.rating,
   }))
 
-  const testimonialsList: TestimonialItem[] = mappedTestimonials.length > 0 ? mappedTestimonials : TESTIMONIALS
+  const testimonialsList: TestimonialItem[] = mappedTestimonials
   const activeTestimonial = testimonialsList[activeIndex] || testimonialsList[0]
 
   const getAvatarPosition = (index: number) => {
@@ -252,8 +206,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             width: INNER_RADIUS * 2 + 40,
             height: INNER_RADIUS * 2 + 40,
             padding: '32px',
-            background: 'radial-gradient(ellipse 70.71% 70.71% at 50.00% 50.00%, rgba(13, 241, 217, 0.12) 0%, rgba(18, 18, 18, 0.95) 70%)',
-            boxShadow: '0px 0px 80px -10px rgba(1, 177, 177, 0.40), 0px 0px 0px 1px rgba(13, 241, 217, 0.30) inset',
+            background: 'radial-gradient(ellipse 100% 60% at 50% 0%, rgba(13, 241, 217, 0.45) 0%, rgba(8, 15, 15, 0.75) 70%, rgba(5, 10, 10, 0.55) 100%)',
+            boxShadow: '0px 0px 0px 1px rgba(13, 241, 217, 0.25) inset',
             borderRadius: '50%',
             filter: 'blur(0px)',
             justifyContent: 'center',
@@ -338,8 +292,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 width: '100%',
                 textAlign: 'center',
                 color: 'white',
-                fontSize: isRtl ? 13 : 15,
-                fontFamily: isRtl ? 'inherit' : 'Rajdhani',
+                fontSize: 14,
+                fontFamily: "'Rajdhani', sans-serif",
                 fontWeight: '500',
                 lineHeight: 1.5,
                 wordBreak: 'break-word',
@@ -352,21 +306,21 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               </Typography>
 
               <Box sx={{ width: '100%', flexDirection: 'column', alignItems: 'center', gap: '2px', display: 'flex', flexShrink: 0 }}>
-                <Typography sx={{ textAlign: 'center', color: 'white', fontSize: 13, fontFamily: isRtl ? 'inherit' : 'Nulshock, sans-serif', fontWeight: '700', lineHeight: '21px', letterSpacing: isRtl ? 0 : 1, wordBreak: 'break-word', width: '100%' }}>
+                <Typography sx={{ textAlign: 'center', color: 'white', fontSize: 13, fontFamily: "'Nulshock', sans-serif", fontWeight: '700', lineHeight: '21px', letterSpacing: 1, wordBreak: 'break-word', width: '100%' }}>
                   {activeTestimonial.name}
                 </Typography>
                 <Box sx={{ textAlign: 'center', width: '100%' }}>
                   {activeTestimonial.role.includes('·') ? (
                     <>
-                      <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
+                      <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: "'Rajdhani', sans-serif", fontWeight: '400', textTransform: 'uppercase', letterSpacing: 1.5, wordBreak: 'break-word' }}>
                         {activeTestimonial.role.split('·')[0]}·
                       </Typography>
-                      <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 11, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
+                      <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 11, fontFamily: "'Rajdhani', sans-serif", fontWeight: '400', textTransform: 'uppercase', letterSpacing: 1.5, wordBreak: 'break-word' }}>
                         {activeTestimonial.role.split('·')[1]}
                       </Typography>
                     </>
                   ) : (
-                    <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
+                    <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: "'Rajdhani', sans-serif", fontWeight: '400', textTransform: 'uppercase', letterSpacing: 1.5, wordBreak: 'break-word' }}>
                       {activeTestimonial.role}
                     </Typography>
                   )}

@@ -4,11 +4,12 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowLeft } from 'lucide-react'
 import type { ContactSubmitButtonProps } from './types'
 
 export default function ContactSubmitButton({ disabled, onClick, label }: ContactSubmitButtonProps) {
   const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
 
   return (
     <motion.div
@@ -57,15 +58,19 @@ export default function ContactSubmitButton({ disabled, onClick, label }: Contac
         >
           {label}
         </Typography>
-        <ArrowRight
-          size={19}
-          strokeWidth={2}
-          color={
-            disabled
-              ? alpha(theme.palette.text.primary, 0.3)
-              : (theme.palette.text.primary as string)
-          }
-        />
+        {isRtl ? (
+          <ArrowLeft
+            size={19}
+            strokeWidth={2}
+            color={disabled ? alpha(theme.palette.text.primary, 0.3) : (theme.palette.text.primary as string)}
+          />
+        ) : (
+          <ArrowRight
+            size={19}
+            strokeWidth={2}
+            color={disabled ? alpha(theme.palette.text.primary, 0.3) : (theme.palette.text.primary as string)}
+          />
+        )}
       </Box>
     </motion.div>
   )

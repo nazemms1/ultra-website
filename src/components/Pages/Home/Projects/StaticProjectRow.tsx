@@ -2,8 +2,9 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowLeft } from 'lucide-react'
 import AnimatedButton from '@/components/shared/AnimatedButton'
+import { useTheme } from '@mui/material/styles'
 import type { ProjectItem } from './types'
 
 interface StaticProjectRowProps {
@@ -12,6 +13,8 @@ interface StaticProjectRowProps {
 
 /** Non-animated two-column row used when the user prefers reduced motion. */
 export function StaticProjectRow({ project }: StaticProjectRowProps) {
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
   const imageFirst = project.imageSide === 'left'
   const isMobileMockup = project.mockup.kind === 'mobile'
 
@@ -92,10 +95,10 @@ export function StaticProjectRow({ project }: StaticProjectRowProps) {
         <AnimatedButton
           variant="secondary"
           href={project.href}
-          endIcon={<ArrowRight size={14} />}
+          endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
           sx={{ px: { xs: 2, md: 4 }, fontSize: { xs: 12, md: 18 } }}
         >
-          See full details
+          {isRtl ? 'عرض التفاصيل' : 'See full details'}
         </AnimatedButton>
       </Box>
     </Box>

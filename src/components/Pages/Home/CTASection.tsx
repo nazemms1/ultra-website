@@ -145,8 +145,8 @@ export default function CTASection({ data }: CTASectionProps) {
       onMouseLeave={handleMouseLeave}
       sx={{
         position: 'relative',
-        overflow: 'hidden',
-        height: '698px',
+        overflow: 'clip',
+        height: '888px',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -204,23 +204,17 @@ export default function CTASection({ data }: CTASectionProps) {
         ref={cardRef}
         sx={theme => ({
           position: 'relative',
-          zIndex: 3,
-          mx: { xs: 3, md: 'auto' },
-          width: '100%',
-          maxWidth: 1120, // Stretches much wider to match layout
-          p: { xs: '40px 24px', md: '80px' }, // Exact Figma padding 80px
-          overflow: 'hidden',
+          zIndex: 100,
+          mx: { xs: 2, md: 4 },
+          height: '60%',
+          width: { xs: 'calc(100% - 32px)', md: 'calc(100% - 64px)' },
+          maxWidth: 1120,
+          p: { xs: '40px 24px', md: '150px' },
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          willChange: 'transform',
-          transform: 'translate3d(0, 0, 0)',
-          backfaceVisibility: 'hidden',
-          WebkitBackfaceVisibility: 'hidden',
-          isolation: 'isolate',
-          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.25) 0%, rgba(255, 255, 255, 0.12) 50%, rgba(255, 255, 255, 0.05) 100%)',
-          backdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
+           backdropFilter: 'blur(20px) brightness(1.10) saturate(1.15)',
           WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
           border: '1px solid rgba(255, 255, 255, 0.15)',
           boxShadow: [
@@ -229,7 +223,7 @@ export default function CTASection({ data }: CTASectionProps) {
             `inset -1px -1px 0 0 rgba(0, 0, 0, 0.15)`,
           ].join(', '),
           backgroundClip: 'padding-box',
-          borderRadius: '50px', // Figma borderRadius 50
+          borderRadius: '50px',
         })}
       >
         <Box

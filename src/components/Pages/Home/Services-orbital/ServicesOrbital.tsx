@@ -108,8 +108,9 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
             transition={{ duration: 0.8, ease: EASE }}
             sx={{
               maxWidth: 576,
-              ml: { xs: 'auto', lg: 'calc((100vw - 1920px) / 2 + 160px)' },
-              pl: { xs: 3, sm: 5, md: 0 },
+              ml: { xs: 'auto', lg: 8, xl: 'calc(max((100vw - 1920px) / 2 + 160px, 64px))' },
+              pl: { xs: 3, sm: 5, md: 3, lg: 0 },
+              pr: { xs: 3, sm: 5, md: 3, lg: 0 },
               mr: { xs: 'auto', lg: 0 },
             }}
           >
@@ -314,15 +315,16 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: { xs: 'center', lg: 'flex-end' },
-                  mr: { lg: 'calc((100vw - 1920px) / -2)', xl: 0 },
+              overflow: { xs: 'hidden', lg: 'visible' },
+              mr: { lg: 0 },
             }}
           >
             <Box
               sx={{
                 transformOrigin: { xs: 'center', lg: 'center right' },
                 transform: {
-                  xs: 'scale(0.56) translateX(50px)',
-                  sm: 'scale(0.74) translateX(50px)',
+                  xs: 'scale(0.56)',
+                  sm: 'scale(0.74)',
                   lg: 'scale(0.9) translateX(50px)',
                   xl: 'scale(1) translateX(80px)',
                 },

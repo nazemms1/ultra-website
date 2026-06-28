@@ -1,6 +1,6 @@
 'use client'
 
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowLeft } from 'lucide-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import ShimmerText from '@/components/shared/ShimmerText'
@@ -237,7 +237,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
                   <AnimatedButton
                     variant="secondary"
                     href="#contact"
-                    endIcon={<ArrowRight size={14} />}
+                    endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
                   >
                     {data ? data.get_in_touch_button_label : 'Get In Touch'}
                   </AnimatedButton>

@@ -2,7 +2,8 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { ArrowRight } from 'lucide-react'
+import { ArrowRight, ArrowLeft } from 'lucide-react'
+import { useTheme } from '@mui/material/styles'
 import { useMotionTemplate, useTransform } from 'framer-motion'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { MotionBox } from './MotionBox'
@@ -10,6 +11,8 @@ import { BLUR_MAX, CLIP_CLOSED, CLIP_OPEN, getPanelRanges } from './constants'
 import type { ProjectPanelProps } from './types'
 
 export default function ProjectPanel({ project, index, total, progress }: ProjectPanelProps) {
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
   const { enter, exit } = getPanelRanges(index, total)
   const isFirst = index === 0
   const hasExit = exit !== null
@@ -172,13 +175,13 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
           <AnimatedButton
             variant="secondary"
             href={project.href}
-            endIcon={<ArrowRight size={14} />}
+            endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
             sx={{
               px: { xs: 2, md: 4 },
               fontSize: { xs: 12, md: 18 },
             }}
           >
-            See full details
+            {isRtl ? 'عرض التفاصيل' : 'See full details'}
           </AnimatedButton>
         </MotionBox>
       </Box>
