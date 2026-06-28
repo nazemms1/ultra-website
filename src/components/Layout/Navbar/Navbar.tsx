@@ -1,6 +1,7 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useCallback } from 'react'
+import { usePathname, useRouter } from 'next/navigation'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -14,7 +15,7 @@ import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import UltraButton from '@/components/shared/UltraButton'
 import { navGlassPillSurface, glassSurface } from '@/lib/theme/surfaces'
-import { navLinks, type NavLabels } from '@/components/Layout/navLinks'
+import { navLinks, type NavLabels, type SectionId } from '@/components/Layout/navLinks'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { useNavbarScrollMode } from './useNavbarScrollMode'
 
@@ -38,13 +39,34 @@ function easeInOutQuart(t: number) {
 
 type NavbarProps = {
   labels: NavLabels
+  sectionsVisibility?: Record<SectionId, boolean>
 }
 
-export default function Navbar({ labels }: NavbarProps) {
+export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   const theme = useTheme()
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
   const { mergeProgress, spreadProgress } = useNavbarScrollMode()
   const [mobileOpen, setMobileOpen] = useState(false)
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const visibleNavLinks = navLinks.filter(
+    link => !sectionsVisibility || sectionsVisibility[link.sectionId] !== false,
+  )
+
+  const handleNavClick = useCallback(
+    (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+      if (!href.startsWith('/#')) return
+      const sectionId = href.slice(2)
+      const isHome = pathname === '/' || /^\/[a-z]{2}$/.test(pathname)
+      if (isHome) {
+        e.preventDefault()
+        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
+        setMobileOpen(false)
+      }
+    },
+    [pathname],
+  )
 
   const t = isDesktop ? easeInOutQuart(Math.max(0, Math.min(1, mergeProgress))) : 1
   const splitOpacity = 1 - t
@@ -73,11 +95,12 @@ export default function Navbar({ labels }: NavbarProps) {
 
   const navLinksStack = (
     <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'center', gap: '45px' }}>
-      {navLinks.map(link => (
+      {visibleNavLinks.map(link => (
         <Box
           key={link.href}
           component={Link}
           href={link.href}
+          onClick={(e: React.MouseEvent<HTMLAnchorElement>) => handleNavClick(e, link.href)}
           sx={{
             fontWeight: 600,
             fontSize: '18px',
@@ -278,12 +301,15 @@ export default function Navbar({ labels }: NavbarProps) {
             flexDirection: 'column',
           }}
         >
-          {navLinks.map((link, index) => (
+          {visibleNavLinks.map((link, index) => (
             <Box
               key={link.href}
               component={Link}
               href={link.href}
-              onClick={() => setMobileOpen(false)}
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                handleNavClick(e, link.href)
+                setMobileOpen(false)
+              }}
               sx={{
                 fontWeight: 500,
                 fontSize: '15px',
@@ -292,7 +318,7 @@ export default function Navbar({ labels }: NavbarProps) {
                 textDecoration: 'none',
                 py: 1.625,
                 borderBottom:
-                  index < navLinks.length - 1
+                  index < visibleNavLinks.length - 1
                     ? theme => `1px solid ${theme.palette.background.divider}`
                     : 'none',
               }}

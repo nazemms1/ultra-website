@@ -33,10 +33,10 @@ export default async function HomePage() {
     <>
       <HeroSection data={heroData} />
       <ScrollVideoStack>
-        <PartnersSection data={partnersData} />
-        <ServicesOrbital data={servicesData} />
+        {partnersData?.is_shown !== false && <div id="about"><PartnersSection data={partnersData} /></div>}
+        {servicesData?.is_shown !== false && <div id="services"><ServicesOrbital data={servicesData} /></div>}
         <Stats data={statsData} />
-        <Projects data={portfoliosData} />
+        {portfoliosData?.is_shown !== false && <div id="projects"><Projects data={portfoliosData} /></div>}
         <Methodologies data={methodologiesData} />
       </ScrollVideoStack>
       <TestimonialsSection data={reviewsData} />

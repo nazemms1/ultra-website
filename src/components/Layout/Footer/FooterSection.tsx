@@ -55,13 +55,24 @@ const socials = [
   },
 ] as const
 
-export default function FooterSection({ data }: { data?: any }) {
+export default function FooterSection({ data, statsData }: { data?: any; statsData?: any }) {
   const theme = useTheme()
   const params = useParams()
   const isAr = params?.locale === 'ar'
   const contactTitle = isAr ? 'اتصل بنا' : 'Contact Us'
 
   const hasApiData = !!data;
+  
+  const showStats = statsData?.is_shown !== false
+
+  const statsItems = statsData?.items || []
+  const mappedFooterStats = statsItems.map((item: any) => ({
+    value: `${item.value}${item.symbol || ''}`,
+    label: item.title,
+  }))
+
+  const finalFooterStats: { value: string; label: string }[] =
+    mappedFooterStats.length > 0 ? mappedFooterStats : [...footerStats]
   
   const publicDataMap = data?.['public-data']?.reduce((acc: Record<string, any>, item: any) => {
     acc[item.key] = item.value;
@@ -435,77 +446,79 @@ export default function FooterSection({ data }: { data?: any }) {
             )}
           </Stack>
 
-          <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-            <Box
-              component={motion.div}
-              initial={{ opacity: 0, y: 16 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-              sx={{
-                ...glassSurface(theme, { radius: '16px' }),
-                width: '100%',
-                maxWidth: CONTENT_MAX_WIDTH,
-                minHeight: { xs: 'auto', md: 120 },
-                overflow: 'hidden',
-              }}
-            >
-              <Grid container>
-                {footerStats.map(stat => (
-                  <Grid
-                    key={stat.label}
-                    size={{ xs: 6, md: 3 }}
-                    sx={{
-                      py: { xs: 2.5, md: '28px' },
-                      textAlign: 'center',
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
-                      cursor: 'default',
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        '& .stat-number': {
-                          textShadow: `0 0 24px ${alpha(theme.palette.primary.main, 0.6)}`,
-                          transform: 'scale(1.05)',
-                        },
-                        '& .stat-label': {
-                          color: 'primary.main',
-                        },
-                      },
-                    }}
-                  >
-                    <Typography
-                      className="stat-number"
-                      component="span"
+          {showStats && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+              <Box
+                component={motion.div}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                sx={{
+                  ...glassSurface(theme, { radius: '16px' }),
+                  width: '100%',
+                  maxWidth: CONTENT_MAX_WIDTH,
+                  minHeight: { xs: 'auto', md: 120 },
+                  overflow: 'hidden',
+                }}
+              >
+                <Grid container>
+                  {finalFooterStats.map(stat => (
+                    <Grid
+                      key={stat.label}
+                      size={{ xs: 6, md: 3 }}
                       sx={{
-                        ...statNumberSx,
-                        fontSize: { xs: 28, md: 36 },
-                        lineHeight: { xs: '32px', md: '36px' },
-                        transition: 'all 0.3s ease',
+                        py: { xs: 2.5, md: '28px' },
+                        textAlign: 'center',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        transition: 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                        cursor: 'default',
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          '& .stat-number': {
+                            textShadow: `0 0 24px ${alpha(theme.palette.primary.main, 0.6)}`,
+                            transform: 'scale(1.05)',
+                          },
+                          '& .stat-label': {
+                            color: 'primary.main',
+                          },
+                        },
                       }}
                     >
-                      {stat.value}
-                    </Typography>
-                    <Typography
-                      className="stat-label"
-                      sx={{
-                        ...statLabelSx,
-                        mt: 1,
-                        fontSize: '12px',
-                        lineHeight: '18px',
-                        letterSpacing: '2px',
-                        transition: 'color 0.3s ease',
-                      }}
-                    >
-                      {stat.label}
-                    </Typography>
-                  </Grid>
-                ))}
-              </Grid>
+                      <Typography
+                        className="stat-number"
+                        component="span"
+                        sx={{
+                          ...statNumberSx,
+                          fontSize: { xs: 28, md: 36 },
+                          lineHeight: { xs: '32px', md: '36px' },
+                          transition: 'all 0.3s ease',
+                        }}
+                      >
+                        {stat.value}
+                      </Typography>
+                      <Typography
+                        className="stat-label"
+                        sx={{
+                          ...statLabelSx,
+                          mt: 1,
+                          fontSize: '12px',
+                          lineHeight: '18px',
+                          letterSpacing: '2px',
+                          transition: 'color 0.3s ease',
+                        }}
+                      >
+                        {stat.label}
+                      </Typography>
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
             </Box>
-          </Box>
+          )}
         </Stack>
 
         <Box sx={{ width: '100%', maxWidth: CONTENT_MAX_WIDTH, mx: 'auto', pt: { md: '48px' } }}>

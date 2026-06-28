@@ -7,9 +7,11 @@ type AppShellProps = {
   children: React.ReactNode
   navLabels: NavLabels
   footerData?: any
+  statsData?: any
+  navSectionsVisibility?: { about: boolean; services: boolean; projects: boolean }
 }
 
-export default function AppShell({ children, navLabels, footerData }: AppShellProps) {
+export default function AppShell({ children, navLabels, footerData, statsData, navSectionsVisibility }: AppShellProps) {
   return (
     <Box
       sx={{
@@ -20,11 +22,11 @@ export default function AppShell({ children, navLabels, footerData }: AppShellPr
         color: 'text.primary',
       }}
     >
-      <Navbar labels={navLabels} />
+      <Navbar labels={navLabels} sectionsVisibility={navSectionsVisibility} />
       <Box component="main" sx={{ flex: 1, pb: 6 }}>
         {children}
       </Box>
-      <FooterSection data={footerData} />
+      <FooterSection data={footerData} statsData={statsData} />
     </Box>
   )
 }

@@ -70,6 +70,7 @@ interface TestimonialsSectionProps {
     is_shown?: boolean
     title?: string | null
     subtitle?: string | null
+    video?: string | { url: string } | null
     items?: Array<{
       id: number
       name: string
@@ -116,6 +117,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   if (!activeTestimonial) return null
 
+  const videoUrl = (typeof data?.video === 'string' ? data.video : data?.video?.url) || "/videos/bg-video.webm"
+
   return (
     <Box
       component="section"
@@ -130,6 +133,55 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         color: '#fff'
       }}
     >
+      {videoUrl && (
+        <Box
+          component="video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: 0,
+          }}
+        >
+          <source src={videoUrl} type={videoUrl.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
+        </Box>
+      )}
+
+      {videoUrl && (
+        <Box
+          sx={theme => ({
+            position: 'absolute',
+            inset: 0,
+            zIndex: 1,
+            pointerEvents: 'none',
+            backgroundColor: alpha(theme.palette.background.default, 0.6),
+            '&::before': {
+              content: '""',
+              position: 'absolute',
+              top: 0,
+              left: 0,
+              right: 0,
+              height: '180px',
+              background: `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
+            },
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              right: 0,
+              height: '180px',
+              background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
+            },
+          })}
+        />
+      )}
       <Box sx={{ textAlign: 'center', mb: 8, zIndex: 2 }}>
         <Typography
           sx={{
@@ -174,7 +226,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          mt: 4
+          mt: 4,
+          zIndex: 2
         }}
       >
         <Box

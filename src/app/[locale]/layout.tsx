@@ -75,7 +75,13 @@ export default async function LocaleLayout({ children, params }: Props) {
     contact: tNav('contact'),
   }
 
-  const footerData = await fetchAPI('/api/footer-data', locale)
+  const [footerData, statsData, partnersData, servicesData, portfoliosData] = await Promise.all([
+    fetchAPI('/api/footer-data', locale),
+    fetchAPI('/api/statisitcs-data', locale),
+    fetchAPI('/api/partners-data', locale),
+    fetchAPI('/api/services-data', locale),
+    fetchAPI('/api/portfolios-data', locale),
+  ])
 
   return (
     <html
@@ -83,10 +89,20 @@ export default async function LocaleLayout({ children, params }: Props) {
       dir={locale === 'ar' ? 'rtl' : 'ltr'}
       className={rajdhani.className}
       suppressHydrationWarning
+      style={{ scrollBehavior: 'smooth' }}
     >
       <body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>
-          <AppShell navLabels={navLabels} footerData={footerData}>{children}</AppShell>
+          <AppShell
+            navLabels={navLabels}
+            footerData={footerData}
+            statsData={statsData}
+            navSectionsVisibility={{
+              about: partnersData?.is_shown !== false,
+              services: servicesData?.is_shown !== false,
+              projects: portfoliosData?.is_shown !== false,
+            }}
+          >{children}</AppShell>
         </AppProviders>
       </body>
     </html>
