@@ -8,6 +8,13 @@ import type { SxProps, Theme } from '@mui/material/styles'
 import type { ElementType } from 'react'
 import { motion } from 'framer-motion'
 
+// RTL-mirrored paths: the protruding circle moves to the top-LEFT corner
+const CARD_PATH_RTL =
+  'M43 0C19.2518 0 0 19.2518 0 43C0 58.8354 8.56118 72.6697 21.306 80.1315C24.869 82.2174 27.468 85.8273 27.468 89.9557V124.963C27.468 135.658 36.8135 144.231 48.218 144.231H248.218C259.623 144.231 268.968 135.658 268.968 124.963V37C268.968 26.305 259.623 17.7314 248.218 17.7314H82.883C79.685 17.7314 76.734 16.1478 74.562 13.8001C66.707 5.31383 55.475 0 43 0Z'
+
+const HOVER_CARD_PATH_RTL =
+  'M37 -6C13.2518 -6 -6 13.2518 -6 37C-6 52.8354 2.56118 66.6697 15.306 74.1315C18.869 76.2174 25.668 84.0273 27.468 89.9557V124.963C27.468 135.658 36.8135 144.231 48.218 144.231H248.218C259.623 144.231 268.968 135.658 268.968 124.963V37C268.968 26.305 259.623 17.7314 248.218 17.7314H82.883C78.485 16.5314 73.134 12.5478 68.562 7.8001C60.707 -0.68617 49.475 -6 37 -6Z'
+
 export const CARD_W = 270
 export const CARD_H = 150
 
@@ -59,6 +66,7 @@ export default function OrbitalCard({
   sx,
 }: OrbitalCardProps) {
   const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
   const primary = theme.palette.primary.main
   const id = useId().replace(/:/g, '')
   const fillId = `orbital-card-fill-${id}`
@@ -79,7 +87,7 @@ export default function OrbitalCard({
 
   const iconContainerVariants = {
     rest: { x: 0, y: 0, scale: 1 },
-    hover: { x: 6, y: -6, scale: 1.04 },
+    hover: { x: isRtl ? -6 : 6, y: -6, scale: 1.04 },
   }
 
   const handleHoverStart = () => {
@@ -129,17 +137,17 @@ export default function OrbitalCard({
       >
         <motion.path
           initial={false}
-          d={CARD_PATH}
-          animate={{ d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH }}
+          d={isRtl ? CARD_PATH_RTL : CARD_PATH}
+          animate={{ d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH) }}
           transition={springTransition}
           fill={`url(#${fillId})`}
         />
 
         <motion.path
           initial={false}
-          d={CARD_PATH}
+          d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
+            d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH),
             opacity: isDisplayingActive ? 0.04 : 0,
           }}
           transition={springTransition}
@@ -148,9 +156,9 @@ export default function OrbitalCard({
 
         <motion.path
           initial={false}
-          d={CARD_PATH}
+          d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
+            d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH),
             opacity: isDisplayingActive ? 0 : 1,
           }}
           transition={springTransition}
@@ -161,9 +169,9 @@ export default function OrbitalCard({
 
         <motion.path
           initial={false}
-          d={CARD_PATH}
+          d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive ? HOVER_CARD_PATH : CARD_PATH,
+            d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH),
             opacity: isDisplayingActive ? 1 : 0,
           }}
           transition={springTransition}

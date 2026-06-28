@@ -45,11 +45,9 @@ const GlobalStyles = () => css`
     background: color-mix(in srgb, var(--ultra-palette-primary-main) 50%, transparent);
   }
 
-  :root {
-    height: 100%;
-  }
-
   html {
+    margin: 0;
+    padding: 0;
     background-color: var(--ultra-palette-background-default);
   }
 
@@ -58,14 +56,54 @@ const GlobalStyles = () => css`
   }
 
   body {
-    min-height: 100%;
-    display: flex;
-    flex-direction: column;
+    margin: 0;
+    width: 100%;
+    height: 100%;
+    padding: 0;
     direction: inherit;
-    margin: 0 !important;
     font-family: 'Rajdhani', sans-serif;
     background-color: var(--ultra-palette-background-default);
     color: var(--ultra-palette-text-primary);
+  }
+
+  /* ─── Arabic / RTL overrides ─────────────────────────────────────────────── */
+
+  /* 1. Arabic font — prevents browser fallback with mismatched vertical metrics */
+  [dir='rtl'] body {
+    font-family: var(--font-arabic, 'Noto Sans Arabic'), sans-serif;
+  }
+
+  /* 2. Clip horizontal overflow at the html level only — avoids breaking
+        minHeight / flex on section and main elements.                         */
+  html[dir='rtl'] {
+    overflow-x: hidden;
+  }
+
+  /* 3. Headings: remove Latin letter-spacing, keep natural Arabic line-height  */
+  [dir='rtl'] h1,
+  [dir='rtl'] h2,
+  [dir='rtl'] h3,
+  [dir='rtl'] h4,
+  [dir='rtl'] h5,
+  [dir='rtl'] h6 {
+    letter-spacing: 0;
+    line-height: 1.4;
+  }
+
+  /* 4. Body text: normalise line-height to match LTR section proportions       */
+  [dir='rtl'] p,
+  [dir='rtl'] span,
+  [dir='rtl'] li,
+  [dir='rtl'] label {
+    line-height: 1.65;
+  }
+
+  /* 5. Buttons: remove uppercase + wide letter-spacing (Latin-only styles)     */
+  [dir='rtl'] button,
+  [dir='rtl'] .MuiButton-root,
+  [dir='rtl'] .MuiButtonBase-root {
+    letter-spacing: 0.02em;
+    text-transform: none;
   }
 
   .ultra-shimmer-text {

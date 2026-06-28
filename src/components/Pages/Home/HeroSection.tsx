@@ -7,6 +7,7 @@ import ShimmerText from '@/components/shared/ShimmerText'
 import { useSplashComplete } from '@/components/shared/SplashScreen'
 import { motion, Variants } from 'framer-motion'
 import AnimatedButton from '@/components/shared/AnimatedButton'
+import { useTheme } from '@mui/material/styles'
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -19,10 +20,10 @@ const containerVariants: Variants = {
   },
 }
 
-const itemVariants: Variants = {
+const makeItemVariants = (isRtl: boolean): Variants => ({
   hidden: {
     opacity: 0,
-    x: -250,
+    x: isRtl ? 0 : -250,
   },
   visible: {
     opacity: 1,
@@ -33,7 +34,7 @@ const itemVariants: Variants = {
       damping: 12,
     },
   },
-}
+})
 
 interface HeroSectionProps {
   data?: {
@@ -48,6 +49,9 @@ interface HeroSectionProps {
 }
 export default function HeroSection({ data }: HeroSectionProps) {
   const splashComplete = useSplashComplete()
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
+  const itemVariants = makeItemVariants(isRtl)
 
   const renderTitle = (title?: string) => {
     if (!title) {
@@ -116,25 +120,32 @@ export default function HeroSection({ data }: HeroSectionProps) {
         minHeight: '100vh',
         display: 'flex',
         flexDirection: 'column',
-        overflow: 'hidden',
       }}
     >
       {(!data || data.background_video?.url) && (
         <Box
-          component="video"
-          autoPlay
-          muted
-          loop
-          style={{
+          sx={{
             position: 'absolute',
             inset: 0,
-            width: '100%',
             height: '100%',
-            objectFit: 'cover',
+            width: '100%',
+            overflow: 'hidden',
             zIndex: 0,
           }}
         >
-          <Box component="source" src={data?.background_video?.url || "/videos/hero.mp4"} type="video/mp4" />
+          <Box
+            component="video"
+            autoPlay
+            muted
+            loop
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          >
+            <Box component="source" src={data?.background_video?.url || "/videos/hero.mp4"} type="video/mp4" />
+          </Box>
         </Box>
       )}
 
@@ -144,8 +155,10 @@ export default function HeroSection({ data }: HeroSectionProps) {
           bottom: 0,
           left: 0,
           right: 0,
-          height: '180px',
-          background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
+          height: '35%',
+          background: isRtl
+            ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
+            : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
           zIndex: 1,
           pointerEvents: 'none',
         })}
@@ -162,6 +175,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           maxWidth: theme.breakpoints.values.xl,
           mx: 'auto',
           width: '100%',
+          minWidth: 0,
           px: { xs: 3, sm: 5, md: '80px' },
         })}
       >
@@ -174,7 +188,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',
-            textAlign: 'left',
+            textAlign: 'start',
+            width: '100%',
           }}
         >
           {(!data || data.title) && (

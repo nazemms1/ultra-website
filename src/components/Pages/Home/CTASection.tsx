@@ -3,7 +3,7 @@
 import { useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { highlightKeywords } from '@/components/shared/SectionHeader'
 
@@ -22,6 +22,8 @@ interface CTASectionProps {
 export default function CTASection({ data }: CTASectionProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
 
   const target = useRef({ x: 0, y: 0 })
   const current = useRef({ x: 0, y: 0 })
@@ -180,7 +182,9 @@ export default function CTASection({ data }: CTASectionProps) {
             left: 0,
             right: 0,
             height: '180px',
-            background: `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
+            background: isRtl
+              ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
+              : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
           },
           '&::after': {
             content: '""',
@@ -189,7 +193,9 @@ export default function CTASection({ data }: CTASectionProps) {
             left: 0,
             right: 0,
             height: '180px',
-            background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
+            background: isRtl
+              ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
+              : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
           },
         })}
       />

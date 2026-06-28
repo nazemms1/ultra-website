@@ -4,7 +4,7 @@ import { useCallback, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
 import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
 import OrbitalAccentRail from './OrbitalAccentRail'
 import OrbitalDeck from './OrbitalDeck'
@@ -44,6 +44,8 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
   const sectionRef = useRef<HTMLElement>(null)
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
 
   const itemsData = data?.items || []
   const mappedItems = itemsData.map((item, i) => ({
@@ -100,7 +102,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
         <Grid size={{ xs: 12, lg: 6 }}>
           <Box
             component={motion.div}
-            initial={{ opacity: 0, x: -60 }}
+            initial={{ opacity: 0, x: isRtl ? 60 : -60 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.8, ease: EASE }}

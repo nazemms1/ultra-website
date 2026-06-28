@@ -1,6 +1,6 @@
 'use client'
 
-import  { useState } from 'react'
+import { useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -89,6 +89,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   const [activeIndex, setActiveIndex] = useState(0)
   const theme = useTheme()
   const primary = theme.palette.primary.main
+  const isRtl = theme.direction === 'rtl'
 
   if (data?.is_shown === false) return null
 
@@ -168,7 +169,9 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               left: 0,
               right: 0,
               height: '180px',
-              background: `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
+              background: isRtl
+                ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
+                : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
             },
             '&::after': {
               content: '""',
@@ -177,7 +180,9 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               left: 0,
               right: 0,
               height: '180px',
-              background: `linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
+              background: isRtl
+                ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
+                : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
             },
           })}
         />
@@ -253,40 +258,42 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             filter: 'blur(0px)',
             justifyContent: 'center',
             alignItems: 'center',
-            display: 'inline-flex',
+            display: 'flex',
+            overflow: 'hidden',
             zIndex: 10,
           }}
         >
           <Box sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-            <Box sx={{ position: 'absolute', left: 220, top: 70, width: 8, height: 8, transform: 'translate(-50%, -50%)' }}>
+            {/* These decorative dots are symmetric, so they look the same in RTL */}
+            <Box sx={{ position: 'absolute', left: '50%', top: 70, width: 8, height: 8, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.96, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
-            
-            <Box sx={{ position: 'absolute', left: 120, top: 90, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
+
+            <Box sx={{ position: 'absolute', left: '27%', top: 90, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.96, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
-            
-            <Box sx={{ position: 'absolute', left: 320, top: 90, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
+
+            <Box sx={{ position: 'absolute', left: '73%', top: 90, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.96, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
-            
-            <Box sx={{ position: 'absolute', left: 70, top: 170, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
+
+            <Box sx={{ position: 'absolute', left: '16%', top: 170, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.6, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
-            
-            <Box sx={{ position: 'absolute', left: 370, top: 170, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
+
+            <Box sx={{ position: 'absolute', left: '84%', top: 170, width: 6, height: 6, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.6, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
-            
-            <Box sx={{ position: 'absolute', left: 90, top: 310, width: 5, height: 5, transform: 'translate(-50%, -50%)' }}>
+
+            <Box sx={{ position: 'absolute', left: '20%', top: 310, width: 5, height: 5, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.4, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
-            
-            <Box sx={{ position: 'absolute', left: 350, top: 310, width: 5, height: 5, transform: 'translate(-50%, -50%)' }}>
+
+            <Box sx={{ position: 'absolute', left: '80%', top: 310, width: 5, height: 5, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.4, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
-            
-            <Box sx={{ position: 'absolute', left: 220, top: 370, width: 4, height: 4, transform: 'translate(-50%, -50%)' }}>
+
+            <Box sx={{ position: 'absolute', left: '50%', top: 370, width: 4, height: 4, transform: 'translate(-50%, -50%)' }}>
               <Box sx={{ width: '100%', height: '100%', position: 'relative', opacity: 0.3, background: 'var(--Color-primary-2, #0DF1D9)', borderRadius: '50%' }} />
             </Box>
           </Box>
@@ -298,68 +305,71 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               exit={{ opacity: 0, scale: 1.05, filter: 'blur(4px)' }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
               style={{
-                height: 256.50,
-                maxWidth: 340,
+                width: '100%',
+                maxWidth: 280,
                 flexDirection: 'column',
-                justifyContent: 'flex-start',
+                justifyContent: 'center',
                 alignItems: 'center',
-                gap: 16,
-                display: 'inline-flex'
+                gap: 10,
+                display: 'flex',
               }}
             >
-              <Box sx={{ width: 36, height: 28, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Box component="img" src="/icons/QuoteMark.svg" alt="Quote" sx={{ width: 48, height: 48, transform: 'rotate(180deg)' }} />
+              <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+                <Box component="img" src="/icons/QuoteMark.svg" alt="Quote" sx={{ width: 36, height: 36, transform: isRtl ? 'none' : 'rotate(180deg)' }} />
               </Box>
-              
+
               {activeTestimonial.rating === undefined ? (
-                /* Fallback for local mock data without rating property */
-                <Box sx={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: '4px', display: 'inline-flex' }}>
+                <Box sx={{ justifyContent: 'center', alignItems: 'center', gap: '3px', display: 'flex', flexShrink: 0 }}>
                   {[...Array(5)].map((_, i) => (
-                    <Box key={i} sx={{ width: 13.33, height: 24, position: 'relative' }}>
-                      <Typography sx={{ left: -1, top: -2, position: 'absolute', textAlign: 'center', color: '#0DF1D9', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: '24px', wordBreak: 'break-word' }}>★</Typography>
-                    </Box>
+                    <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 14, lineHeight: 1 }}>★</Typography>
                   ))}
                 </Box>
               ) : (
-                /* Dynamic rating from backend (number or null) */
                 activeTestimonial.rating !== null && activeTestimonial.rating > 0 && (
-                  <Box sx={{ justifyContent: 'flex-start', alignItems: 'flex-start', gap: '4px', display: 'inline-flex' }}>
+                  <Box sx={{ justifyContent: 'center', alignItems: 'center', gap: '3px', display: 'flex', flexShrink: 0 }}>
                     {[...Array(activeTestimonial.rating)].map((_, i) => (
-                      <Box key={i} sx={{ width: 13.33, height: 24, position: 'relative' }}>
-                        <Typography sx={{ left: -1, top: -2, position: 'absolute', textAlign: 'center', color: '#0DF1D9', fontSize: 16, fontFamily: 'Inter', fontWeight: '400', lineHeight: '24px', wordBreak: 'break-word' }}>★</Typography>
-                      </Box>
+                      <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 14, lineHeight: 1 }}>★</Typography>
                     ))}
                   </Box>
                 )
               )}
-              
-              <Typography sx={{ width: 340, textAlign: 'center', color: 'white', fontSize: 18, fontFamily: 'Rajdhani', fontWeight: '500', lineHeight: '26px', wordBreak: 'break-word' }}>
+
+              <Typography sx={{
+                width: '100%',
+                textAlign: 'center',
+                color: 'white',
+                fontSize: isRtl ? 13 : 15,
+                fontFamily: isRtl ? 'inherit' : 'Rajdhani',
+                fontWeight: '500',
+                lineHeight: 1.5,
+                wordBreak: 'break-word',
+                overflow: 'hidden',
+                display: '-webkit-box',
+                WebkitLineClamp: 5,
+                WebkitBoxOrient: 'vertical',
+              }}>
                 {activeTestimonial.text}
               </Typography>
-              
-              <Box sx={{ width: 235.30, height: 52.50, pt: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'center', gap: '4px', display: 'flex' }}>
-                <Box sx={{ width: 155.84, height: 21, position: 'relative' }}>
-                  <Typography sx={{ left: 1, top: 0, position: 'absolute', textAlign: 'center', color: 'white', fontSize: 14, fontFamily: 'Nulshock, sans-serif', fontWeight: '700', lineHeight: '21px', letterSpacing: 1, wordBreak: 'break-word', width: '100%' }}>
-                    {activeTestimonial.name}
-                  </Typography>
-                </Box>
-                <Box sx={{ width: 235.30, height: 19.50, position: 'relative' }}>
-                  <Box sx={{ left: 1, top: -0.50, position: 'absolute', textAlign: 'center', width: '100%' }}>
-                    {activeTestimonial.role.includes('·') ? (
-                      <>
-                        <Typography component="span" sx={{ color: 'rgba(255, 255, 255, 0.60)', fontSize: 13, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', lineHeight: '19.50px', letterSpacing: 2, wordBreak: 'break-word' }}>
-                          {activeTestimonial.role.split('·')[0]}· 
-                        </Typography>
-                        <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 13, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', lineHeight: '19.50px', letterSpacing: 2, wordBreak: 'break-word' }}>
-                          {activeTestimonial.role.split('·')[1]}
-                        </Typography>
-                      </>
-                    ) : (
-                      <Typography component="span" sx={{ color: 'rgba(255, 255, 255, 0.60)', fontSize: 13, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', lineHeight: '19.50px', letterSpacing: 2, wordBreak: 'break-word' }}>
-                        {activeTestimonial.role}
+
+              <Box sx={{ width: '100%', flexDirection: 'column', alignItems: 'center', gap: '2px', display: 'flex', flexShrink: 0 }}>
+                <Typography sx={{ textAlign: 'center', color: 'white', fontSize: 13, fontFamily: isRtl ? 'inherit' : 'Nulshock, sans-serif', fontWeight: '700', lineHeight: '21px', letterSpacing: isRtl ? 0 : 1, wordBreak: 'break-word', width: '100%' }}>
+                  {activeTestimonial.name}
+                </Typography>
+                <Box sx={{ textAlign: 'center', width: '100%' }}>
+                  {activeTestimonial.role.includes('·') ? (
+                    <>
+                      <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
+                        {activeTestimonial.role.split('·')[0]}·
                       </Typography>
-                    )}
-                  </Box>
+                      <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 11, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
+                        {activeTestimonial.role.split('·')[1]}
+                      </Typography>
+                    </>
+                  ) : (
+                    <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: 'Rajdhani', fontWeight: '400', textTransform: 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
+                      {activeTestimonial.role}
+                    </Typography>
+                  )}
                 </Box>
               </Box>
             </motion.div>

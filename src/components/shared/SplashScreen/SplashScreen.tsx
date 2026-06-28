@@ -1,6 +1,7 @@
 'use client'
 
 import Box from '@mui/material/Box'
+import { useTheme } from '@mui/material/styles'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import SplashBackdropVeil from './SplashBackdropVeil'
 import SplashColumn from './SplashColumn'
@@ -19,6 +20,8 @@ const RIGHT_COLUMNS = COLUMN_HEIGHT_PROFILE.slice(10)
 
 export default function SplashScreen({ isLoading, onExitComplete }: SplashScreenProps) {
   const reducedMotion = useReducedMotion()
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
 
   return (
     <AnimatePresence onExitComplete={onExitComplete}>
@@ -52,7 +55,7 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
           >
             <Box
               component={motion.div}
-              exit={reducedMotion ? { opacity: 0 } : { x: '-100%' }}
+              exit={reducedMotion ? { opacity: 0 } : { x: isRtl ? '100%' : '-100%' }}
               transition={reducedMotion ? { duration: 0.3 } : DOOR_EXIT_TRANSITION}
               sx={{
                 flex: 1,
@@ -73,7 +76,7 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
 
             <Box
               component={motion.div}
-              exit={reducedMotion ? { opacity: 0 } : { x: '100%' }}
+              exit={reducedMotion ? { opacity: 0 } : { x: isRtl ? '-100%' : '100%' }}
               transition={reducedMotion ? { duration: 0.3 } : DOOR_EXIT_TRANSITION}
               sx={{
                 flex: 1,

@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import { Rajdhani } from 'next/font/google'
+import { Noto_Sans_Arabic, Rajdhani } from 'next/font/google'
 import { hasLocale } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
@@ -13,6 +13,13 @@ const rajdhani = Rajdhani({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   display: 'swap',
+})
+
+const notoSansArabic = Noto_Sans_Arabic({
+  subsets: ['arabic'],
+  weight: ['400', '500', '600', '700'],
+  display: 'swap',
+  variable: '--font-arabic',
 })
 
 export function generateStaticParams() {
@@ -83,11 +90,13 @@ export default async function LocaleLayout({ children, params }: Props) {
     fetchAPI('/api/portfolios-data', locale),
   ])
 
+  const isArabic = locale === 'ar'
+
   return (
     <html
       lang={locale}
-      dir={locale === 'ar' ? 'rtl' : 'ltr'}
-      className={rajdhani.className}
+      dir={isArabic ? 'rtl' : 'ltr'}
+      className={isArabic ? `${rajdhani.className} ${notoSansArabic.variable}` : rajdhani.className}
       suppressHydrationWarning
       style={{ scrollBehavior: 'smooth' }}
     >

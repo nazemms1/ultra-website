@@ -86,5 +86,25 @@ const appTheme = responsiveFontSizes(theme, {
 export default appTheme as Theme & CssVarsTheme
 
 export function createAppTheme(direction: 'ltr' | 'rtl' = 'ltr') {
+  if (direction === 'rtl') {
+    const arabicFontFamily = "var(--font-arabic, 'Noto Sans Arabic'), 'Rajdhani', sans-serif"
+    return createTheme(appTheme, {
+      direction,
+      typography: {
+        fontFamily: arabicFontFamily,
+        h1: { fontFamily: arabicFontFamily },
+        h2: { fontFamily: arabicFontFamily },
+        h3: { fontFamily: arabicFontFamily },
+        h4: { fontFamily: arabicFontFamily },
+        h5: { fontFamily: arabicFontFamily },
+        h6: { fontFamily: arabicFontFamily },
+        body1: { fontFamily: arabicFontFamily },
+        body2: { fontFamily: arabicFontFamily },
+        caption: { fontFamily: arabicFontFamily },
+        overline: { fontFamily: arabicFontFamily },
+        button: { fontFamily: arabicFontFamily },
+      },
+    }) as Theme & CssVarsTheme
+  }
   return createTheme(appTheme, { direction }) as Theme & CssVarsTheme
 }

@@ -2,7 +2,7 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { alpha } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
 import SectionHeader from '@/components/shared/SectionHeader'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import FAQCard from './FAQCard'
@@ -58,6 +58,9 @@ interface FAQSectionProps {
 }
 
 export default function FAQSection({ data, stillHaveQuestionsData }: FAQSectionProps) {
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
+
   if (data?.is_shown === false) return null
 
   const items = data?.items || []
@@ -76,6 +79,32 @@ export default function FAQSection({ data, stillHaveQuestionsData }: FAQSectionP
         position: 'relative',
         py: { xs: 10, md: 12 },
         overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '180px',
+          background: isRtl
+            ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
+            : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '180px',
+          background: isRtl
+            ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
+            : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        },
       }}
     >
       <Box

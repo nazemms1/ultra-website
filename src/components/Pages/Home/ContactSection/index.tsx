@@ -228,6 +228,32 @@ export default function ContactSection({ data }: { data?: any }) {
         py: { xs: 10, md: 14 },
         px: { xs: '20px', md: '40px', lg: '80px' },
         overflow: 'visible',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '180px',
+          background: theme.direction === 'rtl'
+            ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
+            : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        },
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          bottom: 0,
+          left: 0,
+          right: 0,
+          height: '180px',
+          background: theme.direction === 'rtl'
+            ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
+            : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
+          zIndex: 0,
+          pointerEvents: 'none',
+        },
       }}
     >
       <Box
