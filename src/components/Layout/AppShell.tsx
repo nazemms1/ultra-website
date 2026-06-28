@@ -24,7 +24,7 @@ export default function AppShell({ children, navLabels, footerData }: AppShellPr
       <Box component="main" sx={{ flex: 1, pb: 6 }}>
         {children}
       </Box>
-      <FooterSection data={footerData} />
+      {/* <FooterSection data={footerData} /> */}
     </Box>
   )
 }
