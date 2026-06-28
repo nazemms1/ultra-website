@@ -1,5 +1,6 @@
 'use client'
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -34,10 +35,6 @@ function useViewportHeight() {
 }
 
 export default function Projects({ data }: { data?: any }) {
-  if (data && data.is_shown === false) {
-    return null
-  }
-
   const trackRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
@@ -140,11 +137,6 @@ export default function Projects({ data }: { data?: any }) {
     },
   )
 
-  // If there are no projects to render, collapse the section
-  if (processedProjects.length === 0) {
-    return null
-  }
-
   // Whole wrapper fades in on entry and back out when scrolled off the top.
   const wrapperOpacity = useTransform(progress, [...SECTION_FADE_IN], [0, 1])
   const labelY = useTransform([progress, labelHeroOffsetMV], ([p, offset]: number[]) => {
@@ -168,6 +160,13 @@ export default function Projects({ data }: { data?: any }) {
 
     return 0
   })
+  if (data && data.is_shown === false) {
+    return null
+  }
+  // If there are no projects to render, collapse the section
+  if (processedProjects.length === 0) {
+    return null
+  }
 
   if (reduce) {
     return (

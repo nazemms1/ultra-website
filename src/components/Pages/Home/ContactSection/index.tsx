@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -8,7 +9,7 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { Briefcase, Mail, MapPin, Phone, Server, Palette, Smartphone } from 'lucide-react'
 import ShimmerText from '@/components/shared/ShimmerText'
 import { glowOrb } from '@/lib/theme/surfaces'
-import { SERVICES, BASE_OFFERINGS } from './data'
+import { SERVICES } from './data'
 import type { ConsultationType, Service } from './types'
 import StepLabel from './StepLabel'
 import SectionDivider from './SectionDivider'
@@ -99,12 +100,14 @@ export default function ContactSection({ data }: { data?: any }) {
     : t('locationPlaceholder')
 
   // Regions list
-  const onlineRegionsList = hasApiData
-    ? data.consultation?.online_regions || []
-    : [
-        { id: 'syria', title: 'syria' },
-        { id: 'uae', title: 'UAE' },
-      ]
+  const onlineRegionsList = useMemo(() => {
+    return hasApiData
+      ? data.consultation?.online_regions || []
+      : [
+          { id: 'syria', title: 'syria' },
+          { id: 'uae', title: 'UAE' },
+        ]
+  }, [data, hasApiData])
 
   // States
   const [selectedService, setSelectedService] = useState<string | null>(null)
@@ -123,6 +126,7 @@ export default function ContactSection({ data }: { data?: any }) {
   useEffect(() => {
     if (hasApiData) {
       if (isOnlineShown) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setConsultationType('online')
       } else if (isOnsiteShown) {
         setConsultationType('onsite')
@@ -133,7 +137,7 @@ export default function ContactSection({ data }: { data?: any }) {
     } else {
       setRegion('syria')
     }
-  }, [data, isOnlineShown, isOnsiteShown])
+  }, [data, hasApiData, isOnlineShown, isOnsiteShown, onlineRegionsList])
 
   // Dynamic services resolving
   const getServiceIcon = (id: string, title: string) => {

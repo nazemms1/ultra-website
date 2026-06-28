@@ -4,7 +4,6 @@ import { useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import AnimatedButton from '@/components/shared/AnimatedButton'
 import { highlightKeywords } from '@/components/shared/SectionHeader'
 
 interface CTASectionProps {
@@ -172,7 +171,7 @@ export default function CTASection({ data }: CTASectionProps) {
       </video>
 
       <Box
-        sx={theme => ({
+        sx={() => ({
           position: 'absolute',
           inset: 0,
           zIndex: 2,

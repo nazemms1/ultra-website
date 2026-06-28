@@ -49,7 +49,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   if (data?.is_shown === false) return null
 
   const items = data?.items?.filter(item => item.show_in_homepage) || []
-  const mappedTestimonials: TestimonialItem[] = items.map((item, index) => ({
+  const mappedTestimonials: TestimonialItem[] = items.map(item => ({
     id: item.id,
     name: item.name,
     role: item.position || '',

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useRef } from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
@@ -13,14 +13,13 @@ import {
   useSpring,
   useTransform,
   useMotionTemplate,
-  useMotionValueEvent,
   type MotionValue,
 } from 'framer-motion'
 import Image from 'next/image'
 import { glassSurface } from '@/lib/theme/surfaces'
 
 // Widget 1: Web Development - Translucent Code Editor & Page Speed Dial
-function WebDevWidget({ active }: { active: boolean }) {
+export function WebDevWidget({ active }: { active: boolean }) {
   return (
     <Box
       sx={{
@@ -128,7 +127,7 @@ function WebDevWidget({ active }: { active: boolean }) {
 }
 
 // Widget 2: UI/UX Design - Floating Interaction Cards & Glowing Ratings
-function UiUxWidget({ active }: { active: boolean }) {
+export function UiUxWidget({ active }: { active: boolean }) {
   return (
     <Box
       sx={{
@@ -230,7 +229,7 @@ function UiUxWidget({ active }: { active: boolean }) {
 }
 
 // Widget 3: AI & Automation - Animated Neural Waves & Metric Progress
-function AiAutomationWidget({ active }: { active: boolean }) {
+export function AiAutomationWidget({ active }: { active: boolean }) {
   return (
     <Box
       sx={{
@@ -333,7 +332,7 @@ function AiAutomationWidget({ active }: { active: boolean }) {
 }
 
 // Widget 4: Cloud & DevOps - Translucent Server Status and Latency
-function DevOpsWidget({ active }: { active: boolean }) {
+export function DevOpsWidget({ active }: { active: boolean }) {
   return (
     <Box
       sx={{

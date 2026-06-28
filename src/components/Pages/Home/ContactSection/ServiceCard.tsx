@@ -7,7 +7,6 @@ import type { ServiceCardProps } from './types'
 
 export default function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
   const theme = useTheme()
-  const Icon = service.icon
   const primary = theme.palette.primary.main
 
   return (
