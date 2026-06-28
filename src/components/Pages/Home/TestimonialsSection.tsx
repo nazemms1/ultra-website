@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography'
 import { motion, AnimatePresence } from 'framer-motion'
 import { alpha, useTheme } from '@mui/material/styles'
 import Image from 'next/image'
+import SectionHeader from '@/components/shared/SectionHeader'
 
 interface TestimonialItem {
   id: number
@@ -123,9 +124,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               left: 0,
               right: 0,
               height: '180px',
-              background: isRtl
-                ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
-                : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
+              background: 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
             },
             '&::after': {
               content: '""',
@@ -134,47 +133,17 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               left: 0,
               right: 0,
               height: '180px',
-              background: isRtl
-                ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
-                : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
+              background: 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
             },
           })}
         />
       )}
-      <Box sx={{ textAlign: 'center', mb: 8, zIndex: 2 }}>
-        <Typography
-          sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontWeight: 500,
-            fontSize: '12px',
-            letterSpacing: '4px',
-            textTransform: 'uppercase',
-            color: 'primary.main',
-            mb: '16px',
-          }}
-        >
-          {data ? data.subtitle : "Voices from the field"}
-        </Typography>
-
-        <Typography
-          sx={{
-            fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-            fontWeight: 400,
-            fontSize: { xs: '28px', md: '40px' },
-            lineHeight: 1.1,
-            letterSpacing: '1.5px',
-            color: 'text.primary',
-            textTransform: 'uppercase'
-          }}
-        >
-          {data?.title ? (
-            data.title
-          ) : (
-            <>
-              What <Box component="span" sx={{ color: 'primary.main' }}>Customers</Box> Say About Us
-            </>
-          )}
-        </Typography>
+      <Box sx={{ zIndex: 2 }}>
+        <SectionHeader
+          title={data?.title ?? 'What Customers Say About Us'}
+          subtitle={data?.subtitle ?? 'Voices from the field'}
+          align="center"
+        />
       </Box>
 
       <Box
@@ -206,7 +175,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             width: INNER_RADIUS * 2 + 40,
             height: INNER_RADIUS * 2 + 40,
             padding: '32px',
-            background: 'radial-gradient(ellipse 100% 60% at 50% 0%, rgba(13, 241, 217, 0.45) 0%, rgba(8, 15, 15, 0.75) 70%, rgba(5, 10, 10, 0.55) 100%)',
+            background: 'radial-gradient(ellipse 100% 60% at center top, rgba(13, 241, 217, 0.45) 0%, rgba(8, 15, 15, 0.75) 70%, rgba(5, 10, 10, 0.55) 100%)',
             boxShadow: '0px 0px 0px 1px rgba(13, 241, 217, 0.25) inset',
             borderRadius: '50%',
             filter: 'blur(0px)',
@@ -264,12 +233,12 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 flexDirection: 'column',
                 justifyContent: 'center',
                 alignItems: 'center',
-                gap: 10,
+                gap: isRtl ? 6 : 10,
                 display: 'flex',
               }}
             >
               <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-                <Box component="img" src="/icons/QuoteMark.svg" alt="Quote" sx={{ width: 36, height: 36, transform: isRtl ? 'none' : 'rotate(180deg)' }} />
+                <Box component="img" src="/icons/QuoteMark.svg" alt="Quote" sx={{ width: isRtl ? 28 : 36, height: isRtl ? 28 : 36, transform: isRtl ? 'none' : 'rotate(180deg)' }} />
               </Box>
 
               {activeTestimonial.rating === undefined ? (
@@ -292,35 +261,36 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 width: '100%',
                 textAlign: 'center',
                 color: 'white',
-                fontSize: 14,
-                fontFamily: "'Rajdhani', sans-serif",
-                fontWeight: '500',
-                lineHeight: 1.5,
+                fontSize: isRtl ? 12 : 14,
+                fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
+                fontWeight: isRtl ? '400' : '500',
+                lineHeight: isRtl ? 1.6 : 1.5,
+                letterSpacing: isRtl ? 0 : undefined,
                 wordBreak: 'break-word',
                 overflow: 'hidden',
                 display: '-webkit-box',
-                WebkitLineClamp: 5,
+                WebkitLineClamp: isRtl ? 4 : 5,
                 WebkitBoxOrient: 'vertical',
               }}>
                 {activeTestimonial.text}
               </Typography>
 
               <Box sx={{ width: '100%', flexDirection: 'column', alignItems: 'center', gap: '2px', display: 'flex', flexShrink: 0 }}>
-                <Typography sx={{ textAlign: 'center', color: 'white', fontSize: 13, fontFamily: "'Nulshock', sans-serif", fontWeight: '700', lineHeight: '21px', letterSpacing: 1, wordBreak: 'break-word', width: '100%' }}>
+                <Typography sx={{ textAlign: 'center', color: 'white', fontSize: isRtl ? 13 : 13, fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif", fontWeight: '700', lineHeight: '21px', letterSpacing: isRtl ? 0 : 1, wordBreak: 'break-word', width: '100%' }}>
                   {activeTestimonial.name}
                 </Typography>
                 <Box sx={{ textAlign: 'center', width: '100%' }}>
                   {activeTestimonial.role.includes('·') ? (
                     <>
-                      <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: "'Rajdhani', sans-serif", fontWeight: '400', textTransform: 'uppercase', letterSpacing: 1.5, wordBreak: 'break-word' }}>
+                      <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: '400', textTransform: isRtl ? 'none' : 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
                         {activeTestimonial.role.split('·')[0]}·
                       </Typography>
-                      <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 11, fontFamily: "'Rajdhani', sans-serif", fontWeight: '400', textTransform: 'uppercase', letterSpacing: 1.5, wordBreak: 'break-word' }}>
+                      <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 11, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: '400', textTransform: isRtl ? 'none' : 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
                         {activeTestimonial.role.split('·')[1]}
                       </Typography>
                     </>
                   ) : (
-                    <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: "'Rajdhani', sans-serif", fontWeight: '400', textTransform: 'uppercase', letterSpacing: 1.5, wordBreak: 'break-word' }}>
+                    <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 11, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: '400', textTransform: isRtl ? 'none' : 'uppercase', letterSpacing: isRtl ? 0 : 1.5, wordBreak: 'break-word' }}>
                       {activeTestimonial.role}
                     </Typography>
                   )}
