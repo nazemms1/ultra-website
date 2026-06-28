@@ -21,10 +21,38 @@ export const officeLocations = [
 ] as const
 
 export const footerStats: StatConfig[] = [
-  { value: 120, suffix: '+', label: 'Projects Shipped', entranceDelay: 0,    entranceDuration: 0.55, countDuration: 2.0 },
-  { value: 45,  suffix: '+', label: 'Happy Clients',    entranceDelay: 0.12, entranceDuration: 0.55, countDuration: 1.7 },
-  { value: 8,   suffix: '+', label: 'Years of Craft',   entranceDelay: 0.24, entranceDuration: 0.55, countDuration: 1.4 },
-  { value: 99,  suffix: '%', label: 'Retention Rate',   entranceDelay: 0.36, entranceDuration: 0.55, countDuration: 1.2 },
+  {
+    value: 120,
+    suffix: '+',
+    label: 'Projects Shipped',
+    entranceDelay: 0,
+    entranceDuration: 0.55,
+    countDuration: 2.0,
+  },
+  {
+    value: 45,
+    suffix: '+',
+    label: 'Happy Clients',
+    entranceDelay: 0.12,
+    entranceDuration: 0.55,
+    countDuration: 1.7,
+  },
+  {
+    value: 8,
+    suffix: '+',
+    label: 'Years of Craft',
+    entranceDelay: 0.24,
+    entranceDuration: 0.55,
+    countDuration: 1.4,
+  },
+  {
+    value: 99,
+    suffix: '%',
+    label: 'Retention Rate',
+    entranceDelay: 0.36,
+    entranceDuration: 0.55,
+    countDuration: 1.2,
+  },
 ]
 
 export const legalLinks = ['Privacy Policy', 'Terms of Service', 'Cookie Policy'] as const

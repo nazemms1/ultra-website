@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Box from '@mui/material/Box'
 import Navbar from './Navbar/Navbar'
 import FooterSection from './Footer/FooterSection'
@@ -11,7 +12,13 @@ type AppShellProps = {
   navSectionsVisibility?: { about: boolean; services: boolean; projects: boolean }
 }
 
-export default function AppShell({ children, navLabels, footerData, statsData, navSectionsVisibility }: AppShellProps) {
+export default function AppShell({
+  children,
+  navLabels,
+  footerData,
+  statsData,
+  navSectionsVisibility,
+}: AppShellProps) {
   return (
     <Box
       sx={{

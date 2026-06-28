@@ -169,12 +169,12 @@ export default function SectionHeader({
       >
         {typeof title === 'string' ? formatHeadingText(title) : title}
       </Typography>
-        {description ? (
+      {description ? (
         <Typography
-           sx={{
+          sx={{
             mt: { xs: 1.5, md: 2 },
             color: 'text.secondary',
-            fontWeight: '400', 
+            fontWeight: '400',
             fontSize: 18,
             maxWidth: align === 'center' ? 640 : 'none',
             mx: align === 'center' ? 'auto' : undefined,

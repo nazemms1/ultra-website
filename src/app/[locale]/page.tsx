@@ -15,7 +15,19 @@ import { fetchAPI } from '@/lib/api'
 export default async function HomePage() {
   const locale = await getLocale()
 
-  const [heroData, partnersData, servicesData, statsData, ctaData, faqsData, stillHaveQuestionsData, methodologiesData, reviewsData, portfoliosData, contactUsData] = await Promise.all([
+  const [
+    heroData,
+    partnersData,
+    servicesData,
+    statsData,
+    ctaData,
+    faqsData,
+    stillHaveQuestionsData,
+    methodologiesData,
+    reviewsData,
+    portfoliosData,
+    contactUsData,
+  ] = await Promise.all([
     fetchAPI('/api/hero-section', locale),
     fetchAPI('/api/partners-data', locale),
     fetchAPI('/api/services-data', locale),
@@ -33,10 +45,22 @@ export default async function HomePage() {
     <>
       <HeroSection data={heroData} />
       <ScrollVideoStack>
-        {partnersData?.is_shown !== false && <div id="about"><PartnersSection data={partnersData} /></div>}
-        {servicesData?.is_shown !== false && <div id="services"><ServicesOrbital data={servicesData} /></div>}
+        {partnersData?.is_shown !== false && (
+          <div id="about">
+            <PartnersSection data={partnersData} />
+          </div>
+        )}
+        {servicesData?.is_shown !== false && (
+          <div id="services">
+            <ServicesOrbital data={servicesData} />
+          </div>
+        )}
         <Stats data={statsData} />
-        {portfoliosData?.is_shown !== false && <div id="projects"><Projects data={portfoliosData} /></div>}
+        {portfoliosData?.is_shown !== false && (
+          <div id="projects">
+            <Projects data={portfoliosData} />
+          </div>
+        )}
         <Methodologies data={methodologiesData} />
       </ScrollVideoStack>
       <TestimonialsSection data={reviewsData} />

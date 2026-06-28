@@ -4,11 +4,11 @@ Hello there, the repository is set up and ready to go. Below is everything you n
 
 ## 🌳 Branch Structure
 
-| Branch | Purpose |
-|---|---|
-| `main` | Stable states of the project. Only tested, working code lives here. |
-| `dev` | The non-stable, always-updating version. This is where ongoing work gets merged before it's considered stable. |
-| `prod` | The final release version — what actually goes out to the public. |
+| Branch        | Purpose                                                                                                                                                                                                     |
+| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `main`        | Stable states of the project. Only tested, working code lives here.                                                                                                                                         |
+| `dev`         | The non-stable, always-updating version. This is where ongoing work gets merged before it's considered stable.                                                                                              |
+| `prod`        | The final release version — what actually goes out to the public.                                                                                                                                           |
 | `feat-<name>` | Feature branches. Create one any time you're working on something that should be isolated from the rest (a new feature, a fix, an experiment, anything). Replace `<name>` with whatever describes the work. |
 
 ### A quick model

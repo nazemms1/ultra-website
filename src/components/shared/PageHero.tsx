@@ -70,7 +70,7 @@ export default function PageHero({
         </Box>
       )}
 
-       {videoSrc && (
+      {videoSrc && (
         <Box
           sx={theme => ({
             position: 'absolute',
@@ -82,7 +82,7 @@ export default function PageHero({
         />
       )}
 
-       {!videoSrc && (
+      {!videoSrc && (
         <>
           <Box sx={{ ...glowOrb, top: 0, right: '25%', width: 500, height: 500, opacity: 1 }} />
           <Box

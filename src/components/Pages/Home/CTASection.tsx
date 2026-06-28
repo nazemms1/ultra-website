@@ -135,7 +135,9 @@ export default function CTASection({ data }: CTASectionProps) {
     )
   }
 
-  const videoUrl = (typeof data?.video === 'string' ? data.video : data?.video?.url) || "/videos/colorflow-animation.mp4"
+  const videoUrl =
+    (typeof data?.video === 'string' ? data.video : data?.video?.url) ||
+    '/videos/colorflow-animation.mp4'
 
   return (
     <Box
@@ -214,7 +216,7 @@ export default function CTASection({ data }: CTASectionProps) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-           backdropFilter: 'blur(20px) brightness(1.10) saturate(1.15)',
+          backdropFilter: 'blur(20px) brightness(1.10) saturate(1.15)',
           WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
           border: '1px solid rgba(255, 255, 255, 0.15)',
           boxShadow: [
@@ -268,7 +270,9 @@ export default function CTASection({ data }: CTASectionProps) {
                   mx: 'auto',
                 }}
               >
-                {data ? highlightKeywords(data.description ?? '') : "Let's talk about your product, your users, and how Ultrawares can help you ship it."}
+                {data
+                  ? highlightKeywords(data.description ?? '')
+                  : "Let's talk about your product, your users, and how Ultrawares can help you ship it."}
               </Typography>
             </Box>
           )}

@@ -69,7 +69,10 @@ export default function HeroSection({ data }: HeroSectionProps) {
     const upperTitle = title.toUpperCase().trim()
 
     // English Match
-    if (upperTitle.includes('WITH ULTRAWARES COMES ULTRA SOLUTIONS') || upperTitle === 'WITH ULTRAWARES COMES ULTRA SOLUTIONS') {
+    if (
+      upperTitle.includes('WITH ULTRAWARES COMES ULTRA SOLUTIONS') ||
+      upperTitle === 'WITH ULTRAWARES COMES ULTRA SOLUTIONS'
+    ) {
       return (
         <>
           WITH <ShimmerText sx={{ color: 'primary.light' }}>ULTRAWARES</ShimmerText>
@@ -101,7 +104,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
         <>
           {parts.map((part, index) => {
             if (part.toUpperCase() === 'ULTRAWARES') {
-              return <ShimmerText key={index} sx={{ color: 'primary.light' }}>{part}</ShimmerText>
+              return (
+                <ShimmerText key={index} sx={{ color: 'primary.light' }}>
+                  {part}
+                </ShimmerText>
+              )
             }
             return part
           })}
@@ -144,13 +151,17 @@ export default function HeroSection({ data }: HeroSectionProps) {
               objectFit: 'cover',
             }}
           >
-            <Box component="source" src={data?.background_video?.url || "/videos/hero.mp4"} type="video/mp4" />
+            <Box
+              component="source"
+              src={data?.background_video?.url || '/videos/hero.mp4'}
+              type="video/mp4"
+            />
           </Box>
         </Box>
       )}
 
       <Box
-        sx={theme => ({
+        sx={() => ({
           position: 'absolute',
           bottom: 0,
           left: 0,
@@ -213,7 +224,9 @@ export default function HeroSection({ data }: HeroSectionProps) {
                 variant="body1"
                 sx={{ mb: 5, maxWidth: 625, color: 'text.secondary', fontSize: 25 }}
               >
-                {data ? data.description : 'Ultrawares provides cutting-edge solutions for businesses wanting to optimize their operations and gain a competitive edge in an increasingly digital world.'}
+                {data
+                  ? data.description
+                  : 'Ultrawares provides cutting-edge solutions for businesses wanting to optimize their operations and gain a competitive edge in an increasingly digital world.'}
               </Typography>
             </motion.div>
           )}

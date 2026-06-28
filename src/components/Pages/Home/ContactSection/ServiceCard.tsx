@@ -63,16 +63,18 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
           alignItems: 'center',
           justifyContent: 'center',
           transition: 'border-color 0.25s ease, background-color 0.25s ease',
-          ...(typeof service.icon === 'string' ? {
-            bgcolor: 'transparent',
-            border: 'none',
-          } : {
-            borderRadius: '12px',
-            bgcolor: selected ? alpha(primary, 0.08) : alpha(theme.palette.common.white, 0.04),
-            border: `1px solid ${
-              selected ? alpha(primary, 0.4) : alpha(theme.palette.common.white, 0.06)
-            }`,
-          })
+          ...(typeof service.icon === 'string'
+            ? {
+                bgcolor: 'transparent',
+                border: 'none',
+              }
+            : {
+                borderRadius: '12px',
+                bgcolor: selected ? alpha(primary, 0.08) : alpha(theme.palette.common.white, 0.04),
+                border: `1px solid ${
+                  selected ? alpha(primary, 0.4) : alpha(theme.palette.common.white, 0.06)
+                }`,
+              }),
         }}
       >
         {typeof service.icon === 'string' ? (

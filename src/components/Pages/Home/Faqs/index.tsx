@@ -147,10 +147,9 @@ export default function FAQSection({ data, stillHaveQuestionsData }: FAQSectionP
       >
         <SectionHeader
           align="center"
-          subtitle={data?.title ?? "Frequently Asked"}
-          title={data?.subtitle ?? "FREQUENTLY ASKED"}
+          subtitle={data?.title ?? 'Frequently Asked'}
+          title={data?.subtitle ?? 'FREQUENTLY ASKED'}
           description={data?.description ?? undefined}
-         
         />
 
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
@@ -224,7 +223,9 @@ export default function FAQSection({ data, stillHaveQuestionsData }: FAQSectionP
                       lineHeight: '18px',
                     }}
                   >
-                    {stillHaveQuestionsData ? stillHaveQuestionsData.description : 'Contact us now and we will answer you as soon as possible.'}
+                    {stillHaveQuestionsData
+                      ? stillHaveQuestionsData.description
+                      : 'Contact us now and we will answer you as soon as possible.'}
                   </Typography>
                 )}
               </Box>

@@ -30,11 +30,13 @@ export default function SplashWaveAmbient() {
             : { opacity: [0.28, 0.42, 0.28], scale: [1, 1.06, 1] }
         }
         transition={reducedMotion ? undefined : AMBIENT_PULSE_TRANSITION}
-        style={{ x: '-50%' }}
-        sx={{
-          position: 'absolute',
+        style={{
+          x: '-50%',
           left: '50%',
           bottom: '-12%',
+        }}
+        sx={{
+          position: 'absolute',
           width: '140%',
           height: '58%',
           background: `radial-gradient(ellipse at center, ${alpha(primaryMain, 0.2)} 0%, ${alpha(primaryMain, 0.08)} 38%, transparent 72%)`,

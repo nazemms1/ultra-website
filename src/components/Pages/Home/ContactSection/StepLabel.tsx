@@ -30,7 +30,7 @@ export default function StepLabel({ imageSrc, label }: { imageSrc: string; label
         sx={{
           fontSize: '14px',
           fontWeight: 700,
-           letterSpacing: '0.22em',
+          letterSpacing: '0.22em',
           textTransform: 'uppercase',
           color: 'primary.main',
         }}

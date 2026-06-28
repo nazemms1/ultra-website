@@ -7,7 +7,15 @@ import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Rating from '@mui/material/Rating'
 import { alpha, useTheme } from '@mui/material/styles'
-import { motion, useScroll, useSpring, useTransform, useMotionTemplate, useMotionValueEvent, type MotionValue } from 'framer-motion'
+import {
+  motion,
+  useScroll,
+  useSpring,
+  useTransform,
+  useMotionTemplate,
+  useMotionValueEvent,
+  type MotionValue,
+} from 'framer-motion'
 import Image from 'next/image'
 import { glassSurface } from '@/lib/theme/surfaces'
 
@@ -37,23 +45,59 @@ function WebDevWidget({ active }: { active: boolean }) {
       </Stack>
 
       {/* Code Text */}
-      <Stack spacing={0.5} sx={{ fontFamily: 'monospace', fontSize: '11px', color: '#8892b0', textAlign: 'left' }}>
+      <Stack
+        spacing={0.5}
+        sx={{ fontFamily: 'monospace', fontSize: '11px', color: '#8892b0', textAlign: 'left' }}
+      >
         <Box sx={{ color: '#0DF1D9' }}>const Application = () =&gt; &#123;</Box>
         <Box sx={{ pl: 2, color: '#ffffff' }}>return (</Box>
-        <Box sx={{ pl: 4, color: '#a0aec0' }}>&lt;<span style={{ color: '#0DF1D9' }}>Performance</span> score=&#123;99&#125; /&gt;</Box>
+        <Box sx={{ pl: 4, color: '#a0aec0' }}>
+          &lt;<span style={{ color: '#0DF1D9' }}>Performance</span> score=&#123;99&#125; /&gt;
+        </Box>
         <Box sx={{ pl: 2, color: '#ffffff' }}>)</Box>
         <Box sx={{ color: '#0DF1D9' }}>&#125;</Box>
       </Stack>
 
       {/* Speed Dial Metric */}
-      <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between', mt: 2, pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+      <Stack
+        direction="row"
+        sx={{
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          mt: 2,
+          pt: 1.5,
+          borderTop: '1px solid rgba(255,255,255,0.06)',
+        }}
+      >
         <Stack spacing={0.25} sx={{ textAlign: 'left' }}>
-          <Typography sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}>LOAD TIME</Typography>
-          <Typography sx={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}>0.32 seconds</Typography>
+          <Typography
+            sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}
+          >
+            LOAD TIME
+          </Typography>
+          <Typography
+            sx={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}
+          >
+            0.32 seconds
+          </Typography>
         </Stack>
-        <Box sx={{ position: 'relative', width: 44, height: 44, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box
+          sx={{
+            position: 'relative',
+            width: 44,
+            height: 44,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
           <svg width="44" height="44" viewBox="0 0 36 36">
-            <path d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="rgba(255,255,255,0.05)" strokeWidth="3" />
+            <path
+              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+              fill="none"
+              stroke="rgba(255,255,255,0.05)"
+              strokeWidth="3"
+            />
             <motion.path
               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               fill="none"
@@ -66,7 +110,17 @@ function WebDevWidget({ active }: { active: boolean }) {
               transition={{ duration: 1.2, ease: 'easeOut' }}
             />
           </svg>
-          <Typography sx={{ position: 'absolute', fontSize: '11px', fontWeight: 700, color: '#0DF1D9', fontFamily: 'Rajdhani' }}>99</Typography>
+          <Typography
+            sx={{
+              position: 'absolute',
+              fontSize: '11px',
+              fontWeight: 700,
+              color: '#0DF1D9',
+              fontFamily: 'Rajdhani',
+            }}
+          >
+            99
+          </Typography>
         </Box>
       </Stack>
     </Box>
@@ -125,20 +179,50 @@ function UiUxWidget({ active }: { active: boolean }) {
               </svg>
             </Box>
             <Stack sx={{ textAlign: 'left' }}>
-              <Typography sx={{ fontSize: '10px', color: 'text.secondary', fontWeight: 600 }}>REACTION</Typography>
-              <Typography sx={{ fontSize: '13px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}>+ 12.4k Likes</Typography>
+              <Typography sx={{ fontSize: '10px', color: 'text.secondary', fontWeight: 600 }}>
+                REACTION
+              </Typography>
+              <Typography
+                sx={{ fontSize: '13px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}
+              >
+                + 12.4k Likes
+              </Typography>
             </Stack>
           </Stack>
-          <Box sx={{ width: 10, height: 10, borderRadius: '50%', bgcolor: '#0DF1D9', boxShadow: '0 0 8px #0DF1D9' }} />
+          <Box
+            sx={{
+              width: 10,
+              height: 10,
+              borderRadius: '50%',
+              bgcolor: '#0DF1D9',
+              boxShadow: '0 0 8px #0DF1D9',
+            }}
+          />
         </Stack>
       </motion.div>
 
       {/* Star Reviews Widget */}
-      <Stack spacing={0.5} sx={{ textAlign: 'left', pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <Typography sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}>USER EXPERIENCE</Typography>
+      <Stack
+        spacing={0.5}
+        sx={{ textAlign: 'left', pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)' }}
+      >
+        <Typography
+          sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}
+        >
+          USER EXPERIENCE
+        </Typography>
         <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center' }}>
-          <Rating value={5} readOnly size="small" sx={{ color: '#0DF1D9', filter: 'drop-shadow(0 0 4px rgba(13,241,217,0.5))' }} />
-          <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}>4.9 / 5.0 Rating</Typography>
+          <Rating
+            value={5}
+            readOnly
+            size="small"
+            sx={{ color: '#0DF1D9', filter: 'drop-shadow(0 0 4px rgba(13,241,217,0.5))' }}
+          />
+          <Typography
+            sx={{ fontSize: '15px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}
+          >
+            4.9 / 5.0 Rating
+          </Typography>
         </Stack>
       </Stack>
     </Box>
@@ -171,7 +255,17 @@ function AiAutomationWidget({ active }: { active: boolean }) {
             fill="none"
             stroke="rgba(13, 241, 217, 0.2)"
             strokeWidth="1.5"
-            animate={active ? { d: ["M0 40 Q25 20, 50 40 T100 40 T150 40 T200 40", "M0 40 Q25 50, 50 20 T100 30 T150 50 T200 30", "M0 40 Q25 20, 50 40 T100 40 T150 40 T200 40"] } : {}}
+            animate={
+              active
+                ? {
+                    d: [
+                      'M0 40 Q25 20, 50 40 T100 40 T150 40 T200 40',
+                      'M0 40 Q25 50, 50 20 T100 30 T150 50 T200 30',
+                      'M0 40 Q25 20, 50 40 T100 40 T150 40 T200 40',
+                    ],
+                  }
+                : {}
+            }
             transition={{ repeat: Infinity, duration: 4, ease: 'easeInOut' }}
           />
           <motion.path
@@ -179,20 +273,53 @@ function AiAutomationWidget({ active }: { active: boolean }) {
             fill="none"
             stroke="#0DF1D9"
             strokeWidth="2.5"
-            animate={active ? { d: ["M0 30 Q25 50, 50 20 T100 40 T150 15 T200 35", "M0 30 Q25 15, 50 45 T100 20 T150 50 T200 20", "M0 30 Q25 50, 50 20 T100 40 T150 15 T200 35"] } : {}}
+            animate={
+              active
+                ? {
+                    d: [
+                      'M0 30 Q25 50, 50 20 T100 40 T150 15 T200 35',
+                      'M0 30 Q25 15, 50 45 T100 20 T150 50 T200 20',
+                      'M0 30 Q25 50, 50 20 T100 40 T150 15 T200 35',
+                    ],
+                  }
+                : {}
+            }
             transition={{ repeat: Infinity, duration: 3, ease: 'easeInOut' }}
           />
         </svg>
       </Box>
 
       {/* Automation Metrics Progress */}
-      <Stack spacing={1} sx={{ textAlign: 'left', pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <Typography sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}>AUTOMATION RATIO</Typography>
+      <Stack
+        spacing={1}
+        sx={{ textAlign: 'left', pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)' }}
+      >
+        <Typography
+          sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}
+        >
+          AUTOMATION RATIO
+        </Typography>
         <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography sx={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}>Tasks Automated</Typography>
-          <Typography sx={{ fontSize: '16px', fontWeight: 700, color: '#0DF1D9', fontFamily: 'Rajdhani' }}>+ 340%</Typography>
+          <Typography
+            sx={{ fontSize: '16px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}
+          >
+            Tasks Automated
+          </Typography>
+          <Typography
+            sx={{ fontSize: '16px', fontWeight: 700, color: '#0DF1D9', fontFamily: 'Rajdhani' }}
+          >
+            + 340%
+          </Typography>
         </Stack>
-        <Box sx={{ width: '100%', height: 4, bgcolor: 'rgba(255,255,255,0.05)', borderRadius: 2, overflow: 'hidden' }}>
+        <Box
+          sx={{
+            width: '100%',
+            height: 4,
+            bgcolor: 'rgba(255,255,255,0.05)',
+            borderRadius: 2,
+            overflow: 'hidden',
+          }}
+        >
           <motion.div
             style={{ height: '100%', backgroundColor: '#0DF1D9', borderRadius: 2 }}
             initial={{ width: 0 }}
@@ -225,29 +352,81 @@ function DevOpsWidget({ active }: { active: boolean }) {
     >
       {/* Latency meter */}
       <Stack direction="row" spacing={1.5} sx={{ alignItems: 'center', height: 60 }}>
-        <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ width: 36, height: 36, borderRadius: '50%', border: '2px solid rgba(13,241,217,0.2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <Box sx={{ width: 14, height: 14, borderRadius: '50%', bgcolor: '#0DF1D9', boxShadow: '0 0 10px #0DF1D9' }} />
+        <Box
+          sx={{
+            position: 'relative',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        >
+          <Box
+            sx={{
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
+              border: '2px solid rgba(13,241,217,0.2)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Box
+              sx={{
+                width: 14,
+                height: 14,
+                borderRadius: '50%',
+                bgcolor: '#0DF1D9',
+                boxShadow: '0 0 10px #0DF1D9',
+              }}
+            />
           </Box>
           <Box
             component={motion.div}
             animate={active ? { scale: [1, 1.5, 1], opacity: [0.6, 0, 0.6] } : {}}
             transition={{ repeat: Infinity, duration: 2, ease: 'easeOut' }}
-            sx={{ position: 'absolute', width: 36, height: 36, borderRadius: '50%', border: '2px solid #0DF1D9' }}
+            sx={{
+              position: 'absolute',
+              width: 36,
+              height: 36,
+              borderRadius: '50%',
+              border: '2px solid #0DF1D9',
+            }}
           />
         </Box>
         <Stack sx={{ textAlign: 'left' }}>
-          <Typography sx={{ fontSize: '10px', color: 'text.secondary', fontWeight: 600 }}>LATENCY</Typography>
-          <Typography sx={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}>12 ms Avg</Typography>
+          <Typography sx={{ fontSize: '10px', color: 'text.secondary', fontWeight: 600 }}>
+            LATENCY
+          </Typography>
+          <Typography
+            sx={{ fontSize: '18px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}
+          >
+            12 ms Avg
+          </Typography>
         </Stack>
       </Stack>
 
-      { }
-      <Stack spacing={0.5} sx={{ textAlign: 'left', pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-        <Typography sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}>SYSTEM HEALTH</Typography>
+      {}
+      <Stack
+        spacing={0.5}
+        sx={{ textAlign: 'left', pt: 1.5, borderTop: '1px solid rgba(255,255,255,0.06)' }}
+      >
+        <Typography
+          sx={{ fontSize: '10px', color: '#0DF1D9', fontWeight: 700, letterSpacing: '0.05em' }}
+        >
+          SYSTEM HEALTH
+        </Typography>
         <Stack direction="row" sx={{ alignItems: 'center', justifyContent: 'space-between' }}>
-          <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}>Cloud Uptime</Typography>
-          <Typography sx={{ fontSize: '15px', fontWeight: 700, color: '#0DF1D9', fontFamily: 'Rajdhani' }}>99.99%</Typography>
+          <Typography
+            sx={{ fontSize: '15px', fontWeight: 700, color: '#ffffff', fontFamily: 'Rajdhani' }}
+          >
+            Cloud Uptime
+          </Typography>
+          <Typography
+            sx={{ fontSize: '15px', fontWeight: 700, color: '#0DF1D9', fontFamily: 'Rajdhani' }}
+          >
+            99.99%
+          </Typography>
         </Stack>
       </Stack>
     </Box>
@@ -256,7 +435,15 @@ function DevOpsWidget({ active }: { active: boolean }) {
 
 // React SVG icon in primary color
 const ReactIcon = () => (
-  <svg width="13" height="13" viewBox="-11.5 -10.23 23 20.46" fill="none" stroke="currentColor" strokeWidth="1.1" style={{ marginRight: 6 }}>
+  <svg
+    width="13"
+    height="13"
+    viewBox="-11.5 -10.23 23 20.46"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="1.1"
+    style={{ marginRight: 6 }}
+  >
     <circle cx="0" cy="0" r="2.05" fill="currentColor" />
     <g stroke="currentColor">
       <ellipse rx="11" ry="4.2" />
@@ -274,40 +461,44 @@ const FlutterIcon = () => (
 )
 
 const tagIcons: Record<string, React.ReactNode> = {
-  'React': <ReactIcon />,
-  'Flutter': <FlutterIcon />,
+  React: <ReactIcon />,
+  Flutter: <FlutterIcon />,
 }
 
 // Sample services data with 3D illustrations from public folder
 const STACK_SERVICES = [
   {
     title: 'Web Development',
-    description: 'We specialize in crafting robust, high-performance applications and web platforms that are thoughtfully engineered to evolve seamlessly with your business needs. Our solutions emphasize seamless scalability and resilience, ensuring your systems maintain optimal reliability and responsiveness even as demand grows. By integrating intuitive design principles and advanced technologies, we create user-friendly experiences that drive engagement and efficiency, empowering your business to thrive in dynamic markets.',
+    description:
+      'We specialize in crafting robust, high-performance applications and web platforms that are thoughtfully engineered to evolve seamlessly with your business needs. Our solutions emphasize seamless scalability and resilience, ensuring your systems maintain optimal reliability and responsiveness even as demand grows. By integrating intuitive design principles and advanced technologies, we create user-friendly experiences that drive engagement and efficiency, empowering your business to thrive in dynamic markets.',
     image: '/images/methodologies/1.png',
     tags: ['React', 'Flutter'],
   },
   {
     title: 'UI/UX Design',
-    description: 'We craft intuitive, accessible interfaces that turn complex products into effortless experiences. Grounded in research and a cohesive design system, every flow is shaped to delight users while driving the metrics your business cares about — from activation to retention and conversion.',
+    description:
+      'We craft intuitive, accessible interfaces that turn complex products into effortless experiences. Grounded in research and a cohesive design system, every flow is shaped to delight users while driving the metrics your business cares about — from activation to retention and conversion.',
     image: '/images/methodologies/2.png',
     tags: ['Figma', 'Prototyping', 'Design Systems'],
   },
   {
     title: 'AI & Automation',
-    description: 'We build AI-powered systems and automation pipelines that remove bottlenecks and multiply your team\'s capacity. From custom machine learning models and LLM integrations to end-to-end workflow automation, we help you move faster and unlock insights.',
+    description:
+      "We build AI-powered systems and automation pipelines that remove bottlenecks and multiply your team's capacity. From custom machine learning models and LLM integrations to end-to-end workflow automation, we help you move faster and unlock insights.",
     image: '/images/methodologies/3.png',
     tags: ['LLMs', 'OpenAI', 'Python', 'Automation'],
   },
   {
     title: 'Cloud & DevOps',
-    description: 'We design resilient cloud infrastructure and automated delivery pipelines that scale effortlessly with demand. From infrastructure-as-code and containerized workloads to zero-downtime deployments, we give your teams the confidence to ship faster.',
+    description:
+      'We design resilient cloud infrastructure and automated delivery pipelines that scale effortlessly with demand. From infrastructure-as-code and containerized workloads to zero-downtime deployments, we give your teams the confidence to ship faster.',
     image: '/images/methodologies/4.png',
     tags: ['AWS', 'Docker', 'Kubernetes', 'CI/CD'],
   },
 ]
 
 interface CardWrapperProps {
-  service: typeof STACK_SERVICES[0]
+  service: (typeof STACK_SERVICES)[0]
   index: number
   total: number
   progress: MotionValue<number>
@@ -315,45 +506,51 @@ interface CardWrapperProps {
 
 function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
   const theme = useTheme()
-  
+
   // Normalized center position for this card
   const progressActive = index / (total - 1)
   const step = 1 / (total - 1)
 
   // Motion transforms based on scroll progress (relative to adjacent active states)
-  const y = useTransform(progress, 
+  const y = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
-    [380, 0, -380]
+    [380, 0, -380],
   )
 
-  const opacity = useTransform(progress,
+  const opacity = useTransform(
+    progress,
     [progressActive - 2 * step, progressActive - step, progressActive, progressActive + step],
-    [0, 0.45, 1, 0]
+    [0, 0.45, 1, 0],
   )
 
-  const scaleX = useTransform(progress,
+  const scaleX = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
-    [0.82, 1, 0.88]
+    [0.82, 1, 0.88],
   )
 
-  const scaleY = useTransform(progress,
+  const scaleY = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
-    [0.86, 1, 0.88]
+    [0.86, 1, 0.88],
   )
 
-  const blurValue = useTransform(progress,
+  const blurValue = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
-    [2.5, 0, 10]
+    [2.5, 0, 10],
   )
   const filter = useMotionTemplate`blur(${blurValue}px)`
 
-  const zIndex = useTransform(progress,
+  const zIndex = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
-    [5, 10, 1]
+    [5, 10, 1],
   )
 
-  const pointerEvents = useTransform(progress, p => 
-    Math.abs(p - progressActive) < step * 0.4 ? 'auto' : 'none'
+  const pointerEvents = useTransform(progress, p =>
+    Math.abs(p - progressActive) < step * 0.4 ? 'auto' : 'none',
   )
 
   return (
@@ -394,7 +591,7 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
           gap: { xs: 3, md: 6 },
         }}
       >
-         <Box
+        <Box
           sx={{
             position: 'absolute',
             top: 20,
@@ -406,7 +603,7 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
           }}
         />
 
-         <Box
+        <Box
           sx={{
             position: 'absolute',
             bottom: 20,
@@ -490,7 +687,9 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
                       {tagIcons[tag]}
-                      <Box component="span" sx={{ color: '#ffffff' }}>{tag}</Box>
+                      <Box component="span" sx={{ color: '#ffffff' }}>
+                        {tag}
+                      </Box>
                     </Box>
                   }
                   size="medium"
@@ -556,7 +755,6 @@ export default function ServicesCardStack() {
           bgcolor: 'background.default',
         }}
       >
-
         {/* Render card deck */}
         <Box
           sx={{
