@@ -11,7 +11,12 @@ type Props = {
 
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params
-  const servicesData = await fetchAPI('/api/services-data', locale)
+  
+  // Fetch services data and CTA content concurrently
+  const [servicesData, startProjectData] = await Promise.all([
+    fetchAPI('/api/services-data', locale),
+    fetchAPI('/api/start-project-data', locale),
+  ])
 
   const eyebrowText = servicesData?.title || 'OUR SERVICES'
   const titleText = servicesData?.subtitle ? (
@@ -41,7 +46,7 @@ export default async function ServicesPage({ params }: Props) {
         subtitle={subtitleText}
       />
       <ServicesCardStack data={servicesData} />
-      <CTASection />
+      <CTASection data={startProjectData} />
     </>
   )
 }

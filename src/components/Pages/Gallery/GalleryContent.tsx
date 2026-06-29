@@ -12,6 +12,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import CloseIcon from '@mui/icons-material/Close'
+import { glassSurface } from '@/lib/theme/surfaces'
 
 // Type definitions matching the API responses
 interface ImageDetails {
@@ -479,91 +480,142 @@ export default function GalleryContent({
         }}
       >
         {/* Prev Page Button */}
-        <IconButton
+        <Box
+          component="button"
           disabled={currentPage === 1}
           onClick={() => handlePageChange(itemId, currentPage - 1)}
           sx={{
-            width: 40,
-            height: 40,
-            border: '1px solid rgba(13, 241, 217, 0.2)',
-            color: 'primary.main',
-            transition: 'all 0.3s ease',
-            '&:hover': {
-              borderColor: 'primary.main',
-              bgcolor: 'rgba(13, 241, 217, 0.05)',
-              boxShadow: '0 0 8px rgba(13, 241, 217, 0.3)',
-            },
+            background: 'none',
+            border: 'none',
+            p: 0,
+            // cursor: currentPage === 1 ? 'default' : 'pointer',
+            opacity: currentPage === 1 ? 0.35 : 1,
+            display: 'flex',
+            ...glassSurface,
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'opacity 0.3s ease',
             '&:disabled': {
-              borderColor: 'rgba(255, 255, 255, 0.05)',
-              color: 'rgba(255, 255, 255, 0.2)',
-            },
+              opacity: 0.35,
+              cursor: 'default',
+            }
           }}
         >
-          <ChevronLeftIcon />
-        </IconButton>
+          <Box
+            component="img"
+            src="/icons/ArrowWrapper.svg"
+            alt="Previous"
+            sx={{
+              width: '41px',
+              height: '41px',
+              display: 'block',
+              transform: isRtl ? 'rotate(180deg)' : 'none',
+            }}
+          />
+        </Box>
 
         {/* Page Numbers */}
         {pages.map(page => {
           const isActive = page === currentPage
+          if (isActive) {
+            return (
+              <Box
+                key={page}
+                sx={{
+                  display: 'inline-flex',
+                  width: 40,
+                  height: 40,
+                  p: '10px',
+                  background: 'rgba(13, 241, 217, 0.10)',
+                  borderRadius: '50%',
+                  flexDirection: 'column',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  gap: '10px',
+                  cursor: 'default',
+                }}
+              >
+                <Typography
+                  sx={{
+                    color: '#0DF1D9',
+                    fontSize: '18px',
+                    fontFamily: '"Rajdhani", sans-serif',
+                    fontWeight: '600',
+                    lineHeight: 1,
+                  }}
+                >
+                  {page}
+                </Typography>
+              </Box>
+            )
+          }
+
           return (
             <Box
               key={page}
-              onClick={() => !isActive && handlePageChange(itemId, page)}
+              onClick={() => handlePageChange(itemId, page)}
               sx={{
+                display: 'inline-flex',
                 width: 40,
                 height: 40,
-                borderRadius: '50%',
-                display: 'flex',
-                alignItems: 'center',
                 justifyContent: 'center',
-                cursor: isActive ? 'default' : 'pointer',
-                fontFamily: '"Rajdhani", sans-serif',
-                fontSize: '16px',
-                fontWeight: 600,
-                color: isActive ? '#080A0A' : '#FAFAFA',
-                bgcolor: isActive ? 'primary.main' : 'transparent',
-                border: isActive ? '1px solid rgba(13, 241, 217, 0.1)' : '1px solid rgba(13, 241, 217, 0.1)',
+                alignItems: 'center',
+                cursor: 'pointer',
+                borderRadius: '50%',
                 transition: 'all 0.3s ease',
-                ...(isActive && {
-                  boxShadow: '0 0 12px rgba(13, 241, 217, 0.6)',
-                }),
-                ...(!isActive && {
-                  '&:hover': {
-                    borderColor: 'primary.main',
-                    color: 'primary.main',
-                    bgcolor: 'rgba(13, 241, 217, 0.03)',
-                  },
-                }),
+                '&:hover': {
+                  background: 'rgba(13, 241, 217, 0.05)',
+                },
               }}
             >
-              {page}
+              <Typography
+                sx={{
+                  color: '#0DF1D9',
+                  fontSize: '18px',
+                  fontFamily: '"Rajdhani", sans-serif',
+                  fontWeight: '600',
+                  lineHeight: 1,
+                }}
+              >
+                {page}
+              </Typography>
             </Box>
           )
         })}
 
         {/* Next Page Button */}
-        <IconButton
+        <Box
+          component="button"
           disabled={currentPage === lastPage}
           onClick={() => handlePageChange(itemId, currentPage + 1)}
           sx={{
-            width: 40,
-            height: 40,
-            border: '1px solid rgba(13, 241, 217, 0.2)',
-            color: 'primary.main',
-            transition: 'all 0.3s ease',
-            '&:hover': {
-              borderColor: 'primary.main',
-              bgcolor: 'rgba(13, 241, 217, 0.05)',
-              boxShadow: '0 0 8px rgba(13, 241, 217, 0.3)',
-            },
+            background: 'none',
+            border: 'none',
+            p: 0,
+            cursor: currentPage === lastPage ? 'default' : 'pointer',
+            opacity: currentPage === lastPage ? 0.35 : 1,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            transition: 'opacity 0.3s ease',
             '&:disabled': {
-              borderColor: 'rgba(255, 255, 255, 0.05)',
-              color: 'rgba(255, 255, 255, 0.2)',
-            },
+              opacity: 0.35,
+              cursor: 'default',
+            }
           }}
         >
-          <ChevronRightIcon />
-        </IconButton>
+          <Box
+            component="img"
+            src="/icons/ArrowWrapper2.svg"
+            alt="Next"
+            sx={{
+              width: '41px',
+              height: '41px',
+              display: 'block',
+              transform: isRtl ? 'rotate(180deg)' : 'none',
+            }}
+          />
+        </Box>
       </Stack>
     )
   }
@@ -575,7 +627,7 @@ export default function GalleryContent({
       sx={{
         py: { xs: 8, md: 12 },
         px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
-        bgcolor: 'background.default',
+ 
         position: 'relative',
         zIndex: 1,
       }}
