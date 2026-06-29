@@ -15,7 +15,9 @@
   },
   "ProjectDetails": {
     "backToProjects": "العودة إلى المشاريع",
-    "visitWebsite": "زيارة الموقع"
+    "visitWebsite": "زيارة الموقع",
+    "demo": "العرض التوضيحي",
+    "moreProjects": "مشاريع أخرى"
   },
   "Methodologies": {
     "label": "منهجياتنا",

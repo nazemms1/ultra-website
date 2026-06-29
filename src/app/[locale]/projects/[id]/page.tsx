@@ -1,6 +1,6 @@
 import { notFound } from 'next/navigation'
 import { setRequestLocale } from 'next-intl/server'
-import ProjectDetailsHero from '@/components/Pages/ProjectDetails/Hero/ProjectDetailsHero'
+import ProjectDetailsPage from '@/components/Pages/ProjectDetails/ProjectDetailsPage'
 import { getProjectById, PROJECT_DETAIL_IDS } from '@/components/Pages/ProjectDetails/data'
 import { routing, type AppLocale } from '@/i18n/routing'
 
@@ -28,5 +28,5 @@ export default async function ProjectDetailPage({ params }: ProjectDetailPagePro
     notFound()
   }
 
-  return <ProjectDetailsHero project={project} />
+  return <ProjectDetailsPage project={project} />
 }

@@ -6,7 +6,41 @@ export interface ProjectDetailLogo {
   readonly height: number
 }
 
-/** Content for a single project detail page hero. */
+export interface BriefBlock {
+  readonly number: string
+  readonly title: string
+  readonly body: string
+}
+
+export interface ProjectMetrics {
+  readonly successRate: number
+  readonly services: readonly string[]
+  readonly tools: readonly string[]
+}
+
+export type DemoViewId = 'mobile' | 'web' | 'admin'
+
+export interface DemoScreenshot {
+  readonly id: string
+  readonly src: string
+  readonly alt: string
+}
+
+export interface DemoView {
+  readonly id: DemoViewId
+  readonly label: string
+  readonly device: 'mobile' | 'desktop'
+  readonly screenshots: readonly DemoScreenshot[]
+}
+
+export interface RelatedProjectCard {
+  readonly id: string
+  readonly title: string
+  readonly description: string
+  readonly logo: ProjectDetailLogo
+}
+
+/** Content for a single project detail page. */
 export interface ProjectDetail {
   readonly id: string
   readonly title: string
@@ -15,4 +49,8 @@ export interface ProjectDetail {
   readonly shortDescription: string
   readonly websiteUrl?: string
   readonly logo: ProjectDetailLogo
+  readonly brief: readonly BriefBlock[]
+  readonly metrics: ProjectMetrics
+  readonly demoViews: readonly DemoView[]
+  readonly relatedProjects: readonly RelatedProjectCard[]
 }
