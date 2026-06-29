@@ -27,7 +27,7 @@ const backgroundVariants = {
 
 export default function ViewAllButton({
   label = 'View all services',
-  href = '#services',
+  href = '/services',
   sx,
 }: ViewAllButtonProps) {
   const theme = useTheme()

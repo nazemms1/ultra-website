@@ -289,7 +289,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                   <Box component={motion.div} layout transition={LAYOUT_TRANSITION} sx={{ mt: 2 }}>
                     <AnimatedButton
                       variant="secondary"
-                      href="#services"
+                      href="/services"
                       sx={{
                         px: { xs: 2, md: 4 },
                         fontSize: { xs: 12, md: 18 },

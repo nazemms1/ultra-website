@@ -1,9 +1,10 @@
 'use client'
 
-import { useRef, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 import Box from '@mui/material/Box'
 import { motion, useReducedMotion, useScroll } from 'framer-motion'
 import { useScrollVideoScrub } from './useScrollVideoScrub'
+import { shouldDisableScrollVideo } from './deviceUtils'
 
 type ScrollVideoStackProps = {
   children: ReactNode
@@ -26,7 +27,11 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
   const viewportRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const reduceMotion = useReducedMotion()
-  const disabled = reduceMotion ?? false
+  const [disabled, setDisabled] = useState(true)
+
+  useEffect(() => {
+    setDisabled(!!reduceMotion || shouldDisableScrollVideo())
+  }, [reduceMotion])
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
