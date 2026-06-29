@@ -65,6 +65,7 @@ export function useScrollVideoScrub({
   const latestProgressRef = useRef(0)
   const rafRef = useRef<number | null>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
+  const viewportSizeRef = useRef<{ width: number; height: number } | null>(null)
 
   const layerOpacity = useTransform(
     progress,
@@ -99,7 +100,23 @@ export function useScrollVideoScrub({
       }
 
       const dpr = readDevicePixelRatio()
-      const size = syncCanvasToViewport(canvas, viewport, dpr)
+      let size: { width: number; height: number } | null = null
+
+      if (viewportSizeRef.current) {
+        const width = Math.round(viewportSizeRef.current.width * dpr)
+        const height = Math.round(viewportSizeRef.current.height * dpr)
+        if (width > 0 && height > 0) {
+          if (canvas.width !== width || canvas.height !== height) {
+            canvas.width = width
+            canvas.height = height
+          }
+          size = { width, height }
+        }
+      }
+
+      if (!size) {
+        size = syncCanvasToViewport(canvas, viewport, dpr)
+      }
       if (!size) return
 
       if (!ctxRef.current) {
@@ -183,7 +200,14 @@ export function useScrollVideoScrub({
     const viewport = viewportRef.current
     if (!viewport) return
 
-    const observer = new ResizeObserver(() => {
+    const observer = new ResizeObserver(entries => {
+      const entry = entries[0]
+      if (entry) {
+        viewportSizeRef.current = {
+          width: entry.target.clientWidth,
+          height: entry.target.clientHeight,
+        }
+      }
       paintedIndexRef.current = -1
       paintFrame(latestProgressRef.current, true)
     })

@@ -1,19 +1,47 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Image from 'next/image'
 import Box from '@mui/material/Box'
 import { alpha } from '@mui/material/styles'
 import { motion, useReducedMotion } from 'framer-motion'
 import type { PartnerLogoProps } from './types'
 import { HOVER_SCALE, HOVER_TRANSITION, REVEAL_STAGGER_S, REVEAL_TRANSITION } from './constants'
+import { shouldDisableScrollVideo } from '../ScrollVideoStack/deviceUtils'
 
 const MotionBox = motion.create(Box)
 
 export default function PartnerLogo({ partner, index, visible }: PartnerLogoProps) {
   const reduceMotion = useReducedMotion()
   const [hovered, setHovered] = useState(false)
-  const showColor = reduceMotion || hovered
+  const [isMobile, setIsMobile] = useState(false)
+  const [active, setActive] = useState(false)
+  const timeoutRef = useRef<NodeJS.Timeout | null>(null)
+
+  useEffect(() => {
+    setIsMobile(shouldDisableScrollVideo())
+    return () => {
+      if (timeoutRef.current) {
+        clearTimeout(timeoutRef.current)
+      }
+    }
+  }, [])
+
+  const handleTap = () => {
+    if (!isMobile) return
+
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current)
+    }
+
+    setActive(prev => !prev)
+
+    timeoutRef.current = setTimeout(() => {
+      setActive(false)
+    }, 1800)
+  }
+
+  const showColor = reduceMotion || hovered || (isMobile && active)
 
   return (
     <Box
@@ -39,11 +67,12 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
         tabIndex={reduceMotion ? -1 : 0}
         role="img"
         aria-label={partner.name}
-        onMouseEnter={() => setHovered(true)}
-        onMouseLeave={() => setHovered(false)}
-        onFocus={() => setHovered(true)}
-        onBlur={() => setHovered(false)}
-        animate={{ scale: showColor && !reduceMotion ? HOVER_SCALE : 1 }}
+        onMouseEnter={() => !isMobile && setHovered(true)}
+        onMouseLeave={() => !isMobile && setHovered(false)}
+        onFocus={() => !isMobile && setHovered(true)}
+        onBlur={() => !isMobile && setHovered(false)}
+        onClick={handleTap}
+        animate={{ scale: (showColor && !reduceMotion && !isMobile) || (isMobile && active) ? HOVER_SCALE : 1 }}
         transition={HOVER_TRANSITION}
         sx={{
           position: 'relative',
@@ -62,7 +91,7 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
             position: 'relative',
             width: '100%',
             height: '100%',
-            filter: showColor
+            filter: (showColor && !isMobile) || (isMobile && active)
               ? theme => `drop-shadow(0 0 37.5px ${alpha(theme.palette.primary.main, 0.55)})`
               : 'none',
             transition: 'filter 0.3s ease',

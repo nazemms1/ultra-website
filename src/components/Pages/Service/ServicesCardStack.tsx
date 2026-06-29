@@ -496,8 +496,40 @@ const STACK_SERVICES = [
   },
 ]
 
+export interface ToolData {
+  id: number
+  name: string
+  icon?: {
+    url: string
+  }
+}
+
+export interface ServiceItemData {
+  id: number
+  title: string
+  description: string
+  image?: {
+    url: string
+  }
+  tools?: ToolData[]
+}
+
+export interface ServicesCardStackProps {
+  data?: {
+    is_shown?: boolean
+    items?: ServiceItemData[]
+  }
+}
+
+export interface ServiceItemNormalized {
+  title: string
+  description: string
+  image: string
+  tools: ToolData[]
+}
+
 interface CardWrapperProps {
-  service: (typeof STACK_SERVICES)[0]
+  service: ServiceItemNormalized
   index: number
   total: number
   progress: MotionValue<number>
@@ -507,50 +539,51 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
   const theme = useTheme()
 
   // Normalized center position for this card
-  const progressActive = index / (total - 1)
-  const step = 1 / (total - 1)
+  const progressActive = total > 1 ? index / (total - 1) : 0
+  const step = total > 1 ? 1 / (total - 1) : 1
 
   // Motion transforms based on scroll progress (relative to adjacent active states)
-  const y = useTransform(
-    progress,
+  const yVal = useTransform(progress, 
     [progressActive - step, progressActive, progressActive + step],
     [380, 0, -380],
   )
+  const y = total > 1 ? yVal : 0
 
-  const opacity = useTransform(
-    progress,
+  const opacityVal = useTransform(progress,
     [progressActive - 2 * step, progressActive - step, progressActive, progressActive + step],
     [0, 0.45, 1, 0],
   )
+  const opacity = total > 1 ? opacityVal : 1
 
-  const scaleX = useTransform(
-    progress,
+  const scaleXVal = useTransform(progress,
     [progressActive - step, progressActive, progressActive + step],
     [0.82, 1, 0.88],
   )
+  const scaleX = total > 1 ? scaleXVal : 1
 
-  const scaleY = useTransform(
-    progress,
+  const scaleYVal = useTransform(progress,
     [progressActive - step, progressActive, progressActive + step],
     [0.86, 1, 0.88],
   )
+  const scaleY = total > 1 ? scaleYVal : 1
 
-  const blurValue = useTransform(
-    progress,
+  const blurValueVal = useTransform(progress,
     [progressActive - step, progressActive, progressActive + step],
     [2.5, 0, 10],
   )
+  const blurValue = total > 1 ? blurValueVal : 0
   const filter = useMotionTemplate`blur(${blurValue}px)`
 
-  const zIndex = useTransform(
-    progress,
+  const zIndexVal = useTransform(progress,
     [progressActive - step, progressActive, progressActive + step],
     [5, 10, 1],
   )
+  const zIndex = total > 1 ? zIndexVal : 10
 
-  const pointerEvents = useTransform(progress, p =>
-    Math.abs(p - progressActive) < step * 0.4 ? 'auto' : 'none',
+  const pointerEventsVal = useTransform(progress, p => 
+    Math.abs(p - progressActive) < step * 0.4 ? 'auto' : 'none'
   )
+  const pointerEvents = total > 1 ? pointerEventsVal : 'auto'
 
   return (
     <Box
@@ -680,15 +713,22 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
               Tools Used
             </Typography>
             <Stack direction="row" spacing={1.5} sx={{ flexWrap: 'wrap', gap: 1 }}>
-              {service.tags.map(tag => (
+              {service.tools.map(tool => (
                 <Chip
-                  key={tag}
+                  key={tool.id}
                   label={
                     <Box sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
-                      {tagIcons[tag]}
-                      <Box component="span" sx={{ color: '#ffffff' }}>
-                        {tag}
-                      </Box>
+                      {tool.icon?.url ? (
+                        <Box
+                          component="img"
+                          src={tool.icon.url}
+                          alt=""
+                          sx={{ width: 14, height: 14, marginRight: 1, objectFit: 'contain' }}
+                        />
+                      ) : (
+                        tagIcons[tool.name]
+                      )}
+                      <Box component="span" sx={{ color: '#ffffff' }}>{tool.name}</Box>
                     </Box>
                   }
                   size="medium"
@@ -717,8 +757,25 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
   )
 }
 
-export default function ServicesCardStack() {
+export default function ServicesCardStack({ data }: ServicesCardStackProps) {
   const trackRef = useRef<HTMLDivElement>(null)
+
+  const items = data?.items || []
+  const hasApiData = items.length > 0
+
+  const services: ServiceItemNormalized[] = hasApiData
+    ? items.map((item, index) => ({
+        title: item.title,
+        description: item.description,
+        image: item.image?.url || `/images/methodologies/${(index % 4) + 1}.png`,
+        tools: item.tools || [],
+      }))
+    : STACK_SERVICES.map((s, index) => ({
+        title: s.title,
+        description: s.description,
+        image: s.image,
+        tools: s.tags.map((tag, idx) => ({ id: idx, name: tag })),
+      }))
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
@@ -737,7 +794,7 @@ export default function ServicesCardStack() {
       ref={trackRef}
       sx={{
         position: 'relative',
-        height: '400vh', // Scrolling track length
+        height: `${services.length * 100}vh`, // Scrolling track length dynamically based on item count
         bgcolor: 'background.default',
       }}
     >
@@ -765,12 +822,12 @@ export default function ServicesCardStack() {
             justifyContent: 'center',
           }}
         >
-          {STACK_SERVICES.map((service, index) => (
+          {services.map((service, index) => (
             <CardWrapper
               key={service.title}
               service={service}
               index={index}
-              total={STACK_SERVICES.length}
+              total={services.length}
               progress={progress}
             />
           ))}

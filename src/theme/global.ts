@@ -160,6 +160,7 @@ const GlobalStyles = () => css`
   }
 
   .ultra-shimmer-text {
+    display: inline-block;
     background: linear-gradient(
       90deg,
       var(--ultra-palette-primary-main) 0%,

@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react'
 import { usePathname } from 'next/navigation'
+import { motion, AnimatePresence } from 'framer-motion'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -289,50 +290,105 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
         </Box>
       </Box>
 
-      {mobileOpen ? (
-        <Box
-          sx={{
-            display: { xs: 'flex', md: 'none' },
-            mt: 1.25,
-            width: '100%',
-            maxWidth: UNIFIED_MAX_WIDTH,
-            ...glassSurface(theme, { tint: 0.06, radius: 24 }),
-            p: '20px 24px',
-            flexDirection: 'column',
-          }}
-        >
-          {visibleNavLinks.map((link, index) => (
+      <AnimatePresence>
+        {mobileOpen && (
+          <Box
+            component={motion.div}
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            sx={{
+              display: { xs: 'flex', md: 'none' },
+              position: 'fixed',
+              inset: 0,
+              width: '100vw',
+              height: '100vh',
+              bgcolor: 'rgba(8, 10, 10, 0.96)',
+              backdropFilter: 'blur(20px)',
+              zIndex: 9999,
+              flexDirection: 'column',
+              p: '40px 32px',
+              justifyContent: 'space-between',
+            }}
+          >
             <Box
-              key={link.href}
-              component={Link}
-              href={link.href}
-              onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
-                handleNavClick(e, link.href)
-                setMobileOpen(false)
-              }}
               sx={{
-                fontWeight: 500,
-                fontSize: '15px',
-                letterSpacing: '0.5px',
-                color: 'text.secondary',
-                textDecoration: 'none',
-                py: 1.625,
-                borderBottom:
-                  index < visibleNavLinks.length - 1
-                    ? theme => `1px solid ${theme.palette.background.divider}`
-                    : 'none',
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+                width: '100%',
               }}
             >
-              {labels[link.labelKey]}
+              {logo}
+              <IconButton
+                aria-label="Close menu"
+                onClick={() => setMobileOpen(false)}
+                sx={{
+                  width: 40,
+                  height: 40,
+                  bgcolor: theme => `color-mix(in srgb, ${theme.palette.primary.main} 10%, transparent)`,
+                  border: theme =>
+                    `1px solid color-mix(in srgb, ${theme.palette.primary.main} 25%, transparent)`,
+                  color: 'primary.main',
+                }}
+              >
+                <CloseIcon />
+              </IconButton>
             </Box>
-          ))}
-          <Box sx={{ mt: 2 }}>
-            <UltraButton variant="primary" href="/contact">
-              {labels.contact}
-            </UltraButton>
+
+            <Stack
+              spacing={4.5}
+              sx={{
+                alignItems: 'center',
+                justifyContent: 'center',
+                flex: 1,
+              }}
+            >
+              {visibleNavLinks.map(link => (
+                <Box
+                  key={link.href}
+                  component={Link}
+                  href={link.href}
+                  onClick={(e: React.MouseEvent<HTMLAnchorElement>) => {
+                    handleNavClick(e, link.href)
+                    setMobileOpen(false)
+                  }}
+                  sx={{
+                    fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+                    fontSize: '22px',
+                    fontWeight: 700,
+                    color: 'text.primary',
+                    textDecoration: 'none',
+                    textTransform: 'uppercase',
+                    letterSpacing: '2px',
+                    transition: 'all 0.3s ease',
+                    '&:hover': {
+                      color: 'primary.main',
+                      textShadow: '0 0 10px rgba(13, 241, 217, 0.6)',
+                    },
+                  }}
+                >
+                  {labels[link.labelKey]}
+                </Box>
+              ))}
+            </Stack>
+
+            <Box
+              sx={{
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 2,
+              }}
+            >
+              <UltraButton variant="primary" href="/contact" onClick={() => setMobileOpen(false)}>
+                {labels.contact}
+              </UltraButton>
+            </Box>
           </Box>
-        </Box>
-      ) : null}
+        )}
+      </AnimatePresence>
     </Box>
   )
 }

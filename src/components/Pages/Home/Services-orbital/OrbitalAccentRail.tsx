@@ -37,7 +37,7 @@ export default function OrbitalAccentRail() {
           width: 16,
           height: 16,
           borderRadius: '50%',
-          bgcolor: 'primary.main',
+          bgcolor: '#0DF1D9',
           boxShadow: `0 0 12px ${alpha(t.palette.primary.main, 0.65)}`,
         })}
       />

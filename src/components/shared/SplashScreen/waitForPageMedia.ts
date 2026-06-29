@@ -1,5 +1,7 @@
 import { SPLASH_CRITICAL_IMAGES, SPLASH_CRITICAL_VIDEOS } from './criticalAssets'
 import { preloadScrollFramesForSplash } from '@/components/Pages/Home/ScrollVideoStack/frameLoader'
+import { shouldDisableScrollVideo } from '@/components/Pages/Home/ScrollVideoStack/deviceUtils'
+
 
 type WaitForPageMediaOptions = {
   /** Minimum time the splash stays visible even if assets resolve instantly. */
@@ -109,10 +111,12 @@ async function preloadVideo(src: string, timeoutMs: number): Promise<void> {
 }
 
 async function waitForCriticalAssets(timeoutMs: number): Promise<void> {
+  const isMobile = shouldDisableScrollVideo()
+
   const tasks = [
-    ...SPLASH_CRITICAL_VIDEOS.map(src => preloadVideo(src, timeoutMs)),
+    ...(!isMobile ? SPLASH_CRITICAL_VIDEOS.map(src => preloadVideo(src, timeoutMs)) : []),
     ...SPLASH_CRITICAL_IMAGES.map(src => preloadImage(src, timeoutMs)),
-    withTimeout(preloadScrollFramesForSplash(), timeoutMs),
+    ...(!isMobile ? [withTimeout(preloadScrollFramesForSplash(), timeoutMs)] : []),
   ]
   return Promise.all(tasks).then(() => undefined)
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
 import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
@@ -10,6 +10,7 @@ import SectionHeader from '@/components/shared/SectionHeader'
 import PhaseCard, { PhaseCardContent } from './PhaseCard'
 import Timeline from './Timeline'
 import { PHASES } from './data'
+import { shouldDisableScrollVideo } from '../ScrollVideoStack/deviceUtils'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 
@@ -36,6 +37,12 @@ export default function Methodologies({ data }: MethodologiesProps) {
   const reduce = useReducedMotion()
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
+
+  const [disabled, setDisabled] = useState(true)
+
+  useEffect(() => {
+    setDisabled(!!reduce || shouldDisableScrollVideo())
+  }, [reduce])
 
   const items = data?.items || []
   const mappedPhases = items.map(item => ({
@@ -72,7 +79,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
 
   if (data?.is_shown === false) return null
 
-  if (reduce) {
+  if (disabled) {
     return (
       <Box
         component="section"
