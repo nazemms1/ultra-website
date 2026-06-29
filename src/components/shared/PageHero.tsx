@@ -75,7 +75,7 @@ export default function PageHero({
           sx={theme => ({
             position: 'absolute',
             inset: 0,
-            background: `linear-gradient(to right, ${alpha(theme.palette.background.default, 0.85)} 0%, ${alpha(theme.palette.background.default, 0.5)} 50%, ${alpha(theme.palette.background.default, 0.1)} 100%), linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`,
+            background: `linear-gradient(to top, ${theme.palette.background.default} 0%, ${alpha(theme.palette.background.default, 0.6)} 100%)`,
             zIndex: 1,
             pointerEvents: 'none',
           })}
