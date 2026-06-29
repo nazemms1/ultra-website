@@ -312,9 +312,9 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
               )}
               {processedSocials.length > 0 && (
                 <Stack direction="row" spacing={1.5} sx={{ pt: 0.5 }}>
-                  {processedSocials.map(social => (
+                  {processedSocials.map((social, idx) => (
                     <Box
-                      key={social.label}
+                      key={`${social.label}-${idx}`}
                       component={Link}
                       href={social.href}
                       aria-label={social.label}

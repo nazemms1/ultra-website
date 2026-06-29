@@ -40,7 +40,7 @@ function easeInOutQuart(t: number) {
 
 type NavbarProps = {
   labels: NavLabels
-  sectionsVisibility?: Record<SectionId, boolean>
+  sectionsVisibility?: Partial<Record<SectionId, boolean>>
 }
 
 export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {

@@ -9,7 +9,7 @@ type AppShellProps = {
   navLabels: NavLabels
   footerData?: any
   statsData?: any
-  navSectionsVisibility?: { about: boolean; services: boolean; projects: boolean }
+  navSectionsVisibility?: { about: boolean; services: boolean; projects: boolean; gallery?: boolean }
 }
 
 export default function AppShell({

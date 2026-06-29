@@ -732,21 +732,13 @@ export default function ServicesCardStack({ data }: ServicesCardStackProps) {
   const trackRef = useRef<HTMLDivElement>(null)
 
   const items = data?.items || []
-  const hasApiData = items.length > 0
 
-  const services: ServiceItemNormalized[] = hasApiData
-    ? items.map((item, index) => ({
-        title: item.title,
-        description: item.description,
-        image: item.image?.url || `/images/methodologies/${(index % 4) + 1}.png`,
-        tools: item.tools || [],
-      }))
-    : STACK_SERVICES.map((s, index) => ({
-        title: s.title,
-        description: s.description,
-        image: s.image,
-        tools: s.tags.map((tag, idx) => ({ id: idx, name: tag })),
-      }))
+  const services: ServiceItemNormalized[] = items.map((item, index) => ({
+    title: item.title,
+    description: item.description,
+    image: item.image?.url || `/images/methodologies/${(index % 4) + 1}.png`,
+    tools: item.tools || [],
+  }))
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
