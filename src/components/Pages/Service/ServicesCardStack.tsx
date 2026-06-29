@@ -465,36 +465,7 @@ const tagIcons: Record<string, React.ReactNode> = {
 }
 
 // Sample services data with 3D illustrations from public folder
-const STACK_SERVICES = [
-  {
-    title: 'Web Development',
-    description:
-      'We specialize in crafting robust, high-performance applications and web platforms that are thoughtfully engineered to evolve seamlessly with your business needs. Our solutions emphasize seamless scalability and resilience, ensuring your systems maintain optimal reliability and responsiveness even as demand grows. By integrating intuitive design principles and advanced technologies, we create user-friendly experiences that drive engagement and efficiency, empowering your business to thrive in dynamic markets.',
-    image: '/images/methodologies/1.png',
-    tags: ['React', 'Flutter'],
-  },
-  {
-    title: 'UI/UX Design',
-    description:
-      'We craft intuitive, accessible interfaces that turn complex products into effortless experiences. Grounded in research and a cohesive design system, every flow is shaped to delight users while driving the metrics your business cares about — from activation to retention and conversion.',
-    image: '/images/methodologies/2.png',
-    tags: ['Figma', 'Prototyping', 'Design Systems'],
-  },
-  {
-    title: 'AI & Automation',
-    description:
-      "We build AI-powered systems and automation pipelines that remove bottlenecks and multiply your team's capacity. From custom machine learning models and LLM integrations to end-to-end workflow automation, we help you move faster and unlock insights.",
-    image: '/images/methodologies/3.png',
-    tags: ['LLMs', 'OpenAI', 'Python', 'Automation'],
-  },
-  {
-    title: 'Cloud & DevOps',
-    description:
-      'We design resilient cloud infrastructure and automated delivery pipelines that scale effortlessly with demand. From infrastructure-as-code and containerized workloads to zero-downtime deployments, we give your teams the confidence to ship faster.',
-    image: '/images/methodologies/4.png',
-    tags: ['AWS', 'Docker', 'Kubernetes', 'CI/CD'],
-  },
-]
+ 
 
 export interface ToolData {
   id: number

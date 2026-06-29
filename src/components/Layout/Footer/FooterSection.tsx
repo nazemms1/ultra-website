@@ -372,47 +372,66 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
 
             <Stack spacing={2} sx={{ width: { md: 192 } }}>
               <Typography variant="h5" sx={footerSectionTitleSx}>
-                Useful Links
+                {isAr ? 'روابط مفيدة' : 'Useful Links'}
               </Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-                {usefulLinks.map(link => (
-                  <Box key={link.href} component="li">
-                    <Box
-                      component={Link}
-                      href={link.href}
-                      sx={{
-                        ...footerLinkSx,
-                        fontSize: '16px',
-                        lineHeight: '24px',
-                        fontWeight: 500,
-                      }}
-                    >
-                      {link.label}
+                {usefulLinks.map(link => {
+                  let labelText = link.label
+                  if (isAr) {
+                    if (link.label === 'About Us') labelText = 'من نحن'
+                    else if (link.label === 'Our services') labelText = 'خدماتنا'
+                    else if (link.label === 'Our projects') labelText = 'مشاريعنا'
+                    else if (link.label === 'Gallery') labelText = 'المعرض'
+                    else if (link.label === 'Contact Us') labelText = 'تواصل معنا'
+                  }
+                  return (
+                    <Box key={link.href} component="li">
+                      <Box
+                        component={Link}
+                        href={link.href}
+                        sx={{
+                          ...footerLinkSx,
+                          fontSize: '16px',
+                          lineHeight: '24px',
+                          fontWeight: 500,
+                        }}
+                      >
+                        {labelText}
+                      </Box>
                     </Box>
-                  </Box>
-                ))}
+                  )
+                })}
               </Stack>
             </Stack>
 
             <Stack spacing={2} sx={{ width: { md: 174 } }}>
               <Typography variant="h5" sx={footerSectionTitleSx}>
-                Services
+                {isAr ? 'خدماتنا' : 'Services'}
               </Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-                {serviceItems.map(item => (
-                  <Typography
-                    key={item}
-                    component="li"
-                    sx={{
-                      ...footerBodySx,
-                      fontSize: '16px',
-                      lineHeight: '24px',
-                      fontWeight: 500,
-                    }}
-                  >
-                    {item}
-                  </Typography>
-                ))}
+                {serviceItems.map(item => {
+                  let itemText = item
+                  if (isAr) {
+                    if (item === 'Business Analysis') itemText = 'تحليل الأعمال'
+                    else if (item === 'Mobile & Web Eng.') itemText = 'هندسة الويب والموبايل'
+                    else if (item === 'UI/UX Design') itemText = 'تصميم واجهات المستخدم'
+                    else if (item === 'DevOps & Cloud') itemText = 'الحوسبة السحابية وDevOps'
+                  }
+                  return (
+                    <Typography
+                      key={item}
+                      component="li"
+                      sx={{
+                        ...footerBodySx,
+                        fontSize: '16px',
+                        lineHeight: '24px',
+                        fontWeight: 500,
+                      }}
+                    >
+                      {itemText}
+                    </Typography>
+                  )
+                })}
               </Stack>
             </Stack>
 

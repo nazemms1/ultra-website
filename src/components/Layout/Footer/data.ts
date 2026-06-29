@@ -5,6 +5,7 @@ export const usefulLinks = [
   { label: 'About Us', href: '/about' },
   { label: 'Our services', href: '/services' },
   { label: 'Our projects', href: '/projects' },
+  { label: 'Gallery', href: '/gallery' },
   { label: 'Contact Us', href: '/contact' },
 ] as const
 

@@ -42,15 +42,14 @@ export default function PageHero({
         minHeight: height ? 'auto' : { xs: 'auto', md: 'auto' },
         pt: { xs: '120px', md: '140px' },
         pb: { xs: 6, md: 8 },
-        px: { xs: 3, sm: 6, md: 10 },
+        px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
         overflow: 'hidden',
         bgcolor: 'background.default',
         display: 'flex',
         alignItems: 'center',
       }}
     >
-      {/* Background Video */}
-      {videoSrc && (
+       {videoSrc && (
         <Box
           component="video"
           autoPlay
@@ -106,7 +105,7 @@ export default function PageHero({
         spacing={2.5}
         sx={{
           width: '100%',
-          maxWidth: 1200,
+          maxWidth: 1480,
           mx: 'auto',
           position: 'relative',
           zIndex: 2,

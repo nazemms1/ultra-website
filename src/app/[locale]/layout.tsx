@@ -73,6 +73,7 @@ export default async function LocaleLayout({ children, params }: Props) {
     services: tNav('services'),
     projects: tNav('projects'),
     contact: tNav('contact'),
+    gallery: tNav('gallery'),
   }
 
   const [footerData, statsData, partnersData, servicesData, portfoliosData] = await Promise.all([
