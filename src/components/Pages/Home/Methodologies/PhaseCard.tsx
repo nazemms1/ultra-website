@@ -196,7 +196,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
           >
             {/* Phase Subtitle Tracker */}
             <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
-              <Box sx={{ height: '1px', width: 32,  bgcolor: 'primary.light' }} />
+              <Box sx={{ height: '1px', width: 32, bgcolor: 'primary.light' }} />
               <Typography
                 sx={{
                   fontFamily: "'Rajdhani', sans-serif",

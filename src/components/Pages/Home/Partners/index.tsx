@@ -92,7 +92,9 @@ export default function PartnersSection({ data }: PartnersSectionProps) {
               slotWidth: 188,
               slotHeight: 144,
             }
-            return <PartnerLogo key={partner.id} partner={partner} index={index} visible={isInView} />
+            return (
+              <PartnerLogo key={partner.id} partner={partner} index={index} visible={isInView} />
+            )
           })}
         </Box>
       </Box>

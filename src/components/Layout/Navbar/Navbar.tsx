@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Stack from '@mui/material/Stack'
@@ -48,7 +48,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   const { mergeProgress, spreadProgress } = useNavbarScrollMode()
   const [mobileOpen, setMobileOpen] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
+  // const router = useRouter()
 
   const visibleNavLinks = navLinks.filter(
     link => !sectionsVisibility || sectionsVisibility[link.sectionId] !== false,

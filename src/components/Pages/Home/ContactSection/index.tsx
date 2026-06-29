@@ -1,6 +1,7 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useMemo } from 'react'
 import { useTranslations } from 'next-intl'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -8,7 +9,7 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { Briefcase, Mail, MapPin, Phone, Server, Palette, Smartphone } from 'lucide-react'
 import ShimmerText from '@/components/shared/ShimmerText'
 import { glowOrb } from '@/lib/theme/surfaces'
-import { SERVICES, BASE_OFFERINGS } from './data'
+import { SERVICES } from './data'
 import type { ConsultationType, Service } from './types'
 import StepLabel from './StepLabel'
 import SectionDivider from './SectionDivider'
@@ -74,8 +75,7 @@ export default function ContactSection({ data }: { data?: any }) {
 
     return (
       <>
-        {highlightWords(prefix)}{' '}
-        <ShimmerText>{lastWord}</ShimmerText>
+        {highlightWords(prefix)} <ShimmerText>{lastWord}</ShimmerText>
       </>
     )
   }
@@ -84,20 +84,30 @@ export default function ContactSection({ data }: { data?: any }) {
   const isCaptchaShown = hasApiData ? !!data.header?.is_captcha_shown : true
 
   // Header configs
-  const categoryLabel = hasApiData ? (data.header?.title || "Get in touch") : "Get in touch"
-  const mainTitle = hasApiData ? (data.header?.subtitle || "IGNITE YOUR VISION") : "IGNITE YOUR VISION"
-  const descriptionText = hasApiData ? data.header?.description : "Tell us where you're headed. Whether it's high-performance VPS architecture, striking UI/UX, or next-gen mobile experiences — we're the launch crew."
+  const categoryLabel = hasApiData ? data.header?.title || 'Get in touch' : 'Get in touch'
+  const mainTitle = hasApiData
+    ? data.header?.subtitle || 'IGNITE YOUR VISION'
+    : 'IGNITE YOUR VISION'
+  const descriptionText = hasApiData
+    ? data.header?.description
+    : "Tell us where you're headed. Whether it's high-performance VPS architecture, striking UI/UX, or next-gen mobile experiences — we're the launch crew."
 
   // Consultation setups
   const isOnlineShown = hasApiData ? !!data.consultation?.setup?.is_online_consultation_shown : true
   const isOnsiteShown = hasApiData ? !!data.consultation?.setup?.is_onsite_consultation_shown : true
-  const addressPlaceholder = hasApiData ? (data.consultation?.setup?.onsite_location_address || t('locationPlaceholder')) : t('locationPlaceholder')
-  
+  const addressPlaceholder = hasApiData
+    ? data.consultation?.setup?.onsite_location_address || t('locationPlaceholder')
+    : t('locationPlaceholder')
+
   // Regions list
-  const onlineRegionsList = hasApiData ? (data.consultation?.online_regions || []) : [
-    { id: 'syria', title: 'syria' },
-    { id: 'uae', title: 'UAE' }
-  ]
+  const onlineRegionsList = useMemo(() => {
+    return hasApiData
+      ? data.consultation?.online_regions || []
+      : [
+          { id: 'syria', title: 'syria' },
+          { id: 'uae', title: 'UAE' },
+        ]
+  }, [data, hasApiData])
 
   // States
   const [selectedService, setSelectedService] = useState<string | null>(null)
@@ -116,6 +126,7 @@ export default function ContactSection({ data }: { data?: any }) {
   useEffect(() => {
     if (hasApiData) {
       if (isOnlineShown) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setConsultationType('online')
       } else if (isOnsiteShown) {
         setConsultationType('onsite')
@@ -126,14 +137,34 @@ export default function ContactSection({ data }: { data?: any }) {
     } else {
       setRegion('syria')
     }
-  }, [data, isOnlineShown, isOnsiteShown])
+  }, [data, hasApiData, isOnlineShown, isOnsiteShown, onlineRegionsList])
 
   // Dynamic services resolving
   const getServiceIcon = (id: string, title: string) => {
     const text = (id + ' ' + title).toLowerCase()
-    if (text.includes('vps') || text.includes('host') || text.includes('infra') || text.includes('server')) return Server
-    if (text.includes('design') || text.includes('ui') || text.includes('ux') || text.includes('art') || text.includes('palette')) return Palette
-    if (text.includes('mobile') || text.includes('app') || text.includes('phone') || text.includes('android') || text.includes('ios')) return Smartphone
+    if (
+      text.includes('vps') ||
+      text.includes('host') ||
+      text.includes('infra') ||
+      text.includes('server')
+    )
+      return Server
+    if (
+      text.includes('design') ||
+      text.includes('ui') ||
+      text.includes('ux') ||
+      text.includes('art') ||
+      text.includes('palette')
+    )
+      return Palette
+    if (
+      text.includes('mobile') ||
+      text.includes('app') ||
+      text.includes('phone') ||
+      text.includes('android') ||
+      text.includes('ios')
+    )
+      return Smartphone
     return Briefcase
   }
 
@@ -149,7 +180,7 @@ export default function ContactSection({ data }: { data?: any }) {
     : SERVICES
 
   const activeService = processedServices.find(s => s.id === selectedService)
-  const availableOfferings = activeService 
+  const availableOfferings = activeService
     ? (activeService.sub_services || activeService.offerings || []).map((o: any) => {
         if (typeof o === 'string') {
           return { id: o, title: o }
@@ -165,7 +196,7 @@ export default function ContactSection({ data }: { data?: any }) {
 
   const toggleOffering = (offeringId: any) => {
     setSelectedSubServices(prev =>
-      prev.includes(offeringId) ? prev.filter(id => id !== offeringId) : [...prev, offeringId]
+      prev.includes(offeringId) ? prev.filter(id => id !== offeringId) : [...prev, offeringId],
     )
   }
 
@@ -185,17 +216,17 @@ export default function ContactSection({ data }: { data?: any }) {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Accept': 'application/json',
+          Accept: 'application/json',
         },
         body: JSON.stringify({
           service_ids: !isNaN(Number(selectedService)) ? [Number(selectedService)] : [],
-          sub_service_ids: selectedSubServices.map(id => !isNaN(Number(id)) ? Number(id) : id),
+          sub_service_ids: selectedSubServices.map(id => (!isNaN(Number(id)) ? Number(id) : id)),
           email,
           phone,
           specialty: sector,
           consultation_type: consultationType,
           consultation_region_id: !isNaN(Number(region)) ? Number(region) : null,
-          ...(consultationType === 'onsite' ? { address } : {})
+          ...(consultationType === 'onsite' ? { address } : {}),
         }),
       })
 
@@ -237,9 +268,10 @@ export default function ContactSection({ data }: { data?: any }) {
           left: 0,
           right: 0,
           height: '180px',
-          background: theme.direction === 'rtl'
-            ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
-            : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
+          background:
+            theme.direction === 'rtl'
+              ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
+              : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
           zIndex: 0,
           pointerEvents: 'none',
         },
@@ -250,9 +282,10 @@ export default function ContactSection({ data }: { data?: any }) {
           left: 0,
           right: 0,
           height: '180px',
-          background: theme.direction === 'rtl'
-            ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
-            : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
+          background:
+            theme.direction === 'rtl'
+              ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
+              : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
           zIndex: 0,
           pointerEvents: 'none',
         },
@@ -364,7 +397,11 @@ export default function ContactSection({ data }: { data?: any }) {
             )}
 
             {isCaptchaShown && (
-              <CaptchaBox checked={captchaDone} onToggle={() => setCaptchaDone(prev => !prev)} label={t('captchaLabel')} />
+              <CaptchaBox
+                checked={captchaDone}
+                onToggle={() => setCaptchaDone(prev => !prev)}
+                label={t('captchaLabel')}
+              />
             )}
           </Box>
         </Box>
@@ -521,8 +558,8 @@ export default function ContactSection({ data }: { data?: any }) {
                     <FieldLabel>{t('selectRegion')}</FieldLabel>
                     <Box sx={{ display: 'flex', gap: '10px', mt: '10px', flexWrap: 'wrap' }}>
                       {onlineRegionsList.map((reg: any) => {
-                        const titleLower = String(reg.title || reg.id).toLowerCase();
-                        const isSyria = titleLower.includes('syria') || titleLower.includes('سوريا');
+                        const titleLower = String(reg.title || reg.id).toLowerCase()
+                        const isSyria = titleLower.includes('syria') || titleLower.includes('سوريا')
                         return (
                           <RadioOption
                             key={reg.id}
@@ -532,7 +569,7 @@ export default function ContactSection({ data }: { data?: any }) {
                             onChange={() => setRegion(String(reg.id))}
                             disabled={!isSyria}
                           />
-                        );
+                        )
                       })}
                     </Box>
                   </Box>
@@ -555,14 +592,10 @@ export default function ContactSection({ data }: { data?: any }) {
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             <ContactSubmitButton disabled={!canSubmit} label={t('submitButton')} />
             {submitSuccess === true && (
-              <Typography sx={{ color: 'success.main', mt: 1 }}>
-                {t('successMessage')}
-              </Typography>
+              <Typography sx={{ color: 'success.main', mt: 1 }}>{t('successMessage')}</Typography>
             )}
             {submitSuccess === false && (
-              <Typography sx={{ color: 'error.main', mt: 1 }}>
-                {t('errorMessage')}
-              </Typography>
+              <Typography sx={{ color: 'error.main', mt: 1 }}>{t('errorMessage')}</Typography>
             )}
             {!captchaDone && isCaptchaShown && (
               <Typography

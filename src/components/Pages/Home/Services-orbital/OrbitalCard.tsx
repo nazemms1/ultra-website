@@ -138,7 +138,15 @@ export default function OrbitalCard({
         <motion.path
           initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
-          animate={{ d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH) }}
+          animate={{
+            d: isDisplayingActive
+              ? isRtl
+                ? HOVER_CARD_PATH_RTL
+                : HOVER_CARD_PATH
+              : isRtl
+                ? CARD_PATH_RTL
+                : CARD_PATH,
+          }}
           transition={springTransition}
           fill={`url(#${fillId})`}
         />
@@ -147,7 +155,13 @@ export default function OrbitalCard({
           initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH),
+            d: isDisplayingActive
+              ? isRtl
+                ? HOVER_CARD_PATH_RTL
+                : HOVER_CARD_PATH
+              : isRtl
+                ? CARD_PATH_RTL
+                : CARD_PATH,
             opacity: isDisplayingActive ? 0.04 : 0,
           }}
           transition={springTransition}
@@ -158,7 +172,13 @@ export default function OrbitalCard({
           initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH),
+            d: isDisplayingActive
+              ? isRtl
+                ? HOVER_CARD_PATH_RTL
+                : HOVER_CARD_PATH
+              : isRtl
+                ? CARD_PATH_RTL
+                : CARD_PATH,
             opacity: isDisplayingActive ? 0 : 1,
           }}
           transition={springTransition}
@@ -171,7 +191,13 @@ export default function OrbitalCard({
           initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive ? (isRtl ? HOVER_CARD_PATH_RTL : HOVER_CARD_PATH) : (isRtl ? CARD_PATH_RTL : CARD_PATH),
+            d: isDisplayingActive
+              ? isRtl
+                ? HOVER_CARD_PATH_RTL
+                : HOVER_CARD_PATH
+              : isRtl
+                ? CARD_PATH_RTL
+                : CARD_PATH,
             opacity: isDisplayingActive ? 1 : 0,
           }}
           transition={springTransition}

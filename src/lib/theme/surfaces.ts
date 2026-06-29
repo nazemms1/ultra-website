@@ -276,7 +276,7 @@ export const statNumberSx: SxProps<Theme> = (theme: Theme) => ({
   fontFamily: "'Ethnocentric Rg', sans-serif !important",
   fontSize: { xs: '40px', sm: '48px', md: '54.85px' },
   lineHeight: { xs: '48px', sm: '60px', md: '82.275px' },
-  color: 'primary.main',
+  color: theme.palette.primary.main,
   display: 'block',
   fontVariantNumeric: 'tabular-nums',
 })

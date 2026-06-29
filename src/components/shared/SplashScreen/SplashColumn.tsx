@@ -10,25 +10,22 @@ export default function SplashColumn({
   heightPercent,
   index,
   showDivider = true,
+  containerStyle,
 }: SplashColumnProps) {
   const theme = useTheme()
   const { scaleY, crestY, glowOpacity } = useColumnWaveMotion(index)
   const primaryMain = theme.palette.primary.main
   const primaryDark = theme.palette.primary.darker
-  const isRtl = theme.direction === 'rtl'
+  const dividerColor = theme.palette.background.divider
 
   return (
     <Box
+      style={{
+        ...containerStyle,
+        ...(showDivider ? { borderRight: `1px solid ${dividerColor}` } : undefined),
+      }}
       sx={{
-        flex: 1,
-        height: '100%',
-        position: 'relative',
         overflow: 'hidden',
-        ...(showDivider && {
-          // In RTL the flex row is mirrored, so the divider goes on the left side
-          ...(isRtl ? { borderLeft: '1px solid' } : { borderRight: '1px solid' }),
-          borderColor: 'background.divider',
-        }),
       }}
     >
       <Box
@@ -36,16 +33,15 @@ export default function SplashColumn({
         style={{
           scaleY,
           transformOrigin: 'bottom center',
+          left: 0,
+          right: 0,
+          marginLeft: '-8%',
+          marginRight: '-8%',
+          width: 'auto',
         }}
         sx={{
           position: 'absolute',
           bottom: 0,
-          // Extend 8% beyond each side symmetrically — use inset 0 + negative
-          // margin instead of left/right so stylis-plugin-rtl doesn't flip it.
-          left: 0,
-          right: 0,
-          mx: '-8%',
-          width: 'auto',
           height: `${heightPercent}%`,
           willChange: 'transform',
           background: `linear-gradient(to top,
@@ -62,12 +58,12 @@ export default function SplashColumn({
           style={{
             y: crestY,
             opacity: glowOpacity,
-          }}
-          sx={{
-            position: 'absolute',
             top: '-18%',
             left: '-25%',
             right: '-25%',
+          }}
+          sx={{
+            position: 'absolute',
             height: '52%',
             pointerEvents: 'none',
             background: `radial-gradient(ellipse at center bottom, ${alpha(primaryMain, 0.55)} 0%, ${alpha(primaryMain, 0.18)} 42%, transparent 78%)`,
@@ -77,12 +73,9 @@ export default function SplashColumn({
 
         <Box
           component={motion.div}
-          style={{ y: crestY }}
+          style={{ y: crestY, top: '-4%', left: 0, right: 0 }}
           sx={{
             position: 'absolute',
-            top: '-4%',
-            left: 0,
-            right: 0,
             height: '28%',
             pointerEvents: 'none',
             background: `linear-gradient(to bottom, transparent 0%, ${alpha(primaryMain, 0.22)} 100%)`,

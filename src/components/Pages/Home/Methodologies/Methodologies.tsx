@@ -202,7 +202,11 @@ export default function Methodologies({ data }: MethodologiesProps) {
             pb: 3,
           }}
         >
-          <Timeline labels={phasesList.map(p => p.title)} progress={progress} onSeek={seekToPhase} />
+          <Timeline
+            labels={phasesList.map(p => p.title)}
+            progress={progress}
+            onSeek={seekToPhase}
+          />
         </Box>
       </Box>
     </Box>

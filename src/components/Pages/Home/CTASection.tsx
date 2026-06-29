@@ -4,7 +4,6 @@ import { useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import AnimatedButton from '@/components/shared/AnimatedButton'
 import { highlightKeywords } from '@/components/shared/SectionHeader'
 
 interface CTASectionProps {
@@ -135,7 +134,9 @@ export default function CTASection({ data }: CTASectionProps) {
     )
   }
 
-  const videoUrl = (typeof data?.video === 'string' ? data.video : data?.video?.url) || "/videos/colorflow-animation.mp4"
+  const videoUrl =
+    (typeof data?.video === 'string' ? data.video : data?.video?.url) ||
+    '/videos/colorflow-animation.mp4'
 
   return (
     <Box
@@ -170,7 +171,7 @@ export default function CTASection({ data }: CTASectionProps) {
       </video>
 
       <Box
-        sx={theme => ({
+        sx={() => ({
           position: 'absolute',
           inset: 0,
           zIndex: 2,
@@ -214,7 +215,7 @@ export default function CTASection({ data }: CTASectionProps) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-           backdropFilter: 'blur(20px) brightness(1.10) saturate(1.15)',
+          backdropFilter: 'blur(20px) brightness(1.10) saturate(1.15)',
           WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
           border: '1px solid rgba(255, 255, 255, 0.15)',
           boxShadow: [
@@ -268,7 +269,9 @@ export default function CTASection({ data }: CTASectionProps) {
                   mx: 'auto',
                 }}
               >
-                {data ? highlightKeywords(data.description ?? '') : "Let's talk about your product, your users, and how Ultrawares can help you ship it."}
+                {data
+                  ? highlightKeywords(data.description ?? '')
+                  : "Let's talk about your product, your users, and how Ultrawares can help you ship it."}
               </Typography>
             </Box>
           )}

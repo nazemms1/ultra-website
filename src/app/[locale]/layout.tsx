@@ -15,7 +15,6 @@ const rajdhani = Rajdhani({
   display: 'swap',
 })
 
-
 export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }))
 }
@@ -105,7 +104,9 @@ export default async function LocaleLayout({ children, params }: Props) {
               services: servicesData?.is_shown !== false,
               projects: portfoliosData?.is_shown !== false,
             }}
-          >{children}</AppShell>
+          >
+            {children}
+          </AppShell>
         </AppProviders>
       </body>
     </html>

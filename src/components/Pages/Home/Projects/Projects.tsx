@@ -1,5 +1,6 @@
 'use client'
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
@@ -34,10 +35,6 @@ function useViewportHeight() {
 }
 
 export default function Projects({ data }: { data?: any }) {
-  if (data && data.is_shown === false) {
-    return null
-  }
-
   const trackRef = useRef<HTMLDivElement>(null)
   const stickyRef = useRef<HTMLDivElement>(null)
   const stageRef = useRef<HTMLDivElement>(null)
@@ -112,35 +109,33 @@ export default function Projects({ data }: { data?: any }) {
 
   // Process API portfolios items or fall back to local dataset
   const hasApiData = !!data
-  const rawProjects = hasApiData ? (data.items || []) : PROJECTS
-  
-  const processedProjects: ProjectItem[] = rawProjects.map((item: any, index: number): ProjectItem => {
-    if (item.mockup) return item
-    const title = item.title || ''
-    const description = item.description || ''
-    const coverImageUrl = item.cover_image?.url || item.cover_image || ''
-    const isMobile = title.toLowerCase().includes('mobile') || 
-                     title.toLowerCase().includes('app') || 
-                     description.toLowerCase().includes('mobile') || 
-                     description.toLowerCase().includes('app')
-    return {
-      id: String(item.id),
-      title,
-      description,
-      href: item.href || '#projects',
-      mockup: {
-        src: coverImageUrl,
-        alt: title,
-        kind: isMobile ? 'mobile' : 'desktop',
-      },
-      imageSide: index % 2 === 0 ? 'left' : 'right',
-    }
-  })
+  const rawProjects = hasApiData ? data.items || [] : PROJECTS
 
-  // If there are no projects to render, collapse the section
-  if (processedProjects.length === 0) {
-    return null
-  }
+  const processedProjects: ProjectItem[] = rawProjects.map(
+    (item: any, index: number): ProjectItem => {
+      if (item.mockup) return item
+      const title = item.title || ''
+      const description = item.description || ''
+      const coverImageUrl = item.cover_image?.url || item.cover_image || ''
+      const isMobile =
+        title.toLowerCase().includes('mobile') ||
+        title.toLowerCase().includes('app') ||
+        description.toLowerCase().includes('mobile') ||
+        description.toLowerCase().includes('app')
+      return {
+        id: String(item.id),
+        title,
+        description,
+        href: item.href || '#projects',
+        mockup: {
+          src: coverImageUrl,
+          alt: title,
+          kind: isMobile ? 'mobile' : 'desktop',
+        },
+        imageSide: index % 2 === 0 ? 'left' : 'right',
+      }
+    },
+  )
 
   // Whole wrapper fades in on entry and back out when scrolled off the top.
   const wrapperOpacity = useTransform(progress, [...SECTION_FADE_IN], [0, 1])
@@ -165,10 +160,25 @@ export default function Projects({ data }: { data?: any }) {
 
     return 0
   })
+  if (data && data.is_shown === false) {
+    return null
+  }
+  // If there are no projects to render, collapse the section
+  if (processedProjects.length === 0) {
+    return null
+  }
 
   if (reduce) {
     return (
-      <Box component="section" id="projects" sx={{ position: 'relative', px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' }, py: 12 }}>
+      <Box
+        component="section"
+        id="projects"
+        sx={{
+          position: 'relative',
+          px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+          py: 12,
+        }}
+      >
         <SectionHeading data={data} />
         <Box
           sx={{
@@ -249,16 +259,18 @@ export default function Projects({ data }: { data?: any }) {
 function SectionHeading({ data }: { data?: any }) {
   const subtitle = data?.title || 'Our Portfolio'
   const title = data?.subtitle || data?.description
-  return (
-    <SectionHeader
-      align="center"
-      subtitle={subtitle}
-      title={title ?? undefined}
-    />
-  )
+  return <SectionHeader align="center" subtitle={subtitle} title={title ?? undefined} />
 }
 
-function PortfolioLabel({ data, labelRef, titleRef }: { data?: any; labelRef?: React.RefObject<HTMLParagraphElement | null>; titleRef?: React.RefObject<HTMLHeadingElement | null> }) {
+function PortfolioLabel({
+  data,
+  labelRef,
+  titleRef,
+}: {
+  data?: any
+  labelRef?: React.RefObject<HTMLParagraphElement | null>
+  titleRef?: React.RefObject<HTMLHeadingElement | null>
+}) {
   const subtitle = data?.title || 'Our Portfolio'
   const title = data?.subtitle || data?.description
   return (

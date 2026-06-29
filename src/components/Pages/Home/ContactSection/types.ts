@@ -1,5 +1,5 @@
 import type { LucideIcon } from 'lucide-react'
-
+/* eslint-disable @typescript-eslint/no-explicit-any */
 export interface Service {
   id: string
   icon: any

@@ -7,7 +7,11 @@ import { motion } from 'framer-motion'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import type { ContactSubmitButtonProps } from './types'
 
-export default function ContactSubmitButton({ disabled, onClick, label }: ContactSubmitButtonProps) {
+export default function ContactSubmitButton({
+  disabled,
+  onClick,
+  label,
+}: ContactSubmitButtonProps) {
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
 
@@ -62,13 +66,21 @@ export default function ContactSubmitButton({ disabled, onClick, label }: Contac
           <ArrowLeft
             size={19}
             strokeWidth={2}
-            color={disabled ? alpha(theme.palette.text.primary, 0.3) : (theme.palette.text.primary as string)}
+            color={
+              disabled
+                ? alpha(theme.palette.text.primary, 0.3)
+                : (theme.palette.text.primary as string)
+            }
           />
         ) : (
           <ArrowRight
             size={19}
             strokeWidth={2}
-            color={disabled ? alpha(theme.palette.text.primary, 0.3) : (theme.palette.text.primary as string)}
+            color={
+              disabled
+                ? alpha(theme.palette.text.primary, 0.3)
+                : (theme.palette.text.primary as string)
+            }
           />
         )}
       </Box>
