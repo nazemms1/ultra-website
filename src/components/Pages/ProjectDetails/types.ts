@@ -1,0 +1,56 @@
+/** Logo shown inside the frosted hero card. */
+export interface ProjectDetailLogo {
+  readonly src: string
+  readonly alt: string
+  readonly width: number
+  readonly height: number
+}
+
+export interface BriefBlock {
+  readonly number: string
+  readonly title: string
+  readonly body: string
+}
+
+export interface ProjectMetrics {
+  readonly successRate: number
+  readonly services: readonly string[]
+  readonly tools: readonly string[]
+}
+
+export type DemoViewId = 'mobile' | 'web' | 'admin'
+
+export interface DemoScreenshot {
+  readonly id: string
+  readonly src: string
+  readonly alt: string
+}
+
+export interface DemoView {
+  readonly id: DemoViewId
+  readonly label: string
+  readonly device: 'mobile' | 'desktop'
+  readonly screenshots: readonly DemoScreenshot[]
+}
+
+export interface RelatedProjectCard {
+  readonly id: string
+  readonly title: string
+  readonly description: string
+  readonly logo: ProjectDetailLogo
+}
+
+/** Content for a single project detail page. */
+export interface ProjectDetail {
+  readonly id: string
+  readonly title: string
+  readonly metaCategory: string
+  readonly year: string
+  readonly shortDescription: string
+  readonly websiteUrl?: string
+  readonly logo: ProjectDetailLogo
+  readonly brief: readonly BriefBlock[]
+  readonly metrics: ProjectMetrics
+  readonly demoViews: readonly DemoView[]
+  readonly relatedProjects: readonly RelatedProjectCard[]
+}
