@@ -376,7 +376,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
               </Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {usefulLinks.map(link => {
-                  let labelText = link.label
+                  let labelText: string = link.label
                   if (isAr) {
                     if (link.label === 'About Us') labelText = 'من نحن'
                     else if (link.label === 'Our services') labelText = 'خدماتنا'
@@ -410,7 +410,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
               </Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                 {serviceItems.map(item => {
-                  let itemText = item
+                  let itemText: string = item
                   if (isAr) {
                     if (item === 'Business Analysis') itemText = 'تحليل الأعمال'
                     else if (item === 'Mobile & Web Eng.') itemText = 'هندسة الويب والموبايل'
