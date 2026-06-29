@@ -17,6 +17,10 @@
     "label": "Our Portfolio",
     "heading": "Explore Our\nProjects in Action"
   },
+  "ProjectDetails": {
+    "backToProjects": "Return to Projects",
+    "visitWebsite": "Visit Website"
+  },
   "Methodologies": {
     "label": "Our methodologies",
     "heading": "How we turn ideas into",

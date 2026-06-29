@@ -13,6 +13,10 @@
     "exploreServices": "استعرض الخدمات",
     "getInTouch": "تواصل معنا"
   },
+  "ProjectDetails": {
+    "backToProjects": "العودة إلى المشاريع",
+    "visitWebsite": "زيارة الموقع"
+  },
   "Methodologies": {
     "label": "منهجياتنا",
     "heading": "كيف نحوّل الأفكار إلى",
