@@ -117,7 +117,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             width: { xs: '100%', md: IMAGE_BLOCK_WIDTH },
             maxWidth: { md: IMAGE_BLOCK_WIDTH },
             height: { xs: 240, md: layout.imageIdleHeight },
-            borderRadius: isReversed ? '0px 40px 40px 0px' : '40px 0px 0px 40px',
+            borderRadius: !isReversed ? '0px 40px 40px 0px' : '40px 0px 0px 40px',
             overflow: 'hidden', // Prevents image frames from spilling over adjacent slots during resize
             zIndex: 3,
             transition: HOVER_TRANSITION,
