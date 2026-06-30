@@ -13,7 +13,6 @@ import {
   HOVER_TRANSITION,
   IMAGE_BLOCK_WIDTH,
   logoPlateSx,
-  ROW_FLEX_GAP,
   rowGradient,
   titleSx,
   viewMoreButtonSx,
@@ -40,15 +39,25 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         position: 'relative',
         width: '100%',
         isolation: 'isolate',
-        minHeight: { xs: 'auto', md: layout.hoverHeight },
+        // Clamps layout heights perfectly during transition so rows don't bleed or overlap
+        height: { xs: 'auto', md: layout.textIdleHeight },
         display: 'flex',
         alignItems: 'center',
-        flexShrink: 0,
+        justifyContent: 'center',
+        overflow: 'visible',
         transition: HOVER_TRANSITION,
         '&:hover': {
+          height: { md: layout.textHoverHeight }, // Smooth accordion expand/collapse
+          zIndex: 5,
           '& .row-inner': {
-            minHeight: { md: layout.hoverHeight },
-            background: rowGradient(theme, layout.hoverGradient),
+            height: { md: layout.textHoverHeight },
+          },
+          '& .image-block': {
+            height: { md: layout.imageHoverHeight },
+          },
+          '& .text-block': {
+            height: { md: layout.textHoverHeight },
+            background: rowGradient(theme, layout.hoverGradient, imageOnLeft),
           },
           '& .cover-image': {
             filter: 'grayscale(0%)',
@@ -87,35 +96,37 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             md: isReversed ? 'row-reverse' : 'row',
           },
           alignItems: 'center',
-          gap: { xs: 3, md: ROW_FLEX_GAP },
+          justifyContent: 'space-between',
           width: '100%',
-          minHeight: { xs: 'auto', md: layout.idleHeight },
-          pr: { xs: 0, md: layout.pr },
-          background: rowGradient(theme, layout.idleGradient),
-          borderRadius: '4px',
+          height: { xs: 'auto', md: layout.textIdleHeight },
+          background: 'transparent',
+          overflow: 'visible',
           transition: HOVER_TRANSITION,
-          overflow: 'hidden',
         }}
       >
+        {/* FIX: Photographic Capsule Layout — Centered vertically, with overflow hidden to prevent bleed */}
         <Box
           className="image-block"
           sx={{
-            position: 'relative',
+            position: { xs: 'relative', md: 'absolute' },
+            left: imageOnLeft ? 0 : 'auto',
+            right: !imageOnLeft ? 0 : 'auto',
+            top: '50%',
+            transform: { xs: 'none', md: 'translateY(-50%)' },
             flexShrink: 0,
             width: { xs: '100%', md: IMAGE_BLOCK_WIDTH },
             maxWidth: { md: IMAGE_BLOCK_WIDTH },
-            height: { xs: 220, md: 281 },
-            overflow: 'hidden',
+            height: { xs: 240, md: layout.imageIdleHeight },
+            borderRadius: isReversed ? '0px 40px 40px 0px' : '40px 0px 0px 40px',
+            overflow: 'hidden', // Prevents image frames from spilling over adjacent slots during resize
+            zIndex: 3,
             transition: HOVER_TRANSITION,
           }}
         >
           <Box
             sx={{
               position: 'absolute',
-              top: '-16%',
-              left: '-1%',
-              width: '181%',
-              height: '200%',
+              inset: 0,
               overflow: 'hidden',
               transform: layout.flipImage ? 'scaleX(-1)' : 'none',
             }}
@@ -178,17 +189,24 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           </Box>
         </Box>
 
+        {/* FIX: Text Container Tracks — Uses overflow: hidden to prevent gradient/shadow spilling over other rows */}
         <Box
           className="text-block"
           sx={{
             flex: 1,
+            width: '100%',
+            height: { xs: 'auto', md: layout.textIdleHeight },
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'flex-start',
             minWidth: 0,
-            gap: { xs: 2, md: 2.5 },
-            py: { xs: 2, md: 1 },
+            pl: imageOnLeft ? { xs: 3, md: '670px' } : { xs: 3, md: 10 },
+            pr: !imageOnLeft ? { xs: 3, md: '670px' } : { xs: 3, md: 10 },
+            py: { xs: 4, md: 2 },
+            background: rowGradient(theme, layout.idleGradient, imageOnLeft),
+            overflow: 'hidden', // Keeps the green shadow gradient cleanly bounded inside its own expanding box
+            transition: HOVER_TRANSITION,
           }}
         >
           <Box
@@ -232,31 +250,34 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
               opacity: 0,
               maxHeight: 0,
               overflow: 'hidden',
-              transform: 'translateY(20px)',
+              transform: 'translateY(14px)',
               pointerEvents: 'none',
+              mt: 1.5,
               transition: HOVER_TRANSITION,
             }}
           >
             <Box component={Link} href={item.href} sx={viewMoreButtonSx}>
               {t('viewMore')}
-              <ArrowUpRight size={20} color="currentColor" strokeWidth={1.75} />
+              <ArrowUpRight size={18} color="currentColor" strokeWidth={1.75} />
             </Box>
           </Box>
         </Box>
 
+        {/* Mobile Viewports Layer */}
         <Box
           sx={{
             display: { xs: 'flex', md: 'none' },
             flexDirection: 'column',
             gap: 2,
             width: '100%',
-            pb: 2,
+            px: 3,
+            pb: 3,
           }}
         >
           <Typography sx={hoverDescriptionSx}>{item.description}</Typography>
           <Box component={Link} href={item.href} sx={viewMoreButtonSx}>
             {t('viewMore')}
-            <ArrowUpRight size={20} color="currentColor" strokeWidth={1.75} />
+            <ArrowUpRight size={18} color="currentColor" strokeWidth={1.75} />
           </Box>
         </Box>
       </Box>
