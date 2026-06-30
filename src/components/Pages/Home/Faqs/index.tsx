@@ -9,26 +9,7 @@ import FAQCard from './FAQCard'
 import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 const faqs = [
-  {
-    question: 'What makes Ultrawares VPS different from typical hosting?',
-    answer:
-      'Our VPS infrastructure is built for performance-first workloads — NVMe storage, dedicated vCPUs, and ultra-low latency networking that typical shared hosting simply cannot match.',
-  },
-  {
-    question: 'Do you handle both UI/UX strategy and visual execution?',
-    answer:
-      'Yes. We cover the full design pipeline from user research and wireframing to pixel-perfect UI delivery and developer handoff, all under one roof.',
-  },
-  {
-    question: 'Native, hybrid, or cross-platform — which path do you recommend?',
-    answer:
-      'It depends on your goals. We assess budget, performance needs, and audience before recommending a path. Most clients benefit from a cross-platform approach with native-level performance.',
-  },
-  {
-    question: 'How are projects scoped and priced?',
-    answer:
-      'We start with a discovery session to define scope, then provide a fixed-price proposal. No surprises — just clear deliverables and timelines agreed upfront.',
-  },
+  
   {
     question: 'Can you operate across Syria and the UAE?',
     answer:

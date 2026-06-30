@@ -135,7 +135,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   const contactButton = (
     <AnimatedButton
       variant="primary"
-      href="/contact"
+      href="#contact"
       sx={{
         display: { xs: 'none', md: 'inline-flex' },
         minHeight: 42,
