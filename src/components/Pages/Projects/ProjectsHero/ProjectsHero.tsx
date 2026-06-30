@@ -74,7 +74,6 @@ export default function ProjectsHero({ videoSrc = VIDEO_SRC }: ProjectsHeroProps
             sx={titleSx}
           >
             {t('titleLine1')}
-            <Box component="br" sx={{ display: { xs: 'none', sm: 'block' } }} />
             <Box component="span" sx={{ color: 'primary.light' }}>
               {t('titleAccent')}
             </Box>

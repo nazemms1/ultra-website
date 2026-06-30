@@ -58,7 +58,6 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             opacity: 0.35,
           },
           '& .logo-flip': {
-            transform: 'rotateX(180deg)',
             opacity: 1,
           },
           '& .row-title': {
@@ -131,7 +130,6 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
                 height: '100%',
                 objectFit: 'cover',
                 display: 'block',
-                filter: 'grayscale(100%)',
                 opacity: layout.idleImageOpacity,
                 transition: HOVER_TRANSITION,
               }}

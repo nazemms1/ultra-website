@@ -23,12 +23,12 @@ export const sectionSx: SxProps<Theme> = {
   width: '100%',
   pt: { xs: 6, md: 10 },
   pb: { xs: 5, md: 7.5 },
-  px: { xs: 3, md: 'max(16px, calc((100vw - 1920px) / 2 + 10px))' },
+  // px: { xs: 3, md: 'max(16px, calc((100vw - 1920px) / 2 + 10px))' },
 }
 
 export const marginWrapperSx: SxProps<Theme> = {
   width: '100%',
-  maxWidth: 1280,
+  // maxWidth: 1280,
   mx: 'auto',
   pt: { xs: 2, md: 3 },
 }
@@ -46,7 +46,6 @@ export const rowsListSx: SxProps<Theme> = {
   display: 'flex',
   flexDirection: 'column',
   gap: 0,
-  // gap: { xs: 4, md: 7.5 },
   width: '100%',
 }
 

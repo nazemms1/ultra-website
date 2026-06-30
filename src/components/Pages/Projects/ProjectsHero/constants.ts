@@ -23,13 +23,13 @@ export const heroContainerSx: SxProps<Theme> = {
   mx: 'auto',
   width: '100%',
   px: { xs: 3, md: 4 },
-  pt: { xs: '120px', md: '188px' },
-  pb: { xs: 6, md: 10 },
+  pt: { xs: '120px', md: 9 },
+  pb: { xs: 6, md: 8 },
 }
 
 /** Figma 2078:4830 — text column */
 export const heroContentSx: SxProps<Theme> = {
-  maxWidth: { xs: '100%', md: 695 },
+  maxWidth: { xs: '100%', md: '100%' },
   pt: { xs: 4, md: 10 },
   pb: { xs: 4, md: 5 },
   pr: { md: 5 },
