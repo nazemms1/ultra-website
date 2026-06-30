@@ -69,6 +69,20 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
     [pathname],
   )
 
+  const handleContactClick = useCallback(
+    (e?: React.MouseEvent<any>) => {
+      const hasContactSection = !!document.getElementById('contact')
+      if (hasContactSection) {
+        e?.preventDefault()
+        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
+        setMobileOpen(false)
+      } else {
+        setMobileOpen(false)
+      }
+    },
+    [],
+  )
+
   const t = isDesktop ? easeInOutQuart(Math.max(0, Math.min(1, mergeProgress))) : 1
   const splitOpacity = 1 - t
   const unifiedOpacity = t
@@ -135,7 +149,8 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   const contactButton = (
     <AnimatedButton
       variant="primary"
-      href="#contact"
+      href="/#contact"
+      onClick={handleContactClick}
       sx={{
         display: { xs: 'none', md: 'inline-flex' },
         minHeight: 42,
@@ -382,7 +397,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
                 gap: 2,
               }}
             >
-              <UltraButton variant="primary" href="/contact" onClick={() => setMobileOpen(false)}>
+              <UltraButton variant="primary" href="/#contact" onClick={handleContactClick}>
                 {labels.contact}
               </UltraButton>
             </Box>
