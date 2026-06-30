@@ -375,7 +375,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
               transition={{ duration: 0.8, ease: EASE }}
               sx={{
                 maxWidth: 576,
-                ml: { xs: 'auto', lg: 8, xl: 'calc(max((100vw - 1920px) / 2 + 160px, 64px))' },
+                ml: { xs: 'auto', lg: 8, xl: 'calc(max((100vw - 1920px) / 2 + 220px, 6px))' },
                 pl: { xs: 3, sm: 5, md: 3, lg: 0 },
                 pr: { xs: 3, sm: 5, md: 3, lg: 0 },
                 mr: { xs: 'auto', lg: 0 },

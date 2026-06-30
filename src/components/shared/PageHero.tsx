@@ -42,7 +42,7 @@ export default function PageHero({
         minHeight: height ? 'auto' : { xs: 'auto', md: 'auto' },
         pt: { xs: '120px', md: '140px' },
         pb: { xs: 6, md: 8 },
-        px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+        px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         overflow: 'hidden',
         bgcolor: 'background.default',
         display: 'flex',

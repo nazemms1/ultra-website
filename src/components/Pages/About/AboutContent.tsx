@@ -42,8 +42,8 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
     <Box
       sx={{
         py: { xs: 8, md: 12 },
-        px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
-        bgcolor: '#080A0A',
+        // px: { xs: 1, md: 'max(80px, calc((100vw - 100%) / 2 + 120px))' },
+        bgcolor: '#121212',
         position: 'relative',
         zIndex: 1,
       }}
@@ -65,7 +65,6 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
               component={motion.div}
               variants={itemVariants}
               sx={{
-                borderBottom: index < items.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
                 pb: { xs: 6, md: 8 },
               }}
             >

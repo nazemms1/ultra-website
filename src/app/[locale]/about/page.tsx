@@ -4,6 +4,7 @@ import AboutContent from '@/components/Pages/About/AboutContent'
 import AboutTimeline from '@/components/Pages/About/AboutTimeline'
 import CTASection from '@/components/Pages/Home/CTASection'
 import { fetchAPI } from '@/lib/api'
+import ContactSection from '@/components/Pages/Home/ContactSection'
 
 type Props = {
   params: Promise<{ locale: string }>
@@ -27,10 +28,11 @@ function formatHeroTitle(text: string) {
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params
 
-  // Fetch page configuration and CTA content concurrently
-  const [aboutData, startProjectData] = await Promise.all([
+  // Fetch page configuration, CTA content, and Contact content concurrently
+  const [aboutData, startProjectData, contactUsData] = await Promise.all([
     fetchAPI('/api/about-us-data', locale),
     fetchAPI('/api/start-project-data', locale),
+    fetchAPI('/api/contact-us-data', locale),
   ])
 
   // Fallbacks for layout
@@ -80,6 +82,8 @@ export default async function AboutPage({ params }: Props) {
       <AboutContent aboutData={aboutData} locale={locale} />
       <AboutTimeline statisticsData={aboutData?.statistics} locale={locale} />
       <CTASection data={startProjectData} />
+      <ContactSection data={contactUsData} />
+      
     </>
   )
 }

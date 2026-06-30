@@ -59,7 +59,7 @@ export default function Stats({ data }: StatsProps) {
         sx={theme => ({
           maxWidth: theme.breakpoints.values.xl,
           mx: 'auto',
-          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
           justifyContent: 'center',
           alignItems: 'flex-start',
         })}

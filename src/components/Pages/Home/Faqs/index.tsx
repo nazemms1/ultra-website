@@ -142,7 +142,7 @@ export default function FAQSection({ data, stillHaveQuestionsData }: FAQSectionP
           position: 'relative',
           zIndex: 1,
           width: '100%',
-          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         }}
       >
         <SectionHeader

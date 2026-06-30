@@ -32,32 +32,28 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
     <Box
       sx={{
         py: { xs: 8, md: 14 },
-        px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
-        bgcolor: '#080A0A',
+        px: { xs: '20px', md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
+        bgcolor: '#121212',
         position: 'relative',
         zIndex: 1,
         overflow: 'hidden',
-        borderTop: '1px solid rgba(255, 255, 255, 0.05)',
       }}
     >
-      {/* Glow Effects */}
-      <Box
+       <Box
         sx={{
           position: 'absolute',
           top: '20%',
           left: '50%',
           width: 500,
           height: 500,
-          background: 'radial-gradient(circle, rgba(13, 241, 217, 0.04) 0%, rgba(13, 241, 217, 0) 70%)',
-          transform: 'translate(-50%, -50%)',
+           transform: 'translate(-50%, -50%)',
           pointerEvents: 'none',
           zIndex: 0,
         }}
       />
 
-      <Stack spacing={10} sx={{ maxWidth: 1480, mx: 'auto', position: 'relative', zIndex: 1 }}>
-        {/* Header */}
-        <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
+      <Stack spacing={10} sx={{ maxWidth: '100%', mx: 'auto', position: 'relative', zIndex: 1 }}>
+         <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
           <Typography
             sx={{
               color: '#0DF1D9',
@@ -84,10 +80,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
           </Typography>
         </Stack>
 
-        {/* Timeline Grid Wrapper */}
-        <Box sx={{ position: 'relative', py: 4 }}>
-          {/* Vertical Line for Desktop */}
-          <Box
+         <Box sx={{ position: 'relative', py: 4 }}>
+           <Box
             sx={{
               position: 'absolute',
               left: '50%',
@@ -100,8 +94,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
             }}
           />
 
-          {/* Vertical Line for Mobile */}
-          <Box
+           <Box
             sx={{
               position: 'absolute',
               left: '16px',
@@ -136,8 +129,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                     }}
                   />
 
-                  {/* Node for Mobile */}
-                  <Box
+                   <Box
                     sx={{
                       position: 'absolute',
                       left: '16px',
@@ -153,7 +145,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                     }}
                   />
 
-                  {/* Desktop Layout */}
+           
                   <Box
                     sx={{
                       display: { xs: 'none', md: 'flex' },
@@ -161,7 +153,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                       width: '100%',
                     }}
                   >
-                    {/* Left Side */}
+                
                     <Box
                       component={motion.div}
                       initial={{ opacity: 0, x: -60 }}

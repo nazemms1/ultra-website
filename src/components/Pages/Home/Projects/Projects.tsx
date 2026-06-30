@@ -175,7 +175,7 @@ export default function Projects({ data }: { data?: any }) {
         id="projects"
         sx={{
           position: 'relative',
-          px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+          px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
           py: 12,
         }}
       >

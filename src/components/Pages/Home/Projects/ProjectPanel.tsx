@@ -94,7 +94,7 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
           width: '100%',
           maxWidth: '1920px',
           mx: 'auto',
-          px: { xs: 2.5, sm: 4, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+          px: { xs: 2.5, sm: 4, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
           gap: { xs: 2.5, sm: 5, md: 8 },
         }}
       >

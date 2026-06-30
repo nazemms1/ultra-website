@@ -188,7 +188,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           mx: 'auto',
           width: '100%',
           minWidth: 0,
-          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+          px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         })}
       >
         <Box
@@ -251,6 +251,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
                   <AnimatedButton
                     variant="secondary"
                     href="#contact"
+                    
                     endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
                   >
                     {data ? data.get_in_touch_button_label : 'Get In Touch'}

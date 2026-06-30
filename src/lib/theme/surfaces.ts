@@ -198,12 +198,12 @@ export function glowOrb(theme: Theme, opacity = 0.05) {
 
 export function primaryButtonSx(theme: Theme) {
   return {
-    bgcolor: 'primary.main',
-    color: 'primary.contrastText',
-    boxShadow: `0 0 23px ${alpha(theme.palette.primary.darker, 0.5)}`,
+    bgcolor: '#0DF1D9',
+    color: '#060E10',
+    boxShadow: `0 0 23px ${alpha('#0DF1D9', 0.40)}`,
     '&:hover': {
-      bgcolor: 'primary.light',
-      boxShadow: `0 0 36px ${alpha(theme.palette.primary.darker, 0.8)}`,
+      bgcolor: '#7FFFF4',
+      boxShadow: `0 0 36px ${alpha('#0DF1D9', 0.70)}`,
       transform: 'translateY(-1px)',
     },
   } satisfies SxProps<Theme>
