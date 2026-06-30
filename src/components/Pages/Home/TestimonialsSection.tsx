@@ -18,8 +18,8 @@ interface TestimonialItem {
   rating?: number | null
 }
 
-const ORBIT_RADIUS = 280
-const INNER_RADIUS = 200
+const ORBIT_RADIUS = 300
+const INNER_RADIUS = 300
 
 interface TestimonialsSectionProps {
   data?: {
@@ -119,7 +119,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        color: '#fff',
+        // color: '#fff',
       }}
     >
       {videoUrl && (
@@ -149,7 +149,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             inset: 0,
             zIndex: 1,
             pointerEvents: 'none',
-            backgroundColor: alpha(theme.palette.background.default, 0.6),
+            // backgroundColor: alpha(theme.palette.background.default, 0.6),
             '&::before': {
               content: '""',
               position: 'absolute',
@@ -370,6 +370,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             zIndex: 2,
           }}
         >
+          {/* Outer solid border */}
           <Box
             sx={{
               position: 'absolute',
@@ -381,14 +382,16 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             }}
           />
 
+
+
           <Box
             sx={{
               position: 'absolute',
-              width: INNER_RADIUS * 2 + 40,
-              height: INNER_RADIUS * 2 + 40,
+              width: 540,
+              height: 540,
               padding: '32px',
               background:
-                'radial-gradient(ellipse 100% 60% at center top, rgba(13, 241, 217, 0.1) 0%, rgba(12, 40, 40, 0.5) 60%, rgba(8, 20, 20, 0.2) 100%)',
+                'radial-gradient(ellipse 100% 60% at center top, rgba(13, 241, 217, 0.7) 0%, rgba(12, 40, 40, 0.8) 60%, rgba(8, 20, 20, 0.6) 100%)',
               boxShadow: '0px 0px 0px 1px rgba(13, 241, 217, 0.25) inset',
               borderRadius: '50%',
               filter: 'blur(0px)',
@@ -410,16 +413,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transform: 'translate(-50%, -50%)',
                 }}
               >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.96,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
+              
               </Box>
 
               <Box
@@ -432,16 +426,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transform: 'translate(-50%, -50%)',
                 }}
               >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.96,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
+           
               </Box>
 
               <Box
@@ -454,16 +439,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transform: 'translate(-50%, -50%)',
                 }}
               >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.96,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
+            
               </Box>
 
               <Box
@@ -476,16 +452,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transform: 'translate(-50%, -50%)',
                 }}
               >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.6,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
+                
               </Box>
 
               <Box
@@ -498,83 +465,10 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transform: 'translate(-50%, -50%)',
                 }}
               >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.6,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
+               
               </Box>
 
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '20%',
-                  top: 310,
-                  width: 5,
-                  height: 5,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.4,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '80%',
-                  top: 310,
-                  width: 5,
-                  height: 5,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.4,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
-              </Box>
-
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: 370,
-                  width: 4,
-                  height: 4,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-                <Box
-                  sx={{
-                    width: '100%',
-                    height: '100%',
-                    position: 'relative',
-                    opacity: 0.3,
-                    background: 'var(--Color-primary-2, #0DF1D9)',
-                    borderRadius: '50%',
-                  }}
-                />
-              </Box>
+              
             </Box>
             <AnimatePresence mode="wait">
               <motion.div
@@ -585,13 +479,13 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 transition={{ duration: 0.4, ease: 'easeInOut' }}
                 style={{
                   width: '100%',
-                  maxWidth: 280,
+                  maxWidth: 380,
                   flexDirection: 'column',
                   justifyContent: 'center',
                   alignItems: 'center',
                   gap: isRtl ? 6 : 10,
                   display: 'flex',
-                  paddingTop: '105px',
+                  paddingTop: '305px',
                 }}
               >
                 <Box
