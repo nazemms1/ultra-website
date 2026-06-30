@@ -9,9 +9,7 @@ type ProjectDetailPageProps = {
 }
 
 export function generateStaticParams() {
-  return routing.locales.flatMap(locale =>
-    PROJECT_DETAIL_IDS.map(id => ({ locale, id })),
-  )
+  return routing.locales.flatMap(locale => PROJECT_DETAIL_IDS.map(id => ({ locale, id })))
 }
 
 export default async function ProjectDetailPage({ params }: ProjectDetailPageProps) {

@@ -7,12 +7,7 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import type { ProjectMetrics } from '../types'
 import CornerBrackets from '../shared/CornerBrackets'
-import {
-  feedbackCardSx,
-  metaCardSx,
-  metaLabelSx,
-  toolPillSx,
-} from './constants'
+import { feedbackCardSx, metaCardSx, metaLabelSx, toolPillSx } from './constants'
 
 type MetricsSidebarProps = {
   metrics: ProjectMetrics
@@ -20,7 +15,11 @@ type MetricsSidebarProps = {
 
 const itemVariants = {
   hidden: { opacity: 0, y: 20 },
-  visible: { opacity: 1, y: 0, transition: { type: 'spring' as const, stiffness: 60, damping: 14 } },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { type: 'spring' as const, stiffness: 60, damping: 14 },
+  },
 }
 
 export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {

@@ -49,7 +49,7 @@ export default function PageHero({
         alignItems: 'center',
       }}
     >
-       {videoSrc && (
+      {videoSrc && (
         <Box
           component="video"
           autoPlay

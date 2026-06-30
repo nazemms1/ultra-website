@@ -465,7 +465,6 @@ const tagIcons: Record<string, React.ReactNode> = {
 }
 
 // Sample services data with 3D illustrations from public folder
- 
 
 export interface ToolData {
   id: number
@@ -514,45 +513,51 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
   const step = total > 1 ? 1 / (total - 1) : 1
 
   // Motion transforms based on scroll progress (relative to adjacent active states)
-  const yVal = useTransform(progress, 
+  const yVal = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
     [380, 0, -380],
   )
   const y = total > 1 ? yVal : 0
 
-  const opacityVal = useTransform(progress,
+  const opacityVal = useTransform(
+    progress,
     [progressActive - 2 * step, progressActive - step, progressActive, progressActive + step],
     [0, 0.45, 1, 0],
   )
   const opacity = total > 1 ? opacityVal : 1
 
-  const scaleXVal = useTransform(progress,
+  const scaleXVal = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
     [0.82, 1, 0.88],
   )
   const scaleX = total > 1 ? scaleXVal : 1
 
-  const scaleYVal = useTransform(progress,
+  const scaleYVal = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
     [0.86, 1, 0.88],
   )
   const scaleY = total > 1 ? scaleYVal : 1
 
-  const blurValueVal = useTransform(progress,
+  const blurValueVal = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
     [2.5, 0, 10],
   )
   const blurValue = total > 1 ? blurValueVal : 0
   const filter = useMotionTemplate`blur(${blurValue}px)`
 
-  const zIndexVal = useTransform(progress,
+  const zIndexVal = useTransform(
+    progress,
     [progressActive - step, progressActive, progressActive + step],
     [5, 10, 1],
   )
   const zIndex = total > 1 ? zIndexVal : 10
 
-  const pointerEventsVal = useTransform(progress, p => 
-    Math.abs(p - progressActive) < step * 0.4 ? 'auto' : 'none'
+  const pointerEventsVal = useTransform(progress, p =>
+    Math.abs(p - progressActive) < step * 0.4 ? 'auto' : 'none',
   )
   const pointerEvents = total > 1 ? pointerEventsVal : 'auto'
 
@@ -699,7 +704,9 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
                       ) : (
                         tagIcons[tool.name]
                       )}
-                      <Box component="span" sx={{ color: '#ffffff' }}>{tool.name}</Box>
+                      <Box component="span" sx={{ color: '#ffffff' }}>
+                        {tool.name}
+                      </Box>
                     </Box>
                   }
                   size="medium"

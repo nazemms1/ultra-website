@@ -327,7 +327,8 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
                 sx={{
                   width: 40,
                   height: 40,
-                  bgcolor: theme => `color-mix(in srgb, ${theme.palette.primary.main} 10%, transparent)`,
+                  bgcolor: theme =>
+                    `color-mix(in srgb, ${theme.palette.primary.main} 10%, transparent)`,
                   border: theme =>
                     `1px solid color-mix(in srgb, ${theme.palette.primary.main} 25%, transparent)`,
                   color: 'primary.main',

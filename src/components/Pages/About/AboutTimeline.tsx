@@ -19,14 +19,15 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
       values: (y.values || []).map((val: any) => ({
         title: val.title,
         value: val.value,
-        symbol: val.symbol
-      }))
+        symbol: val.symbol,
+      })),
     }))
 
   if (years.length === 0) return null
 
   const eyebrowText = statisticsData?.title || (locale === 'ar' ? 'مسارنا الزمني' : 'OUR TIMESTAMP')
-  const titleText = statisticsData?.subtitle || (locale === 'ar' ? 'كيف تطورنا' : 'HOW WE DEVELOPED')
+  const titleText =
+    statisticsData?.subtitle || (locale === 'ar' ? 'كيف تطورنا' : 'HOW WE DEVELOPED')
 
   return (
     <Box
@@ -48,7 +49,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
           left: '50%',
           width: 500,
           height: 500,
-          background: 'radial-gradient(circle, rgba(13, 241, 217, 0.04) 0%, rgba(13, 241, 217, 0) 70%)',
+          background:
+            'radial-gradient(circle, rgba(13, 241, 217, 0.04) 0%, rgba(13, 241, 217, 0) 70%)',
           transform: 'translate(-50%, -50%)',
           pointerEvents: 'none',
           zIndex: 0,
@@ -94,7 +96,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
               top: 0,
               bottom: 0,
               width: '2px',
-              background: 'linear-gradient(to bottom, rgba(13, 241, 217, 0) 0%, rgba(13, 241, 217, 0.20) 15%, rgba(13, 241, 217, 0.20) 85%, rgba(13, 241, 217, 0) 100%)',
+              background:
+                'linear-gradient(to bottom, rgba(13, 241, 217, 0) 0%, rgba(13, 241, 217, 0.20) 15%, rgba(13, 241, 217, 0.20) 85%, rgba(13, 241, 217, 0) 100%)',
               transform: 'translateX(-50%)',
               display: { xs: 'none', md: 'block' },
             }}
@@ -108,7 +111,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
               top: 0,
               bottom: 0,
               width: '2px',
-              background: 'linear-gradient(to bottom, rgba(13, 241, 217, 0) 0%, rgba(13, 241, 217, 0.20) 10%, rgba(13, 241, 217, 0.20) 90%, rgba(13, 241, 217, 0) 100%)',
+              background:
+                'linear-gradient(to bottom, rgba(13, 241, 217, 0) 0%, rgba(13, 241, 217, 0.20) 10%, rgba(13, 241, 217, 0.20) 90%, rgba(13, 241, 217, 0) 100%)',
               display: { xs: 'block', md: 'none' },
             }}
           />
@@ -116,7 +120,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
           <Stack spacing={{ xs: 4, md: 12 }}>
             {years.map((item, index) => {
               const isEven = index % 2 === 0
-              
+
               return (
                 <Box key={item.year} sx={{ position: 'relative' }}>
                   {/* Central Node for Desktop */}
@@ -188,7 +192,11 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                           {item.year}
                         </Typography>
                       ) : (
-                        <Stack direction="row" spacing="40px" sx={{ maxWidth: 520, justifyContent: 'flex-end', width: '100%' }}>
+                        <Stack
+                          direction="row"
+                          spacing="40px"
+                          sx={{ maxWidth: 520, justifyContent: 'flex-end', width: '100%' }}
+                        >
                           {item.values.map((val: any, vIdx: number) => (
                             <Box key={vIdx} sx={{ textAlign: 'right', minWidth: '90px' }}>
                               <Typography
@@ -200,7 +208,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                                   lineHeight: 1,
                                 }}
                               >
-                                {val.value}{val.symbol}
+                                {val.value}
+                                {val.symbol}
                               </Typography>
                               <Typography
                                 sx={{
@@ -237,7 +246,11 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                       }}
                     >
                       {isEven ? (
-                        <Stack direction="row" spacing="40px" sx={{ maxWidth: 520, justifyContent: 'flex-start', width: '100%' }}>
+                        <Stack
+                          direction="row"
+                          spacing="40px"
+                          sx={{ maxWidth: 520, justifyContent: 'flex-start', width: '100%' }}
+                        >
                           {item.values.map((val: any, vIdx: number) => (
                             <Box key={vIdx} sx={{ textAlign: 'left', minWidth: '90px' }}>
                               <Typography
@@ -249,7 +262,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                                   lineHeight: 1,
                                 }}
                               >
-                                {val.value}{val.symbol}
+                                {val.value}
+                                {val.symbol}
                               </Typography>
                               <Typography
                                 sx={{
@@ -321,7 +335,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                               lineHeight: 1,
                             }}
                           >
-                            {val.value}{val.symbol}
+                            {val.value}
+                            {val.symbol}
                           </Typography>
                           <Typography
                             sx={{

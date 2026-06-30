@@ -37,32 +37,30 @@ export default async function GalleryPage({ params }: Props) {
 
   // Fallbacks for layout
   const eyebrowText = galleryData?.title || (locale === 'ar' ? 'روائعنا' : 'OUR GALLERY')
-  
-  const titleText = galleryData?.subtitle 
-    ? formatHeroTitle(galleryData.subtitle) 
-    : (
-      locale === 'ar' ? (
-        <>
-          استكشف اللحظات التي{' '}
-          <Box component="span" sx={{ color: '#0DF1D9' }}>
-            التقطناها
-          </Box>
-        </>
-      ) : (
-        <>
-          OUR PARTICIPATIONS IN THE{' '}
-          <Box component="span" sx={{ color: '#0DF1D9' }}>
-            BIG EVENTS
-          </Box>
-        </>
-      )
-    )
 
-  const subtitleText = galleryData?.description || (
-    locale === 'ar' 
-      ? 'رحلة بصرية لمشاركتنا وفعالياتنا وأبرز محطاتنا.' 
-      : 'A visual journey of our events, participations, and milestones.'
+  const titleText = galleryData?.subtitle ? (
+    formatHeroTitle(galleryData.subtitle)
+  ) : locale === 'ar' ? (
+    <>
+      استكشف اللحظات التي{' '}
+      <Box component="span" sx={{ color: '#0DF1D9' }}>
+        التقطناها
+      </Box>
+    </>
+  ) : (
+    <>
+      OUR PARTICIPATIONS IN THE{' '}
+      <Box component="span" sx={{ color: '#0DF1D9' }}>
+        BIG EVENTS
+      </Box>
+    </>
   )
+
+  const subtitleText =
+    galleryData?.description ||
+    (locale === 'ar'
+      ? 'رحلة بصرية لمشاركتنا وفعالياتنا وأبرز محطاتنا.'
+      : 'A visual journey of our events, participations, and milestones.')
 
   const rawVideo = galleryData?.video
   const videoSrc = (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) || undefined
@@ -77,7 +75,7 @@ export default async function GalleryPage({ params }: Props) {
       if (res) {
         initialImagesMap[item.id] = res
       }
-    })
+    }),
   )
 
   return (
@@ -91,7 +89,9 @@ export default async function GalleryPage({ params }: Props) {
         subtitle={subtitleText}
       />
       <GalleryContent
-        galleryData={galleryData || { title: eyebrowText, subtitle: '', description: subtitleText, items: [] }}
+        galleryData={
+          galleryData || { title: eyebrowText, subtitle: '', description: subtitleText, items: [] }
+        }
         initialImagesMap={initialImagesMap}
         locale={locale}
       />

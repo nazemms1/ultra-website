@@ -35,7 +35,7 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
       title: item.title,
       paragraphs: item.description
         ? item.description.split(/\r?\n/).filter((p: string) => p.trim() !== '')
-        : []
+        : [],
     }))
 
   return (
@@ -65,7 +65,8 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
               component={motion.div}
               variants={itemVariants}
               sx={{
-                borderBottom: index < items.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+                borderBottom:
+                  index < items.length - 1 ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
                 pb: { xs: 6, md: 8 },
               }}
             >

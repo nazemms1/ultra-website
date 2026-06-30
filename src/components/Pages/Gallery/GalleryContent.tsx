@@ -158,7 +158,8 @@ export default function GalleryContent({
   const isRtl = locale === 'ar'
 
   // Image and pagination state per group item ID
-  const [imagesMap, setImagesMap] = useState<Record<number, GalleryGroupImagesResponse>>(initialImagesMap)
+  const [imagesMap, setImagesMap] =
+    useState<Record<number, GalleryGroupImagesResponse>>(initialImagesMap)
   const [loadingMap, setLoadingMap] = useState<Record<number, boolean>>({})
 
   // Lightbox state
@@ -207,7 +208,12 @@ export default function GalleryContent({
   }
 
   // Render crop-framed image cards
-  const renderCard = (item: GalleryImageItem, idx: number, groupImages: GalleryImageItem[], sxProps?: any) => {
+  const renderCard = (
+    item: GalleryImageItem,
+    idx: number,
+    groupImages: GalleryImageItem[],
+    sxProps?: any,
+  ) => {
     return (
       <Box
         onClick={() => openLightbox(groupImages, idx)}
@@ -446,9 +452,11 @@ export default function GalleryContent({
               gap: 3,
             }}
           >
-            {images.slice(10).map((item, index) =>
-              renderCard(item, index + 10, images, { height: { xs: '200px', sm: '280px' } })
-            )}
+            {images
+              .slice(10)
+              .map((item, index) =>
+                renderCard(item, index + 10, images, { height: { xs: '200px', sm: '280px' } }),
+              )}
           </Box>
         )}
       </Stack>
@@ -498,7 +506,7 @@ export default function GalleryContent({
             '&:disabled': {
               opacity: 0.35,
               cursor: 'default',
-            }
+            },
           }}
         >
           <Box
@@ -601,7 +609,7 @@ export default function GalleryContent({
             '&:disabled': {
               opacity: 0.35,
               cursor: 'default',
-            }
+            },
           }}
         >
           <Box
@@ -627,7 +635,7 @@ export default function GalleryContent({
       sx={{
         py: { xs: 8, md: 12 },
         px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
- 
+
         position: 'relative',
         zIndex: 1,
       }}
@@ -640,7 +648,7 @@ export default function GalleryContent({
 
           return (
             <Box key={item.id} component="section" sx={{ position: 'relative' }}>
-               <Box
+              <Box
                 sx={{
                   display: 'flex',
                   alignItems: 'center',

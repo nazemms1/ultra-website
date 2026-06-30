@@ -28,12 +28,7 @@ export default function BackLink({ label, href }: BackLinkProps) {
   const ArrowIcon = isRtl ? ArrowRight : ArrowLeft
 
   return (
-    <Box
-      component={motion.div}
-      variants={linkVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <Box component={motion.div} variants={linkVariants} initial="hidden" animate="visible">
       <Box
         component={Link}
         href={href}

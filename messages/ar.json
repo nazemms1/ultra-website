@@ -14,6 +14,14 @@
     "exploreServices": "استعرض الخدمات",
     "getInTouch": "تواصل معنا"
   },
+  "ProjectsPage": {
+    "eyebrow": "معرض أعمالنا",
+    "titleLine1": "استكشف كل ",
+    "titleAccent": "أعمالنا",
+    "titleLine2": " المُنجَزة.",
+    "description": "كل مشروع مدرج أدناه تم تسليمه بنجاح ويُستخدم فعلياً من قبل عملاء حقيقيين حول العالم.",
+    "viewMore": "عرض المزيد"
+  },
   "ProjectDetails": {
     "backToProjects": "العودة إلى المشاريع",
     "visitWebsite": "زيارة الموقع",

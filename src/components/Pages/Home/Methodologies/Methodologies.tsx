@@ -41,6 +41,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
   const [disabled, setDisabled] = useState(true)
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setDisabled(!!reduce || shouldDisableScrollVideo())
   }, [reduce])
 

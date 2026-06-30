@@ -72,7 +72,10 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
         onFocus={() => !isMobile && setHovered(true)}
         onBlur={() => !isMobile && setHovered(false)}
         onClick={handleTap}
-        animate={{ scale: (showColor && !reduceMotion && !isMobile) || (isMobile && active) ? HOVER_SCALE : 1 }}
+        animate={{
+          scale:
+            (showColor && !reduceMotion && !isMobile) || (isMobile && active) ? HOVER_SCALE : 1,
+        }}
         transition={HOVER_TRANSITION}
         sx={{
           position: 'relative',
@@ -91,9 +94,10 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
             position: 'relative',
             width: '100%',
             height: '100%',
-            filter: (showColor && !isMobile) || (isMobile && active)
-              ? theme => `drop-shadow(0 0 37.5px ${alpha(theme.palette.primary.main, 0.55)})`
-              : 'none',
+            filter:
+              (showColor && !isMobile) || (isMobile && active)
+                ? theme => `drop-shadow(0 0 37.5px ${alpha(theme.palette.primary.main, 0.55)})`
+                : 'none',
             transition: 'filter 0.3s ease',
           }}
         >

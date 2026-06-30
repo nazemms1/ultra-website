@@ -33,7 +33,8 @@ export function demoChipSx(theme: Theme, active: boolean): SxProps<Theme> {
     fontWeight: 400,
     lineHeight: '18px',
     cursor: 'pointer',
-    transition: 'border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease',
+    transition:
+      'border-color 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease',
     '&:hover': {
       borderColor: alpha(theme.palette.primary.light, 0.35),
       color: 'text.primary',

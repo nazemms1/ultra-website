@@ -18,6 +18,14 @@
     "label": "Our Portfolio",
     "heading": "Explore Our\nProjects in Action"
   },
+  "ProjectsPage": {
+    "eyebrow": "Our Portfolio",
+    "titleLine1": "Explore All of Our ",
+    "titleAccent": "Delivered",
+    "titleLine2": " Work.",
+    "description": "Each project listed below has been successfully delivered and is actively used by real customers worldwide.",
+    "viewMore": "View More"
+  },
   "ProjectDetails": {
     "backToProjects": "Return to Projects",
     "visitWebsite": "Visit Website",

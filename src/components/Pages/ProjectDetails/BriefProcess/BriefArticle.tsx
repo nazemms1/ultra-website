@@ -4,12 +4,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion } from 'framer-motion'
 import type { BriefBlock } from '../types'
-import {
-  briefBodySx,
-  briefCardSx,
-  briefNumberSx,
-  briefTitleSx,
-} from './constants'
+import { briefBodySx, briefCardSx, briefNumberSx, briefTitleSx } from './constants'
 
 type BriefArticleProps = {
   block: BriefBlock
