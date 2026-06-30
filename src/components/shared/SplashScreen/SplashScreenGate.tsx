@@ -63,7 +63,7 @@ function SplashScreenGateInner({
     }
   }, [scrollLocked, mounted, hasShownSplash])
 
-  const showSplash = isSplashVisible && !hasShownSplash
+  const showSplash = !hasShownSplash
 
   return (
     <>
