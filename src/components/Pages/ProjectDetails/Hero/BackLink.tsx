@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import { ArrowLeft, ArrowRight } from 'lucide-react'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { backLinkSx, backLinkTextSx } from './constants'
 
 type BackLinkProps = {

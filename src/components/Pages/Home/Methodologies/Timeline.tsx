@@ -20,7 +20,7 @@ export default function Timeline({ labels, progress, onSeek }: TimelineProps) {
   const fillWidth = useMotionTemplate`${useTransform(progress, p => p * 100)}%`
 
   return (
-    <Box sx={{ width: '100%', px: 'max(8px, calc((100vw - 1920px) / 2 + 160px))' }}>
+    <Box sx={{ width: '100%', px: 'max(8px, calc((100vw - 1920px) / 2 + 220px))' }}>
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
         <Typography
           sx={{

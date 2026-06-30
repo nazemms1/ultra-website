@@ -33,24 +33,44 @@ function SplashScreenGateInner({
     minDisplayMs,
     postReadyHoldMs,
   })
+
+  const [mounted, setMounted] = useState(false)
+  const [hasShownSplash, setHasShownSplash] = useState(false)
   const [scrollLocked, setScrollLocked] = useState(true)
 
   useEffect(() => {
-    document.body.style.overflow = scrollLocked ? 'hidden' : ''
-    return () => {
-      document.body.style.overflow = ''
+    setMounted(true)
+    if (typeof window !== 'undefined' && sessionStorage.getItem('splash_shown') === 'true') {
+      setHasShownSplash(true)
+      setScrollLocked(false)
+      markSplashComplete()
     }
-  }, [scrollLocked])
+  }, [markSplashComplete])
 
   const handleSplashExitComplete = useCallback(() => {
+    if (typeof window !== 'undefined') {
+      sessionStorage.setItem('splash_shown', 'true')
+    }
     setScrollLocked(false)
     markSplashComplete()
   }, [markSplashComplete])
 
+  useEffect(() => {
+    const shouldLock = scrollLocked && (!mounted || !hasShownSplash)
+    document.body.style.overflow = shouldLock ? 'hidden' : ''
+    return () => {
+      document.body.style.overflow = ''
+    }
+  }, [scrollLocked, mounted, hasShownSplash])
+
+  const showSplash = !hasShownSplash
+
   return (
     <>
       {children}
-      <SplashScreen isLoading={isSplashVisible} onExitComplete={handleSplashExitComplete} />
+      {mounted && showSplash && (
+        <SplashScreen isLoading={isSplashVisible} onExitComplete={handleSplashExitComplete} />
+      )}
     </>
   )
 }

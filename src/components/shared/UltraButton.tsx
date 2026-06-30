@@ -3,7 +3,7 @@
 import Button from '@mui/material/Button'
 import { useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import { glassButtonSx, ghostButtonSx, primaryButtonSx } from '@/lib/theme/surfaces'
 
 type UltraButtonProps = {

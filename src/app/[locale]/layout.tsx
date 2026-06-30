@@ -3,11 +3,13 @@ import { Rajdhani } from 'next/font/google'
 import { hasLocale } from 'next-intl'
 import { getMessages, getTranslations, setRequestLocale } from 'next-intl/server'
 import { notFound } from 'next/navigation'
+import { Suspense } from 'react'
 import AppShell from '@/components/Layout/AppShell'
 import AppProviders from '@/providers/AppProviders'
 import { routing, type AppLocale } from '@/i18n/routing'
 import { host, siteConfig } from '@/config'
 import { fetchAPI } from '@/lib/api'
+import GlobalNavigationLoader from '@/components/shared/GlobalNavigationLoader'
 
 const rajdhani = Rajdhani({
   subsets: ['latin'],
@@ -96,6 +98,9 @@ export default async function LocaleLayout({ children, params }: Props) {
     >
       <body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>
+          <Suspense fallback={null}>
+            <GlobalNavigationLoader />
+          </Suspense>
           <AppShell
             navLabels={navLabels}
             footerData={footerData}

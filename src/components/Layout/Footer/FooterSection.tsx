@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { type ReactNode } from 'react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
@@ -246,7 +246,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
           width: '100%',
           minHeight: { xs: 'auto', md: 695 },
           pt: { xs: 6, md: '72px' },
-          px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+          px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
           pb: { xs: 4, md: '40px' },
         }}
       >

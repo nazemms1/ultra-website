@@ -21,8 +21,7 @@ import InputField from './InputField'
 import CaptchaBox from './CaptchaBox'
 import ContactSubmitButton from './ContactSubmitButton'
 
-/** Clears fixed navbar (68px) + top padding when the left column pins on scroll */
-const STICKY_TOP_OFFSET = '100px'
+ const STICKY_TOP_OFFSET = '100px'
 
 export default function ContactSection({ data }: { data?: any }) {
   const theme = useTheme()
@@ -80,11 +79,9 @@ export default function ContactSection({ data }: { data?: any }) {
     )
   }
 
-  // Captcha configuration
-  const isCaptchaShown = hasApiData ? !!data.header?.is_captcha_shown : true
+   const isCaptchaShown = hasApiData ? !!data.header?.is_captcha_shown : true
 
-  // Header configs
-  const categoryLabel = hasApiData ? data.header?.title || 'Get in touch' : 'Get in touch'
+   const categoryLabel = hasApiData ? data.header?.title || 'Get in touch' : 'Get in touch'
   const mainTitle = hasApiData
     ? data.header?.subtitle || 'IGNITE YOUR VISION'
     : 'IGNITE YOUR VISION'
@@ -92,15 +89,13 @@ export default function ContactSection({ data }: { data?: any }) {
     ? data.header?.description
     : "Tell us where you're headed. Whether it's high-performance VPS architecture, striking UI/UX, or next-gen mobile experiences — we're the launch crew."
 
-  // Consultation setups
-  const isOnlineShown = hasApiData ? !!data.consultation?.setup?.is_online_consultation_shown : true
+   const isOnlineShown = hasApiData ? !!data.consultation?.setup?.is_online_consultation_shown : true
   const isOnsiteShown = hasApiData ? !!data.consultation?.setup?.is_onsite_consultation_shown : true
   const addressPlaceholder = hasApiData
     ? data.consultation?.setup?.onsite_location_address || t('locationPlaceholder')
     : t('locationPlaceholder')
 
-  // Regions list
-  const onlineRegionsList = useMemo(() => {
+   const onlineRegionsList = useMemo(() => {
     return hasApiData
       ? data.consultation?.online_regions || []
       : [
@@ -122,12 +117,10 @@ export default function ContactSection({ data }: { data?: any }) {
   const [submitting, setSubmitting] = useState(false)
   const [submitSuccess, setSubmitSuccess] = useState<boolean | null>(null)
 
-  // Sync default consultation type and region when API data loads
-  useEffect(() => {
+   useEffect(() => {
     if (hasApiData) {
       if (isOnlineShown) {
-        // eslint-disable-next-line react-hooks/set-state-in-effect
-        setConsultationType('online')
+         setConsultationType('online')
       } else if (isOnsiteShown) {
         setConsultationType('onsite')
       }
@@ -139,8 +132,7 @@ export default function ContactSection({ data }: { data?: any }) {
     }
   }, [data, hasApiData, isOnlineShown, isOnsiteShown, onlineRegionsList])
 
-  // Dynamic services resolving
-  const getServiceIcon = (id: string, title: string) => {
+   const getServiceIcon = (id: string, title: string) => {
     const text = (id + ' ' + title).toLowerCase()
     if (
       text.includes('vps') ||
@@ -259,7 +251,7 @@ export default function ContactSection({ data }: { data?: any }) {
       sx={{
         position: 'relative',
         py: { xs: 10, md: 14 },
-        px: { xs: '20px', md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+        px: { xs: '20px', md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         overflow: 'visible',
         '&::before': {
           content: '""',

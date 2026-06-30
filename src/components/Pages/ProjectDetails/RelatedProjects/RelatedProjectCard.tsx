@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
-import Link from 'next/link'
+import { Link } from '@/i18n/routing'
 import type { RelatedProjectCard as RelatedProjectCardType } from '../types'
 import CornerBrackets from '../shared/CornerBrackets'
 import {

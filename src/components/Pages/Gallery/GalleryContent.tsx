@@ -634,7 +634,7 @@ export default function GalleryContent({
     <Box
       sx={{
         py: { xs: 8, md: 12 },
-        px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 160px))' },
+        px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
 
         position: 'relative',
         zIndex: 1,
@@ -684,10 +684,20 @@ export default function GalleryContent({
                     fontSize: { xs: '18px', sm: '22px', md: '28px' },
                     textTransform: 'uppercase',
                     letterSpacing: '0.04em',
+                    whiteSpace: 'nowrap',
                   }}
                 >
                   {item.title}
                 </Typography>
+                <Box
+                  sx={{
+                    flex: 1,
+                    height: '1px',
+                    position: 'relative',
+                    background:
+                      'linear-gradient(90deg, rgba(94, 243, 255, 0.40) 0%, rgba(94, 243, 255, 0.10) 50%, rgba(0, 0, 0, 0) 100%)',
+                  }}
+                />
               </Box>
 
               {/* Image Grid with Loading Overlay */}
