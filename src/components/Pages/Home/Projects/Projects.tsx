@@ -109,14 +109,14 @@ export default function Projects({ data }: { data?: any }) {
 
   // Process API portfolios items or fall back to local dataset
   const hasApiData = !!data
-  const rawProjects = hasApiData ? data.items || [] : PROJECTS
+  const rawProjects = hasApiData ? data.projects || data.items || [] : PROJECTS
 
   const processedProjects: ProjectItem[] = rawProjects.map(
     (item: any, index: number): ProjectItem => {
       if (item.mockup) return item
       const title = item.title || ''
-      const description = item.description || ''
-      const coverImageUrl = item.cover_image?.url || item.cover_image || ''
+      const description = item.subtitle || item.description || ''
+      const coverImageUrl = item.image?.url || item.image || item.cover_image?.url || item.cover_image || ''
       const isMobile =
         title.toLowerCase().includes('mobile') ||
         title.toLowerCase().includes('app') ||
@@ -126,7 +126,7 @@ export default function Projects({ data }: { data?: any }) {
         id: String(item.id),
         title,
         description,
-        href: item.href || '#projects',
+        href: item.website_url || item.href || '#projects',
         mockup: {
           src: coverImageUrl,
           alt: title,
@@ -257,8 +257,9 @@ export default function Projects({ data }: { data?: any }) {
 }
 
 function SectionHeading({ data }: { data?: any }) {
-  const subtitle = data?.title || 'Our Portfolio'
-  const title = data?.subtitle || data?.description
+  const mainSection = data?.['main-section'] || data
+  const subtitle = mainSection?.title || 'Our Portfolio'
+  const title = mainSection?.subtitle || mainSection?.description
   return <SectionHeader align="center" subtitle={subtitle} title={title ?? undefined} />
 }
 
@@ -271,8 +272,9 @@ function PortfolioLabel({
   labelRef?: React.RefObject<HTMLParagraphElement | null>
   titleRef?: React.RefObject<HTMLHeadingElement | null>
 }) {
-  const subtitle = data?.title || 'Our Portfolio'
-  const title = data?.subtitle || data?.description
+  const mainSection = data?.['main-section'] || data
+  const subtitle = mainSection?.title || 'Our Portfolio'
+  const title = mainSection?.subtitle || mainSection?.description
   return (
     <SectionHeader
       align="center"

@@ -388,7 +388,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               height: INNER_RADIUS * 2 + 40,
               padding: '32px',
               background:
-                'radial-gradient(ellipse 100% 60% at center top, rgba(13, 241, 217, 0.45) 0%, rgba(8, 15, 15, 0.75) 70%, rgba(5, 10, 10, 0.55) 100%)',
+                'radial-gradient(ellipse 100% 60% at center top, rgba(13, 241, 217, 0.1) 0%, rgba(12, 40, 40, 0.5) 60%, rgba(8, 20, 20, 0.2) 100%)',
               boxShadow: '0px 0px 0px 1px rgba(13, 241, 217, 0.25) inset',
               borderRadius: '50%',
               filter: 'blur(0px)',
@@ -591,6 +591,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   alignItems: 'center',
                   gap: isRtl ? 6 : 10,
                   display: 'flex',
+                  paddingTop: '105px',
                 }}
               >
                 <Box
@@ -601,16 +602,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                     flexShrink: 0,
                   }}
                 >
-                  <Box
-                    component="img"
-                    src="/icons/QuoteMark.svg"
-                    alt="Quote"
-                    sx={{
-                      width: isRtl ? 28 : 36,
-                      height: isRtl ? 28 : 36,
-                      transform: isRtl ? 'none' : 'rotate(180deg)',
-                    }}
-                  />
+                
                 </Box>
 
                 {activeTestimonial.rating === undefined ? (
