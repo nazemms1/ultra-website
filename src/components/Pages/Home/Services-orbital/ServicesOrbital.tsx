@@ -77,13 +77,16 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
     baseAngle: 112 + i * (360 / itemsData.length),
   }))
 
-  const orbitalItems = mappedItems.length > 0 ? mappedItems : SERVICES.map(s => ({
-    ...s,
-    tools: s.tags.map((t, idx) => ({
-      id: idx,
-      name: t,
-    }))
-  }))
+  const orbitalItems =
+    mappedItems.length > 0
+      ? mappedItems
+      : SERVICES.map(s => ({
+          ...s,
+          tools: s.tags.map((t, idx) => ({
+            id: idx,
+            name: t,
+          })),
+        }))
 
   useEffect(() => {
     if (!isMobile) return
@@ -108,8 +111,6 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
 
     return () => clearInterval(interval)
   }, [isMobile, orbitalItems.length])
-
-
 
   const activeIndex = hoveredIndex ?? selectedIndex
   const active = activeIndex !== null ? orbitalItems[activeIndex] : null
@@ -152,7 +153,16 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           }}
         >
           {/* Header */}
-          <Box sx={{ display: 'flex', flexDirection: 'column', mb: 5, textAlign: 'center', alignItems: 'center', px: { xs: 3, sm: 5 } }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              mb: 5,
+              textAlign: 'center',
+              alignItems: 'center',
+              px: { xs: 3, sm: 5 },
+            }}
+          >
             {data?.title && (
               <Typography
                 sx={{
@@ -259,8 +269,10 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                 mt: 3,
                 mx: { xs: 3, sm: 5 },
                 p: 3,
-                background: 'linear-gradient(135deg, rgba(13, 241, 217, 0.05) 0%, rgba(18, 18, 18, 0.9) 100%)',
-                boxShadow: '0px 0px 0px 1px rgba(13, 241, 217, 0.15) inset, 0px 8px 32px rgba(0, 0, 0, 0.4)',
+                background:
+                  'linear-gradient(135deg, rgba(13, 241, 217, 0.05) 0%, rgba(18, 18, 18, 0.9) 100%)',
+                boxShadow:
+                  '0px 0px 0px 1px rgba(13, 241, 217, 0.15) inset, 0px 8px 32px rgba(0, 0, 0, 0.4)',
                 borderRadius: '20px',
                 display: 'flex',
                 gap: 2.5,
@@ -269,7 +281,9 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
             >
               <OrbitalAccentRail />
 
-              <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: 0, flex: 1 }}>
+              <Box
+                sx={{ display: 'flex', flexDirection: 'column', gap: 1.5, minWidth: 0, flex: 1 }}
+              >
                 <Typography
                   component="h3"
                   sx={{
@@ -317,7 +331,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                             bgcolor: 'rgba(13, 241, 217, 0.08)',
                             border: '1px solid rgba(13, 241, 217, 0.3)',
                             color: 'primary.main',
-                          }
+                          },
                         }}
                       >
                         {tool.icon?.url && (
@@ -541,7 +555,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                                     bgcolor: 'rgba(13, 241, 217, 0.08)',
                                     border: '1px solid rgba(13, 241, 217, 0.3)',
                                     color: 'primary.main',
-                                  }
+                                  },
                                 })}
                               >
                                 {tool.icon?.url && (
@@ -566,7 +580,12 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                   </AnimatePresence>
 
                   {data?.button_is_shown !== false && (
-                    <Box component={motion.div} layout transition={LAYOUT_TRANSITION} sx={{ mt: 2 }}>
+                    <Box
+                      component={motion.div}
+                      layout
+                      transition={LAYOUT_TRANSITION}
+                      sx={{ mt: 2 }}
+                    >
                       <AnimatedButton
                         variant="secondary"
                         href="/services"

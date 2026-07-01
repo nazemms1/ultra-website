@@ -5,12 +5,7 @@ import type { ProjectDetail } from '../types'
 import { sectionShellSx } from '../constants'
 import BriefArticle from './BriefArticle'
 import MetricsSidebar from './MetricsSidebar'
-import {
-  briefArticlesSx,
-  briefGridSx,
-  briefSectionSx,
-  metricsStickySx,
-} from './constants'
+import { briefArticlesSx, briefGridSx, briefSectionSx, metricsStickySx } from './constants'
 
 type BriefProcessSectionProps = {
   project: ProjectDetail

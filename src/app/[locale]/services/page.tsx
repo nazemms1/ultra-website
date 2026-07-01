@@ -11,7 +11,7 @@ type Props = {
 
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params
-  
+
   // Fetch services data and CTA content concurrently
   const [servicesData, startProjectData] = await Promise.all([
     fetchAPI('/api/services-data', locale),
@@ -31,9 +31,13 @@ export default async function ServicesPage({ params }: Props) {
       </Box>
     </>
   )
-  const subtitleText = servicesData?.description || 'Explore our six core practices and three engagement models designed to fit your unique challenges. Choose the approach that aligns with your needs, or reach out to us for personalized guidance.'
+  const subtitleText =
+    servicesData?.description ||
+    'Explore our six core practices and three engagement models designed to fit your unique challenges. Choose the approach that aligns with your needs, or reach out to us for personalized guidance.'
   const rawVideo = servicesData?.video
-  const videoSrc = (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) || '/videos/colorflow-animation (3).mp4'
+  const videoSrc =
+    (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) ||
+    '/videos/colorflow-animation (3).mp4'
 
   return (
     <>

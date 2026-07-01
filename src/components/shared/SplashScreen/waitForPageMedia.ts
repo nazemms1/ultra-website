@@ -2,7 +2,6 @@ import { SPLASH_CRITICAL_IMAGES, SPLASH_CRITICAL_VIDEOS } from './criticalAssets
 import { preloadScrollFramesForSplash } from '@/components/Pages/Home/ScrollVideoStack/frameLoader'
 import { shouldDisableScrollVideo } from '@/components/Pages/Home/ScrollVideoStack/deviceUtils'
 
-
 type WaitForPageMediaOptions = {
   /** Minimum time the splash stays visible even if assets resolve instantly. */
   minDurationMs?: number

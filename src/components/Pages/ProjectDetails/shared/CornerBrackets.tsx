@@ -20,10 +20,42 @@ export default function CornerBrackets({ inset = 13, size = 12 }: CornerBrackets
 
   return (
     <>
-      <Box sx={{ ...cornerBase, top: inset, insetInlineStart: inset, borderTop: `1px solid ${color}`, borderInlineStart: `1px solid ${color}` }} />
-      <Box sx={{ ...cornerBase, top: inset, insetInlineEnd: inset, borderTop: `1px solid ${color}`, borderInlineEnd: `1px solid ${color}` }} />
-      <Box sx={{ ...cornerBase, bottom: inset, insetInlineStart: inset, borderBottom: `1px solid ${color}`, borderInlineStart: `1px solid ${color}` }} />
-      <Box sx={{ ...cornerBase, bottom: inset, insetInlineEnd: inset, borderBottom: `1px solid ${color}`, borderInlineEnd: `1px solid ${color}` }} />
+      <Box
+        sx={{
+          ...cornerBase,
+          top: inset,
+          insetInlineStart: inset,
+          borderTop: `1px solid ${color}`,
+          borderInlineStart: `1px solid ${color}`,
+        }}
+      />
+      <Box
+        sx={{
+          ...cornerBase,
+          top: inset,
+          insetInlineEnd: inset,
+          borderTop: `1px solid ${color}`,
+          borderInlineEnd: `1px solid ${color}`,
+        }}
+      />
+      <Box
+        sx={{
+          ...cornerBase,
+          bottom: inset,
+          insetInlineStart: inset,
+          borderBottom: `1px solid ${color}`,
+          borderInlineStart: `1px solid ${color}`,
+        }}
+      />
+      <Box
+        sx={{
+          ...cornerBase,
+          bottom: inset,
+          insetInlineEnd: inset,
+          borderBottom: `1px solid ${color}`,
+          borderInlineEnd: `1px solid ${color}`,
+        }}
+      />
     </>
   )
 }

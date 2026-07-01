@@ -75,7 +75,11 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     const width = container.clientWidth
     if (width > 0) {
       const scrollIndex = Math.round(Math.abs(scrollLeft) / width)
-      if (scrollIndex !== activeIndex && scrollIndex >= 0 && scrollIndex < testimonialsList.length) {
+      if (
+        scrollIndex !== activeIndex &&
+        scrollIndex >= 0 &&
+        scrollIndex < testimonialsList.length
+      ) {
         setActiveIndex(scrollIndex)
       }
     }
@@ -216,8 +220,10 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   position: 'relative',
                   width: '100%',
                   p: { xs: 3.5, sm: 4.5 },
-                  background: 'linear-gradient(135deg, rgba(13, 241, 217, 0.08) 0%, rgba(18, 18, 18, 0.85) 100%)',
-                  boxShadow: '0px 0px 0px 1px rgba(13, 241, 217, 0.2) inset, 0px 8px 32px rgba(0, 0, 0, 0.5)',
+                  background:
+                    'linear-gradient(135deg, rgba(13, 241, 217, 0.08) 0%, rgba(18, 18, 18, 0.85) 100%)',
+                  boxShadow:
+                    '0px 0px 0px 1px rgba(13, 241, 217, 0.2) inset, 0px 8px 32px rgba(0, 0, 0, 0.5)',
                   borderRadius: '24px',
                   display: 'flex',
                   flexDirection: 'column',
@@ -295,12 +301,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                       flexShrink: 0,
                     }}
                   >
-                    <Image
-                      src={item.avatar}
-                      alt={item.name}
-                      fill
-                      style={{ objectFit: 'cover' }}
-                    />
+                    <Image src={item.avatar} alt={item.name} fill style={{ objectFit: 'cover' }} />
                   </Box>
 
                   <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>

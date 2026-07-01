@@ -1,23 +1,27 @@
-'use client'
+import ProjectsHero from '@/components/Pages/Projects/ProjectsHero/ProjectsHero'
+import ProjectsGrid from '@/components/Pages/Projects/ProjectsGrid/ProjectsGrid'
+import { parsePortfoliosApiData } from '@/components/Pages/Projects/ProjectsGrid/data'
+import { getLocale } from 'next-intl/server'
+import { fetchAPI } from '@/lib/api'
 
-import PageHero, { ShimmerText } from '@/components/shared/PageHero'
-import Portfolio from '@/components/sections/Portfolio'
-import CTASection from '@/components/Pages/Home/CTASection'
+type MediaField = string | { url?: string } | null | undefined
 
-export default function ProjectsPage() {
+function resolveMediaUrl(value: MediaField): string | undefined {
+  if (typeof value === 'string') return value
+  return value?.url
+}
+
+export default async function ProjectsPage() {
+  const locale = await getLocale()
+
+  const [portfoliosData] = await Promise.all([fetchAPI('/api/portfolios-data', locale)])
+
+  const videoSrc = resolveMediaUrl(portfoliosData?.video) ?? '/videos/colorflow-animation (3).mp4'
+
   return (
     <>
-      <PageHero
-        eyebrow="Our Work"
-        title={
-          <>
-            OUR <ShimmerText>PROJECTS</ShimmerText>
-          </>
-        }
-        subtitle="Selected builds that showcase our engineering craft and design precision."
-      />
-      <Portfolio />
-      <CTASection />
+      <ProjectsHero videoSrc={videoSrc} />
+      <ProjectsGrid data={parsePortfoliosApiData(portfoliosData)} />
     </>
   )
 }

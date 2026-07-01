@@ -35,7 +35,7 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
       title: item.title,
       paragraphs: item.description
         ? item.description.split(/\r?\n/).filter((p: string) => p.trim() !== '')
-        : []
+        : [],
     }))
 
   return (
