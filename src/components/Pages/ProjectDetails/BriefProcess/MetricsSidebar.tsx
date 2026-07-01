@@ -119,11 +119,28 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
       <Box component={motion.div} variants={itemVariants} sx={metaCardSx}>
         <Typography sx={metaLabelSx}>Used tools</Typography>
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.125, pt: 2 }}>
-          {metrics.tools.map(tool => (
-            <Box key={tool} sx={toolPillSx}>
-              {tool}
-            </Box>
-          ))}
+          {metrics.tools.map(tool => {
+            const name = typeof tool === 'string' ? tool : tool.name
+            const iconUrl = typeof tool === 'string' ? null : tool.icon
+
+            return (
+              <Box key={name} sx={{ ...toolPillSx, gap: 1 }}>
+                {iconUrl && (
+                  <Box
+                    component="img"
+                    src={iconUrl}
+                    alt={`${name} icon`}
+                    sx={{
+                      width: 16,
+                      height: 16,
+                      objectFit: 'contain',
+                    }}
+                  />
+                )}
+                <span>{name}</span>
+              </Box>
+            )
+          })}
         </Box>
       </Box>
     </Stack>

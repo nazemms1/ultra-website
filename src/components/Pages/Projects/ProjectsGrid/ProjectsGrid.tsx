@@ -66,6 +66,18 @@ export default function ProjectsGrid({ data }: ProjectsGridProps) {
         totalPages={totalPages}
         onPageChange={handlePageChange}
       />
+
+      {/* SVG Clip Paths for Projects Rows (Bottleneck layouts) */}
+      <svg width="0" height="0" style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none' }}>
+        <defs>
+          <clipPath id="row-clip-left" clipPathUnits="objectBoundingBox">
+            <path d="M 0.05,0 L 0.45,0 C 0.5,0 0.5,0.15 0.55,0.15 L 0.95,0.15 Q 1,0.15 1,0.2 L 1,0.8 Q 1,0.85 0.95,0.85 L 0.55,0.85 C 0.5,0.85 0.5,1 0.45,1 L 0.05,1 Q 0,1 0,0.95 L 0,0.05 Q 0,0 0.05,0 Z" />
+          </clipPath>
+          <clipPath id="row-clip-right" clipPathUnits="objectBoundingBox">
+            <path d="M 0.05,0.15 L 0.45,0.15 C 0.5,0.15 0.5,0 0.55,0 L 0.95,0 Q 1,0 1,0.05 L 1,0.95 Q 1,1 0.95,1 L 0.55,1 C 0.5,1 0.5,0.85 0.45,0.85 L 0.05,0.85 Q 0,0.85 0,0.8 L 0,0.2 Q 0,0.15 0.05,0.15 Z" />
+          </clipPath>
+        </defs>
+      </svg>
     </Box>
   )
 }

@@ -20,7 +20,11 @@ export default async function ProjectsPage() {
 
   return (
     <>
-      <ProjectsHero videoSrc={videoSrc} />
+      <ProjectsHero
+        title={portfoliosData?.['main-section']?.title}
+        description={portfoliosData?.['main-section']?.description}
+        videoSrc={videoSrc}
+      />
       <ProjectsGrid data={parsePortfoliosApiData(portfoliosData)} />
     </>
   )

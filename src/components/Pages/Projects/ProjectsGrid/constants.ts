@@ -35,38 +35,42 @@ export const rowsListSx: SxProps<Theme> = {
   width: '100%',
 }
 
-export const ROW_NORMAL = {
-  imageIdleHeight: 340,
-  imageHoverHeight: 340,
-  textIdleHeight: 260,
-  textHoverHeight: 260,
-  titleOpacity: 1,
-  logoOpacity: 0.9,
-  flipImage: false,
-  idleGradient: 0.12,
-  hoverGradient: 0.22,
-  idleImageOpacity: 0.95,
-  hoverImageOpacity: 0.95,
-} as const
-
-export const ROW_REVERSED = {
-  imageIdleHeight: 340,
-  imageHoverHeight: 340,
-  textIdleHeight: 260,
-  textHoverHeight: 260,
-  titleOpacity: 1,
-  logoOpacity: 0.9,
-  flipImage: false,
-  idleGradient: 0.12,
-  hoverGradient: 0.22,
-  idleImageOpacity: 0.95,
-  hoverImageOpacity: 0.95,
-} as const
-
-export type RowLayout = typeof ROW_NORMAL | typeof ROW_REVERSED
+export type RowLayout = {
+  readonly imageIdleHeight: number
+  readonly imageHoverHeight: number
+  readonly textIdleHeight: number
+  readonly textHoverHeight: number
+  readonly titleOpacity: number
+  readonly logoOpacity: number
+  readonly flipImage: boolean
+  readonly idleGradient: number
+  readonly hoverGradient: number
+  readonly idleImageOpacity: number
+  readonly hoverImageOpacity: number
+}
 
 export function rowLayoutForIndex(index: number): RowLayout {
-  return index % 2 === 0 ? ROW_NORMAL : ROW_REVERSED
+  const clampedIndex = Math.min(5, Math.max(0, index))
+
+  const imageIdleHeight = Math.max(160, 260 - clampedIndex * 20)
+  const imageHoverHeight = imageIdleHeight + 60
+
+  const textIdleHeight = Math.max(110, 190 - clampedIndex * 16)
+  const textHoverHeight = textIdleHeight + 160
+
+  return {
+    imageIdleHeight,
+    imageHoverHeight,
+    textIdleHeight,
+    textHoverHeight,
+    titleOpacity: 1,
+    logoOpacity: 0.9,
+    flipImage: false,
+    idleGradient: 0.12,
+    hoverGradient: 0.22,
+    idleImageOpacity: 0.95,
+    hoverImageOpacity: 0.95,
+  }
 }
 
 export const titleSx: SxProps<Theme> = {

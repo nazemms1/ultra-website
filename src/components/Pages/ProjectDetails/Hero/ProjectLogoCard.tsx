@@ -3,7 +3,6 @@
 import Box from '@mui/material/Box'
 import { useTheme } from '@mui/material/styles'
 import { motion, useReducedMotion } from 'framer-motion'
-import Image from 'next/image'
 import type { ProjectDetailLogo } from '../types'
 import { logoCardSx, logoGlowSx } from './constants'
 
@@ -63,18 +62,17 @@ export default function ProjectLogoCard({ logo }: ProjectLogoCardProps) {
           ...logoCardSx(theme),
         }}
       >
-        <Image
+        <Box
+          component="img"
           src={logo.src}
           alt={logo.alt}
-          width={logo.width}
-          height={logo.height}
-          style={{
+          sx={{
             width: 'auto',
             height: 'auto',
             maxWidth: '100%',
+            maxHeight: 80,
             objectFit: 'contain',
           }}
-          priority
         />
       </Box>
     </Box>

@@ -4,7 +4,6 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import { AnimatePresence, motion } from 'framer-motion'
-import Image from 'next/image'
 import type { DemoScreenshot } from '../types'
 
 type DeviceShowcaseProps = {
@@ -39,116 +38,102 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
             borderRadius: '20px 20px 2px 2px',
             overflow: 'hidden',
             bgcolor: 'common.black',
+            '&:hover img': {
+              transform: 'translateY(calc(-100% + 56.25%))',
+              transition: 'transform 4s ease-in-out',
+            },
+            '& img': {
+              transition: 'transform 1s ease-in-out',
+            },
           }}
         >
-          <Image
-            src={screenshot.src}
-            alt={screenshot.alt}
-            fill
-            sizes="(max-width: 900px) 90vw, 720px"
-            style={{ objectFit: 'cover', objectPosition: 'top center' }}
-            priority
-          />
+            <Box
+              component="img"
+              src={screenshot.src}
+              alt={screenshot.alt}
+              sx={{
+                width: '100%',
+                height: 'auto',
+                display: 'block',
+                objectFit: 'cover',
+                objectPosition: 'top center',
+                transform: 'translateY(0)',
+              }}
+            />
+          </Box>
         </Box>
+
+        <Box
+          sx={{
+            mx: 'auto',
+            mt: '-2px',
+            width: '100%',
+            maxWidth: 930,
+            height: 14,
+            borderRadius: '2px 2px 0 0',
+            background: `linear-gradient(180deg, #a3acb1 0%, ${alpha(theme.palette.common.white, 0.35)} 100%)`,
+          }}
+        />
       </Box>
+    )
+  }
 
-      <Box
-        sx={{
-          mx: 'auto',
-          mt: '-2px',
-          width: '100%',
-          maxWidth: 930,
-          height: 14,
-          borderRadius: '2px 2px 0 0',
-          background: `linear-gradient(180deg, #a3acb1 0%, ${alpha(theme.palette.common.white, 0.35)} 100%)`,
-        }}
-      />
-    </Box>
-  )
-}
+  function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: number }) {
+    const theme = useTheme()
 
-function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: number }) {
-  const theme = useTheme()
-
-  return (
-    <Box
-      sx={{
-        position: 'relative',
-        width: '100%',
-        maxWidth: 245,
-        filter: `drop-shadow(76px 25px 64px ${alpha(theme.palette.primary.dark, 0.15)})`,
-      }}
-    >
+    return (
       <Box
         sx={{
           position: 'relative',
           width: '100%',
-          aspectRatio: '245 / 496',
-          borderRadius: '32px',
-          border: `3px solid ${alpha(theme.palette.common.white, 0.2)}`,
-          bgcolor: '#e8eef2',
-          p: '10px',
-          boxShadow: `inset 0 0 0 1px ${alpha(theme.palette.common.white, 0.35)}`,
+          maxWidth: 245,
+          mx: 'auto',
+          filter: `drop-shadow(30px 20px 40px ${alpha(theme.palette.common.black, 0.45)})`,
         }}
       >
+        {/* Screenshot Image inside mock screen */}
         <Box
           sx={{
             position: 'absolute',
-            top: 14,
-            left: '50%',
-            transform: 'translateX(-50%)',
-            width: 72,
-            height: 22,
-            borderRadius: '12px',
-            bgcolor: alpha(theme.palette.common.black, 0.85),
-            zIndex: 2,
+            top: '2.5%',
+            bottom: '2.5%',
+            left: '5.2%',
+            right: '5.2%',
+            borderRadius: '32px',
+            overflow: 'hidden',
+            bgcolor: 'background.paper',
+            zIndex: 1,
           }}
-        />
+        >
+          <Box
+            component="img"
+            src={screenshot.src}
+            alt={screenshot.alt}
+            sx={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+            }}
+          />
+        </Box>
 
+        {/* Mock Bezel on top */}
         <Box
+          component="img"
+          src="/images/mobile-mock.png"
+          alt="Mobile Mockup Frame"
           sx={{
             position: 'relative',
             width: '100%',
-            height: '100%',
-            borderRadius: '22px',
-            overflow: 'hidden',
-            bgcolor: 'background.paper',
+            height: 'auto',
+            display: 'block',
+            zIndex: 3,
+            pointerEvents: 'none',
           }}
-        >
-          <Image
-            src={screenshot.src}
-            alt={screenshot.alt}
-            fill
-            sizes="245px"
-            style={{ objectFit: 'cover' }}
-          />
-
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              bgcolor: alpha(theme.palette.background.default, 0.35),
-              opacity: screenshot.src.includes('etihad') ? 0 : 0.65,
-            }}
-          >
-            <Typography
-              sx={{
-                fontFamily: "'Ethnocentric Rg', sans-serif",
-                fontSize: 64,
-                color: alpha(theme.palette.primary.light, 0.35),
-              }}
-            >
-              {String(index + 1).padStart(2, '0')}
-            </Typography>
-          </Box>
-        </Box>
+        />
       </Box>
-    </Box>
-  )
-}
+    )
+  }
 
 export default function DeviceShowcase({ device, screenshot, index }: DeviceShowcaseProps) {
   return (

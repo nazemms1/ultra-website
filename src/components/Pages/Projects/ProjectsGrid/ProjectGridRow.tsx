@@ -11,11 +11,11 @@ import {
   coverEdgeFade,
   hoverDescriptionSx,
   HOVER_TRANSITION,
-  IMAGE_BLOCK_WIDTH,
   logoPlateSx,
   rowGradient,
   titleSx,
   viewMoreButtonSx,
+  rowLayoutForIndex,
   type RowLayout,
 } from './constants'
 import type { ProjectGridItem } from './types'
@@ -31,6 +31,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
   const t = useTranslations('ProjectsPage')
   const isReversed = index % 2 === 1
   const imageOnLeft = !isReversed
+  const prevLayout = index > 0 ? rowLayoutForIndex(index - 1) : null
 
   return (
     <Box
@@ -40,23 +41,24 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         width: '100%',
         isolation: 'isolate',
         // Clamps layout heights perfectly during transition so rows don't bleed or overlap
-        height: { xs: 'auto', md: layout.textIdleHeight },
+        height: { xs: 'auto', md: layout.imageIdleHeight },
+        marginTop: index > 0 && prevLayout ? { xs: 3, md: `${-0.15 * prevLayout.imageIdleHeight}px` } : 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'visible',
         transition: HOVER_TRANSITION,
         '&:hover': {
-          height: { md: layout.textHoverHeight }, // Smooth accordion expand/collapse
+          height: { md: layout.imageHoverHeight }, // Smooth accordion expand/collapse
           zIndex: 5,
           '& .row-inner': {
-            height: { md: layout.textHoverHeight },
-          },
-          '& .image-block': {
             height: { md: layout.imageHoverHeight },
           },
+          '& .image-block': {
+            width: { md: '100%' },
+            maxWidth: { md: '100%' },
+          },
           '& .text-block': {
-            height: { md: layout.textHoverHeight },
             background: rowGradient(theme, layout.hoverGradient, imageOnLeft),
           },
           '& .cover-fade': {
@@ -80,6 +82,9 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             pointerEvents: 'auto',
           },
         },
+        '&:hover + .project-grid-row': {
+          marginTop: { md: `${-0.15 * layout.imageHoverHeight}px` },
+        },
       }}
     >
       <Box
@@ -94,9 +99,13 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
-          height: { xs: 'auto', md: layout.textIdleHeight },
+          height: { xs: 'auto', md: layout.imageIdleHeight },
           background: 'transparent',
           overflow: 'visible',
+          clipPath: {
+            xs: 'none',
+            md: imageOnLeft ? 'url(#row-clip-left)' : 'url(#row-clip-right)',
+          },
           transition: HOVER_TRANSITION,
         }}
       >
@@ -107,55 +116,60 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             position: { xs: 'relative', md: 'absolute' },
             left: imageOnLeft ? 0 : 'auto',
             right: !imageOnLeft ? 0 : 'auto',
-            top: '50%',
-            transform: { xs: 'none', md: 'translateY(-50%)' },
+            top: 0,
+            bottom: 0,
+            transform: 'none',
             flexShrink: 0,
-            width: { xs: '100%', md: IMAGE_BLOCK_WIDTH },
-            maxWidth: { md: IMAGE_BLOCK_WIDTH },
-            height: { xs: 240, md: layout.imageIdleHeight },
-            borderRadius: !isReversed ? '0px 40px 40px 0px' : '40px 0px 0px 40px',
+            width: { xs: '100%', md: '45%' },
+            maxWidth: { md: '45%' },
+            height: { xs: 240, md: '100%' },
+            borderRadius: { xs: '24px', md: '40px' },
             overflow: 'hidden', // Prevents image frames from spilling over adjacent slots during resize
-            zIndex: 3,
+            zIndex: 2,
             transition: HOVER_TRANSITION,
           }}
         >
-          <Box
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              overflow: 'hidden',
-              transform: layout.flipImage ? 'scaleX(-1)' : 'none',
-            }}
-          >
-            <Box
-              component="img"
-              className="cover-image"
-              src={item.coverSrc}
-              alt={item.coverAlt}
-              sx={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                display: 'block',
-                opacity: layout.idleImageOpacity,
-                transition: HOVER_TRANSITION,
-              }}
-            />
-          </Box>
+          {item.coverSrc && (
+            <>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  overflow: 'hidden',
+                  transform: layout.flipImage ? 'scaleX(-1)' : 'none',
+                }}
+              >
+                <Box
+                  component="img"
+                  className="cover-image"
+                  src={item.coverSrc}
+                  alt={item.coverAlt}
+                  sx={{
+                    width: '100%',
+                    height: '100%',
+                    objectFit: 'cover',
+                    display: 'block',
+                    opacity: layout.idleImageOpacity,
+                    transition: HOVER_TRANSITION,
+                  }}
+                />
+              </Box>
 
-          <Box
-            className="cover-fade"
-            aria-hidden
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              zIndex: 1,
-              opacity: 0.5,
-              background: coverEdgeFade(theme, imageOnLeft),
-              pointerEvents: 'none',
-              transition: HOVER_TRANSITION,
-            }}
-          />
+              <Box
+                className="cover-fade"
+                aria-hidden
+                sx={{
+                  position: 'absolute',
+                  inset: 0,
+                  zIndex: 1,
+                  opacity: 0.5,
+                  background: coverEdgeFade(theme, imageOnLeft),
+                  pointerEvents: 'none',
+                  transition: HOVER_TRANSITION,
+                }}
+              />
+            </>
+          )}
 
           <Box sx={logoPlateSx(theme)}>
             <Box
@@ -192,17 +206,19 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           sx={{
             flex: 1,
             width: '100%',
-            height: { xs: 'auto', md: layout.textIdleHeight },
+            height: { xs: 'auto', md: '100%' },
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'flex-start',
             minWidth: 0,
-            pl: imageOnLeft ? { xs: 3, md: '670px' } : { xs: 3, md: 10 },
-            pr: !imageOnLeft ? { xs: 3, md: '670px' } : { xs: 3, md: 10 },
+            pl: imageOnLeft ? { xs: 3, md: '58%' } : { xs: 3, md: 10 },
+            pr: !imageOnLeft ? { xs: 3, md: '58%' } : { xs: 3, md: 10 },
             py: { xs: 4, md: 2 },
             background: rowGradient(theme, layout.idleGradient, imageOnLeft),
             overflow: 'hidden', // Keeps the green shadow gradient cleanly bounded inside its own expanding box
+            zIndex: 3,
+            position: 'relative',
             transition: HOVER_TRANSITION,
           }}
         >

@@ -267,3 +267,106 @@ export const PROJECT_DETAIL_IDS = PROJECT_DETAILS.map(project => project.id)
 export function getProjectById(id: string): ProjectDetail | undefined {
   return PROJECT_DETAILS.find(project => project.id === id)
 }
+
+export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
+  if (!apiData || !apiData.id || !apiData.title) return null
+
+  const id = String(apiData.id)
+  const title = apiData.title || ''
+  const subtitle = apiData.subtitle || ''
+  const platform = apiData.platform || 'website'
+  
+  let metaCategory = 'Website'
+  if (platform.toLowerCase() === 'mobileapp') {
+    metaCategory = 'Mobile Application'
+  } else if (platform.toLowerCase() === 'website') {
+    metaCategory = 'Web Application'
+  }
+
+  const year = String(apiData.year || new Date().getFullYear())
+  const websiteUrl = apiData.website_url || undefined
+
+  const logoSrc = apiData.image?.url || ''
+
+  const brief = Array.isArray(apiData.items)
+    ? apiData.items.map((item: any, idx: number) => ({
+        number: String(item.order || idx + 1).padStart(2, '0'),
+        title: item.title || '',
+        body: item.description || '',
+      }))
+    : []
+
+  const successRate = apiData.feedback_percentage || 100
+  const services = Array.isArray(apiData.services)
+    ? apiData.services.map((s: any) => s.title || '')
+    : []
+  const tools = Array.isArray(apiData.used_tools)
+    ? apiData.used_tools.map((t: any) => ({
+        name: t.name || '',
+        icon: t.icon?.url || '',
+      }))
+    : []
+
+  const demoViews = Array.isArray(apiData.demos)
+    ? apiData.demos.map((demo: any, idx: number) => {
+        const title = demo.title || `Demo ${idx + 1}`
+        const titleLower = title.toLowerCase()
+        const isMobile =
+          titleLower.includes('تطبيق') ||
+          titleLower.includes('mobile') ||
+          titleLower.includes('app') ||
+          titleLower.includes('موب') ||
+          titleLower.includes('جوال') ||
+          titleLower.includes('هاتف')
+          
+        const isAdmin =
+          titleLower.includes('لوحة') ||
+          titleLower.includes('admin') ||
+          titleLower.includes('dashboard') ||
+          titleLower.includes('تحكم') ||
+          titleLower.includes('إدارة') ||
+          titleLower.includes('اداره')
+
+        const device = isMobile ? 'mobile' : 'desktop'
+
+        const screenshots = Array.isArray(demo.images)
+          ? demo.images.map((img: any, imgIdx: number) => ({
+              id: `${title}-shot-${imgIdx + 1}`,
+              src: img.url || '',
+              alt: `${title} screenshot ${imgIdx + 1}`,
+            }))
+          : []
+
+        return {
+          id: title,
+          label: title,
+          device,
+          icon: demo.icon?.url || '',
+          screenshots,
+        }
+      })
+    : []
+
+  return {
+    id,
+    title,
+    metaCategory,
+    year,
+    shortDescription: subtitle,
+    websiteUrl,
+    logo: {
+      src: logoSrc,
+      alt: `${title} logo`,
+      width: 200,
+      height: 87,
+    },
+    brief,
+    metrics: {
+      successRate,
+      services,
+      tools,
+    },
+    demoViews,
+    relatedProjects: [],
+  }
+}

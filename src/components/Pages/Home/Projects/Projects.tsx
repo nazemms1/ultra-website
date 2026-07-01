@@ -126,7 +126,7 @@ export default function Projects({ data }: { data?: any }) {
         id: String(item.id),
         title,
         description,
-        href: item.website_url || item.href || '#projects',
+        href: item.id ? `/projects/${item.id}` : '#projects',
         mockup: {
           src: coverImageUrl,
           alt: title,

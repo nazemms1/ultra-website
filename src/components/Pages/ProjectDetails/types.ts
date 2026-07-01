@@ -12,13 +12,18 @@ export interface BriefBlock {
   readonly body: string
 }
 
+export interface ProjectTool {
+  readonly name: string
+  readonly icon?: string
+}
+
 export interface ProjectMetrics {
   readonly successRate: number
   readonly services: readonly string[]
-  readonly tools: readonly string[]
+  readonly tools: readonly (string | ProjectTool)[]
 }
 
-export type DemoViewId = 'mobile' | 'web' | 'admin'
+export type DemoViewId = string
 
 export interface DemoScreenshot {
   readonly id: string
@@ -30,6 +35,7 @@ export interface DemoView {
   readonly id: DemoViewId
   readonly label: string
   readonly device: 'mobile' | 'desktop'
+  readonly icon?: string
   readonly screenshots: readonly DemoScreenshot[]
 }
 

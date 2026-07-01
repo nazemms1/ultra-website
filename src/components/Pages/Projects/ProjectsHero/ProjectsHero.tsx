@@ -20,6 +20,8 @@ import {
 } from './constants'
 
 type ProjectsHeroProps = {
+  title?: string | null
+  description?: string | null
   videoSrc?: string
 }
 
@@ -40,7 +42,7 @@ const itemVariants = {
   },
 }
 
-export default function ProjectsHero({ videoSrc = VIDEO_SRC }: ProjectsHeroProps) {
+export default function ProjectsHero({ title, description, videoSrc = VIDEO_SRC }: ProjectsHeroProps) {
   const t = useTranslations('ProjectsPage')
 
   return (
@@ -73,15 +75,21 @@ export default function ProjectsHero({ videoSrc = VIDEO_SRC }: ProjectsHeroProps
             variants={itemVariants}
             sx={titleSx}
           >
-            {t('titleLine1')}
-            <Box component="span" sx={{ color: 'primary.light' }}>
-              {t('titleAccent')}
-            </Box>
-            {t('titleLine2')}
+            {title ? (
+              title
+            ) : (
+              <>
+                {t('titleLine1')}
+                <Box component="span" sx={{ color: 'primary.light' }}>
+                  {t('titleAccent')}
+                </Box>
+                {t('titleLine2')}
+              </>
+            )}
           </Typography>
 
           <Typography component={motion.p} variants={itemVariants} sx={descriptionSx}>
-            {t('description')}
+            {description || t('description')}
           </Typography>
         </Stack>
       </Box>
