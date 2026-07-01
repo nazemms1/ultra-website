@@ -370,6 +370,17 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             zIndex: 2,
           }}
         >
+          <style>{`
+            @keyframes orbitRotate {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(-360deg); }
+            }
+            @keyframes avatarRotate {
+              from { transform: rotate(0deg); }
+              to { transform: rotate(360deg); }
+            }
+          `}</style>
+
           {/* Outer solid border */}
           <Box
             sx={{
@@ -382,268 +393,281 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             }}
           />
 
-
-
           <Box
             sx={{
               position: 'absolute',
-              width: 540,
-              height: 540,
-              padding: '32px',
-              background:
-                'radial-gradient(ellipse 100% 60% at center top, rgba(13, 241, 217, 0.7) 0%, rgba(12, 40, 40, 0.8) 60%, rgba(8, 20, 20, 0.6) 100%)',
-              boxShadow: '0px 0px 0px 1px rgba(13, 241, 217, 0.25) inset',
-              borderRadius: '50%',
-              filter: 'blur(0px)',
-              justifyContent: 'center',
-              alignItems: 'center',
+              width: 580,
+              height: 580,
               display: 'flex',
-              overflow: 'hidden',
+              alignItems: 'center',
+              justifyContent: 'center',
               zIndex: 10,
             }}
           >
-            <Box sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '50%',
-                  top: 70,
-                  width: 8,
-                  height: 8,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-              
-              </Box>
+            <div
+              style={{
+                width: '100%',
+                height: '100%',
+                position: 'absolute',
+                left: 0,
+                top: 0,
+                borderRadius: 16777200,
+                border: '1px rgba(18, 18, 18, 0.95) solid',
+                pointerEvents: 'none',
+              }}
+            />
 
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '27%',
-                  top: 90,
-                  width: 6,
-                  height: 6,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-           
-              </Box>
-
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '73%',
-                  top: 90,
-                  width: 6,
-                  height: 6,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-            
-              </Box>
-
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '16%',
-                  top: 170,
-                  width: 6,
-                  height: 6,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-                
-              </Box>
-
-              <Box
-                sx={{
-                  position: 'absolute',
-                  left: '84%',
-                  top: 170,
-                  width: 6,
-                  height: 6,
-                  transform: 'translate(-50%, -50%)',
-                }}
-              >
-               
-              </Box>
-
-              
-            </Box>
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={activeIndex}
-                initial={{ opacity: 0, scale: 0.95, filter: 'blur(4px)' }}
-                animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
-                exit={{ opacity: 0, scale: 1.05, filter: 'blur(4px)' }}
-                transition={{ duration: 0.4, ease: 'easeInOut' }}
-                style={{
-                  width: '100%',
-                  maxWidth: 380,
-                  flexDirection: 'column',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                  gap: isRtl ? 6 : 10,
-                  display: 'flex',
-                  paddingTop: '305px',
-                }}
-              >
+            <Box
+              sx={{
+                width: 540,
+                height: 540,
+                padding: '32px',
+                background: 'radial-gradient(ellipse 70.71% 70.71% at 50.00% 50.00%, rgba(13, 241, 217, 0.65) 0%, rgba(18, 18, 18, 0.95) 70%)',
+                boxShadow: '0px 0px 80px -10px rgba(1, 177, 177, 0.40), 0px 0px 0px 1px rgba(18, 18, 18, 0.95) inset',
+                borderRadius: "100%",
+                filter: 'blur(0px)',
+                justifyContent: 'center',
+                alignItems: 'center',
+                display: 'flex',
+                overflow: 'hidden',
+                position: 'relative',
+              }}
+            >
+              <Box sx={{ position: 'absolute', inset: 0, pointerEvents: 'none' }}>
                 <Box
                   sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    flexShrink: 0,
+                    position: 'absolute',
+                    left: '50%',
+                    top: 70,
+                    width: 8,
+                    height: 8,
+                    transform: 'translate(-50%, -50%)',
                   }}
                 >
                 
                 </Box>
 
-                {activeTestimonial.rating === undefined ? (
-                  <Box
-                    sx={{
-                      justifyContent: 'center',
-                      alignItems: 'center',
-                      gap: '3px',
-                      display: 'flex',
-                      flexShrink: 0,
-                    }}
-                  >
-                    {[...Array(5)].map((_, i) => (
-                      <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 14, lineHeight: 1 }}>
-                        ★
-                      </Typography>
-                    ))}
-                  </Box>
-                ) : (
-                  activeTestimonial.rating !== null &&
-                  activeTestimonial.rating > 0 && (
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '27%',
+                    top: 90,
+                    width: 6,
+                    height: 6,
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+             
+                </Box>
+
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '73%',
+                    top: 90,
+                    width: 6,
+                    height: 6,
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+              
+                </Box>
+
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '16%',
+                    top: 170,
+                    width: 6,
+                    height: 6,
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                  
+                </Box>
+
+                <Box
+                  sx={{
+                    position: 'absolute',
+                    left: '84%',
+                    top: 170,
+                    width: 6,
+                    height: 6,
+                    transform: 'translate(-50%, -50%)',
+                  }}
+                >
+                 
+                </Box>
+              </Box>
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, scale: 0.95, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, scale: 1, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, scale: 1.05, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.4, ease: 'easeInOut' }}
+                  style={{
+                    position: 'absolute',
+                    top: '260px',
+                    left: '100px',
+                    width: '340px',
+                    flexDirection: 'column',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    gap: '16px',
+                    display: 'flex',
+                  }}
+                >
+                  {activeTestimonial.rating === undefined ? (
                     <Box
                       sx={{
                         justifyContent: 'center',
                         alignItems: 'center',
-                        gap: '3px',
+                        gap: '4px',
                         display: 'flex',
                         flexShrink: 0,
                       }}
                     >
-                      {[...Array(activeTestimonial.rating)].map((_, i) => (
-                        <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 14, lineHeight: 1 }}>
+                      {[...Array(5)].map((_, i) => (
+                        <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, fontFamily: "'Inter', sans-serif", fontWeight: '400', lineHeight: 1.5 }}>
                           ★
                         </Typography>
                       ))}
                     </Box>
-                  )
-                )}
+                  ) : (
+                    activeTestimonial.rating !== null &&
+                    activeTestimonial.rating > 0 && (
+                      <Box
+                        sx={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          gap: '4px',
+                          display: 'flex',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {[...Array(activeTestimonial.rating)].map((_, i) => (
+                          <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, fontFamily: "'Inter', sans-serif", fontWeight: '400', lineHeight: 1.5 }}>
+                            ★
+                          </Typography>
+                        ))}
+                      </Box>
+                    )
+                  )}
 
-                <Typography
-                  sx={{
-                    width: '100%',
-                    textAlign: 'center',
-                    color: 'white',
-                    fontSize: isRtl ? 12 : 14,
-                    fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
-                    fontWeight: isRtl ? '400' : '500',
-                    lineHeight: isRtl ? 1.6 : 1.5,
-                    letterSpacing: isRtl ? 0 : undefined,
-                    wordBreak: 'break-word',
-                    overflow: 'hidden',
-                    display: '-webkit-box',
-                    WebkitLineClamp: isRtl ? 4 : 5,
-                    WebkitBoxOrient: 'vertical',
-                  }}
-                >
-                  {activeTestimonial.text}
-                </Typography>
-
-                <Box
-                  sx={{
-                    width: '100%',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                    gap: '2px',
-                    display: 'flex',
-                    flexShrink: 0,
-                  }}
-                >
                   <Typography
                     sx={{
+                      width: '340px',
                       textAlign: 'center',
                       color: 'white',
-                      fontSize: isRtl ? 13 : 13,
-                      fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif",
-                      fontWeight: '700',
-                      lineHeight: '21px',
-                      letterSpacing: isRtl ? 0 : 1,
+                      fontSize: isRtl ? '16px' : '18px',
+                      fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
+                      fontWeight: isRtl ? '400' : '500',
+                      lineHeight: '26px',
                       wordBreak: 'break-word',
-                      width: '100%',
+                      overflow: 'hidden',
+                      display: '-webkit-box',
+                      WebkitLineClamp: isRtl ? 4 : 5,
+                      WebkitBoxOrient: 'vertical',
                     }}
                   >
-                    {activeTestimonial.name}
+                    {activeTestimonial.text}
                   </Typography>
-                  <Box sx={{ textAlign: 'center', width: '100%' }}>
-                    {activeTestimonial.role.includes('·') ? (
-                      <>
+
+                  <Box
+                    sx={{
+                      width: '235.30px',
+                      height: '52.50px',
+                      paddingTop: '8px',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      gap: '4px',
+                      display: 'flex',
+                      flexShrink: 0,
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        textAlign: 'center',
+                        color: 'white',
+                        fontSize: '14px',
+                        fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif",
+                        fontWeight: '700',
+                        lineHeight: '21px',
+                        letterSpacing: '1px',
+                        wordBreak: 'break-word',
+                        width: '100%',
+                      }}
+                    >
+                      {activeTestimonial.name}
+                    </Typography>
+                    <Box sx={{ textAlign: 'center', width: '100%' }}>
+                      {activeTestimonial.role.includes('·') ? (
+                        <>
+                          <Typography
+                            component="span"
+                            sx={{
+                              color: 'rgba(255,255,255,0.60)',
+                              fontSize: 13,
+                              fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
+                              fontWeight: '400',
+                              textTransform: isRtl ? 'none' : 'uppercase',
+                              lineHeight: '19.50px',
+                              letterSpacing: '2px',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {activeTestimonial.role.split('·')[0]}·
+                          </Typography>
+                          <Typography
+                            component="span"
+                            sx={{
+                              color: '#0DF1D9',
+                              fontSize: 13,
+                              fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
+                              fontWeight: '400',
+                              textTransform: isRtl ? 'none' : 'uppercase',
+                              lineHeight: '19.50px',
+                              letterSpacing: '2px',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {activeTestimonial.role.split('·')[1]}
+                          </Typography>
+                        </>
+                      ) : (
                         <Typography
                           component="span"
                           sx={{
                             color: 'rgba(255,255,255,0.60)',
-                            fontSize: 11,
+                            fontSize: 13,
                             fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
                             fontWeight: '400',
                             textTransform: isRtl ? 'none' : 'uppercase',
-                            letterSpacing: isRtl ? 0 : 1.5,
+                            lineHeight: '19.50px',
+                            letterSpacing: '2px',
                             wordBreak: 'break-word',
                           }}
                         >
-                          {activeTestimonial.role.split('·')[0]}·
+                          {activeTestimonial.role}
                         </Typography>
-                        <Typography
-                          component="span"
-                          sx={{
-                            color: '#0DF1D9',
-                            fontSize: 11,
-                            fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
-                            fontWeight: '400',
-                            textTransform: isRtl ? 'none' : 'uppercase',
-                            letterSpacing: isRtl ? 0 : 1.5,
-                            wordBreak: 'break-word',
-                          }}
-                        >
-                          {activeTestimonial.role.split('·')[1]}
-                        </Typography>
-                      </>
-                    ) : (
-                      <Typography
-                        component="span"
-                        sx={{
-                          color: 'rgba(255,255,255,0.60)',
-                          fontSize: 11,
-                          fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
-                          fontWeight: '400',
-                          textTransform: isRtl ? 'none' : 'uppercase',
-                          letterSpacing: isRtl ? 0 : 1.5,
-                          wordBreak: 'break-word',
-                        }}
-                      >
-                        {activeTestimonial.role}
-                      </Typography>
-                    )}
+                      )}
+                    </Box>
                   </Box>
-                </Box>
-              </motion.div>
-            </AnimatePresence>
+                </motion.div>
+              </AnimatePresence>
+            </Box>
           </Box>
 
-          <motion.div
-            animate={{ rotate: -360 }}
-            transition={{ repeat: Infinity, duration: 60, ease: 'linear' }}
+          <div
             style={{
               position: 'absolute',
               width: '100%',
               height: '100%',
               zIndex: 20,
               pointerEvents: 'none',
+              animation: 'orbitRotate 60s linear infinite',
             }}
           >
             <Box
@@ -697,53 +721,86 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                     pointerEvents: 'auto',
                   }}
                 >
-                  <motion.div
-                    animate={{
-                      scale: isActive ? 1.2 : 1,
-                      rotate: 360,
-                    }}
-                    transition={{
-                      scale: { type: 'spring', stiffness: 300, damping: 20 },
-                      rotate: { repeat: Infinity, duration: 60, ease: 'linear' },
-                    }}
+                  <AnimatePresence>
+                    {isActive && (
+                      <motion.div
+                        initial={{ opacity: 0, scale: 0.8 }}
+                        animate={{ opacity: 0.20, scale: 1 }}
+                        exit={{ opacity: 0, scale: 0.8 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
+                          position: 'absolute',
+                          top: -42,
+                          left: -42,
+                          right: -42,
+                          bottom: -42,
+                          borderRadius: 32856678,
+                          border: '1.96px #0DF1D9 solid',
+                          pointerEvents: 'none',
+                        }}
+                      />
+                    )}
+                  </AnimatePresence>
+
+                  {/* Outer rotating wrapper - browser CSS animation guarantees no sync loss */}
+                  <div
                     style={{
                       position: 'relative',
                       width: 56,
                       height: 56,
-                      borderRadius: '50%',
-                      padding: 4,
-                      background: isActive
-                        ? `linear-gradient(135deg, ${primary}, transparent)`
-                        : alpha('#fff', 0.1),
-                      boxShadow: isActive ? `0 0 20px ${alpha(primary, 0.6)}` : 'none',
+                      animation: 'avatarRotate 60s linear infinite',
                     }}
                   >
-                    <Box
-                      sx={{
-                        width: '100%',
-                        height: '100%',
+                    {/* Inner wrapper - handles scale, shadow, padding, etc. */}
+                    <motion.div
+                      animate={{
+                        scale: isActive ? 1.607 : 1,
+                      }}
+                      transition={{
+                        scale: { type: 'spring', stiffness: 300, damping: 20 },
+                      }}
+                      style={{
+                        position: 'absolute',
+                        inset: 0,
                         borderRadius: '50%',
-                        overflow: 'hidden',
-                        position: 'relative',
-                        bgcolor: '#000',
+                        padding: isActive ? 0 : 4,
+                        background: isActive
+                          ? 'rgba(255, 255, 255, 0)'
+                          : alpha('#fff', 0.1),
+                        transition: 'padding 0.3s ease, background 0.3s ease',
                       }}
                     >
-                      <Image
-                        src={testimonial.avatar}
-                        alt={testimonial.name}
-                        fill
-                        style={{
-                          objectFit: 'cover',
-                          opacity: isActive ? 1 : 0.6,
-                          transition: 'opacity 0.3s ease',
+                      <Box
+                        sx={{
+                          width: '100%',
+                          height: '100%',
+                          borderRadius: isActive ? 20971500 : '50%',
+                          overflow: 'hidden',
+                          position: 'relative',
+                          bgcolor: '#000',
+                          boxShadow: isActive
+                            ? '0px 0px 40px rgba(13, 241, 217, 0.70), 0px 0px 0px 3.75px #0DF1D9'
+                            : 'none',
+                          transition: 'box-shadow 0.3s ease, border-radius 0.3s ease',
                         }}
-                      />
-                    </Box>
-                  </motion.div>
+                      >
+                        <Image
+                          src={testimonial.avatar}
+                          alt={testimonial.name}
+                          fill
+                          style={{
+                            objectFit: 'cover',
+                            opacity: isActive ? 1 : 0.6,
+                            transition: 'opacity 0.3s ease',
+                          }}
+                        />
+                      </Box>
+                    </motion.div>
+                  </div>
                 </Box>
               )
             })}
-          </motion.div>
+          </div>
         </Box>
       )}
     </Box>
