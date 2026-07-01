@@ -75,7 +75,7 @@ export default function DemoFilterChips({ views, activeViewId, onChange }: DemoF
                 }}
               />
             ) : (
-              Icon && <Icon size={18} color="currentColor" strokeWidth={1.75} sx={{ flexShrink: 0 }} />
+              Icon && <Icon size={18} color="currentColor" strokeWidth={1.75}  />
             )}
             <Box
               component="span"
