@@ -3,11 +3,13 @@
 import Box from '@mui/material/Box'
 import { useTheme } from '@mui/material/styles'
 import { motion, useReducedMotion } from 'framer-motion'
-import type { ProjectDetailLogo } from '../types'
+import type { ProjectDetail, ProjectDetailLogo } from '../types'
 import { logoCardSx, logoGlowSx } from './constants'
 
 type ProjectLogoCardProps = {
   logo: ProjectDetailLogo
+  cover?: ProjectDetail['cover']
+  logoImage?: ProjectDetail['logoImage']
 }
 
 const cardVariants = {
@@ -20,9 +22,12 @@ const cardVariants = {
   },
 }
 
-export default function ProjectLogoCard({ logo }: ProjectLogoCardProps) {
+export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoCardProps) {
   const theme = useTheme()
   const prefersReducedMotion = useReducedMotion()
+
+  const hasCover = Boolean(cover)
+  const displayLogoSrc = logoImage || logo.src
 
   return (
     <Box
@@ -39,42 +44,133 @@ export default function ProjectLogoCard({ logo }: ProjectLogoCardProps) {
     >
       <Box sx={logoGlowSx(theme)} aria-hidden />
 
-      <Box
-        component={motion.div}
-        animate={
-          prefersReducedMotion
-            ? undefined
-            : {
-                y: [0, -6, 0],
-              }
-        }
-        transition={
-          prefersReducedMotion
-            ? undefined
-            : {
-                duration: 5,
-                repeat: Infinity,
-                ease: 'easeInOut',
-              }
-        }
-        sx={{
-          zIndex: 1,
-          ...logoCardSx(theme),
-        }}
-      >
+      {hasCover ? (
+        /* Flip card container */
         <Box
-          component="img"
-          src={logo.src}
-          alt={logo.alt}
+          component={motion.div}
+          animate={
+            prefersReducedMotion
+              ? undefined
+              : { y: [0, -6, 0] }
+          }
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : { duration: 5, repeat: Infinity, ease: 'easeInOut' }
+          }
           sx={{
-            width: 'auto',
-            height: 'auto',
-            maxWidth: '100%',
-            maxHeight: 80,
-            objectFit: 'contain',
+            zIndex: 1,
+            perspective: '1000px',
+            width: { xs: '100%', sm: 286 },
+            maxWidth: 286,
+            minHeight: { xs: 140, sm: 170 },
           }}
-        />
-      </Box>
+        >
+          <Box
+            sx={{
+              position: 'relative',
+              width: '100%',
+              height: '100%',
+              minHeight: { xs: 140, sm: 170 },
+              transformStyle: 'preserve-3d',
+              transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+              '&:hover': {
+                transform: 'rotateY(180deg)',
+              },
+            }}
+          >
+            {/* Front face — logo */}
+            <Box
+              sx={{
+                ...logoCardSx(theme),
+                position: 'absolute',
+                inset: 0,
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '40px',
+                width: '100%',
+                minHeight: { xs: 140, sm: 170 },
+              }}
+            >
+              <Box
+                component="img"
+                src={displayLogoSrc}
+                alt={logo.alt}
+                sx={{
+                  width: 'auto',
+                  height: 'auto',
+                  maxWidth: '100%',
+                  maxHeight: 80,
+                  objectFit: 'contain',
+                }}
+              />
+            </Box>
+
+            {/* Back face — cover image */}
+            <Box
+              sx={{
+                ...logoCardSx(theme),
+                position: 'absolute',
+                inset: 0,
+                backfaceVisibility: 'hidden',
+                WebkitBackfaceVisibility: 'hidden',
+                transform: 'rotateY(180deg)',
+                borderRadius: '40px',
+                overflow: 'hidden',
+                width: '100%',
+                minHeight: { xs: 140, sm: 170 },
+                p: 0,
+              }}
+            >
+              <Box
+                component="img"
+                src={cover!}
+                alt={`${logo.alt} cover`}
+                sx={{
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover',
+                }}
+              />
+            </Box>
+          </Box>
+        </Box>
+      ) : (
+        /* Original floating card — no cover */
+        <Box
+          component={motion.div}
+          animate={
+            prefersReducedMotion
+              ? undefined
+              : { y: [0, -6, 0] }
+          }
+          transition={
+            prefersReducedMotion
+              ? undefined
+              : { duration: 5, repeat: Infinity, ease: 'easeInOut' }
+          }
+          sx={{
+            zIndex: 1,
+            ...logoCardSx(theme),
+          }}
+        >
+          <Box
+            component="img"
+            src={displayLogoSrc}
+            alt={logo.alt}
+            sx={{
+              width: 'auto',
+              height: 'auto',
+              maxWidth: '100%',
+              maxHeight: 80,
+              objectFit: 'contain',
+            }}
+          />
+        </Box>
+      )}
     </Box>
   )
 }

@@ -52,8 +52,8 @@ export type RowLayout = {
 export function rowLayoutForIndex(index: number): RowLayout {
   const clampedIndex = Math.min(5, Math.max(0, index))
 
-  const imageIdleHeight = Math.max(160, 260 - clampedIndex * 20)
-  const imageHoverHeight = imageIdleHeight + 60
+  const imageIdleHeight = Math.max(240, 360 - clampedIndex * 20)
+  const imageHoverHeight = imageIdleHeight + 100
 
   const textIdleHeight = Math.max(110, 190 - clampedIndex * 16)
   const textHoverHeight = textIdleHeight + 160
@@ -121,27 +121,27 @@ export const viewMoreButtonSx: SxProps<Theme> = {
 }
 
 export function logoPlateSx(theme: Theme): SxProps<Theme> {
-  const glass = glassSurface(theme, { radius: '32px', tint: 0.06 })
+  const glass = glassSurface(theme, { radius: '20px', tint: 0.06 })
   return {
     position: 'absolute',
-    left: '50%',
     top: '50%',
-    transform: 'translate(-50%, -50%)',
+    transform: 'translateY(-50%)',
     zIndex: 3,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: { xs: 200, sm: 240, md: 260 },
-    height: { xs: 120, sm: 140, md: 150 },
-    p: '12px',
-    borderRadius: '32px',
+    width: { xs: 160, sm: 180, md: 200 },
+    height: { xs: 90, sm: 100, md: 110 },
+    p: '10px',
+    borderRadius: '20px',
     border: `1px solid ${alpha(theme.palette.common.white, 0.08)}`,
     backdropFilter: 'blur(26px) brightness(1.08)',
     WebkitBackdropFilter: 'blur(26px) brightness(1.08)',
     background: glass.background,
-    boxShadow: `0 0 40px 0 ${alpha(theme.palette.primary.light, 0.35)}`,
+    boxShadow: `0 0 32px 0 ${alpha(theme.palette.primary.light, 0.3)}`,
     perspective: '1000px',
-    transition: HOVER_TRANSITION,
+    cursor: 'default',
+    transition: 'none',
   }
 }
 

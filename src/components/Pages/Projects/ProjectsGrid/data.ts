@@ -10,8 +10,8 @@ function mapApiItemToGridItem(item: PortfoliosApiItem): ProjectGridItem | null {
   const title = item.title?.trim()
   if (!id || !title) return null
 
-  const logoSrc = resolveMediaUrl(item.image) || resolveMediaUrl(item.logo) || ''
-  const coverSrc = resolveMediaUrl(item.cover_image) || ''
+  const logoSrc = resolveMediaUrl(item.logo) || resolveMediaUrl(item.image) || ''
+  const coverSrc = resolveMediaUrl(item.cover) || resolveMediaUrl(item.cover_image) || ''
 
   const description = item.subtitle?.trim() || item.short_description?.trim() || item.description?.trim() || ''
 
@@ -22,7 +22,7 @@ function mapApiItemToGridItem(item: PortfoliosApiItem): ProjectGridItem | null {
     coverSrc: coverSrc,
     coverAlt: title,
     logo: {
-      src: logoSrc || coverSrc,
+      src: logoSrc,
       alt: `${title} logo`,
       width: 200,
       height: 87,

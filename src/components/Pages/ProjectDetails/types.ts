@@ -55,6 +55,8 @@ export interface ProjectDetail {
   readonly shortDescription: string
   readonly websiteUrl?: string
   readonly logo: ProjectDetailLogo
+  readonly cover?: string | null
+  readonly logoImage?: string | null
   readonly brief: readonly BriefBlock[]
   readonly metrics: ProjectMetrics
   readonly demoViews: readonly DemoView[]

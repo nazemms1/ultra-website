@@ -287,6 +287,8 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
   const websiteUrl = apiData.website_url || undefined
 
   const logoSrc = apiData.image?.url || ''
+  const coverSrc = apiData.cover?.url || null
+  const logoImageSrc = apiData.logo?.url || null
 
   const brief = Array.isArray(apiData.items)
     ? apiData.items.map((item: any, idx: number) => ({
@@ -360,6 +362,8 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
       width: 200,
       height: 87,
     },
+    cover: coverSrc,
+    logoImage: logoImageSrc,
     brief,
     metrics: {
       successRate,

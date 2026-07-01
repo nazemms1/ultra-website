@@ -4,14 +4,12 @@ import { ArrowUpRight } from 'lucide-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
 import {
   coverEdgeFade,
   hoverDescriptionSx,
   HOVER_TRANSITION,
-  logoPlateSx,
   rowGradient,
   titleSx,
   viewMoreButtonSx,
@@ -19,6 +17,7 @@ import {
   type RowLayout,
 } from './constants'
 import type { ProjectGridItem } from './types'
+import LogoFlipCard from './LogoFlipCard'
 
 type ProjectGridRowProps = {
   item: ProjectGridItem
@@ -64,8 +63,8 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           '& .cover-fade': {
             opacity: 0.25,
           },
-          '& .logo-flip': {
-            opacity: 1,
+          '& .cover-image': {
+            transform: 'scale(1.06)',
           },
           '& .row-title': {
             opacity: 1,
@@ -151,6 +150,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
                     display: 'block',
                     opacity: layout.idleImageOpacity,
                     transition: HOVER_TRANSITION,
+                    transformOrigin: 'center center',
                   }}
                 />
               </Box>
@@ -170,35 +170,9 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
               />
             </>
           )}
-
-          <Box sx={logoPlateSx(theme)}>
-            <Box
-              className="logo-flip"
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: item.logo.width,
-                height: item.logo.height,
-                transformStyle: 'preserve-3d',
-                opacity: layout.logoOpacity,
-                transition: HOVER_TRANSITION,
-              }}
-            >
-              <Image
-                src={item.logo.src}
-                alt={item.logo.alt}
-                width={item.logo.width}
-                height={item.logo.height}
-                style={{
-                  width: '100%',
-                  height: 'auto',
-                  objectFit: 'contain',
-                }}
-              />
-            </Box>
-          </Box>
         </Box>
+
+        <LogoFlipCard item={item} imageOnLeft={imageOnLeft} />
 
         {/* FIX: Text Container Tracks — Uses overflow: hidden to prevent gradient/shadow spilling over other rows */}
         <Box

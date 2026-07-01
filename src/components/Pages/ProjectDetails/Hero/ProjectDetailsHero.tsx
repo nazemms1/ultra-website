@@ -139,7 +139,7 @@ export default function ProjectDetailsHero({ project }: ProjectDetailsHeroProps)
             ) : null}
           </Stack>
 
-          <ProjectLogoCard logo={project.logo} />
+          <ProjectLogoCard logo={project.logo} cover={project.cover} logoImage={project.logoImage} />
         </Box>
       </Box>
     </Box>

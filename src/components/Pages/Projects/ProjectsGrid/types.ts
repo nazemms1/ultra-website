@@ -22,8 +22,9 @@ export type PortfoliosApiItem = {
   readonly description?: string
   readonly short_description?: string
   readonly subtitle?: string
+  readonly cover?: string | { url?: string } | null
   readonly cover_image?: string | { url?: string }
-  readonly logo?: string | { url?: string }
+  readonly logo?: string | { url?: string } | null
   readonly image?: string | { url?: string } | null
 }
 
