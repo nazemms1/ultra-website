@@ -36,30 +36,30 @@ export const rowsListSx: SxProps<Theme> = {
 }
 
 export const ROW_NORMAL = {
-  imageIdleHeight: 250,
+  imageIdleHeight: 340,
   imageHoverHeight: 340,
-  textIdleHeight: 180,
+  textIdleHeight: 260,
   textHoverHeight: 260,
-  titleOpacity: 0.5,
-  logoOpacity: 0.7,
+  titleOpacity: 1,
+  logoOpacity: 0.9,
   flipImage: false,
-  idleGradient: 0.06,
+  idleGradient: 0.12,
   hoverGradient: 0.22,
-  idleImageOpacity: 0.5,
+  idleImageOpacity: 0.95,
   hoverImageOpacity: 0.95,
 } as const
 
 export const ROW_REVERSED = {
-  imageIdleHeight: 250,
+  imageIdleHeight: 340,
   imageHoverHeight: 340,
-  textIdleHeight: 180,
+  textIdleHeight: 260,
   textHoverHeight: 260,
-  titleOpacity: 0.5,
-  logoOpacity: 0.7,
+  titleOpacity: 1,
+  logoOpacity: 0.9,
   flipImage: false,
-  idleGradient: 0.06,
+  idleGradient: 0.12,
   hoverGradient: 0.22,
-  idleImageOpacity: 0.5,
+  idleImageOpacity: 0.95,
   hoverImageOpacity: 0.95,
 } as const
 

@@ -59,12 +59,8 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             height: { md: layout.textHoverHeight },
             background: rowGradient(theme, layout.hoverGradient, imageOnLeft),
           },
-          '& .cover-image': {
-            filter: 'grayscale(0%)',
-            opacity: layout.hoverImageOpacity,
-          },
           '& .cover-fade': {
-            opacity: 0.35,
+            opacity: 0.25,
           },
           '& .logo-flip': {
             opacity: 1,
@@ -154,6 +150,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
               position: 'absolute',
               inset: 0,
               zIndex: 1,
+              opacity: 0.5,
               background: coverEdgeFade(theme, imageOnLeft),
               pointerEvents: 'none',
               transition: HOVER_TRANSITION,

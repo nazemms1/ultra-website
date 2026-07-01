@@ -18,8 +18,8 @@ interface TestimonialItem {
   rating?: number | null
 }
 
-const ORBIT_RADIUS = 300
-const INNER_RADIUS = 300
+const ORBIT_RADIUS = 360
+const INNER_RADIUS = 360
 
 interface TestimonialsSectionProps {
   data?: {
@@ -397,8 +397,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           <Box
             sx={{
               position: 'absolute',
-              width: 580,
-              height: 580,
+              width: 640,
+              height: 640,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -420,8 +420,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
             <Box
               sx={{
-                width: 540,
-                height: 540,
+                width: 600,
+                height: 600,
                 padding: '32px',
                 background: 'radial-gradient(ellipse 70.71% 70.71% at 50.00% 50.00%, rgba(13, 241, 217, 0.65) 0%, rgba(18, 18, 18, 0.95) 70%)',
                 boxShadow: '0px 0px 80px -10px rgba(1, 177, 177, 0.40), 0px 0px 0px 1px rgba(18, 18, 18, 0.95) inset',
@@ -510,56 +510,19 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                   style={{
                     position: 'absolute',
-                    top: '260px',
-                    left: '100px',
-                    width: '340px',
+                    top: '345px',
+                    left: '80px',
+                    width: '440px',
                     flexDirection: 'column',
                     justifyContent: 'flex-start',
                     alignItems: 'center',
-                    gap: '16px',
+                    gap: '12px',
                     display: 'flex',
                   }}
                 >
-                  {activeTestimonial.rating === undefined ? (
-                    <Box
-                      sx={{
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        gap: '4px',
-                        display: 'flex',
-                        flexShrink: 0,
-                      }}
-                    >
-                      {[...Array(5)].map((_, i) => (
-                        <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, fontFamily: "'Inter', sans-serif", fontWeight: '400', lineHeight: 1.5 }}>
-                          ★
-                        </Typography>
-                      ))}
-                    </Box>
-                  ) : (
-                    activeTestimonial.rating !== null &&
-                    activeTestimonial.rating > 0 && (
-                      <Box
-                        sx={{
-                          justifyContent: 'center',
-                          alignItems: 'center',
-                          gap: '4px',
-                          display: 'flex',
-                          flexShrink: 0,
-                        }}
-                      >
-                        {[...Array(activeTestimonial.rating)].map((_, i) => (
-                          <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, fontFamily: "'Inter', sans-serif", fontWeight: '400', lineHeight: 1.5 }}>
-                            ★
-                          </Typography>
-                        ))}
-                      </Box>
-                    )
-                  )}
-
                   <Typography
                     sx={{
-                      width: '340px',
+                      width: '440px',
                       textAlign: 'center',
                       color: 'white',
                       fontSize: isRtl ? '16px' : '18px',
@@ -579,15 +542,53 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   <Box
                     sx={{
                       width: '235.30px',
-                      height: '52.50px',
-                      paddingTop: '8px',
+                      height: 'auto',
+                      paddingTop: '4px',
                       flexDirection: 'column',
                       alignItems: 'center',
-                      gap: '4px',
+                      gap: '8px',
                       display: 'flex',
                       flexShrink: 0,
                     }}
                   >
+                    {/* Stars block placed directly above the name */}
+                    {activeTestimonial.rating === undefined ? (
+                      <Box
+                        sx={{
+                          justifyContent: 'center',
+                          alignItems: 'center',
+                          gap: '4px',
+                          display: 'flex',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {[...Array(5)].map((_, i) => (
+                          <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, fontFamily: "'Inter', sans-serif", fontWeight: '400', lineHeight: 1.5 }}>
+                            ★
+                          </Typography>
+                        ))}
+                      </Box>
+                    ) : (
+                      activeTestimonial.rating !== null &&
+                      activeTestimonial.rating > 0 && (
+                        <Box
+                          sx={{
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            gap: '4px',
+                            display: 'flex',
+                            flexShrink: 0,
+                          }}
+                        >
+                          {[...Array(activeTestimonial.rating)].map((_, i) => (
+                            <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, fontFamily: "'Inter', sans-serif", fontWeight: '400', lineHeight: 1.5 }}>
+                              ★
+                            </Typography>
+                          ))}
+                        </Box>
+                      )
+                    )}
+
                     <Typography
                       sx={{
                         textAlign: 'center',
@@ -731,10 +732,10 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                         transition={{ duration: 0.3 }}
                         style={{
                           position: 'absolute',
-                          top: -42,
-                          left: -42,
-                          right: -42,
-                          bottom: -42,
+                          top: -43,
+                          left: -43,
+                          right: -43,
+                          bottom: -43,
                           borderRadius: 32856678,
                           border: '1.96px #0DF1D9 solid',
                           pointerEvents: 'none',
@@ -747,15 +748,15 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   <div
                     style={{
                       position: 'relative',
-                      width: 56,
-                      height: 56,
+                      width: 64,
+                      height: 64,
                       animation: 'avatarRotate 60s linear infinite',
                     }}
                   >
                     {/* Inner wrapper - handles scale, shadow, padding, etc. */}
                     <motion.div
                       animate={{
-                        scale: isActive ? 1.607 : 1,
+                        scale: isActive ? 1.5625 : 1,
                       }}
                       transition={{
                         scale: { type: 'spring', stiffness: 300, damping: 20 },
