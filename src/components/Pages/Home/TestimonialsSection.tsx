@@ -139,7 +139,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            zIndex: 0,
+            zIndex: 100,
+            pointerEvents: 'none', // Allow clicks to pass through
           }}
         >
           <source src={videoUrl} type={videoUrl.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
@@ -151,9 +152,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           sx={theme => ({
             position: 'absolute',
             inset: 0,
-            zIndex: 1,
-            pointerEvents: 'none',
-            // backgroundColor: alpha(theme.palette.background.default, 0.6),
+            zIndex: 102,
+            pointerEvents: 'none', // Allow clicks to pass through
             '&::before': {
               content: '""',
               position: 'absolute',
@@ -175,7 +175,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           })}
         />
       )}
-      <Box sx={{ zIndex: 2 }}>
+
+      <Box sx={{ zIndex: 200 }}>
         <SectionHeader
           title={data?.title ?? 'What Customers Say About Us'}
           subtitle={data?.subtitle ?? 'Voices from the field'}
@@ -191,7 +192,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             maxWidth: 'min(90vw, 480px)',
             mt: 4,
             px: 2,
-            zIndex: 2,
+            zIndex: 200,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -368,7 +369,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             alignItems: 'center',
             justifyContent: 'center',
             mt: 4,
-            zIndex: 2,
+            zIndex: 'auto',
           }}
         >
           <style>{`
@@ -402,7 +403,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              zIndex: 10,
+              zIndex: 90,
             }}
           >
             <div
@@ -667,7 +668,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               position: 'absolute',
               width: '100%',
               height: '100%',
-              zIndex: 20,
+              zIndex: 200,
               pointerEvents: 'none',
               animation: 'orbitRotate 60s linear infinite',
             }}
