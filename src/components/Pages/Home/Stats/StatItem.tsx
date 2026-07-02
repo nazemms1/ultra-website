@@ -2,7 +2,6 @@
 
 import { useState } from 'react'
 import Box from '@mui/material/Box'
-import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { motion, useReducedMotion } from 'framer-motion'
 import AnimatedNumber from './AnimatedNumber'
@@ -19,7 +18,14 @@ export default function StatItem({ stat, active }: StatItemProps) {
   const [clickTrigger, setClickTrigger] = useState(0)
 
   return (
-    <Grid size={{ xs: 6, md: 3 }} sx={{ display: 'flex', justifyContent: 'center' }}>
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        flexShrink: 0,
+        width: { xs: 180, sm: 200, md: 206.5 },
+      }}
+    >
       <Box
         component={reduce ? 'div' : motion.div}
         onClick={() => setClickTrigger(prev => prev + 1)}
@@ -63,6 +69,6 @@ export default function StatItem({ stat, active }: StatItemProps) {
 
         <Typography sx={statLabelSx}>{stat.label}</Typography>
       </Box>
-    </Grid>
+    </Box>
   )
 }

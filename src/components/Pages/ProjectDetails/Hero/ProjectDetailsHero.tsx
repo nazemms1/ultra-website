@@ -84,7 +84,7 @@ export default function ProjectDetailsHero({ project }: ProjectDetailsHeroProps)
       aboveTitle={<BackLink label={t('backToProjects')} href="/projects" />}
       actions={actions}
     >
-      <ProjectLogoCard logo={project.logo} cover={project.cover} logoImage={project.logoImage} />
+      <ProjectLogoCard logo={project.logo} cover={project.cover} logoImage={project.logoImage} logoFlip={project.logoFlip} />
     </PageHero>
   )
 }

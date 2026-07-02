@@ -10,6 +10,7 @@ type ProjectLogoCardProps = {
   logo: ProjectDetailLogo
   cover?: ProjectDetail['cover']
   logoImage?: ProjectDetail['logoImage']
+  logoFlip?: ProjectDetail['logoFlip']
 }
 
 const cardVariants = {
@@ -22,11 +23,12 @@ const cardVariants = {
   },
 }
 
-export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoCardProps) {
+export default function ProjectLogoCard({ logo, cover, logoImage, logoFlip }: ProjectLogoCardProps) {
   const theme = useTheme()
   const prefersReducedMotion = useReducedMotion()
 
   const displayLogoSrc = logoImage || logo.src
+  const displayLogoFlipSrc = logoFlip || displayLogoSrc
 
   return (
     <Box
@@ -73,7 +75,7 @@ export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoC
             transformStyle: 'preserve-3d',
             transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
             '&:hover': {
-              transform: 'rotateY(180deg)',
+              transform: 'rotateY(180deg) scale(1.06)',
             },
           }}
         >
@@ -91,6 +93,8 @@ export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoC
               borderRadius: '40px',
               width: '100%',
               minHeight: { xs: 140, sm: 170 },
+              p: 0,
+              overflow: 'hidden',
             }}
           >
             <Box
@@ -98,16 +102,15 @@ export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoC
               src={displayLogoSrc}
               alt={logo.alt}
               sx={{
-                width: 'auto',
-                height: 'auto',
-                maxWidth: '100%',
-                maxHeight: 80,
-                objectFit: 'contain',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '40px',
               }}
             />
           </Box>
 
-          {/* Back face — same logo, flipped */}
+          {/* Back face ── */}
           <Box
             sx={{
               ...logoCardSx(theme),
@@ -122,18 +125,19 @@ export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoC
               borderRadius: '40px',
               width: '100%',
               minHeight: { xs: 140, sm: 170 },
+              p: 0,
+              overflow: 'hidden',
             }}
           >
             <Box
               component="img"
-              src={displayLogoSrc}
+              src={displayLogoFlipSrc}
               alt={logo.alt}
               sx={{
-                width: 'auto',
-                height: 'auto',
-                maxWidth: '100%',
-                maxHeight: 80,
-                objectFit: 'contain',
+                width: '100%',
+                height: '100%',
+                objectFit: 'cover',
+                borderRadius: '40px',
               }}
             />
           </Box>

@@ -200,10 +200,10 @@ export function primaryButtonSx(theme: Theme) {
   return {
     bgcolor: '#0DF1D9',
     color: '#060E10',
-    boxShadow: `0 0 23px ${alpha('#0DF1D9', 0.40)}`,
+    boxShadow: '0px 0px 23.23px 0px #01B1B180',
     '&:hover': {
       bgcolor: '#7FFFF4',
-      boxShadow: `0 0 36px ${alpha('#0DF1D9', 0.70)}`,
+      boxShadow: '0px 0px 36px 0px #01B1B1B3',
       transform: 'translateY(-1px)',
     },
   } satisfies SxProps<Theme>

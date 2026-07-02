@@ -44,6 +44,7 @@ interface OrbitalCardProps {
   title: string
   description: string
   Icon: ElementType<{ size?: number; color?: string; strokeWidth?: number }> | string
+  tools?: any[]
   onHoverStart?: () => void
   onHoverEnd?: () => void
   onClick?: () => void
@@ -58,6 +59,7 @@ export default function OrbitalCard({
   title,
   description,
   Icon,
+  tools = [],
   onHoverStart,
   onHoverEnd,
   onClick,
@@ -351,45 +353,78 @@ export default function OrbitalCard({
         sx={{
           position: 'absolute',
           left: '24px',
-          top: '36px',
+          top: '16px',
+          bottom: '16px',
           display: 'flex',
           width: 168,
           flexDirection: 'column',
-          alignItems: 'flex-start',
-          gap: '8px',
+          alignItems: 'center',
+          justifyContent: 'center',
           zIndex: 1,
         }}
       >
         <Typography
-          component="h3"
+         
           sx={{
-            width: 160,
-            fontSize: '15px',
-            fontWeight: 600,
-            lineHeight: 1.3,
+            width: '100%',
+            fontSize: '17px',
+            fontFamily: "'Rajdhani', sans-serif",
+            fontWeight: 500,
+            // lineHeight: 1.3,
             letterSpacing: '0.2px',
             color: 'text.primary',
+            textAlign: 'center',
           }}
         >
           {title}
         </Typography>
-        <Typography
-          sx={{
-            width: '100%',
-            fontSize: '11.5px',
-            fontWeight: 400,
-            lineHeight: 1.45,
-            color: 'text.secondary',
-            opacity: 0.85,
-            display: '-webkit-box',
-            WebkitLineClamp: 2,
-            WebkitBoxOrient: 'vertical',
-            overflow: 'hidden',
-            textOverflow: 'ellipsis',
-          }}
-        >
-          {description}
-        </Typography>
+
+        {tools && tools.length > 0 && (
+          <Box
+            sx={{
+              display: 'flex',
+              flexWrap: 'wrap',
+              gap: '6px',
+              mt: '10px',
+              justifyContent: 'center',
+              width: '100%',
+            }}
+          >
+            {tools.slice(0, 3).map((tool: any) => (
+              <Box
+                key={tool.name}
+                sx={theme => ({
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                  bgcolor: 'rgba(255, 255, 255, 0.05)',
+                  border: `1px solid ${alpha(theme.palette.common.white, 0.12)}`,
+                  borderRadius: '9999px',
+                  px: '8px',
+                  py: '2.5px',
+                  fontSize: '10px',
+                  fontWeight: 500,
+                  color: 'text.primary',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    bgcolor: 'rgba(13, 241, 217, 0.08)',
+                    borderColor: 'primary.main',
+                  },
+                })}
+              >
+                {tool.icon?.url && (
+                  <Box
+                    component="img"
+                    src={tool.icon.url}
+                    alt=""
+                    sx={{ width: 11, height: 11, objectFit: 'contain' }}
+                  />
+                )}
+                {tool.name}
+              </Box>
+            ))}
+          </Box>
+        )}
       </Box>
     </MotionBox>
   )

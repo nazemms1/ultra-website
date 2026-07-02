@@ -14,21 +14,6 @@ type LogoFlipCardProps = {
 
 export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
   const theme = useTheme()
-  const rotateY   = useMotionValue(0)
-  const cardScale = useMotionValue(1)
-
-  const frontOpacity = useTransform(rotateY, [0, 89, 90, 180], [1, 1, 0, 0])
-  const backOpacity  = useTransform(rotateY, [0, 89, 90, 180], [0, 0, 1, 1])
-
-  function onEnter() {
-    animate(cardScale, 1.06, { duration: 0.18, ease: 'easeOut' })
-    animate(rotateY,   180,  { duration: 0.65, ease: [0.4, 0, 0.2, 1] })
-  }
-
-  function onLeave() {
-    animate(cardScale, 1,   { duration: 0.2,  ease: 'easeIn' })
-    animate(rotateY,   0,   { duration: 0.65, ease: [0.4, 0, 0.2, 1] })
-  }
 
   const faceStyle = {
     ...glassSurface(theme, { radius: '16px', tint: 0.06 }),
@@ -41,15 +26,12 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
     backfaceVisibility: 'hidden',
     WebkitBackfaceVisibility: 'hidden',
     overflow: 'hidden',
-    padding: '12px',
+    padding: '0px',
   }
 
   return (
-    <motion.div
-      onHoverStart={onEnter}
-      onHoverEnd={onLeave}
-      style={{
-        scale: cardScale,
+    <Box
+      sx={{
         position: 'absolute',
         top: '50%',
         left: imageOnLeft ? '22.5%' : 'auto',
@@ -61,56 +43,81 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
         height: 110,
         perspective: 1200,
         cursor: 'default',
+        transition: 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)',
+        transform: 'translate(-50%, -50%) scale(1)',
+        '.project-grid-row:hover &': {
+          transform: 'translate(-50%, -50%) scale(1.06)',
+        },
       }}
     >
-      <motion.div
-        style={{
-          rotateY,
+      <Box
+        className="logo-flip-card-inner"
+        sx={{
           width: '100%',
           height: '100%',
           transformStyle: 'preserve-3d',
           position: 'relative',
+          transition: 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)',
+          '.project-grid-row:hover &': {
+            transform: 'rotateY(180deg)',
+          },
         }}
       >
-        {/* ── Front face — logo image ── */}
+        {/* ── Front face ── */}
         <Box
-          component={motion.div}
-          style={{ opacity: frontOpacity }}
           sx={faceStyle}
         >
           {item.logo.src ? (
-            <Image
+            <Box
+              component="img"
               src={item.logo.src}
               alt={item.logo.alt}
-              width={item.logo.width}
-              height={item.logo.height}
-              style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
             />
           ) : (
             <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{item.title}</span>
           )}
         </Box>
 
-        {/* ── Back face — same logo, flipped ── */}
+        {/* ── Back face ── */}
         <Box
-          component={motion.div}
-          style={{ opacity: backOpacity, rotateY: 180 }}
-          sx={faceStyle}
+          sx={{
+            ...faceStyle,
+            transform: 'rotateY(180deg)',
+          }}
         >
-          {item.logo.src ? (
-            <Image
+          {item.logoFlip?.src ? (
+            <Box
+              component="img"
+              src={item.logoFlip.src}
+              alt={item.logoFlip.alt}
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
+            />
+          ) : item.logo.src ? (
+            <Box
+              component="img"
               src={item.logo.src}
               alt={item.logo.alt}
-              width={item.logo.width}
-              height={item.logo.height}
-              style={{ width: '100%', height: 'auto', objectFit: 'contain' }}
+              sx={{
+                width: '100%',
+                height: '100%',
+                objectFit: 'contain',
+              }}
             />
           ) : (
             <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{item.title}</span>
           )}
         </Box>
-      </motion.div>
-    </motion.div>
+      </Box>
+    </Box>
   )
 }
 

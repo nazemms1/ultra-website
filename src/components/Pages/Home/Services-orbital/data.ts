@@ -21,6 +21,8 @@ export interface ServiceItem {
   Icon: LucideIcon | string
   /** Tech / discipline chips shown beneath the active description. */
   tags: string[]
+  /** Tool objects with id, name, optional icon — alternative to tags. */
+  tools?: Array<{ id: number; name: string; icon?: { url: string } }>
   /**
    * Starting position on the orbit, in degrees, measured clockwise from the
    * east (3 o'clock) axis. 0° sits inside the right-hand shadow zone.

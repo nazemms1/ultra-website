@@ -60,6 +60,7 @@ export interface ProjectDetail {
   readonly logo: ProjectDetailLogo
   readonly cover?: string | null
   readonly logoImage?: string | null
+  readonly logoFlip?: string | null
   readonly brief: readonly BriefBlock[]
   readonly metrics: ProjectMetrics
   readonly demoViews: readonly DemoView[]

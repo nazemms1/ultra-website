@@ -494,11 +494,28 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                   overflow: 'hidden',
                 }}
               >
-                <Grid container sx={{ width: '100%' }}>
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'nowrap',
+                    overflowX: 'auto',
+                    justifyContent: { xs: 'flex-start', md: 'space-around' },
+                    alignItems: 'center',
+                    py: 3,
+                    px: 2,
+                    gap: 3,
+                    scrollbarWidth: 'none',
+                    '&::-webkit-scrollbar': {
+                      display: 'none',
+                    },
+                  }}
+                >
                   {finalFooterStats.map(stat => (
                     <StatItem key={stat.label} stat={stat} active />
                   ))}
-                </Grid>
+                </Box>
               </Box>
             </Box>
           )}

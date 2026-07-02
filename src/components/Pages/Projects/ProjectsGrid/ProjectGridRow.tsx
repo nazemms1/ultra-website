@@ -46,8 +46,10 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         alignItems: 'center',
         justifyContent: 'center',
         overflow: 'visible',
+        transform: 'scale(1)',
         transition: HOVER_TRANSITION,
         '&:hover': {
+          transform: { md: 'scale(1.02)' },
           height: { md: layout.imageHoverHeight }, // Smooth accordion expand/collapse
           zIndex: 5,
           '& .row-inner': {
@@ -119,8 +121,8 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             bottom: 0,
             transform: 'none',
             flexShrink: 0,
-            width: { xs: '100%', md: '45%' },
-            maxWidth: { md: '45%' },
+            width: '100%',
+            maxWidth: '100%',
             height: { xs: 240, md: '100%' },
             borderRadius: { xs: '24px', md: '40px' },
             overflow: 'hidden', // Prevents image frames from spilling over adjacent slots during resize
@@ -196,12 +198,31 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             transition: HOVER_TRANSITION,
           }}
         >
+          {/* Mask overlay */}
+          <Box
+            component="img"
+            src="/images/mask1.png"
+            alt="mask"
+            sx={{
+              position: 'absolute',
+              inset: 0,
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              zIndex: 1,
+              pointerEvents: 'none',
+              opacity: 0.35,
+            }}
+          />
+
           <Box
             sx={{
               display: 'flex',
               flexDirection: 'column',
               gap: { xs: 1, md: 1.25 },
               width: '100%',
+              zIndex: 2,
+              position: 'relative',
             }}
           >
             <Typography
@@ -240,6 +261,8 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
               transform: 'translateY(14px)',
               pointerEvents: 'none',
               mt: 1.5,
+              zIndex: 2,
+              position: 'relative',
               transition: HOVER_TRANSITION,
             }}
           >

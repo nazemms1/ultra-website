@@ -63,20 +63,14 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
         ? {
             bgcolor: resolvedBaseColor,
             color: theme.palette.primary.contrastText,
-            boxShadow: [
-              `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.71)}`,
-              `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
-            ].join(', '),
+            boxShadow: '0px 0px 23.23px 0px #01B1B180',
             transition: theme.transitions.create('box-shadow', {
               duration: theme.transitions.duration.standard,
               easing: theme.transitions.easing.easeOut,
             }),
             '&:hover': {
               bgcolor: resolvedBaseColor,
-              boxShadow: [
-                `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.4)}`,
-                `inset -1px -1px 0 0 ${alpha(theme.palette.primary.main, 0.4)}`,
-              ].join(', '),
+              boxShadow: '0px 0px 36px 0px #01B1B1B3',
             },
           }
         : {

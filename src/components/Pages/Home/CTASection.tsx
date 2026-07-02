@@ -207,7 +207,7 @@ export default function CTASection({ data }: CTASectionProps) {
           position: 'relative',
           zIndex: 100,
           mx: { xs: 2, md: 4 },
-          height: '60%',
+          height: '55%',
           width: { xs: 'calc(100% - 32px)', md: 'calc(100% - 64px)' },
           maxWidth: 1120,
           p: { xs: '40px 24px', md: '150px' },
@@ -297,7 +297,7 @@ export default function CTASection({ data }: CTASectionProps) {
                 alignItems: 'center',
                 padding: '15.48px 30.97px', // Exact Figma padding values
                 background: '#0DF1D9', // Figma background Color
-                boxShadow: '0px 0px 23.22px rgba(1, 177, 177, 0.50)', // Exact Figma glow
+                boxShadow: '0px 0px 23.23px 0px #01B1B180',
                 borderRadius: '100px', // Fully rounded pill shape
                 textDecoration: 'none',
                 transition: 'all 0.3s ease',

@@ -118,7 +118,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
 
   const handleActivate = useCallback((index: number | null) => {
     if (index !== null) {
-      setSelectedIndex(index)
+      setSelectedIndex(prev => (prev === index ? null : index))
     }
   }, [])
 
@@ -255,6 +255,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                   title={item.title}
                   description={item.cardDescription}
                   Icon={item.Icon}
+                  tools={item.tools}
                   selected={idx === selectedIndex}
                   active={true}
                 />
@@ -624,8 +625,8 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                   transform: {
                     xs: 'scale(0.56)',
                     sm: 'scale(0.74)',
-                    lg: 'scale(0.9) translateX(50px)',
-                    xl: 'scale(1) translateX(80px)',
+                    lg: 'scale(0.9) translateX(50px) translateY(-120px)',
+                    xl: 'scale(1) translateX(80px) translateY(-120px)',
                   },
                 }}
               >

@@ -292,6 +292,7 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
   const logoSrc = apiData.image?.url || ''
   const coverSrc = apiData.cover?.url || null
   const logoImageSrc = apiData.logo?.url || null
+  const logoFlipSrc = apiData.logo_flip?.url || null
 
   const brief = Array.isArray(apiData.items)
     ? apiData.items.map((item: any, idx: number) => ({
@@ -331,9 +332,9 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
           titleLower.includes('تحكم') ||
           titleLower.includes('إدارة') ||
           titleLower.includes('اداره')
-
+ 
         const device = isMobile ? 'mobile' : 'desktop'
-
+ 
         const screenshots = Array.isArray(demo.images)
           ? demo.images.map((img: any, imgIdx: number) => ({
               id: `${title}-shot-${imgIdx + 1}`,
@@ -341,7 +342,7 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
               alt: `${title} screenshot ${imgIdx + 1}`,
             }))
           : []
-
+ 
         return {
           id: title,
           label: title,
@@ -351,7 +352,7 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
         }
       })
     : []
-
+ 
   return {
     id,
     title,
@@ -370,6 +371,7 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
     },
     cover: coverSrc,
     logoImage: logoImageSrc,
+    logoFlip: logoFlipSrc,
     brief,
     metrics: {
       successRate,

@@ -237,6 +237,7 @@ function OrbitalSpoke({
               title={service.title}
               description={service.cardDescription}
               Icon={service.Icon}
+              tools={service.tools}
               selected={isSelected}
               active={isActive}
               onClick={onSelect}

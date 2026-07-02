@@ -11,6 +11,7 @@ function mapApiItemToGridItem(item: PortfoliosApiItem): ProjectGridItem | null {
   if (!id || !title) return null
 
   const logoSrc = resolveMediaUrl(item.logo) || resolveMediaUrl(item.image) || ''
+  const logoFlipSrc = resolveMediaUrl(item.logo_flip) || ''
   const coverSrc = resolveMediaUrl(item.cover) || resolveMediaUrl(item.cover_image) || ''
 
   const description = item.subtitle?.trim() || item.short_description?.trim() || item.description?.trim() || ''
@@ -27,6 +28,12 @@ function mapApiItemToGridItem(item: PortfoliosApiItem): ProjectGridItem | null {
       width: 200,
       height: 87,
     },
+    logoFlip: logoFlipSrc ? {
+      src: logoFlipSrc,
+      alt: `${title} logo flip`,
+      width: 200,
+      height: 87,
+    } : null,
     href: `/projects/${id}`,
   }
 }

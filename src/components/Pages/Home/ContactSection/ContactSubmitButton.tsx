@@ -39,16 +39,18 @@ export default function ContactSubmitButton({
           borderRadius: '9999px',
           border: 'none',
           cursor: disabled ? 'default' : 'pointer',
-          bgcolor: alpha(theme.palette.common.white, 0.08),
-          color: disabled ? alpha(theme.palette.text.primary, 0.3) : theme.palette.text.primary,
+          bgcolor: disabled ? alpha(theme.palette.common.white, 0.08) : '#0DF1D9',
+          color: disabled ? alpha(theme.palette.text.primary, 0.3) : '#060E10',
+          boxShadow: disabled ? 'none' : '0px 0px 23.23px 0px #01B1B180',
           fontFamily: "'Rajdhani', sans-serif",
           fontWeight: 600,
           fontSize: '20px',
           letterSpacing: '1.5px',
           textTransform: 'uppercase',
-          transition: 'background-color 0.25s, color 0.25s',
+          transition: 'background-color 0.25s, box-shadow 0.25s',
           '&:hover:not(:disabled)': {
-            bgcolor: alpha(theme.palette.common.white, 0.12),
+            bgcolor: '#7FFFF4',
+            boxShadow: '0px 0px 36px 0px #01B1B1B3',
           },
         }}
       >
@@ -66,21 +68,13 @@ export default function ContactSubmitButton({
           <ArrowLeft
             size={19}
             strokeWidth={2}
-            color={
-              disabled
-                ? alpha(theme.palette.text.primary, 0.3)
-                : (theme.palette.text.primary as string)
-            }
+            color={disabled ? alpha(theme.palette.text.primary, 0.3) : '#060E10'}
           />
         ) : (
           <ArrowRight
             size={19}
             strokeWidth={2}
-            color={
-              disabled
-                ? alpha(theme.palette.text.primary, 0.3)
-                : (theme.palette.text.primary as string)
-            }
+            color={disabled ? alpha(theme.palette.text.primary, 0.3) : '#060E10'}
           />
         )}
       </Box>
