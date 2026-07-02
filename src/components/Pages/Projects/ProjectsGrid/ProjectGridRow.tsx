@@ -110,7 +110,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           transition: HOVER_TRANSITION,
         }}
       >
-        {/* FIX: Photographic Capsule Layout — Centered vertically, with overflow hidden to prevent bleed */}
+        {/* Image block */}
         <Box
           className="image-block"
           sx={{
@@ -123,9 +123,9 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             flexShrink: 0,
             width: '100%',
             maxWidth: '100%',
-            height: { xs: 240, md: '100%' },
-            borderRadius: { xs: '24px', md: '40px' },
-            overflow: 'hidden', // Prevents image frames from spilling over adjacent slots during resize
+            height: { xs: 220, sm: 300, md: '100%' },
+            borderRadius: { xs: '20px', md: '40px' },
+            overflow: 'hidden',
             zIndex: 2,
             transition: HOVER_TRANSITION,
           }}
@@ -174,25 +174,28 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           )}
         </Box>
 
-        <LogoFlipCard item={item} imageOnLeft={imageOnLeft} />
+        {/* LogoFlipCard — hidden on mobile, shown on md+ */}
+        <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+          <LogoFlipCard item={item} imageOnLeft={imageOnLeft} />
+        </Box>
 
-        {/* FIX: Text Container Tracks — Uses overflow: hidden to prevent gradient/shadow spilling over other rows */}
+        {/* Text block — desktop only (md+) */}
         <Box
           className="text-block"
           sx={{
+            display: { xs: 'none', md: 'flex' },
             flex: 1,
             width: '100%',
-            height: { xs: 'auto', md: '100%' },
-            display: 'flex',
+            height: '100%',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'flex-start',
             minWidth: 0,
-            pl: imageOnLeft ? { xs: 3, md: '58%' } : { xs: 3, md: 10 },
-            pr: !imageOnLeft ? { xs: 3, md: '58%' } : { xs: 3, md: 10 },
-            py: { xs: 4, md: 2 },
+            pl: imageOnLeft ? '58%' : 10,
+            pr: !imageOnLeft ? '58%' : 10,
+            py: 2,
             background: rowGradient(theme, layout.idleGradient, imageOnLeft),
-            overflow: 'hidden', // Keeps the green shadow gradient cleanly bounded inside its own expanding box
+            overflow: 'hidden',
             zIndex: 3,
             position: 'relative',
             transition: HOVER_TRANSITION,
@@ -220,7 +223,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             sx={{
               display: 'flex',
               flexDirection: 'column',
-              gap: { xs: 1, md: 1.25 },
+              gap: 1.25,
               width: '100%',
               zIndex: 2,
               position: 'relative',
@@ -274,21 +277,75 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           </Box>
         </Box>
 
-        {/* Mobile Viewports Layer */}
+        {/* Mobile card — xs only */}
         <Box
           sx={{
             display: { xs: 'flex', md: 'none' },
-            flexDirection: 'column',
+            flexDirection: 'row',
+            alignItems: 'center',
             gap: 2,
             width: '100%',
-            px: 3,
-            pb: 3,
+            px: 2,
+            py: 2.5,
+            borderRadius: '20px',
+            background: theme => `linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 100%)`,
+            backdropFilter: 'blur(14px)',
+            WebkitBackdropFilter: 'blur(14px)',
+            border: theme => `1px solid rgba(255,255,255,0.08)`,
           }}
         >
-          <Typography sx={hoverDescriptionSx}>{item.description}</Typography>
-          <Box component={Link} href={item.href} sx={viewMoreButtonSx}>
-            {t('viewMore')}
-            <ArrowUpRight size={18} color="currentColor" strokeWidth={1.75} />
+          {/* Logo thumbnail */}
+          {item.logo.src && (
+            <Box
+              component="img"
+              src={item.logo.src}
+              alt={item.logo.alt}
+              sx={{
+                width: 64,
+                height: 64,
+                objectFit: 'contain',
+                flexShrink: 0,
+                borderRadius: '12px',
+                background: 'rgba(255,255,255,0.06)',
+                p: '8px',
+              }}
+            />
+          )}
+
+          {/* Text + CTA */}
+          <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 0.75 }}>
+            <Typography sx={{ ...titleSx, fontSize: 18, lineHeight: '24px' }}>
+              {item.title}
+            </Typography>
+            <Typography
+              sx={{
+                ...hoverDescriptionSx,
+                fontSize: 13,
+                lineHeight: '18px',
+                opacity: 0.7,
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+              }}
+            >
+              {item.description}
+            </Typography>
+            <Box
+              component={Link}
+              href={item.href}
+              sx={{
+                ...viewMoreButtonSx,
+                fontSize: 12,
+                px: '14px',
+                py: '6px',
+                mt: 0.5,
+                alignSelf: 'flex-start',
+              }}
+            >
+              {t('viewMore')}
+              <ArrowUpRight size={14} color="currentColor" strokeWidth={1.75} />
+            </Box>
           </Box>
         </Box>
       </Box>

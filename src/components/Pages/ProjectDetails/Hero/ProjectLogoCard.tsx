@@ -102,10 +102,9 @@ export default function ProjectLogoCard({ logo, cover, logoImage, logoFlip }: Pr
               src={displayLogoSrc}
               alt={logo.alt}
               sx={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                borderRadius: '40px',
+                maxWidth: '70%',
+                maxHeight: '70%',
+                objectFit: 'contain',
               }}
             />
           </Box>
@@ -134,10 +133,9 @@ export default function ProjectLogoCard({ logo, cover, logoImage, logoFlip }: Pr
               src={displayLogoFlipSrc}
               alt={logo.alt}
               sx={{
-                width: '100%',
-                height: '100%',
-                objectFit: 'cover',
-                borderRadius: '40px',
+                maxWidth: '70%',
+                maxHeight: '70%',
+                objectFit: 'contain',
               }}
             />
           </Box>

@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { alpha, useTheme } from '@mui/material/styles'
-import { useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { type MotionValue, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
 import SectionHeader, { formatHeadingText } from '@/components/shared/SectionHeader'
 import ProjectPanel from './ProjectPanel'
@@ -13,7 +13,7 @@ import { StaticProjectRow } from './StaticProjectRow'
 import { MotionBox } from './MotionBox'
 import { PROJECTS } from './data'
 import type { ProjectItem } from './types'
-import { LABEL_PIN, SECTION_FADE_IN, TITLE_RISE } from './constants'
+import { LABEL_PIN, SECTION_FADE_IN, TITLE_FADE_OUT, TITLE_RISE } from './constants'
 
 /** Smooth 0→1 easing for the label pin transition. */
 function smoothstep(t: number) {
@@ -48,10 +48,10 @@ export default function Projects({ data }: { data?: any }) {
   const headerInsetPx = Number.parseFloat(
     theme.spacing(isSmUp ? SECTION_HEADER_INSET.sm : SECTION_HEADER_INSET.xs),
   )
-  const titleGapPx = Number.parseFloat(theme.spacing(isMdUp ? 3 : 2))
-
-  const estimatedHeroLabelY = viewportHeight * 0.5 - (isMdUp ? 100 : 76)
-  const [labelHeroOffset, setLabelHeroOffset] = useState(() => estimatedHeroLabelY - headerInsetPx)
+  // Estimate: center the label+title block in the viewport
+  const estimatedBlockHeight = isMdUp ? 52 + 20 : 40 + 18
+  const estimatedHeroLabelY = viewportHeight * 0.5 - estimatedBlockHeight / 2
+  const [labelHeroOffset, setLabelHeroOffset] = useState(() => estimatedHeroLabelY)
   const labelHeroOffsetMV = useMotionValue(labelHeroOffset)
 
   useEffect(() => {
@@ -60,31 +60,24 @@ export default function Projects({ data }: { data?: any }) {
 
   useLayoutEffect(() => {
     const measure = () => {
-      const sticky = stickyRef.current
-      const stage = stageRef.current
       const title = titleRef.current
-      if (!sticky || !stage || !title) return
+      const label = labelRef.current
+      if (!title || !label) return
 
-      const stickyTop = sticky.getBoundingClientRect().top
-      const stageRect = stage.getBoundingClientRect()
-      const stageCenterY = stageRect.top + stageRect.height / 2 - stickyTop
-
-      const titleStyles = getComputedStyle(title)
-      const titleMarginTop = Number.parseFloat(titleStyles.marginTop) || titleGapPx
       const titleHeight = title.getBoundingClientRect().height
-      const labelHeight = labelRef.current?.getBoundingClientRect().height ?? (isMdUp ? 20 : 18)
+      const labelHeight = label.getBoundingClientRect().height
+      const totalHeight = labelHeight + titleHeight
 
-      const titleMarginBoxTop = stageCenterY - (titleMarginTop + titleHeight) / 2
-      const heroLabelY = titleMarginBoxTop - labelHeight
+      // Center the label+title block in the viewport
+      // The label sits at headerInsetPx from top, so offset = vh/2 - totalHeight/2 - headerInsetPx
+      const heroLabelY = window.innerHeight / 2 - totalHeight / 2
 
-      setLabelHeroOffset(heroLabelY - headerInsetPx)
+      setLabelHeroOffset(heroLabelY)
     }
 
     measure()
 
     const observer = new ResizeObserver(measure)
-    if (stickyRef.current) observer.observe(stickyRef.current)
-    if (stageRef.current) observer.observe(stageRef.current)
     if (titleRef.current) observer.observe(titleRef.current)
     if (labelRef.current) observer.observe(labelRef.current)
 
@@ -93,7 +86,7 @@ export default function Projects({ data }: { data?: any }) {
       observer.disconnect()
       window.removeEventListener('resize', measure)
     }
-  }, [headerInsetPx, isMdUp, titleGapPx, viewportHeight])
+  }, [headerInsetPx, isMdUp, viewportHeight])
 
   const { scrollYProgress } = useScroll({
     target: trackRef,
@@ -139,23 +132,32 @@ export default function Projects({ data }: { data?: any }) {
 
   // Whole wrapper fades in on entry and back out when scrolled off the top.
   const wrapperOpacity = useTransform(progress, [...SECTION_FADE_IN], [0, 1])
+
+  // Title fades out as the label rises to pinned position
+  const titleOpacity = useTransform(progress, [...TITLE_FADE_OUT], [1, 0])
+
   const labelY = useTransform([progress, labelHeroOffsetMV], ([p, offset]: number[]) => {
     const heroOffset = typeof offset === 'number' ? offset : 0
     const [riseStart, riseEnd] = TITLE_RISE
     const [pinStart, pinEnd] = LABEL_PIN
 
+    // Stay centered before rise begins
+    if (p <= riseStart) {
+      return heroOffset
+    }
+
     if (p <= riseEnd) {
       const riseT = smoothstep((p - riseStart) / (riseEnd - riseStart))
-      return heroOffset + 40 * (1 - riseT)
+      return heroOffset * (1 - riseT)
     }
 
     if (p < pinStart) {
-      return heroOffset
+      return heroOffset * 0
     }
 
     if (p <= pinEnd) {
       const pinT = smoothstep((p - pinStart) / (pinEnd - pinStart))
-      return heroOffset * (1 - pinT)
+      return heroOffset * 0 * (1 - pinT)
     }
 
     return 0
@@ -235,7 +237,7 @@ export default function Projects({ data }: { data?: any }) {
           }}
         >
           <MotionBox style={{ y: labelY, willChange: 'transform' }}>
-            <PortfolioLabel data={data} labelRef={labelRef} titleRef={titleRef} />
+            <PortfolioLabel data={data} labelRef={labelRef} titleRef={titleRef} titleOpacity={titleOpacity} />
           </MotionBox>
         </Box>
 
@@ -267,10 +269,12 @@ function PortfolioLabel({
   data,
   labelRef,
   titleRef,
+  titleOpacity,
 }: {
   data?: any
   labelRef?: React.RefObject<HTMLParagraphElement | null>
   titleRef?: React.RefObject<HTMLHeadingElement | null>
+  titleOpacity?: MotionValue<number>
 }) {
   const mainSection = data?.['main-section'] || data
   const subtitle = mainSection?.title || 'Our Portfolio'
@@ -278,8 +282,15 @@ function PortfolioLabel({
   return (
     <SectionHeader
       align="center"
+      disableAnimation
       subtitle={<span ref={labelRef}>{subtitle}</span>}
-      title={title ? <span ref={titleRef}>{formatHeadingText(title)}</span> : undefined}
+      title={
+        title ? (
+          <MotionBox style={{ opacity: titleOpacity }} sx={{ display: 'block' }}>
+            <span ref={titleRef}>{formatHeadingText(title)}</span>
+          </MotionBox>
+        ) : undefined
+      }
       sx={{ mb: 0, pointerEvents: 'none' }}
     />
   )

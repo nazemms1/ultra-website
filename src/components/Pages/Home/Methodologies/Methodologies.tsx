@@ -5,7 +5,6 @@ import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
 import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { useTranslations } from 'next-intl'
-import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
 import SectionHeader from '@/components/shared/SectionHeader'
 import PhaseCard, { PhaseCardContent } from './PhaseCard'
 import Timeline from './Timeline'
@@ -108,18 +107,19 @@ export default function Methodologies({ data }: MethodologiesProps) {
 
   return (
     <Box
-      component="section"
+      component="section" 
       id="methodologies"
       ref={trackRef}
       // aria-label="How we turn ideas into reality"
-      sx={{ position: 'relative', height: '500vh' }}
+      sx={{ position: 'relative', height: '1200vh' }}
     >
       <Box
         sx={{
           position: 'sticky',
           top: 0,
           display: 'flex',
-          height: '100vh',
+          height: '100dvh',
+          minHeight: 700,
           width: '100%',
           flexDirection: 'column',
           overflow: 'hidden',
@@ -159,7 +159,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
             position: 'relative',
             zIndex: 2,
             flexShrink: 0,
-            pt: SECTION_HEADER_INSET,
+            pt: { xs: 11, sm: 12 },
             pb: { xs: 1, sm: 1.25 },
             pointerEvents: 'none',
           }}
@@ -200,7 +200,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
             flexShrink: 0,
             px: { xs: 3, sm: 5 },
             pt: { xs: 1.5, sm: 2 },
-            pb: 3,
+            pb: { xs: 5, sm: 6 },
           }}
         >
           <Timeline
@@ -225,7 +225,7 @@ function Header({ title, description }: { title?: string | null; description?: s
         mb: 0,
         '& h2': {
           mx: 'auto',
-          maxWidth: 720,
+          // maxWidth: 920,
         },
       }}
       subtitle={title ?? t('label')}

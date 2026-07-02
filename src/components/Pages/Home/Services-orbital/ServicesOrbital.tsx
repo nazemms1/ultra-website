@@ -523,6 +523,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
 
                             <Typography
                               sx={{
+                                width: '75%',
                                 fontSize: '15px',
                                 fontWeight: 400,
                                 lineHeight: 1.625,

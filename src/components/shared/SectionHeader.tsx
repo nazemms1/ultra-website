@@ -14,6 +14,7 @@ export interface SectionHeaderProps {
   description?: ReactNode
   align?: SectionHeaderAlign
   sx?: SxProps<Theme>
+  disableAnimation?: boolean
 }
 
 const REVEAL_EASE = [0.16, 1, 0.3, 1] as const
@@ -118,14 +119,16 @@ export default function SectionHeader({
   description,
   align = 'center',
   sx,
+  disableAnimation = false,
 }: SectionHeaderProps) {
   const reduceMotion = useReducedMotion()
+  const noAnim = reduceMotion || disableAnimation
 
   return (
     <Box
       component={motion.div}
-      initial={reduceMotion ? false : { opacity: 0, y: 30 }}
-      whileInView={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+      initial={noAnim ? false : { opacity: 0, y: 30 }}
+      whileInView={noAnim ? undefined : { opacity: 1, y: 0 }}
       viewport={VIEWPORT}
       transition={{ duration: 0.9, ease: REVEAL_EASE }}
       sx={[
@@ -145,6 +148,7 @@ export default function SectionHeader({
             fontSize: 16,
             lineHeight: '24px',
             letterSpacing: 8,
+          
             textTransform: 'uppercase',
             color: '#0DF1D9',
             wordWrap: 'break-word',
@@ -163,8 +167,10 @@ export default function SectionHeader({
           fontFamily: "'Nulshock', 'Almarai', sans-serif !important",
           fontWeight: '700 !important',
           lineHeight: '52.66px',
+          width: '100%',
           textTransform: 'uppercase',
           wordWrap: 'break-word',
+          px: { xs: 2, sm: 4 },
         }}
       >
         {typeof title === 'string' ? formatHeadingText(title) : title}

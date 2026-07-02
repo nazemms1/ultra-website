@@ -33,27 +33,10 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
       whileInView="visible"
       viewport={{ once: true, margin: '-80px' }}
       variants={{ visible: { transition: { staggerChildren: 0.1 } } }}
-      direction="row"
+      direction="column"
       spacing={3}
       sx={{
         width: '100%',
-        overflowX: 'auto',
-        pb: 1.5,
-        scrollbarWidth: 'thin',
-        '&::-webkit-scrollbar': {
-          height: '6px',
-        },
-        '&::-webkit-scrollbar-track': {
-          background: 'rgba(255, 255, 255, 0.05)',
-          borderRadius: '100px',
-        },
-        '&::-webkit-scrollbar-thumb': {
-          background: alpha(theme.palette.primary.light, 0.3),
-          borderRadius: '100px',
-          '&:hover': {
-            background: alpha(theme.palette.primary.light, 0.5),
-          },
-        },
       }}
     >
       <Box
@@ -61,8 +44,6 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
         variants={itemVariants}
         sx={{
           ...feedbackCardSx,
-          minWidth: 280,
-          flexShrink: 0,
         }}
       >
         <CornerBrackets inset={12} />
@@ -120,25 +101,12 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
         variants={itemVariants}
         sx={{
           ...metaCardSx,
-          minWidth: 280,
-          flexShrink: 0,
         }}
       >
         <Typography sx={metaLabelSx}>Services Deployed</Typography>
-        <Box
-          sx={{
-            display: 'flex',
-            flexWrap: 'nowrap',
-            overflowX: 'auto',
-            gap: 1.5,
-            pt: 2,
-            pb: 0.5,
-            scrollbarWidth: 'none',
-            '&::-webkit-scrollbar': { display: 'none' },
-          }}
-        >
+        <Stack spacing={1.5} sx={{ pt: 2 }}>
           {metrics.services.map(service => (
-            <Box key={service} sx={{ display: 'flex', alignItems: 'center', gap: 1.5, flexShrink: 0 }}>
+            <Box key={service} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
               <Box
                 sx={{
                   width: 7,
@@ -154,14 +122,13 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
                   fontSize: 16,
                   fontWeight: 500,
                   color: 'text.primary',
-                  whiteSpace: 'nowrap',
                 }}
               >
                 {service}
               </Typography>
             </Box>
           ))}
-        </Box>
+        </Stack>
       </Box>
 
       <Box
@@ -169,8 +136,6 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
         variants={itemVariants}
         sx={{
           ...metaCardSx,
-          minWidth: 280,
-          flexShrink: 0,
         }}
       >
         <Typography sx={metaLabelSx}>Used tools</Typography>
