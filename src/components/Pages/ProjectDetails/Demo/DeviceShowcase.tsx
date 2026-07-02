@@ -16,67 +16,76 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
   const theme = useTheme()
 
   return (
-    <Box sx={{ position: 'relative', width: '100%', maxWidth: 930, mx: 'auto' }}>
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: 930,
+        mx: 'auto',
+        filter: `drop-shadow(30px 20px 40px ${alpha(theme.palette.common.black, 0.45)})`,
+      }}
+    >
+      {/* Mock Bezel (Background) */}
       <Box
+        component="img"
+        src="/images/web-desktop.png"
+        alt="Laptop Mockup Frame"
         sx={{
           position: 'relative',
-          mx: 'auto',
           width: '100%',
-          maxWidth: 754,
-          borderRadius: '26px 26px 4px 4px',
-          border: `2px solid ${alpha(theme.palette.common.white, 0.15)}`,
-          bgcolor: '#1a202c',
-          p: '5px',
-          boxShadow: `0 40px 80px ${alpha(theme.palette.common.black, 0.55)}`,
+          height: 'auto',
+          display: 'block',
+          zIndex: 1,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* Screenshot Image inside mock screen (Foreground) */}
+      <Box
+        sx={{
+          position: 'absolute',
+          top: '9.2%',
+          bottom: '24.2%',
+          left: '13.3%',
+          right: '13.3%',
+          overflowY: 'auto',
+          bgcolor: 'common.black',
+          zIndex: 2,
+          borderRadius: '4px',
+          '&::-webkit-scrollbar': {
+            width: '4px',
+          },
+          '&::-webkit-scrollbar-track': {
+            background: 'rgba(0, 0, 0, 0.1)',
+          },
+          '&::-webkit-scrollbar-thumb': {
+            background: 'rgba(255, 255, 255, 0.15)',
+            borderRadius: '2px',
+          },
+          '&::-webkit-scrollbar-thumb:hover': {
+            background: 'rgba(255, 255, 255, 0.3)',
+          },
         }}
       >
         <Box
+          component="img"
+          src={screenshot.src}
+          alt={screenshot.alt}
           sx={{
-            position: 'relative',
             width: '100%',
-            aspectRatio: '16 / 10',
-            borderRadius: '20px 20px 2px 2px',
-            overflow: 'hidden',
-            bgcolor: 'common.black',
-            '&:hover img': {
-              transform: 'translateY(calc(-100% + 56.25%))',
-              transition: 'transform 4s ease-in-out',
-            },
-            '& img': {
-              transition: 'transform 1s ease-in-out',
-            },
-          }}
-        >
-            <Box
-              component="img"
-              src={screenshot.src}
-              alt={screenshot.alt}
-              sx={{
-                width: '100%',
-                height: 'auto',
-                display: 'block',
-                objectFit: 'cover',
-                objectPosition: 'top center',
-                transform: 'translateY(0)',
-              }}
-            />
-          </Box>
-        </Box>
-
-        <Box
-          sx={{
-            mx: 'auto',
-            mt: '-2px',
-            width: '100%',
-            maxWidth: 930,
-            height: 14,
-            borderRadius: '2px 2px 0 0',
-            background: `linear-gradient(180deg, #a3acb1 0%, ${alpha(theme.palette.common.white, 0.35)} 100%)`,
+            height: 'auto',
+            minHeight: '100%',
+            display: 'block',
+            objectFit: 'cover',
+            objectPosition: 'top center',
           }}
         />
       </Box>
-    )
-  }
+    </Box>
+  )
+}
+
+
 
   function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: number }) {
     const theme = useTheme()
@@ -100,9 +109,14 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
             left: '5.2%',
             right: '5.2%',
             borderRadius: '32px',
-            overflow: 'hidden',
+            overflowY: 'auto',
             bgcolor: 'background.paper',
             zIndex: 1,
+            '&::-webkit-scrollbar': {
+              display: 'none',
+            },
+            scrollbarWidth: 'none',
+            msOverflowStyle: 'none',
           }}
         >
           <Box
@@ -111,8 +125,8 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
             alt={screenshot.alt}
             sx={{
               width: '100%',
-              height: '100%',
-              objectFit: 'cover',
+              height: 'auto',
+              display: 'block',
             }}
           />
         </Box>
@@ -134,6 +148,7 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
       </Box>
     )
   }
+
 
 export default function DeviceShowcase({ device, screenshot, index }: DeviceShowcaseProps) {
   return (

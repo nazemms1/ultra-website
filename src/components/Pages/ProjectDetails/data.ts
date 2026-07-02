@@ -285,6 +285,9 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
 
   const year = String(apiData.year || new Date().getFullYear())
   const websiteUrl = apiData.website_url || undefined
+  const googlePlayUrl = apiData.google_play_url || undefined
+  const appleStoreUrl = apiData.apple_store_url || undefined
+  const backgroundVideo = apiData.background_video?.url || undefined
 
   const logoSrc = apiData.image?.url || ''
   const coverSrc = apiData.cover?.url || null
@@ -356,6 +359,9 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
     year,
     shortDescription: subtitle,
     websiteUrl,
+    googlePlayUrl,
+    appleStoreUrl,
+    backgroundVideo,
     logo: {
       src: logoSrc,
       alt: `${title} logo`,

@@ -54,6 +54,9 @@ export interface ProjectDetail {
   readonly year: string
   readonly shortDescription: string
   readonly websiteUrl?: string
+  readonly googlePlayUrl?: string
+  readonly appleStoreUrl?: string
+  readonly backgroundVideo?: string
   readonly logo: ProjectDetailLogo
   readonly cover?: string | null
   readonly logoImage?: string | null

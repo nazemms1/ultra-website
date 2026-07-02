@@ -11,10 +11,13 @@ import { eyebrowBadgeSx, glowOrb } from '@/lib/theme/surfaces'
 type PageHeroProps = {
   eyebrow: string
   title: React.ReactNode
-  subtitle?: string
+  subtitle?: React.ReactNode
   videoSrc?: string
   height?: string | number
   align?: 'left' | 'center'
+  aboveTitle?: React.ReactNode
+  actions?: React.ReactNode
+  children?: React.ReactNode
 }
 
 const itemVariants = {
@@ -22,6 +25,7 @@ const itemVariants = {
   visible: {
     opacity: 1,
     y: 0,
+    scale: 1,
     transition: { type: 'spring' as const, stiffness: 50, damping: 14 },
   },
 }
@@ -33,6 +37,9 @@ export default function PageHero({
   videoSrc,
   height,
   align = 'center',
+  aboveTitle,
+  actions,
+  children,
 }: PageHeroProps) {
   return (
     <Box
@@ -109,93 +116,213 @@ export default function PageHero({
           mx: 'auto',
           position: 'relative',
           zIndex: 2,
-          alignItems: align === 'left' ? 'flex-start' : 'center',
-          textAlign: align === 'left' ? 'left' : 'center',
+          alignItems: children ? 'stretch' : (align === 'left' ? 'flex-start' : 'center'),
+          textAlign: children ? 'left' : (align === 'left' ? 'left' : 'center'),
         }}
       >
-        <Box component={motion.div} variants={itemVariants}>
-          {align === 'left' ? (
-            <Box
-              sx={{
-                width: '100%',
-                display: 'inline-flex',
-                justifyContent: 'flex-start',
-                alignItems: 'center',
-                gap: '12px',
-              }}
-            >
-              <Box
-                sx={{
-                  width: 40,
-                  height: '1px',
-                  background: 'rgba(13, 241, 217, 0.60)',
-                  flexShrink: 0,
-                }}
-              />
-              <Box
-                sx={{
-                  position: 'relative',
-                  height: 16,
-                  display: 'flex',
-                  alignItems: 'center',
-                }}
-              >
-                <Typography
-                  sx={{
-                    color: 'var(--Color-primary-2, #0DF1D9)',
-                    fontSize: 12,
-                    fontFamily: '"Rajdhani", sans-serif',
-                    fontWeight: 400,
-                    textTransform: 'uppercase',
-                    lineHeight: '16px',
-                    letterSpacing: '8px',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  {eyebrow}
-                </Typography>
-              </Box>
-            </Box>
-          ) : (
-            <Box sx={eyebrowBadgeSx}>{eyebrow}</Box>
-          )}
-        </Box>
-
-        <Typography
-          component={motion.h1}
-          variants={itemVariants}
-          variant="h2"
-          sx={{
-            fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-            textTransform: 'uppercase',
-            letterSpacing: '0.03em',
-            fontWeight: 700,
-            maxWidth: 900,
-            fontSize: { xs: '32px', sm: '48px', md: '60px' },
-            lineHeight: 1.15,
-          }}
-        >
-          {title}
-        </Typography>
-
-        {subtitle ? (
-          <Typography
-            component={motion.p}
-            variants={itemVariants}
-            variant="body1"
+        {children ? (
+          <Box
             sx={{
-              maxWidth: 1120,
-              color: 'rgba(206, 250, 254, 0.60)',
-              fontSize: { xs: '14px', md: '16px' },
-              fontFamily: '"Rajdhani", sans-serif',
-              fontWeight: 400,
-              lineHeight: '26px',
-              letterSpacing: '0.015em',
+              display: 'flex',
+              flexDirection: { xs: 'column', md: 'row' },
+              alignItems: { xs: 'flex-start', md: 'center' },
+              justifyContent: 'space-between',
+              gap: { xs: 5, md: 0 },
+              width: '100%',
             }}
           >
-            {subtitle}
-          </Typography>
-        ) : null}
+            <Stack
+              spacing={2.5}
+              sx={{
+                maxWidth: { md: 695 },
+                flex: 1,
+                pr: { md: 5 },
+              }}
+            >
+              {aboveTitle && (
+                <Box component={motion.div} variants={itemVariants} sx={{ mb: 1.5 }}>
+                  {aboveTitle}
+                </Box>
+              )}
+              <Box component={motion.div} variants={itemVariants}>
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'inline-flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    gap: '12px',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: '1px',
+                      background: 'rgba(13, 241, 217, 0.60)',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Typography
+                    sx={{
+                      color: 'var(--Color-primary-2, #0DF1D9)',
+                      fontSize: 12,
+                      fontFamily: '"Rajdhani", sans-serif',
+                      fontWeight: 400,
+                      textTransform: 'uppercase',
+                      lineHeight: '16px',
+                      letterSpacing: '8px',
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    {eyebrow}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Typography
+                component={motion.h1}
+                variants={itemVariants}
+                variant="h2"
+                sx={{
+                  fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.03em',
+                  fontWeight: 700,
+                  fontSize: { xs: '32px', sm: '48px', md: '60px' },
+                  lineHeight: 1.15,
+                }}
+              >
+                {title}
+              </Typography>
+
+              {subtitle && (
+                <Typography
+                  component={motion.p}
+                  variants={itemVariants}
+                  variant="body1"
+                  sx={{
+                    color: 'rgba(206, 250, 254, 0.60)',
+                    fontSize: { xs: '14px', md: '16px' },
+                    fontFamily: '"Rajdhani", sans-serif',
+                    fontWeight: 400,
+                    lineHeight: '26px',
+                    letterSpacing: '0.015em',
+                  }}
+                >
+                  {subtitle}
+                </Typography>
+              )}
+
+              {actions && (
+                <Box component={motion.div} variants={itemVariants}>
+                  {actions}
+                </Box>
+              )}
+            </Stack>
+
+            <Box
+              sx={{
+                width: { xs: '100%', md: 'auto' },
+                display: 'flex',
+                justifyContent: 'center',
+              }}
+            >
+              {children}
+            </Box>
+          </Box>
+        ) : (
+          <>
+            <Box component={motion.div} variants={itemVariants}>
+              {align === 'left' ? (
+                <Box
+                  sx={{
+                    width: '100%',
+                    display: 'inline-flex',
+                    justifyContent: 'flex-start',
+                    alignItems: 'center',
+                    gap: '12px',
+                  }}
+                >
+                  <Box
+                    sx={{
+                      width: 40,
+                      height: '1px',
+                      background: 'rgba(13, 241, 217, 0.60)',
+                      flexShrink: 0,
+                    }}
+                  />
+                  <Box
+                    sx={{
+                      position: 'relative',
+                      height: 16,
+                      display: 'flex',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <Typography
+                      sx={{
+                        color: 'var(--Color-primary-2, #0DF1D9)',
+                        fontSize: 12,
+                        fontFamily: '"Rajdhani", sans-serif',
+                        fontWeight: 400,
+                        textTransform: 'uppercase',
+                        lineHeight: '16px',
+                        letterSpacing: '8px',
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {eyebrow}
+                    </Typography>
+                  </Box>
+                </Box>
+              ) : (
+                <Box sx={eyebrowBadgeSx}>{eyebrow}</Box>
+              )}
+            </Box>
+
+            <Typography
+              component={motion.h1}
+              variants={itemVariants}
+              variant="h2"
+              sx={{
+                fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+                textTransform: 'uppercase',
+                letterSpacing: '0.03em',
+                fontWeight: 700,
+                maxWidth: 900,
+                fontSize: { xs: '32px', sm: '48px', md: '60px' },
+                lineHeight: 1.15,
+              }}
+            >
+              {title}
+            </Typography>
+
+            {subtitle ? (
+              <Typography
+                component={motion.p}
+                variants={itemVariants}
+                variant="body1"
+                sx={{
+                  maxWidth: 1120,
+                  color: 'rgba(206, 250, 254, 0.60)',
+                  fontSize: { xs: '14px', md: '16px' },
+                  fontFamily: '"Rajdhani", sans-serif',
+                  fontWeight: 400,
+                  lineHeight: '26px',
+                  letterSpacing: '0.015em',
+                }}
+              >
+                {subtitle}
+              </Typography>
+            ) : null}
+
+            {actions && (
+              <Box component={motion.div} variants={itemVariants}>
+                {actions}
+              </Box>
+            )}
+          </>
+        )}
       </Stack>
     </Box>
   )

@@ -29,6 +29,8 @@
   "ProjectDetails": {
     "backToProjects": "Return to Projects",
     "visitWebsite": "Visit Website",
+    "googlePlay": "Google Play",
+    "appStore": "App Store",
     "demo": "Demo",
     "moreProjects": "More Projects"
   },

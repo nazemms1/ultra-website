@@ -26,7 +26,6 @@ export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoC
   const theme = useTheme()
   const prefersReducedMotion = useReducedMotion()
 
-  const hasCover = Boolean(cover)
   const displayLogoSrc = logoImage || logo.src
 
   return (
@@ -44,133 +43,103 @@ export default function ProjectLogoCard({ logo, cover, logoImage }: ProjectLogoC
     >
       <Box sx={logoGlowSx(theme)} aria-hidden />
 
-      {hasCover ? (
-        /* Flip card container */
+      {/* Flip card container */}
+      <Box
+        component={motion.div}
+        animate={
+          prefersReducedMotion
+            ? undefined
+            : { y: [0, -6, 0] }
+        }
+        transition={
+          prefersReducedMotion
+            ? undefined
+            : { duration: 5, repeat: Infinity, ease: 'easeInOut' }
+        }
+        sx={{
+          zIndex: 1,
+          perspective: '1000px',
+          width: { xs: '100%', sm: 286 },
+          maxWidth: 286,
+          minHeight: { xs: 140, sm: 170 },
+        }}
+      >
         <Box
-          component={motion.div}
-          animate={
-            prefersReducedMotion
-              ? undefined
-              : { y: [0, -6, 0] }
-          }
-          transition={
-            prefersReducedMotion
-              ? undefined
-              : { duration: 5, repeat: Infinity, ease: 'easeInOut' }
-          }
           sx={{
-            zIndex: 1,
-            perspective: '1000px',
-            width: { xs: '100%', sm: 286 },
-            maxWidth: 286,
+            position: 'relative',
+            width: '100%',
+            height: '100%',
             minHeight: { xs: 140, sm: 170 },
+            transformStyle: 'preserve-3d',
+            transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
+            '&:hover': {
+              transform: 'rotateY(180deg)',
+            },
           }}
         >
+          {/* Front face — logo */}
           <Box
             sx={{
-              position: 'relative',
+              ...logoCardSx(theme),
+              position: 'absolute',
+              inset: 0,
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '40px',
               width: '100%',
-              height: '100%',
               minHeight: { xs: 140, sm: 170 },
-              transformStyle: 'preserve-3d',
-              transition: 'transform 0.6s cubic-bezier(0.4, 0, 0.2, 1)',
-              '&:hover': {
-                transform: 'rotateY(180deg)',
-              },
             }}
           >
-            {/* Front face — logo */}
             <Box
+              component="img"
+              src={displayLogoSrc}
+              alt={logo.alt}
               sx={{
-                ...logoCardSx(theme),
-                position: 'absolute',
-                inset: 0,
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                borderRadius: '40px',
-                width: '100%',
-                minHeight: { xs: 140, sm: 170 },
+                width: 'auto',
+                height: 'auto',
+                maxWidth: '100%',
+                maxHeight: 80,
+                objectFit: 'contain',
               }}
-            >
-              <Box
-                component="img"
-                src={displayLogoSrc}
-                alt={logo.alt}
-                sx={{
-                  width: 'auto',
-                  height: 'auto',
-                  maxWidth: '100%',
-                  maxHeight: 80,
-                  objectFit: 'contain',
-                }}
-              />
-            </Box>
+            />
+          </Box>
 
-            {/* Back face — cover image */}
+          {/* Back face — same logo, flipped */}
+          <Box
+            sx={{
+              ...logoCardSx(theme),
+              position: 'absolute',
+              inset: 0,
+              backfaceVisibility: 'hidden',
+              WebkitBackfaceVisibility: 'hidden',
+              transform: 'rotateY(180deg)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: '40px',
+              width: '100%',
+              minHeight: { xs: 140, sm: 170 },
+            }}
+          >
             <Box
+              component="img"
+              src={displayLogoSrc}
+              alt={logo.alt}
               sx={{
-                ...logoCardSx(theme),
-                position: 'absolute',
-                inset: 0,
-                backfaceVisibility: 'hidden',
-                WebkitBackfaceVisibility: 'hidden',
-                transform: 'rotateY(180deg)',
-                borderRadius: '40px',
-                overflow: 'hidden',
-                width: '100%',
-                minHeight: { xs: 140, sm: 170 },
-                p: 0,
+                width: 'auto',
+                height: 'auto',
+                maxWidth: '100%',
+                maxHeight: 80,
+                objectFit: 'contain',
               }}
-            >
-              <Box
-                component="img"
-                src={cover!}
-                alt={`${logo.alt} cover`}
-                sx={{
-                  width: '100%',
-                  height: '100%',
-                  objectFit: 'cover',
-                }}
-              />
-            </Box>
+            />
           </Box>
         </Box>
-      ) : (
-        /* Original floating card — no cover */
-        <Box
-          component={motion.div}
-          animate={
-            prefersReducedMotion
-              ? undefined
-              : { y: [0, -6, 0] }
-          }
-          transition={
-            prefersReducedMotion
-              ? undefined
-              : { duration: 5, repeat: Infinity, ease: 'easeInOut' }
-          }
-          sx={{
-            zIndex: 1,
-            ...logoCardSx(theme),
-          }}
-        >
-          <Box
-            component="img"
-            src={displayLogoSrc}
-            alt={logo.alt}
-            sx={{
-              width: 'auto',
-              height: 'auto',
-              maxWidth: '100%',
-              maxHeight: 80,
-              objectFit: 'contain',
-            }}
-          />
-        </Box>
-      )}
+      </Box>
     </Box>
   )
 }
+

@@ -3,21 +3,17 @@
 import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
 import Image from 'next/image'
 import type { ProjectGridItem } from './types'
+import { useTheme } from '@mui/material/styles'
+import Box from '@mui/material/Box'
+import { glassSurface } from '@/lib/theme/surfaces'
 
 type LogoFlipCardProps = {
   item: ProjectGridItem
   imageOnLeft: boolean
 }
 
-const GLASS = {
-  background: 'rgba(255,255,255,0.06)',
-  backdropFilter: 'blur(24px) brightness(1.1)',
-  WebkitBackdropFilter: 'blur(24px) brightness(1.1)',
-  border: '1px solid rgba(255,255,255,0.10)',
-  boxShadow: '0 8px 40px 0 rgba(80,180,255,0.22), inset 0 1px 0 rgba(255,255,255,0.12)',
-} as React.CSSProperties
-
 export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
+  const theme = useTheme()
   const rotateY   = useMotionValue(0)
   const cardScale = useMotionValue(1)
 
@@ -34,18 +30,18 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
     animate(rotateY,   0,   { duration: 0.65, ease: [0.4, 0, 0.2, 1] })
   }
 
-  const faceStyle: React.CSSProperties = {
-    ...GLASS,
+  const faceStyle = {
+    ...glassSurface(theme, { radius: '16px', tint: 0.06 }),
     position: 'absolute',
     inset: 0,
-    borderRadius: 16,
+    borderRadius: '16px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backfaceVisibility: 'hidden',
     WebkitBackfaceVisibility: 'hidden',
     overflow: 'hidden',
-    padding: 12,
+    padding: '12px',
   }
 
   return (
@@ -77,7 +73,11 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
         }}
       >
         {/* ── Front face — logo image ── */}
-        <motion.div style={{ ...faceStyle, opacity: frontOpacity }}>
+        <Box
+          component={motion.div}
+          style={{ opacity: frontOpacity }}
+          sx={faceStyle}
+        >
           {item.logo.src ? (
             <Image
               src={item.logo.src}
@@ -89,10 +89,14 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
           ) : (
             <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{item.title}</span>
           )}
-        </motion.div>
+        </Box>
 
         {/* ── Back face — same logo, flipped ── */}
-        <motion.div style={{ ...faceStyle, opacity: backOpacity, rotateY: 180 }}>
+        <Box
+          component={motion.div}
+          style={{ opacity: backOpacity, rotateY: 180 }}
+          sx={faceStyle}
+        >
           {item.logo.src ? (
             <Image
               src={item.logo.src}
@@ -104,8 +108,9 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
           ) : (
             <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: 12 }}>{item.title}</span>
           )}
-        </motion.div>
+        </Box>
       </motion.div>
     </motion.div>
   )
 }
+
