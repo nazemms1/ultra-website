@@ -65,19 +65,6 @@ export default async function GalleryPage({ params }: Props) {
   const rawVideo = galleryData?.video
   const videoSrc = (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) || undefined
 
-  // Fetch initial (page 1) images for all gallery groups concurrently
-  const items = galleryData?.items || []
-  const initialImagesMap: Record<number, any> = {}
-
-  await Promise.all(
-    items.map(async (item: any) => {
-      const res = await fetchAPI(`/api/gallery-items/${item.id}/images`, locale)
-      if (res) {
-        initialImagesMap[item.id] = res
-      }
-    }),
-  )
-
   return (
     <>
       <PageHero
@@ -92,7 +79,6 @@ export default async function GalleryPage({ params }: Props) {
         galleryData={
           galleryData || { title: eyebrowText, subtitle: '', description: subtitleText, items: [] }
         }
-        initialImagesMap={initialImagesMap}
         locale={locale}
       />
       <CTASection data={startProjectData} />

@@ -6,6 +6,7 @@ export interface PartnerLogoAssets {
 export interface PartnerEntry extends PartnerLogoAssets {
   id: string
   name: string
+  url: string | null
   /** Logo slot width at the lg breakpoint (px). */
   slotWidth: number
   /** Logo slot height at the lg breakpoint (px). */

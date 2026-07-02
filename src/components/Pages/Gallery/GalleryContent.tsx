@@ -1,17 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import IconButton from '@mui/material/IconButton'
 import Modal from '@mui/material/Modal'
 import CircularProgress from '@mui/material/CircularProgress'
-import { useTheme, alpha } from '@mui/material/styles'
+import { useTheme } from '@mui/material/styles'
 import { motion, AnimatePresence } from 'framer-motion'
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft'
 import ChevronRightIcon from '@mui/icons-material/ChevronRight'
 import CloseIcon from '@mui/icons-material/Close'
+import Skeleton from '@mui/material/Skeleton'
 import { glassSurface } from '@/lib/theme/surfaces'
 
 // Type definitions matching the API responses
@@ -69,7 +70,6 @@ interface GalleryGroupImagesResponse {
 
 interface GalleryContentProps {
   galleryData: GalleryData
-  initialImagesMap: Record<number, GalleryGroupImagesResponse>
   locale: string
 }
 
@@ -149,23 +149,73 @@ const CornerBrackets = () => {
   )
 }
 
-export default function GalleryContent({
-  galleryData,
-  initialImagesMap,
-  locale,
-}: GalleryContentProps) {
+export default function GalleryContent({ galleryData, locale }: GalleryContentProps) {
   const theme = useTheme()
   const isRtl = locale === 'ar'
 
   // Image and pagination state per group item ID
-  const [imagesMap, setImagesMap] =
-    useState<Record<number, GalleryGroupImagesResponse>>(initialImagesMap)
+  const [imagesMap, setImagesMap] = useState<Record<number, GalleryGroupImagesResponse>>({})
   const [loadingMap, setLoadingMap] = useState<Record<number, boolean>>({})
+  // Track which items have been fetched (to avoid re-fetching on scroll)
+  const fetchedRef = useRef<Set<number>>(new Set())
+  // Refs for each section element
+  const sectionRefs = useRef<Record<number, HTMLElement | null>>({})
 
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
   const [lightboxGroupImages, setLightboxGroupImages] = useState<GalleryImageItem[]>([])
   const [lightboxIndex, setLightboxIndex] = useState(0)
+
+  // Fetch images for a gallery item (initial load triggered by intersection)
+  const fetchItemImages = useCallback(
+    async (itemId: number) => {
+      if (fetchedRef.current.has(itemId)) return
+      fetchedRef.current.add(itemId)
+      setLoadingMap(prev => ({ ...prev, [itemId]: true }))
+      try {
+        const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:8000'
+        const res = await fetch(`${baseUrl}/api/gallery-items/${itemId}/images`, {
+          headers: { 'Accept-Language': locale, 'Content-Type': 'application/json' },
+        })
+        if (res.ok) {
+          const json = await res.json()
+          setImagesMap(prev => ({ ...prev, [itemId]: json.data }))
+        }
+      } catch (e) {
+        console.error('Failed to fetch gallery images', e)
+      } finally {
+        setLoadingMap(prev => ({ ...prev, [itemId]: false }))
+      }
+    },
+    [locale],
+  )
+
+  // IntersectionObserver: fetch images when section scrolls into view
+  useEffect(() => {
+    const items = galleryData.items || []
+    const observers: IntersectionObserver[] = []
+
+    items.forEach(item => {
+      const el = sectionRefs.current[item.id]
+      if (!el) return
+
+      const observer = new IntersectionObserver(
+        entries => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              fetchItemImages(item.id)
+              observer.disconnect()
+            }
+          })
+        },
+        { rootMargin: '200px' },
+      )
+      observer.observe(el)
+      observers.push(observer)
+    })
+
+    return () => observers.forEach(o => o.disconnect())
+  }, [galleryData.items, fetchItemImages])
 
   // Fetch images page client-side
   const handlePageChange = async (itemId: number, page: number) => {
@@ -463,6 +513,64 @@ export default function GalleryContent({
     )
   }
 
+  // Shimmer skeleton matching the 4-image classic layout
+  const renderShimmer = () => (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: { xs: '1fr', sm: '1.5fr 1fr 1fr', md: '2.08fr 1fr 1fr' },
+        gridTemplateRows: { xs: 'auto', sm: 'repeat(2, 180px)', md: '238px 238px' },
+        columnGap: 3,
+        rowGap: '22px',
+      }}
+    >
+      <Skeleton
+        variant="rectangular"
+        animation="wave"
+        sx={{
+          gridColumn: { xs: 'span 1', sm: '1' },
+          gridRow: { xs: 'span 1', sm: '1 / span 2' },
+          borderRadius: '14px',
+          height: { xs: '200px', sm: '100%' },
+          bgcolor: 'rgba(255,255,255,0.06)',
+        }}
+      />
+      <Skeleton
+        variant="rectangular"
+        animation="wave"
+        sx={{
+          gridColumn: { xs: 'span 1', sm: '2' },
+          gridRow: { xs: 'span 1', sm: '1' },
+          borderRadius: '14px',
+          height: { xs: '160px', sm: '100%' },
+          bgcolor: 'rgba(255,255,255,0.06)',
+        }}
+      />
+      <Skeleton
+        variant="rectangular"
+        animation="wave"
+        sx={{
+          gridColumn: { xs: 'span 1', sm: '2' },
+          gridRow: { xs: 'span 1', sm: '2' },
+          borderRadius: '14px',
+          height: { xs: '160px', sm: '100%' },
+          bgcolor: 'rgba(255,255,255,0.06)',
+        }}
+      />
+      <Skeleton
+        variant="rectangular"
+        animation="wave"
+        sx={{
+          gridColumn: { xs: 'span 1', sm: '3' },
+          gridRow: { xs: 'span 1', sm: '1 / span 2' },
+          borderRadius: '14px',
+          height: { xs: '200px', sm: '100%' },
+          bgcolor: 'rgba(255,255,255,0.06)',
+        }}
+      />
+    </Box>
+  )
+
   // Render pagination buttons
   const renderPagination = (itemId: number, response: GalleryGroupImagesResponse) => {
     const meta = response.meta
@@ -647,7 +755,14 @@ export default function GalleryContent({
           const isLoading = loadingMap[item.id]
 
           return (
-            <Box key={item.id} component="section" sx={{ position: 'relative' }}>
+            <Box
+              key={item.id}
+              component="section"
+              ref={(el: HTMLElement | null) => {
+                sectionRefs.current[item.id] = el
+              }}
+              sx={{ position: 'relative' }}
+            >
               <Box
                 sx={{
                   display: 'flex',
@@ -702,35 +817,42 @@ export default function GalleryContent({
 
               {/* Image Grid with Loading Overlay */}
               <Box sx={{ position: 'relative', minHeight: '180px' }}>
-                <AnimatePresence mode="wait">
-                  <motion.div
-                    key={groupImagesResponse?.meta?.current_page || 1}
-                    initial={{ opacity: 0, y: 15 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -15 }}
-                    transition={{ duration: 0.4 }}
-                  >
-                    {renderImageGrid(item.id, groupImages)}
-                  </motion.div>
-                </AnimatePresence>
+                {/* Shimmer: shown until images are loaded for the first time */}
+                {!groupImagesResponse ? (
+                  renderShimmer()
+                ) : (
+                  <>
+                    <AnimatePresence mode="wait">
+                      <motion.div
+                        key={groupImagesResponse?.meta?.current_page || 1}
+                        initial={{ opacity: 0, y: 15 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -15 }}
+                        transition={{ duration: 0.4 }}
+                      >
+                        {renderImageGrid(item.id, groupImages)}
+                      </motion.div>
+                    </AnimatePresence>
 
-                {/* Loading overlay */}
-                {isLoading && (
-                  <Box
-                    sx={{
-                      position: 'absolute',
-                      inset: 0,
-                      bgcolor: 'rgba(8, 10, 10, 0.7)',
-                      backdropFilter: 'blur(4px)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      zIndex: 3,
-                      borderRadius: '8px',
-                    }}
-                  >
-                    <CircularProgress color="primary" />
-                  </Box>
+                    {/* Pagination page-change overlay */}
+                    {isLoading && (
+                      <Box
+                        sx={{
+                          position: 'absolute',
+                          inset: 0,
+                          bgcolor: 'rgba(8, 10, 10, 0.7)',
+                          backdropFilter: 'blur(4px)',
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          zIndex: 3,
+                          borderRadius: '8px',
+                        }}
+                      >
+                        <CircularProgress color="primary" />
+                      </Box>
+                    )}
+                  </>
                 )}
               </Box>
 

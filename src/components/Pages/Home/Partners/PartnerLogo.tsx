@@ -30,6 +30,11 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
   const handleTap = () => {
     if (!isMobile) return
 
+    if (partner.url) {
+      window.open(partner.url, '_blank', 'noopener,noreferrer')
+      return
+    }
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current)
     }
@@ -42,6 +47,79 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
   }
 
   const showColor = reduceMotion || hovered || (isMobile && active)
+
+  const inner = (
+    <MotionBox
+      tabIndex={partner.url ? -1 : reduceMotion ? -1 : 0}
+      role="img"
+      aria-label={partner.name}
+      onMouseEnter={() => !isMobile && setHovered(true)}
+      onMouseLeave={() => !isMobile && setHovered(false)}
+      onFocus={() => !isMobile && setHovered(true)}
+      onBlur={() => !isMobile && setHovered(false)}
+      onClick={handleTap}
+      animate={{
+        scale:
+          (showColor && !reduceMotion && !isMobile) || (isMobile && active) ? HOVER_SCALE : 1,
+      }}
+      transition={HOVER_TRANSITION}
+      sx={{
+        position: 'relative',
+        width: '100%',
+        height: '100%',
+        cursor: reduceMotion ? 'default' : 'pointer',
+        outline: 'none',
+        '&:focus-visible': {
+          borderRadius: '50px',
+          boxShadow: theme => `0 0 0 2px ${alpha(theme.palette.primary.main, 0.65)}`,
+        },
+      }}
+    >
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: '100%',
+          filter:
+            (showColor && !isMobile) || (isMobile && active)
+              ? theme => `drop-shadow(0 0 37.5px ${alpha(theme.palette.primary.main, 0.55)})`
+              : 'none',
+          transition: 'filter 0.3s ease',
+        }}
+      >
+        <MotionBox
+          aria-hidden={showColor}
+          animate={{ opacity: showColor ? 0 : 1 }}
+          transition={HOVER_TRANSITION}
+          sx={{ position: 'absolute', inset: 0 }}
+        >
+          <Image
+            src={partner.cyanSrc}
+            alt=""
+            fill
+            sizes="(max-width: 600px) 45vw, 200px"
+            priority={index < 2}
+            style={{ objectFit: 'contain' }}
+          />
+        </MotionBox>
+
+        <MotionBox
+          aria-hidden={!showColor}
+          animate={{ opacity: showColor ? 1 : 0 }}
+          transition={HOVER_TRANSITION}
+          sx={{ position: 'absolute', inset: 0 }}
+        >
+          <Image
+            src={partner.colorSrc}
+            alt=""
+            fill
+            sizes="(max-width: 600px) 45vw, 200px"
+            style={{ objectFit: 'contain' }}
+          />
+        </MotionBox>
+      </Box>
+    </MotionBox>
+  )
 
   return (
     <Box
@@ -63,76 +141,29 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
         transitionDelay: visible ? `${index * REVEAL_STAGGER_S}s` : '0s',
       }}
     >
-      <MotionBox
-        tabIndex={reduceMotion ? -1 : 0}
-        role="img"
-        aria-label={partner.name}
-        onMouseEnter={() => !isMobile && setHovered(true)}
-        onMouseLeave={() => !isMobile && setHovered(false)}
-        onFocus={() => !isMobile && setHovered(true)}
-        onBlur={() => !isMobile && setHovered(false)}
-        onClick={handleTap}
-        animate={{
-          scale:
-            (showColor && !reduceMotion && !isMobile) || (isMobile && active) ? HOVER_SCALE : 1,
-        }}
-        transition={HOVER_TRANSITION}
-        sx={{
-          position: 'relative',
-          width: '100%',
-          height: '100%',
-          cursor: reduceMotion ? 'default' : 'pointer',
-          outline: 'none',
-          '&:focus-visible': {
-            borderRadius: '50px',
-            boxShadow: theme => `0 0 0 2px ${alpha(theme.palette.primary.main, 0.65)}`,
-          },
-        }}
-      >
+      {partner.url && !isMobile ? (
         <Box
+          component="a"
+          href={partner.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          aria-label={partner.name}
           sx={{
-            position: 'relative',
+            display: 'block',
             width: '100%',
             height: '100%',
-            filter:
-              (showColor && !isMobile) || (isMobile && active)
-                ? theme => `drop-shadow(0 0 37.5px ${alpha(theme.palette.primary.main, 0.55)})`
-                : 'none',
-            transition: 'filter 0.3s ease',
+            textDecoration: 'none',
+            '&:focus-visible': {
+              borderRadius: '50px',
+              outline: theme => `2px solid ${alpha(theme.palette.primary.main, 0.65)}`,
+            },
           }}
         >
-          <MotionBox
-            aria-hidden={showColor}
-            animate={{ opacity: showColor ? 0 : 1 }}
-            transition={HOVER_TRANSITION}
-            sx={{ position: 'absolute', inset: 0 }}
-          >
-            <Image
-              src={partner.cyanSrc}
-              alt=""
-              fill
-              sizes="(max-width: 600px) 45vw, 200px"
-              priority={index < 2}
-              style={{ objectFit: 'contain' }}
-            />
-          </MotionBox>
-
-          <MotionBox
-            aria-hidden={!showColor}
-            animate={{ opacity: showColor ? 1 : 0 }}
-            transition={HOVER_TRANSITION}
-            sx={{ position: 'absolute', inset: 0 }}
-          >
-            <Image
-              src={partner.colorSrc}
-              alt=""
-              fill
-              sizes="(max-width: 600px) 45vw, 200px"
-              style={{ objectFit: 'contain' }}
-            />
-          </MotionBox>
+          {inner}
         </Box>
-      </MotionBox>
+      ) : (
+        inner
+      )}
     </Box>
   )
 }

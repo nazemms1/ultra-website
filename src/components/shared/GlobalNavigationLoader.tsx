@@ -11,6 +11,11 @@ export default function GlobalNavigationLoader() {
   const [isNavigating, setIsNavigating] = useState(false)
   const [progress, setProgress] = useState(0)
 
+  // Scroll to top on every page change
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+  }, [pathname])
+
   // Reset progress and hide loader on page load completion
   useEffect(() => {
     if (isNavigating) {

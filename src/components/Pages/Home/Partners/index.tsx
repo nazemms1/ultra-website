@@ -87,6 +87,7 @@ export default function PartnersSection({ data }: PartnersSectionProps) {
             const partner = {
               id: String(item.id),
               name: item.title || `Partner ${item.id}`,
+              url: item.url || null,
               cyanSrc: item.normal_logo?.url,
               colorSrc: item.hover_logo?.url,
               slotWidth: 188,
