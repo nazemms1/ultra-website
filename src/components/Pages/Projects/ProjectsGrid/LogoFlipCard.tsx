@@ -5,7 +5,7 @@ import Image from 'next/image'
 import type { ProjectGridItem } from './types'
 import { useTheme } from '@mui/material/styles'
 import Box from '@mui/material/Box'
-import { glassSurface } from '@/lib/theme/surfaces'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 type LogoFlipCardProps = {
   item: ProjectGridItem
@@ -16,17 +16,17 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
   const theme = useTheme()
 
   const faceStyle = {
-    ...glassSurface(theme, { radius: '16px', tint: 0.06 }),
+    ...cardGlassSurface(theme, { radius: '40px' }),
     position: 'absolute',
     inset: 0,
-    borderRadius: '16px',
+    borderRadius: '40px',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
     backfaceVisibility: 'hidden',
     WebkitBackfaceVisibility: 'hidden',
     overflow: 'hidden',
-    padding: '0px',
+    padding: '15.36px',
   }
 
   return (
@@ -39,8 +39,8 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
         translateY: '-50%',
         translateX: '-50%',
         zIndex: 10,
-        width: 200,
-        height: 110,
+        width: 286,
+        height: 170,
         perspective: 1200,
         cursor: 'default',
         transition: 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)',

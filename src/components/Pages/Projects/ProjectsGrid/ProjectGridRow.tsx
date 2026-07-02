@@ -41,7 +41,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         isolation: 'isolate',
         // Clamps layout heights perfectly during transition so rows don't bleed or overlap
         height: { xs: 'auto', md: layout.imageIdleHeight },
-        marginTop: index > 0 && prevLayout ? { xs: 3, md: `${-0.15 * prevLayout.imageIdleHeight}px` } : 0,
+        marginTop: index > 0 ? { xs: 3, md: 0 } : 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -84,7 +84,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           },
         },
         '&:hover + .project-grid-row': {
-          marginTop: { md: `${-0.15 * layout.imageHoverHeight}px` },
+          marginTop: { md: 0 },
         },
       }}
     >
@@ -211,7 +211,8 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
               objectFit: 'cover',
               zIndex: 1,
               pointerEvents: 'none',
-              opacity: 0.35,
+              opacity: 0.6,
+              mixBlendMode: 'luminosity',
             }}
           />
 
