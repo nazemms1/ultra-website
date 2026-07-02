@@ -11,9 +11,16 @@ export default function GlobalNavigationLoader() {
   const [isNavigating, setIsNavigating] = useState(false)
   const [progress, setProgress] = useState(0)
 
-  // Scroll to top on every page change
+  // Scroll to top after the new page has painted
   useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    // Double rAF ensures we scroll only after the browser has committed the new layout
+    const raf1 = requestAnimationFrame(() => {
+      const raf2 = requestAnimationFrame(() => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+      })
+      return () => cancelAnimationFrame(raf2)
+    })
+    return () => cancelAnimationFrame(raf1)
   }, [pathname])
 
   // Reset progress and hide loader on page load completion
