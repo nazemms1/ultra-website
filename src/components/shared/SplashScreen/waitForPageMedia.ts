@@ -13,12 +13,12 @@ type WaitForPageMediaOptions = {
   perAssetTimeoutMs?: number
 }
 
-const DEFAULT_MIN_DURATION_MS = 900
-const DEFAULT_MAX_DURATION_MS = 4_000
-const DEFAULT_SETTLE_MS = 80
-const DEFAULT_PER_ASSET_TIMEOUT_MS = 3_000
+const DEFAULT_MIN_DURATION_MS = 0
+const DEFAULT_MAX_DURATION_MS = 1_500
+const DEFAULT_SETTLE_MS = 50
+const DEFAULT_PER_ASSET_TIMEOUT_MS = 1_000
 /** Resolve DOM wait when no img/video appears (e.g. lightweight routes). */
-const DEFAULT_EMPTY_DOM_RESOLVE_MS = 1_500
+const DEFAULT_EMPTY_DOM_RESOLVE_MS = 200
 
 /** `HTMLMediaElement.HAVE_CURRENT_DATA` — literal avoids SSR ReferenceError. */
 const VIDEO_READY_STATE = 2
@@ -155,18 +155,16 @@ function waitForDomMedia(
     }
 
     const check = () => {
-      const { images, videos } = collectDomMedia(root)
+      // Only wait for images — videos are excluded to avoid blocking LCP
+      const { images } = collectDomMedia(root)
       const pending: Promise<void>[] = []
 
       for (const img of images) {
         if (!isImageReady(img)) pending.push(waitForImageElement(img, perAssetTimeoutMs))
       }
-      for (const video of videos) {
-        if (!isVideoReady(video)) pending.push(waitForVideoElement(video, perAssetTimeoutMs))
-      }
 
       if (pending.length === 0) {
-        if (images.length + videos.length === 0) {
+        if (images.length === 0) {
           if (emptyTimer === undefined) {
             emptyTimer = window.setTimeout(finish, emptyResolveMs)
           }
@@ -223,7 +221,6 @@ export async function waitForPageMedia(options: WaitForPageMediaOptions = {}): P
     document.fonts.ready,
     waitForCriticalAssets(perAssetTimeoutMs),
     waitForDomMedia(document.body, perAssetTimeoutMs, settleMs, DEFAULT_EMPTY_DOM_RESOLVE_MS),
-    waitForWindowLoad(),
   ])
 
   await Promise.race([Promise.all([readiness, delay(minDurationMs)]), delay(maxDurationMs)])

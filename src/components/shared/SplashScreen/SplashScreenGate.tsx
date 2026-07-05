@@ -57,9 +57,17 @@ function SplashScreenGateInner({
 
   useEffect(() => {
     const shouldLock = scrollLocked && (!mounted || !hasShownSplash)
-    document.body.style.overflow = shouldLock ? 'hidden' : ''
+    if (shouldLock) {
+      // Use scrollbar-gutter to prevent layout shift when hiding scrollbar
+      document.body.style.overflow = 'hidden'
+      document.body.style.paddingRight = `${window.innerWidth - document.documentElement.clientWidth}px`
+    } else {
+      document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
+    }
     return () => {
       document.body.style.overflow = ''
+      document.body.style.paddingRight = ''
     }
   }, [scrollLocked, mounted, hasShownSplash])
 

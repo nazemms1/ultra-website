@@ -96,6 +96,13 @@ export default async function LocaleLayout({ children, params }: Props) {
       suppressHydrationWarning
       style={{ scrollBehavior: 'smooth' }}
     >
+      <head>
+        {/* Preload hero video to improve LCP */}
+        <link rel="preload" as="video" href="/videos/hero.mp4" type="video/mp4" />
+        {/* Preconnect to font origins */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+      </head>
       <body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>
           <Suspense fallback={null}>

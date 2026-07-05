@@ -14,8 +14,8 @@ const containerVariants: Variants = {
   visible: {
     opacity: 1,
     transition: {
-      staggerChildren: 0.3,
-      delayChildren: 0.2,
+      staggerChildren: 0.12,
+      delayChildren: 0.05,
     },
   },
 }
@@ -23,15 +23,15 @@ const containerVariants: Variants = {
 const makeItemVariants = (isRtl: boolean): Variants => ({
   hidden: {
     opacity: 0,
-    x: isRtl ? 0 : -250,
+    x: isRtl ? 0 : -60,
   },
   visible: {
     opacity: 1,
     x: 0,
     transition: {
       type: 'spring',
-      stiffness: 50,
-      damping: 12,
+      stiffness: 120,
+      damping: 20,
     },
   },
 })
@@ -146,6 +146,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
           loop
           playsInline
           preload="auto"
+           width={1920}
+          height={1080}
           style={{
             width: '100%',
             height: '100%',
