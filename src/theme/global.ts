@@ -7,8 +7,8 @@ const shimmer = keyframes`
 
 const faqShimmerSweep = keyframes`
   0%   { transform: translateX(-160%) skewX(-18deg); opacity: 0; }
-  15%  { opacity: 1; }
-  85%  { opacity: 1; }
+  15%  { transform: translateX(-50%) skewX(-18deg); opacity: 1; }
+  85%  { transform: translateX(250%) skewX(-18deg); opacity: 1; }
   100% { transform: translateX(360%) skewX(-18deg); opacity: 0; }
 `
 
@@ -201,6 +201,7 @@ const GlobalStyles = () => css`
       transparent 100%
     );
     filter: blur(6px);
+    will-change: transform, opacity;
   }
 
   .ultra-faq-card:hover {

@@ -24,6 +24,7 @@ export default function StatItem({ stat, active }: StatItemProps) {
         justifyContent: 'center',
         flexShrink: 0,
         width: { xs: 180, sm: 200, md: 206.5 },
+        minHeight: { xs: 90, md: 110 },
       }}
     >
       <Box

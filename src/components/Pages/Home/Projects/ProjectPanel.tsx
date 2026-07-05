@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import { useTheme } from '@mui/material/styles'
 import { useMotionTemplate, useTransform } from 'framer-motion'
+import Image from 'next/image'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { MotionBox } from './MotionBox'
 import { BLUR_MAX, CLIP_CLOSED, CLIP_OPEN, getPanelRanges } from './constants'
@@ -110,24 +111,26 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
           }}
         >
           <Box
-            component="img"
-            src={project.mockup.src}
-            alt={project.mockup.alt}
-            loading="lazy"
             sx={{
-              display: 'block',
+              position: 'relative',
               width: '100%',
               maxWidth: isMobileMockup
                 ? { xs: 150, sm: 220, md: 300 }
                 : { xs: 200, sm: 360, md: 480 },
-              height: 'auto',
               aspectRatio: isMobileMockup ? '9/16' : '16/9',
-              objectFit: 'contain',
-              background: 'transparent',
               transform: isMobileMockup ? 'rotate(3deg)' : 'none',
               filter: 'drop-shadow(0 30px 55px rgba(0, 0, 0, 0.55))',
             }}
-          />
+          >
+            <Image
+              src={project.mockup.src}
+              alt={project.mockup.alt}
+              fill
+              sizes="(max-width: 600px) 200px, (max-width: 900px) 360px, 480px"
+              style={{ objectFit: 'contain', background: 'transparent' }}
+              loading="lazy"
+            />
+          </Box>
         </MotionBox>
 
         {/* Copy — exits to the right */}

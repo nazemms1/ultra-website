@@ -5,7 +5,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { alpha, useTheme } from '@mui/material/styles'
-import { type MotionValue, useMotionValue, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
+import { type MotionValue, useMotionValue, useReducedMotion, useScroll, useTransform } from 'framer-motion'
 import { SECTION_HEADER_INSET } from '@/components/Layout/sectionInsets'
 import SectionHeader, { formatHeadingText } from '@/components/shared/SectionHeader'
 import ProjectPanel from './ProjectPanel'
@@ -88,16 +88,9 @@ export default function Projects({ data }: { data?: any }) {
     }
   }, [headerInsetPx, isMdUp, viewportHeight])
 
-  const { scrollYProgress } = useScroll({
+  const { scrollYProgress: progress } = useScroll({
     target: trackRef,
     offset: ['start start', 'end end'],
-  })
-
-  const progress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 28,
-    mass: 0.35,
-    restDelta: 0.0005,
   })
 
   // Process API portfolios items or fall back to local dataset
