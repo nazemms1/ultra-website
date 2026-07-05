@@ -1,10 +1,10 @@
 export const SCROLL_VIDEO_MANIFEST = '/videos/frames/manifest.json'
 
 /** How many frames to prefetch on each side of the current index while scrolling. */
-export const SCROLL_VIDEO_PRELOAD_RADIUS = 10
+export const SCROLL_VIDEO_PRELOAD_RADIUS = 5
 
-/** Parallel decode jobs during splash preload. */
-export const SCROLL_VIDEO_SPLASH_CONCURRENCY = 10
+/** Parallel decode jobs during splash preload — keep low to avoid blocking main thread. */
+export const SCROLL_VIDEO_SPLASH_CONCURRENCY = 3
 
 /** Master opacity for frame artwork (alpha mask preserved underneath). */
 export const SCROLL_VIDEO_CONTENT_OPACITY = 0.15 // 0.72

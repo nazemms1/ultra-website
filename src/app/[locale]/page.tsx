@@ -1,17 +1,32 @@
-import PartnersSection from '@/components/Pages/Home/Partners'
-import Stats from '@/components/Pages/Home/Stats/Stats'
-import CTASection from '@/components/Pages/Home/CTASection'
-import FAQSection from '@/components/Pages/Home/Faqs'
-import ServicesOrbital from '@/components/Pages/Home/Services-orbital/ServicesOrbital'
-import Methodologies from '@/components/Pages/Home/Methodologies/Methodologies'
-import Projects from '@/components/Pages/Home/Projects/Projects'
+import dynamic from 'next/dynamic'
 import HeroSection from '@/components/Pages/Home/HeroSection'
-import ContactSection from '@/components/Pages/Home/ContactSection'
-import ScrollVideoStack from '@/components/Pages/Home/ScrollVideoStack'
-import TestimonialsSection from '@/components/Pages/Home/TestimonialsSection'
-
 import { getLocale } from 'next-intl/server'
 import { fetchAPI } from '@/lib/api'
+
+// Lazy-load everything below the fold to reduce initial JS bundle
+const ScrollVideoStack = dynamic(() => import('@/components/Pages/Home/ScrollVideoStack'), {
+  ssr: false,
+})
+const PartnersSection = dynamic(() => import('@/components/Pages/Home/Partners'), { ssr: false })
+const Stats = dynamic(() => import('@/components/Pages/Home/Stats/Stats'), { ssr: false })
+const ServicesOrbital = dynamic(
+  () => import('@/components/Pages/Home/Services-orbital/ServicesOrbital'),
+  { ssr: false },
+)
+const Projects = dynamic(() => import('@/components/Pages/Home/Projects/Projects'), { ssr: false })
+const Methodologies = dynamic(
+  () => import('@/components/Pages/Home/Methodologies/Methodologies'),
+  { ssr: false },
+)
+const TestimonialsSection = dynamic(
+  () => import('@/components/Pages/Home/TestimonialsSection'),
+  { ssr: false },
+)
+const CTASection = dynamic(() => import('@/components/Pages/Home/CTASection'), { ssr: false })
+const FAQSection = dynamic(() => import('@/components/Pages/Home/Faqs'), { ssr: false })
+const ContactSection = dynamic(() => import('@/components/Pages/Home/ContactSection'), {
+  ssr: false,
+})
 export default async function HomePage() {
   const locale = await getLocale()
 

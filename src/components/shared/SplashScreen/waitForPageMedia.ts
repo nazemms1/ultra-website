@@ -115,9 +115,16 @@ async function waitForCriticalAssets(timeoutMs: number): Promise<void> {
     ...SPLASH_CRITICAL_IMAGES.map(src => preloadImage(src, timeoutMs)),
   ]
 
-  // Start frame preload in the background — don't block splash dismissal
+  // Defer scroll frame preload until after page is interactive (requestIdleCallback)
   if (!shouldDisableScrollVideo()) {
-    void preloadScrollFramesForSplash()
+    const scheduleFramePreload = () => {
+      void preloadScrollFramesForSplash()
+    }
+    if (typeof requestIdleCallback !== 'undefined') {
+      requestIdleCallback(scheduleFramePreload, { timeout: 3000 })
+    } else {
+      setTimeout(scheduleFramePreload, 2000)
+    }
   }
 
   return Promise.all(tasks).then(() => undefined)

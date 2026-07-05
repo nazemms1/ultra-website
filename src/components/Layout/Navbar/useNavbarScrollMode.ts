@@ -17,7 +17,7 @@ const TOP_THRESHOLD = 1
 const DIRECTION_DELTA = 4
 /** Distance from top while scrolling — unified crossfades in/out */
 const MERGE_ZONE = 120
-const SPREAD_LERP = 0.11
+const SPREAD_LERP = 0.18
 
 function resolveMode(scrollY: number, delta: number, prevMode: NavbarScrollMode): NavbarScrollMode {
   if (scrollY <= TOP_THRESHOLD) return 'top'
@@ -67,7 +67,7 @@ export function useNavbarScrollMode(): NavbarScrollState {
       const current = spreadRef.current
       const diff = goal - current
 
-      if (Math.abs(diff) < 0.002) {
+      if (Math.abs(diff) < 0.008) {
         spreadRef.current = goal
         setState(prev => (prev.spreadProgress === goal ? prev : { ...prev, spreadProgress: goal }))
         spreadRaf.current = null
@@ -75,8 +75,13 @@ export function useNavbarScrollMode(): NavbarScrollState {
       }
 
       const next = current + diff * SPREAD_LERP
-      spreadRef.current = next
-      setState(prev => ({ ...prev, spreadProgress: next }))
+      // Only update state when change is visible (> 0.5%)
+      if (Math.abs(next - current) > 0.005) {
+        spreadRef.current = next
+        setState(prev => ({ ...prev, spreadProgress: next }))
+      } else {
+        spreadRef.current = next
+      }
       spreadRaf.current = requestAnimationFrame(step)
     }
 

@@ -20,6 +20,8 @@ const canvasSx = {
   backgroundColor: 'transparent',
   transform: 'translateZ(0)',
   backfaceVisibility: 'hidden' as const,
+  willChange: 'transform',
+  contain: 'strict' as const,
 }
 
 export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {

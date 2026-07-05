@@ -152,6 +152,9 @@ export default function HeroSection({ data }: HeroSectionProps) {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
+            transform: 'translateZ(0)',
+            backfaceVisibility: 'hidden',
+            willChange: 'transform',
           }}
         >
           <source
