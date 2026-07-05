@@ -158,6 +158,7 @@ export default function CTASection({ data }: CTASectionProps) {
         loop
         muted
         playsInline
+        preload="none"
         style={{
           position: 'absolute',
           inset: 0,

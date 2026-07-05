@@ -216,6 +216,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
         loop
         muted
         playsInline
+        preload="none"
         aria-hidden
         sx={{
           position: 'absolute',

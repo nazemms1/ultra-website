@@ -129,37 +129,35 @@ export default function HeroSection({ data }: HeroSectionProps) {
         flexDirection: 'column',
       }}
     >
-      {(!data || data.background_video?.url) && (
+      <Box
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          height: '100%',
+          width: '100%',
+          overflow: 'hidden',
+          zIndex: 0,
+        }}
+      >
         <Box
-          sx={{
-            position: 'absolute',
-            inset: 0,
-            height: '100%',
+          component="video"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          style={{
             width: '100%',
-            overflow: 'hidden',
-            zIndex: 0,
+            height: '100%',
+            objectFit: 'cover',
           }}
         >
-          <Box
-            component="video"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            style={{
-              width: '100%',
-              height: '100%',
-              objectFit: 'cover',
-            }}
-          >
-            <source
-              src={data?.background_video?.url || '/videos/hero.mp4'}
-              type="video/mp4"
-            />
-          </Box>
+          <source
+            src={data?.background_video?.url || '/videos/hero.mp4'}
+            type="video/mp4"
+          />
         </Box>
-      )}
+      </Box>
 
       <Box
         sx={() => ({

@@ -14,11 +14,11 @@ type WaitForPageMediaOptions = {
 }
 
 const DEFAULT_MIN_DURATION_MS = 900
-const DEFAULT_MAX_DURATION_MS = 14_000
-const DEFAULT_SETTLE_MS = 120
-const DEFAULT_PER_ASSET_TIMEOUT_MS = 8_000
+const DEFAULT_MAX_DURATION_MS = 4_000
+const DEFAULT_SETTLE_MS = 80
+const DEFAULT_PER_ASSET_TIMEOUT_MS = 3_000
 /** Resolve DOM wait when no img/video appears (e.g. lightweight routes). */
-const DEFAULT_EMPTY_DOM_RESOLVE_MS = 2_500
+const DEFAULT_EMPTY_DOM_RESOLVE_MS = 1_500
 
 /** `HTMLMediaElement.HAVE_CURRENT_DATA` — literal avoids SSR ReferenceError. */
 const VIDEO_READY_STATE = 2
@@ -110,13 +110,16 @@ async function preloadVideo(src: string, timeoutMs: number): Promise<void> {
 }
 
 async function waitForCriticalAssets(timeoutMs: number): Promise<void> {
-  const isMobile = shouldDisableScrollVideo()
-
   const tasks = [
-    ...(!isMobile ? SPLASH_CRITICAL_VIDEOS.map(src => preloadVideo(src, timeoutMs)) : []),
+    ...SPLASH_CRITICAL_VIDEOS.map(src => preloadVideo(src, timeoutMs)),
     ...SPLASH_CRITICAL_IMAGES.map(src => preloadImage(src, timeoutMs)),
-    ...(!isMobile ? [withTimeout(preloadScrollFramesForSplash(), timeoutMs)] : []),
   ]
+
+  // Start frame preload in the background — don't block splash dismissal
+  if (!shouldDisableScrollVideo()) {
+    void preloadScrollFramesForSplash()
+  }
+
   return Promise.all(tasks).then(() => undefined)
 }
 

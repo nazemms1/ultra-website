@@ -1,6 +1,5 @@
 export async function fetchAPI(endpoint: string, locale: string) {
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || 'http://127.0.0.1:8000'
-  console.log('API Base URL:', baseUrl)
   const url = `${baseUrl}${endpoint}`
 
   try {
@@ -9,7 +8,7 @@ export async function fetchAPI(endpoint: string, locale: string) {
         'Accept-Language': locale,
         'Content-Type': 'application/json',
       },
-      cache: 'no-store',
+      next: { revalidate: 60 },
     })
 
     if (!response.ok) {
