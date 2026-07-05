@@ -146,14 +146,14 @@ export default function HeroSection({ data }: HeroSectionProps) {
             muted
             loop
             playsInline
+            preload="auto"
             style={{
               width: '100%',
               height: '100%',
               objectFit: 'cover',
             }}
           >
-            <Box
-              component="source"
+            <source
               src={data?.background_video?.url || '/videos/hero.mp4'}
               type="video/mp4"
             />

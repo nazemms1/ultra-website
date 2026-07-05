@@ -47,6 +47,7 @@ export function StaticProjectRow({ project }: StaticProjectRowProps) {
               ? { xs: 150, sm: 220, md: 300 }
               : { xs: 200, sm: 360, md: 480 },
             height: 'auto',
+            aspectRatio: isMobileMockup ? '9/16' : '16/9',
             objectFit: 'contain',
             background: 'transparent',
             transform: isMobileMockup ? 'rotate(3deg)' : 'none',
