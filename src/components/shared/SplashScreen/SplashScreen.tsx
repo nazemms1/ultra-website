@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, type CSSProperties } from 'react'
+import { type CSSProperties } from 'react'
 import { createPortal } from 'react-dom'
 import Box from '@mui/material/Box'
 import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
@@ -41,14 +41,6 @@ const doorHalfBaseStyle: CSSProperties = {
 
 export default function SplashScreen({ isLoading, onExitComplete }: SplashScreenProps) {
   const reducedMotion = useReducedMotion()
-  const [portalTarget, setPortalTarget] = useState<HTMLElement | null>(null)
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setPortalTarget(document.body)
-  }, [])
-
-  if (!portalTarget) return null
 
   return createPortal(
     <SplashLtrShell>
@@ -147,6 +139,6 @@ export default function SplashScreen({ isLoading, onExitComplete }: SplashScreen
         ) : null}
       </AnimatePresence>
     </SplashLtrShell>,
-    portalTarget,
+    document.body,
   )
 }

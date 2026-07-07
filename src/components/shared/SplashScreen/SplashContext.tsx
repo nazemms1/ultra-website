@@ -1,6 +1,6 @@
 'use client'
 
-import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 type SplashContextValue = {
   isSplashComplete: boolean
@@ -10,8 +10,15 @@ type SplashContextValue = {
 const SplashContext = createContext<SplashContextValue | null>(null)
 
 export function SplashProvider({ children }: { children: React.ReactNode }) {
+  // Always start false to match SSR; sync from sessionStorage after mount to avoid hydration mismatch.
   const [isSplashComplete, setIsSplashComplete] = useState(false)
   const markSplashComplete = useCallback(() => setIsSplashComplete(true), [])
+
+  useEffect(() => {
+    if (sessionStorage.getItem('splash_shown') === 'true') {
+      setIsSplashComplete(true)
+    }
+  }, [])
 
   const value = useMemo(
     () => ({ isSplashComplete, markSplashComplete }),

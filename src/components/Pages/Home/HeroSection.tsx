@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef, useState } from 'react'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -52,6 +53,18 @@ export default function HeroSection({ data }: HeroSectionProps) {
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
   const itemVariants = makeItemVariants(isRtl)
+
+  // Track whether the entrance animation has already fired so it never re-hides.
+  // Initialise to true if splash was already complete at mount (returning visitor).
+  const hasAnimatedRef = useRef(splashComplete)
+  const [heroVisible, setHeroVisible] = useState(splashComplete)
+
+  useEffect(() => {
+    if (splashComplete && !hasAnimatedRef.current) {
+      hasAnimatedRef.current = true
+      setHeroVisible(true)
+    }
+  }, [splashComplete])
 
   const renderTitle = (title?: string) => {
     if (!title) {
@@ -198,7 +211,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           component={motion.div}
           variants={containerVariants}
           initial="hidden"
-          animate={splashComplete ? 'visible' : 'hidden'}
+          animate={heroVisible ? 'visible' : 'hidden'}
           sx={{
             display: 'flex',
             flexDirection: 'column',
