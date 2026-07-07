@@ -1,116 +1,157 @@
-# 🚀 Repository Ready!
+# Ultrawares Website
 
-Hello there, the repository is set up and ready to go. Below is everything you need to know about our branch structure and how to work with it day-to-day.
+## Overview
 
-## 🌳 Branch Structure
+Frontend application for the **Ultrawares company website** — showcasing services, projects, and portfolio with rich animations and multi-language support.
 
-| Branch        | Purpose                                                                                                                                                                                                     |
-| ------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `main`        | Stable states of the project. Only tested, working code lives here.                                                                                                                                         |
-| `dev`         | The non-stable, always-updating version. This is where ongoing work gets merged before it's considered stable.                                                                                              |
-| `prod`        | The final release version — what actually goes out to the public.                                                                                                                                           |
-| `feat-<name>` | Feature branches. Create one any time you're working on something that should be isolated from the rest (a new feature, a fix, an experiment, anything). Replace `<name>` with whatever describes the work. |
+- **Related systems:** Ultrawares backend API
+- **Target users:** Public / Customers
 
-### A quick model
+---
+
+## Tech Stack
+
+| Layer | Technology | Version |
+|---|---|---|
+| Framework | Next.js | 16.0.0 |
+| Language | TypeScript | 5.7.0 |
+| Runtime | React | 19.0.0 |
+| State Management | React Context API | — |
+| UI Library | MUI (Material UI) | 9.1.1 |
+| Styling | Emotion (CSS-in-JS) | 11.14.x |
+| Animations | Framer Motion | 12.40.0 |
+| i18n | next-intl | 4.8.3 |
+| Package Manager | pnpm | 10.12.1 |
+
+---
+
+## Project Structure
 
 ```
-feat-whatever  →  dev  →  main  →  prod
-   (build)      (test)  (stable) (release)
+src/
+├── app/
+│   └── [locale]/           # Locale-aware routing (next-intl)
+│       ├── page.tsx
+│       ├── about/
+│       ├── contact/
+│       ├── services/
+│       ├── projects/
+│       │   └── [id]/
+│       └── gallery/
+├── components/
+│   ├── Layout/             # Navbar, Footer, AppShell
+│   ├── Pages/              # Page-level section components
+│   │   ├── Home/
+│   │   ├── About/
+│   │   ├── Service/
+│   │   ├── Projects/
+│   │   ├── ProjectDetails/
+│   │   └── Gallery/
+│   └── shared/             # Reusable UI atoms (buttons, splash screen, etc.)
+├── providers/              # AppProviders, Theme
+├── theme/                  # MUI theme, palette, typography, global styles
+├── lib/                    # API utilities, theme helpers
+└── i18n/                   # Routing and request config
 ```
 
-Work happens in feature branches, gets merged into `dev` for integration, proves itself stable on `main`, and eventually ships via `prod`.
+---
 
-## 🛠️ Getting Started
+## Backend Reference
 
-Clone the repo and check out `dev` to start working:
+- **Backend Repo:** https://gitlab.ultrawares.com/ultrawares/ultrawares-project/new-website-frontend.git
+- **API Base URL (Dev):** `https://newwebsite-dev-back.ultrawares.com`
+- **Authentication Method:** —
+
+Environments: **Staging** (dev branch auto-deploy)
+
+---
+
+## Environment Variables
+
+```env
+NEXT_PUBLIC_BASE_URL=https://newwebsite-dev-back.ultrawares.com
+```
+
+---
+
+## Run Locally
 
 ```bash
-git clone https://gitlab.ultrawares.com/ultrawares/ultrawares-project/new-website-frontend.git
-cd new-website-frontend
-git checkout dev
-git pull origin dev
+pnpm install
+pnpm dev
 ```
 
-## ✨ Creating a Feature Branch
-
-When you're about to start work on something new, branch off of `dev`:
+Other available scripts:
 
 ```bash
-git checkout dev
-git pull origin dev
-git checkout -b feat-your-feature-name
+pnpm build        # Production build
+pnpm start        # Start production server
+pnpm lint         # Run ESLint
+pnpm lint:fix     # Fix lint issues
+pnpm format       # Format with Prettier
+pnpm typecheck    # TypeScript type checking
 ```
 
-Push it up so others can see it / collaborate:
+---
+
+## CI/CD & Branches
+
+### Pipeline Tool: GitLab CI
+
+| Branch | Environment | CI/CD |
+|--------|-------------|-------|
+| `main` | Stable / Production-ready | Manual merge only |
+| `prod` | Production release | — |
+| `dev` | Staging | Auto-deploy on push (port 3000) |
+
+
+Flow:
+
+```
+feat-*  →  dev  →  main  →  prod
+(build)  (test) (stable) (release)
+```
+
+- CI runner tagged: `server17`
+- Deploy command: `docker compose up -d --build`
+- Unused images pruned after each deploy
+
+---
+
+## Docker & Deployment
+
+Multi-stage Dockerfile (Builder + Runner) using Node 24 slim.
 
 ```bash
-git push -u origin feat-your-feature-name
+docker compose -p <project>-<branch> up -d --build
 ```
 
-## 🔄 Keeping Your Feature Branch Up to Date
+| Setting | Value |
+|---|---|
+| Internal port | 3000 |
+| Docker network | `ultrawares-net` (external) |
+| Security | Caps dropped, no-new-privileges, read-only FS |
 
-If `dev` has moved on while you've been working, rebase or merge to stay current:
+---
 
-```bash
-git checkout feat-your-feature-name
-git fetch origin
-git merge origin/dev
-```
+## Persistent Storage
 
-(Use `git rebase origin/dev` instead of `merge` if you prefer a cleaner linear history — just be careful rebasing if others are also working on the same branch.)
+This is a stateless Next.js frontend — no persistent volumes required.  
+All assets are served from the built image. Uploads and media are managed by the backend.
 
-## ✅ Merging Your Work Back Into `dev`
+---
 
-Once your feature is done and tested:
+## Ownership
 
-```bash
-git checkout dev
-git pull origin dev
-git merge feat-your-feature-name
-git push origin dev
-```
+- **Team:** Frontend Team
+- **Maintainer:** Nazem Almsouti
 
-Or, preferably, open a **Merge Request** on GitLab targeting `dev` so the team can review before it lands.
+---
 
-## 🧹 Cleaning Up After Merge
+## Notes
 
-Once your feature branch has been merged and is no longer needed:
-
-```bash
-git branch -d feat-your-feature-name
-git push origin --delete feat-your-feature-name
-```
-
-## 📌 Quick Reference Cheat Sheet
-
-```bash
-# Start a new feature
-git checkout dev && git pull origin dev && git checkout -b feat-my-feature
-
-# Push a new feature branch
-git push -u origin feat-my-feature
-
-# Update your feature branch with latest dev
-git fetch origin && git merge origin/dev
-
-# Merge feature into dev (after MR approval, or directly if solo)
-git checkout dev && git pull origin dev && git merge feat-my-feature && git push origin dev
-
-# Delete a finished feature branch (local + remote)
-git branch -d feat-my-feature && git push origin --delete feat-my-feature
-
-# Check which branch you're on
-git branch --show-current
-
-# See all branches (local + remote)
-git branch -a
-```
-
-## 🧭 A Few Ground Rules
-
-- Never push directly to `main` or `prod` — these should only be updated through reviewed merges (or release processes), to keep them stable.
-- All new work starts from `dev`, not `main`.
-- Name feature branches descriptively: `feat-login-page`, `feat-fix-payment-bug`, `feat-dark-mode`, etc. — anything goes after `feat-`, just make it clear what it's for.
-- Delete your feature branch once it's merged to keep things tidy.
-
-That's it — happy coding! 🎉 If anything about the workflow is unclear, just ask.
+- RTL support configured via `stylis-plugin-rtl` for Arabic locale.
+- Splash screen uses a custom `SplashContext` with asset-readiness detection before dismissal.
+- Video frames are extracted at build time via `scripts/extract-video-frames.mjs` using `ffmpeg-static`.
+- `.env` file must exist before running locally — use the `NEXT_PUBLIC_BASE_URL` value from docker-compose args as reference.
+- Never push directly to `main` or `prod` — all changes go through reviewed merge requests targeting `dev`.
