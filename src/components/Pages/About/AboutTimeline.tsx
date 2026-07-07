@@ -4,7 +4,77 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { motion } from 'framer-motion'
+import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+
+function parseNumericValue(raw: string | number): { numeric: number; prefix: string; suffix: string } {
+  const str = String(raw).trim()
+  const match = str.match(/^([^\d]*)(\d+(?:\.\d+)?)([^\d]*)$/)
+  if (!match) return { numeric: 0, prefix: '', suffix: str }
+  return { numeric: parseFloat(match[2]), prefix: match[1], suffix: match[3] }
+}
+
+interface AnimatedCounterProps {
+  value: string | number
+  symbol?: string
+  sx?: object
+}
+
+function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
+  const { numeric, prefix, suffix } = parseNumericValue(value)
+  const isDecimal = !Number.isInteger(numeric)
+
+  const motionVal = useMotionValue(0)
+  const displayed = useTransform(motionVal, v =>
+    prefix + (isDecimal ? v.toFixed(1) : Math.round(v).toString()) + suffix + symbol
+  )
+  const [hovered, setHovered] = useState(false)
+  const controlRef = useRef<ReturnType<typeof animate> | null>(null)
+  const hasRunRef = useRef(false)
+
+  const runAnimation = () => {
+    if (controlRef.current) controlRef.current.stop()
+    motionVal.set(0)
+    controlRef.current = animate(motionVal, numeric, {
+      duration: 1.4,
+      ease: [0.16, 1, 0.3, 1],
+    })
+  }
+
+  // Run on first in-view (triggered by parent whileInView) via a small delay
+  useEffect(() => {
+    if (!hasRunRef.current) {
+      hasRunRef.current = true
+      const t = setTimeout(runAnimation, 200)
+      return () => clearTimeout(t)
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const handleMouseEnter = () => {
+    setHovered(true)
+    runAnimation()
+  }
+
+  const handleMouseLeave = () => setHovered(false)
+
+  return (
+    <Typography
+      component="span"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      sx={{
+        display: 'inline-block',
+        cursor: 'default',
+        transition: 'filter 0.2s ease',
+        filter: hovered ? 'drop-shadow(0 0 8px rgba(13,241,217,0.7))' : 'none',
+        ...sx,
+      }}
+    >
+      <motion.span>{displayed}</motion.span>
+    </Typography>
+  )
+}
 
 interface AboutTimelineProps {
   statisticsData: any
@@ -188,7 +258,9 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                         >
                           {item.values.map((val: any, vIdx: number) => (
                             <Box key={vIdx} sx={{ textAlign: 'right', minWidth: '90px' }}>
-                              <Typography
+                              <AnimatedCounter
+                                value={val.value}
+                                symbol={val.symbol}
                                 sx={{
                                   fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                                   fontSize: { md: '26px', lg: '30px' },
@@ -196,10 +268,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                                   fontWeight: 700,
                                   lineHeight: 1,
                                 }}
-                              >
-                                {val.value}
-                                {val.symbol}
-                              </Typography>
+                              />
                               <Typography
                                 sx={{
                                   fontFamily: '"Rajdhani", sans-serif',
@@ -242,7 +311,9 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                         >
                           {item.values.map((val: any, vIdx: number) => (
                             <Box key={vIdx} sx={{ textAlign: 'left', minWidth: '90px' }}>
-                              <Typography
+                              <AnimatedCounter
+                                value={val.value}
+                                symbol={val.symbol}
                                 sx={{
                                   fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                                   fontSize: { md: '26px', lg: '30px' },
@@ -250,10 +321,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                                   fontWeight: 700,
                                   lineHeight: 1,
                                 }}
-                              >
-                                {val.value}
-                                {val.symbol}
-                              </Typography>
+                              />
                               <Typography
                                 sx={{
                                   fontFamily: '"Rajdhani", sans-serif',
@@ -315,7 +383,9 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                     <Grid container spacing={2.5}>
                       {item.values.map((val: any, vIdx: number) => (
                         <Grid key={vIdx} size={{ xs: 6 }}>
-                          <Typography
+                          <AnimatedCounter
+                            value={val.value}
+                            symbol={val.symbol}
                             sx={{
                               fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                               fontSize: '20px',
@@ -323,10 +393,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                               fontWeight: 700,
                               lineHeight: 1,
                             }}
-                          >
-                            {val.value}
-                            {val.symbol}
-                          </Typography>
+                          />
                           <Typography
                             sx={{
                               fontFamily: '"Rajdhani", sans-serif',

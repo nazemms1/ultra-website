@@ -38,6 +38,8 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
         : [],
     }))
 
+  if (items.length === 0) return null
+
   return (
     <Box
       sx={{

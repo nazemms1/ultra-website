@@ -77,7 +77,7 @@ export default async function AboutPage({ params }: Props) {
         title={titleText}
         subtitle={subtitleText}
       />
-      <AboutContent aboutData={aboutData} locale={locale} />
+      {aboutData && <AboutContent aboutData={aboutData} locale={locale} />}
       <AboutTimeline statisticsData={aboutData?.statistics} locale={locale} />
       <CTASection data={startProjectData} />
       <ContactSection data={contactUsData} />

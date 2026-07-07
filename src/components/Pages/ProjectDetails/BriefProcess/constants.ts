@@ -42,8 +42,15 @@ export const briefCardSx: SxProps<Theme> = {
   minWidth: 0,
   p: 2.5,
   borderRadius: '25px',
+  border: theme => `1px solid ${alpha(theme.palette.primary.light, 0)}`,
   background: theme =>
     `linear-gradient(180deg, ${alpha(theme.palette.primary.light, 0.08)} 0%, ${alpha(theme.palette.common.black, 0)} 100%)`,
+  transition: 'border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease',
+  '&:hover': {
+    borderColor: theme => alpha(theme.palette.primary.light, 0.25),
+    boxShadow: theme => `0 8px 40px ${alpha(theme.palette.primary.light, 0.1)}`,
+    transform: 'translateY(-4px)',
+  },
 }
 
 export const briefTitleSx: SxProps<Theme> = {
@@ -82,6 +89,12 @@ export const feedbackCardSx: SxProps<Theme> = {
   background: theme =>
     `linear-gradient(216.77deg, ${alpha(theme.palette.primary.light, 0.2)} 5.52%, ${alpha(theme.palette.primary.dark, 0)} 94.31%)`,
   overflow: 'hidden',
+  transition: 'border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease',
+  '&:hover': {
+    borderColor: theme => alpha(theme.palette.primary.light, 0.6),
+    boxShadow: theme => `0 8px 40px ${alpha(theme.palette.primary.light, 0.18)}`,
+    transform: 'translateY(-4px)',
+  },
 }
 
 export const metaCardSx: SxProps<Theme> = {
@@ -90,6 +103,12 @@ export const metaCardSx: SxProps<Theme> = {
   border: theme => `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
   bgcolor: theme => alpha(theme.palette.common.white, 0.02),
   backdropFilter: 'blur(12px)',
+  transition: 'border-color 0.35s ease, box-shadow 0.35s ease, transform 0.35s ease',
+  '&:hover': {
+    borderColor: theme => alpha(theme.palette.primary.light, 0.3),
+    boxShadow: theme => `0 8px 32px ${alpha(theme.palette.primary.light, 0.1)}`,
+    transform: 'translateY(-4px)',
+  },
 }
 
 export const metaLabelSx: SxProps<Theme> = {
@@ -114,4 +133,11 @@ export const toolPillSx: SxProps<Theme> = {
   fontWeight: 500,
   letterSpacing: '0.025em',
   color: theme => alpha(theme.palette.common.white, 0.8),
+  transition: 'border-color 0.25s ease, color 0.25s ease, background 0.25s ease',
+  cursor: 'default',
+  '&:hover': {
+    borderColor: theme => alpha(theme.palette.primary.light, 0.5),
+    color: 'primary.light',
+    background: theme => alpha(theme.palette.primary.light, 0.08),
+  },
 }

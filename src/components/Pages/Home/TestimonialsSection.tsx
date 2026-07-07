@@ -49,9 +49,32 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   const [isMobile, setIsMobile] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const sectionRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
     setIsMobile(shouldDisableScrollVideo())
+  }, [])
+
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          const video = videoRef.current
+          if (video) {
+            video.currentTime = 0
+            video.play().catch(() => {})
+          }
+        }
+      },
+      { threshold: 0.2 }
+    )
+
+    observer.observe(section)
+    return () => observer.disconnect()
   }, [])
 
   if (data?.is_shown === false) return null
@@ -114,6 +137,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   return (
     <Box
+      ref={sectionRef}
       component="section"
       sx={{
         position: 'relative',
@@ -128,6 +152,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     >
       {videoUrl && (
         <Box
+          ref={videoRef}
           component="video"
           autoPlay
           muted

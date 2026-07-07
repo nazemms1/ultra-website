@@ -5,6 +5,7 @@ import { NextIntlClientProvider } from 'next-intl'
 import type { Locale } from 'next-intl'
 import { SplashScreenGate } from '@/components/shared/SplashScreen'
 import ThemeProvider from './Theme'
+import { SmoothScroll } from './SmoothScroll'
 
 type AppProvidersProps = {
   locale: Locale
@@ -16,7 +17,9 @@ export default function AppProviders({ locale, messages, children }: AppProvider
   return (
     <ThemeProvider locale={locale}>
       <NextIntlClientProvider locale={locale} messages={messages}>
-        <SplashScreenGate>{children}</SplashScreenGate>
+        <SplashScreenGate>
+            <SmoothScroll>{children}</SmoothScroll>
+          </SplashScreenGate>
       </NextIntlClientProvider>
     </ThemeProvider>
   )
