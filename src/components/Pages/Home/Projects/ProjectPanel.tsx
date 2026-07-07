@@ -8,7 +8,7 @@ import { useMotionTemplate, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { MotionBox } from './MotionBox'
-import { BLUR_MAX, CLIP_CLOSED, CLIP_OPEN, getPanelRanges } from './constants'
+import { BLUR_MAX, CLIP_OPEN, getPanelRanges } from './constants'
 import type { ProjectPanelProps } from './types'
 
 export default function ProjectPanel({ project, index, total, progress }: ProjectPanelProps) {
@@ -31,24 +31,17 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
   const textExit = imageFirst ? '100%' : '-100%'
 
   // Whole-panel opacity: all cards fade in on enter and fade out on exit.
-  // The first card previously started at opacity=1 while still clip-closed,
-  // causing a black screen before its animation began — now it fades in with
-  // the clip-open animation just like every other card.
+  // First card starts fully visible (opacity=1) so there's no black-screen flash.
   const opacity = useTransform(
     progress,
     hasExit ? [enterStart, enterEnd, exitStart, exitEnd] : [enterStart, enterEnd],
-    hasExit ? [0, 1, 1, 0] : [0, 1],
+    isFirst
+      ? hasExit ? [1, 1, 1, 0] : [1, 1]
+      : hasExit ? [0, 1, 1, 0] : [0, 1],
   )
 
   // Phase 2+: subsequent cards slide up from the bottom as they fade in.
-  const y = useTransform(progress, [enterStart, enterEnd], isFirst ? [0, 0] : [80, 0])
-
-  // Phase 1: the first card "collapses open" from the centre over the title.
-  const clipPath = useTransform(
-    progress,
-    [enterStart, enterEnd],
-    isFirst ? [CLIP_CLOSED, CLIP_OPEN] : [CLIP_OPEN, CLIP_OPEN],
-  )
+  const y = useTransform(progress, [enterStart, enterEnd], isFirst ? [0, 0] : [60, 0])
 
   // Exit split — text + mockup each slide off toward their own edge.
   const textX = useTransform(
@@ -64,16 +57,18 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
 
   // Depth-of-field blur: cards arrive sharp, then blur out as they leave so a
   // transitioning pair never reads as two overlapping screens at once.
+  // First card starts sharp (0 blur) since it's visible from the beginning.
+  const blurEnterValue = isFirst ? 0 : BLUR_MAX
   const blur = useTransform(
     progress,
     hasExit ? [enterStart, enterEnd, exitStart, exitEnd] : [enterStart, enterEnd],
-    hasExit ? [BLUR_MAX, 0, 0, BLUR_MAX] : [BLUR_MAX, 0],
+    hasExit ? [blurEnterValue, 0, 0, BLUR_MAX] : [blurEnterValue, 0],
   )
   const filter = useMotionTemplate`blur(${blur}px)`
 
   return (
     <MotionBox
-      style={{ opacity, y, clipPath, filter }}
+      style={{ opacity, y, filter }}
       sx={{
         position: 'absolute',
         inset: 0,
@@ -81,7 +76,8 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        willChange: 'opacity, transform, clip-path, filter',
+        clipPath: CLIP_OPEN,
+        willChange: 'opacity, transform, filter',
       }}
     >
       <Box

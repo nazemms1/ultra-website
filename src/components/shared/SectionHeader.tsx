@@ -148,8 +148,7 @@ export default function SectionHeader({
             fontSize: 16,
             lineHeight: '24px',
             letterSpacing: 8,
-          
-            textTransform: 'uppercase',
+             textTransform: 'uppercase',
             color: '#0DF1D9',
             wordWrap: 'break-word',
             mx: align === 'center' ? 'auto' : undefined,
