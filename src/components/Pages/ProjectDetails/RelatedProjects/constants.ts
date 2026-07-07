@@ -36,6 +36,7 @@ export function relatedCardSx(theme: Theme, hovered: boolean): SxProps<Theme> {
       content: '""',
       position: 'absolute',
       inset: 0,
+      zIndex: 0,
       background: `linear-gradient(180deg, ${alpha(theme.palette.primary.light, hovered ? 0.22 : 0.15)} 0%, ${alpha(theme.palette.common.black, 0)} 80%)`,
       opacity: 0.8,
       pointerEvents: 'none',
@@ -55,6 +56,7 @@ export const relatedLogoSlotSx: SxProps<Theme> = {
   alignItems: 'center',
   justifyContent: 'center',
   pointerEvents: 'none',
+  zIndex: 1,
 }
 
 export const relatedFooterSx: SxProps<Theme> = {
@@ -62,12 +64,13 @@ export const relatedFooterSx: SxProps<Theme> = {
   insetInline: 0,
   bottom: 0,
   p: 4,
-  backdropFilter: 'blur(25px)',
+  // backdropFilter: 'blur(25px)',
   display: 'flex',
   alignItems: 'flex-end',
   justifyContent: 'space-between',
   gap: 2,
   minHeight: 115,
+  // zIndex: 100,
 }
 
 export const relatedTitleSx: SxProps<Theme> = {

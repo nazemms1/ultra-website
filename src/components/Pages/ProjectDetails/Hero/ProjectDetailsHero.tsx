@@ -20,6 +20,7 @@ const DEFAULT_VIDEO_SRC = '/videos/colorflow-animation (3).mp4'
 export default function ProjectDetailsHero({ project }: ProjectDetailsHeroProps) {
   const theme = useTheme()
   const t = useTranslations('ProjectDetails')
+  const btnSx = visitButtonSx(theme) as object
 
   const metaLabel = `${project.metaCategory} · ${project.year}`
   const videoSrc = project.backgroundVideo || DEFAULT_VIDEO_SRC
@@ -32,7 +33,7 @@ export default function ProjectDetailsHero({ project }: ProjectDetailsHeroProps)
           href={project.websiteUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={visitButtonSx}
+          sx={btnSx}
         >
           {t('visitWebsite')}
           <Link2 size={20} color="currentColor" strokeWidth={1.75} />
@@ -45,7 +46,7 @@ export default function ProjectDetailsHero({ project }: ProjectDetailsHeroProps)
           href={project.googlePlayUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={visitButtonSx}
+          sx={btnSx}
         >
           {t('googlePlay')}
           <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>
@@ -62,7 +63,7 @@ export default function ProjectDetailsHero({ project }: ProjectDetailsHeroProps)
           href={project.appleStoreUrl}
           target="_blank"
           rel="noopener noreferrer"
-          sx={visitButtonSx}
+          sx={btnSx}
         >
           {t('appStore')}
           <Box component="span" sx={{ display: 'inline-flex', alignItems: 'center' }}>

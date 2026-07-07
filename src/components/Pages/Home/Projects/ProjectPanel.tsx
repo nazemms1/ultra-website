@@ -30,17 +30,14 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
   const imageExit = imageFirst ? '-100%' : '100%'
   const textExit = imageFirst ? '100%' : '-100%'
 
-  // Whole-panel opacity: incoming cards fade in, outgoing cards fade out.
+  // Whole-panel opacity: all cards fade in on enter and fade out on exit.
+  // The first card previously started at opacity=1 while still clip-closed,
+  // causing a black screen before its animation began — now it fades in with
+  // the clip-open animation just like every other card.
   const opacity = useTransform(
     progress,
-    isFirst
-      ? hasExit
-        ? [0, exitStart, exitEnd]
-        : [0, 1]
-      : hasExit
-        ? [enterStart, enterEnd, exitStart, exitEnd]
-        : [enterStart, enterEnd],
-    isFirst ? (hasExit ? [1, 1, 0] : [1, 1]) : hasExit ? [0, 1, 1, 0] : [0, 1],
+    hasExit ? [enterStart, enterEnd, exitStart, exitEnd] : [enterStart, enterEnd],
+    hasExit ? [0, 1, 1, 0] : [0, 1],
   )
 
   // Phase 2+: subsequent cards slide up from the bottom as they fade in.
@@ -70,7 +67,7 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
   const blur = useTransform(
     progress,
     hasExit ? [enterStart, enterEnd, exitStart, exitEnd] : [enterStart, enterEnd],
-    hasExit ? [isFirst ? 0 : BLUR_MAX, 0, 0, BLUR_MAX] : [isFirst ? 0 : BLUR_MAX, 0],
+    hasExit ? [BLUR_MAX, 0, 0, BLUR_MAX] : [BLUR_MAX, 0],
   )
   const filter = useMotionTemplate`blur(${blur}px)`
 

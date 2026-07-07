@@ -156,7 +156,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           component="video"
           autoPlay
           muted
-          loop
+         
           playsInline
           sx={{
             position: 'absolute',

@@ -4,7 +4,7 @@ import type { SxProps } from '@mui/material/styles'
 
 export const demoSectionSx: SxProps<Theme> = {
   width: '100%',
-  pt: { xs: 6, md: 8 },
+  pt: { xs: 6, md: 0},
   pb: { xs: 6, md: 8 },
 }
 

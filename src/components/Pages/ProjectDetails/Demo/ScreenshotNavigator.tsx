@@ -26,37 +26,38 @@ export default function ScreenshotNavigator({
   const thumbTop = trackHeight > 0 ? (thumbOffset / trackHeight) * 100 : 0
 
   return (
-    <Box sx={screenshotPanelSx}>
-      <Typography sx={screenshotTitleSx}>Screenshots</Typography>
-
-      <Box sx={{ display: 'flex', gap: 1.875, alignItems: 'flex-start' }}>
-        {screenshots.length > 1 && (
+    <Box sx={{ ...screenshotPanelSx, display: 'flex', gap: 1.875, alignItems: 'flex-start' }}>
+      {/* Scroll indicator — left edge */}
+      {screenshots.length > 1 && (
+        <Box
+          sx={{
+            position: 'relative',
+            width: 6,
+            height: trackHeight,
+            borderRadius: '50px',
+            bgcolor: alpha(theme.palette.common.white, 0.2),
+            opacity: 0.5,
+            flexShrink: 0,
+            mt: '52px', // align with first thumb (title height)
+          }}
+        >
           <Box
             sx={{
-              position: 'relative',
-              width: 6,
-              height: trackHeight,
-              borderRadius: '50px',
-              bgcolor: alpha(theme.palette.common.white, 0.2),
-              opacity: 0.5,
-              flexShrink: 0,
+              position: 'absolute',
+              insetInlineStart: 0,
+              width: '100%',
+              top: `${thumbTop}%`,
+              height: `${thumbRatio}%`,
+              borderRadius: 'inherit',
+              bgcolor: 'primary.light',
+              transition: 'top 0.35s ease, height 0.35s ease',
             }}
-          >
-            <Box
-              sx={{
-                position: 'absolute',
-                insetInlineStart: 0,
-                width: '100%',
-                top: `${thumbTop}%`,
-                height: `${thumbRatio}%`,
-                borderRadius: 'inherit',
-                bgcolor: 'primary.light',
-                transition: 'top 0.35s ease, height 0.35s ease',
-              }}
-            />
-          </Box>
-        )}
+          />
+        </Box>
+      )}
 
+      <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Typography sx={screenshotTitleSx}>Screenshots</Typography>
         <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
           {screenshots.map((shot, index) => (
             <Box

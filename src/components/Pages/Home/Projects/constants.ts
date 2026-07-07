@@ -9,17 +9,17 @@ import type { PanelRanges } from './types'
 /** The whole pinned wrapper fades in over this window — and reverses on the way out the top. */
 export const SECTION_FADE_IN: readonly [number, number] = [0, 0.01]
 
-/** Phase 0: title rises + fades in from the bottom. */
-export const TITLE_RISE: readonly [number, number] = [0.04, 0.12]
+/** Phase 0: label is already pinned — no rise animation. */
+export const TITLE_RISE: readonly [number, number] = [0, 0.01]
 
-/** Title fades back out as the first project collapses open over it. */
-export const TITLE_FADE_OUT: readonly [number, number] = [0.12, 0.22]
+/** Title sub-heading fades out instantly as projects begin. */
+export const TITLE_FADE_OUT: readonly [number, number] = [0, 0.04]
 
 /** "Our Portfolio" label slides from the title block to the pinned section top. */
 export const LABEL_PIN: readonly [number, number] = TITLE_FADE_OUT
 
 /** Point at which the first project begins to reveal — projects own [START, 1]. */
-const TIMELINE_START = 0.12
+const TIMELINE_START = 0.04
 
 /** Fraction of each project's segment spent entering (and the previous one exiting). */
 const ENTER_FRACTION = 0.5

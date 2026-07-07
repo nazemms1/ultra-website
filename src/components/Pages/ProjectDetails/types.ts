@@ -44,6 +44,7 @@ export interface RelatedProjectCard {
   readonly title: string
   readonly description: string
   readonly logo: ProjectDetailLogo
+  readonly logoFlip?: ProjectDetailLogo | null
 }
 
 /** Content for a single project detail page. */

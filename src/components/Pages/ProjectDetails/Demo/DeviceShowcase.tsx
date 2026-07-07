@@ -96,13 +96,13 @@ function ScrollHintOverlay({ visible, onDismiss }: { visible: boolean; onDismiss
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 4 }}
-          transition={{ duration: 0.3, ease: 'easeOut' }}
+          transition={{ duration: 0.1, ease: 'easeOut' }}
           onClick={onDismiss}
           style={{
             position: 'absolute',
-            bottom: 14,
-            left: '50%',
-            transform: 'translateX(-50%)',
+            top: '50%',
+            right: -48,
+            transform: 'translateY(-50%)',
             zIndex: 20,
             display: 'flex',
             flexDirection: 'column',
@@ -115,8 +115,8 @@ function ScrollHintOverlay({ visible, onDismiss }: { visible: boolean; onDismiss
           {/* Track */}
           <Box
             sx={{
-              width: 24,
-              height: 40,
+              width: 30,
+              height: 50,
               borderRadius: '12px',
               border: '1.5px solid rgba(13, 241, 217, 0.55)',
               background: 'rgba(0,0,0,0.45)',
@@ -293,17 +293,16 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
           alt={screenshot.alt}
           sx={{ width: '100%', height: 'auto', display: 'block' }}
         />
-
-        {/* Bottom fade gradient */}
-        <Box
+ 
+         <Box
           aria-hidden
           sx={{
             position: 'sticky',
             bottom: 0,
             left: 0,
             right: 0,
-            height: 48,
-            mt: '-48px',
+            height: 148,
+            mt: ' 38px',
             borderRadius: '0 0 32px 32px',
             background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)',
             pointerEvents: 'none',

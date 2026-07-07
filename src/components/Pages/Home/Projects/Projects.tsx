@@ -199,7 +199,7 @@ export default function Projects({ data }: { data?: any }) {
       id="projects"
       ref={trackRef}
       aria-label="Explore our projects in action"
-      sx={{ position: 'relative', height: '300vh' }}
+      sx={{ position: 'relative', height: '300vh', mt: { xs: -6, md: -8 } }}
     >
       <MotionBox
         ref={stickyRef}

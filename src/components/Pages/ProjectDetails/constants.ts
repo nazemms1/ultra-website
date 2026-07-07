@@ -1,10 +1,13 @@
 import type { SxProps, Theme } from '@mui/material/styles'
-import { sectionMaxWidthSx } from '@/lib/theme/surfaces'
 
-/** Figma Container (margin) — max 1280px centered shell */
+/** Matches PageHero horizontal padding */
 export const sectionShellSx: SxProps<Theme> = {
-  ...sectionMaxWidthSx,
-  px: { xs: 3, sm: 4 },
+  width: '100%',
+  maxWidth: 1920,
+  mx: 'auto',
+  position: 'relative',
+  zIndex: 1,
+  px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
 }
 
 export const sectionHeadingSx: SxProps<Theme> = {

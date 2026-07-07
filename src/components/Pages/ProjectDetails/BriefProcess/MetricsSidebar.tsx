@@ -42,9 +42,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
       <Box
         component={motion.div}
         variants={itemVariants}
-        sx={{
-          ...feedbackCardSx,
-        }}
+        sx={feedbackCardSx(theme)}
       >
         <CornerBrackets inset={12} />
         <Typography sx={metaLabelSx}>Feedback</Typography>
@@ -99,9 +97,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
       <Box
         component={motion.div}
         variants={itemVariants}
-        sx={{
-          ...metaCardSx,
-        }}
+        sx={metaCardSx(theme)}
       >
         <Typography sx={metaLabelSx}>Services Deployed</Typography>
         <Stack spacing={1.5} sx={{ pt: 2 }}>
@@ -134,9 +130,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
       <Box
         component={motion.div}
         variants={itemVariants}
-        sx={{
-          ...metaCardSx,
-        }}
+        sx={metaCardSx(theme)}
       >
         <Typography sx={metaLabelSx}>Used tools</Typography>
         <Box

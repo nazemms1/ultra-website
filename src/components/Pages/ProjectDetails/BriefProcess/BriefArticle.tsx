@@ -2,6 +2,7 @@
 
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import { useTheme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import type { BriefBlock } from '../types'
 import { briefBodySx, briefCardSx, briefNumberSx, briefTitleSx } from './constants'
@@ -12,6 +13,7 @@ type BriefArticleProps = {
 }
 
 export default function BriefArticle({ block, index }: BriefArticleProps) {
+  const theme = useTheme()
   return (
     <Box
       component={motion.article}
@@ -25,7 +27,7 @@ export default function BriefArticle({ block, index }: BriefArticleProps) {
         {block.number}
       </Typography>
 
-      <Box sx={briefCardSx}>
+      <Box sx={briefCardSx(theme)}>
         <Typography component="h2" sx={briefTitleSx}>
           {block.title}
         </Typography>

@@ -1,7 +1,7 @@
 import type { Theme } from '@mui/material/styles'
 import { alpha } from '@mui/material/styles'
 import type { SxProps } from '@mui/material/styles'
-import { glassSurface } from '@/lib/theme/surfaces'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 /** Figma node 4256:3949 — section shell */
 export const heroSectionSx: SxProps<Theme> = {
@@ -83,7 +83,7 @@ export const descriptionSx: SxProps<Theme> = {
 }
 
 /** Figma node 4256:3972 — visit website CTA */
-export const visitButtonSx: SxProps<Theme> = {
+export const visitButtonSx = (theme: Theme): SxProps<Theme> => ({
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
@@ -91,8 +91,7 @@ export const visitButtonSx: SxProps<Theme> = {
   px: { xs: 2.5, md: '30.97px' },
   py: { xs: 1.25, md: '15.485px' },
   borderRadius: '100px',
-  border: theme => `0.774px solid ${alpha(theme.palette.common.white, 0.2)}`,
-  bgcolor: 'transparent',
+  ...cardGlassSurface(theme, { radius: '100px' }),
   color: 'text.primary',
   fontFamily: "'Rajdhani', sans-serif",
   fontSize: { xs: 16, md: 18 },
@@ -104,17 +103,15 @@ export const visitButtonSx: SxProps<Theme> = {
   transition:
     'border-color 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease, transform 0.3s ease',
   '&:hover': {
-    borderColor: theme => alpha(theme.palette.primary.light, 0.5),
-    bgcolor: theme => alpha(theme.palette.primary.main, 0.08),
-    boxShadow: theme => `0 0 24px ${alpha(theme.palette.primary.light, 0.2)}`,
+    borderColor: alpha(theme.palette.primary.light, 0.5),
+    background: `linear-gradient(135deg, ${alpha(theme.palette.primary.light, 0.12)} 0%, ${alpha(theme.palette.primary.main, 0.06)} 100%)`,
+    boxShadow: `0 0 24px ${alpha(theme.palette.primary.light, 0.2)}`,
     transform: 'translateY(-1px)',
   },
-}
+})
 
 /** Figma node 4256:3979 — frosted logo card */
 export function logoCardSx(theme: Theme) {
-  const glass = glassSurface(theme, { radius: '40px', tint: 0.06 })
-
   return {
     position: 'relative',
     display: 'flex',
@@ -124,11 +121,7 @@ export function logoCardSx(theme: Theme) {
     maxWidth: 286,
     minHeight: { xs: 140, sm: 170 },
     p: '15.36px',
-    borderRadius: '40px',
-    border: `1px solid ${alpha(theme.palette.common.white, 0.08)}`,
-    backdropFilter: 'blur(20px)',
-    WebkitBackdropFilter: 'blur(20px)',
-    background: glass.background,
+    ...cardGlassSurface(theme, { radius: '40px' }),
     boxShadow: `0 0 40px 0 ${alpha(theme.palette.primary.light, 0.4)}`,
   } satisfies SxProps<Theme>
 }

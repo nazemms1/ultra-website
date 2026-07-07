@@ -379,6 +379,21 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
       tools,
     },
     demoViews,
-    relatedProjects: [],
+    relatedProjects: Array.isArray(apiData.related_projects)
+      ? apiData.related_projects.map((rp: any) => ({
+          id: String(rp.id),
+          title: rp.title || '',
+          description: rp.subtitle || '',
+          logo: {
+            src: rp.logo?.url || rp.image?.url || '',
+            alt: `${rp.title || ''} logo`,
+            width: 200,
+            height: 87,
+          },
+          logoFlip: rp.logo_flip?.url
+            ? { src: rp.logo_flip.url, alt: `${rp.title || ''} logo flip`, width: 200, height: 87 }
+            : null,
+        }))
+      : [],
   }
 }
