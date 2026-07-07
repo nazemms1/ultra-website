@@ -61,9 +61,9 @@ export default function Methodologies({ data }: MethodologiesProps) {
   })
 
   const progress = useSpring(scrollYProgress, {
-    stiffness: 90,
-    damping: 28,
-    mass: 0.35,
+    stiffness: 400,
+    damping: 45,
+    mass: 0.1,
     restDelta: 0.0005,
   })
 
@@ -111,7 +111,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
       id="methodologies"
       ref={trackRef}
       // aria-label="How we turn ideas into reality"
-      sx={{ position: 'relative', height: '1200vh' }}
+      sx={{ position: 'relative', height: '250vh' }}
     >
       <Box
         sx={{

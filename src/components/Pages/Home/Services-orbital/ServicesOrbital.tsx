@@ -16,6 +16,7 @@ import AnimatedButton from '@/components/shared/AnimatedButton'
 import { shouldDisableScrollVideo } from '../ScrollVideoStack/deviceUtils'
 
 const EASE = [0.22, 1, 0.36, 1] as const
+const SLIDE_EASE = [0.16, 1.1, 0.3, 1] as const
 const PANEL_TRANSITION = { duration: 0.48, ease: EASE } as const
 const LAYOUT_TRANSITION = { layout: { duration: 0.55, ease: EASE } } as const
 
@@ -384,10 +385,10 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           <Grid size={{ xs: 12, lg: 6 }}>
             <Box
               component={motion.div}
-              initial={{ opacity: 0, x: isRtl ? 60 : -60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.8, ease: EASE }}
+              initial={{ opacity: 0, x: isRtl ? 80 : -80, scale: 0.95 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 0.9, ease: SLIDE_EASE }}
               sx={{
                 maxWidth: 576,
                 ml: { xs: 'auto', lg: 8, xl: 'calc(max((100vw - 1920px) / 2 + 220px, 6px))' },
@@ -608,10 +609,10 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           <Grid size={{ xs: 12, lg: 6 }}>
             <Box
               component={motion.div}
-              initial={{ opacity: 0, x: 60 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true, amount: 0.2 }}
-              transition={{ duration: 0.8, ease: EASE, delay: 0.1 }}
+              initial={{ opacity: 0, x: 100, scale: 0.92 }}
+              whileInView={{ opacity: 1, x: 0, scale: 1 }}
+              viewport={{ once: true, amount: 0.1 }}
+              transition={{ duration: 1.0, ease: SLIDE_EASE, delay: 0.12 }}
               sx={{
                 display: 'flex',
                 alignItems: 'center',

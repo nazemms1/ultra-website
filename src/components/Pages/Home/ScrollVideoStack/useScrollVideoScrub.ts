@@ -44,7 +44,8 @@ function edgeFadeFactor(value: number) {
 
 function frameIndexFromProgress(value: number, count: number) {
   if (count <= 1) return 0
-  return Math.min(Math.floor(clampProgress(value) * (count - 1)), count - 1)
+  const fast = clampProgress(value * 1.0)
+  return Math.min(Math.floor(fast * (count - 1)), count - 1)
 }
 
 function readDevicePixelRatio() {
