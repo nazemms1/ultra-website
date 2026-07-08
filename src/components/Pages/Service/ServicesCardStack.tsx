@@ -581,10 +581,14 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
       }}
     >
       <Box
+        component={motion.div}
+        whileHover={{ scale: 1.012 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 22 }}
         sx={{
           position: 'relative',
           width: '100%',
           p: { xs: 3.5, md: 5.5 },
+          cursor: 'default',
           ...glassSurface(theme, { radius: '24px' }),
           background: `linear-gradient(90deg, ${alpha(theme.palette.primary.main, 0.06)} 0%, ${alpha(theme.palette.primary.main, 0.015)} 45%, rgba(0, 0, 0, 0.4) 75%, rgba(0, 0, 0, 0.7) 100%)`,
           borderColor: alpha(theme.palette.primary.main, 0.2),
@@ -593,6 +597,16 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
             `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.25)}`,
             `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
           ].join(', '),
+          transition: 'border-color 0.3s, box-shadow 0.3s',
+          '&:hover': {
+            borderColor: alpha(theme.palette.primary.main, 0.55),
+            boxShadow: [
+              `0 40px 80px ${alpha(theme.palette.common.black, 0.65)}`,
+              `0 0 40px ${alpha(theme.palette.primary.main, 0.12)}`,
+              `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.45)}`,
+              `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+            ].join(', '),
+          },
           display: 'flex',
           flexDirection: { xs: 'column', md: 'row' },
           alignItems: 'center',
@@ -625,6 +639,9 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
 
         {/* Left Side: 3D Illustration */}
         <Box
+          component={motion.div}
+          whileHover={{ y: -8, rotate: 2 }}
+          transition={{ type: 'spring', stiffness: 200, damping: 18 }}
           sx={{
             width: { xs: 160, md: 280 },
             height: { xs: 160, md: 280 },

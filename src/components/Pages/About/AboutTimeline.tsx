@@ -4,7 +4,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
-import { motion, useMotionValue, useTransform, animate } from 'framer-motion'
+import { motion, useMotionValue, useTransform, animate, useInView } from 'framer-motion'
 import { useEffect, useRef, useState } from 'react'
 
 function parseNumericValue(raw: string | number): { numeric: number; prefix: string; suffix: string } {
@@ -31,6 +31,8 @@ function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
   const [hovered, setHovered] = useState(false)
   const controlRef = useRef<ReturnType<typeof animate> | null>(null)
   const hasRunRef = useRef(false)
+  const containerRef = useRef<HTMLSpanElement>(null)
+  const isInView = useInView(containerRef, { once: true, margin: '-80px' })
 
   const runAnimation = () => {
     if (controlRef.current) controlRef.current.stop()
@@ -41,15 +43,14 @@ function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
     })
   }
 
-  // Run on first in-view (triggered by parent whileInView) via a small delay
   useEffect(() => {
-    if (!hasRunRef.current) {
+    if (isInView && !hasRunRef.current) {
       hasRunRef.current = true
       const t = setTimeout(runAnimation, 200)
       return () => clearTimeout(t)
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [isInView])
 
   const handleMouseEnter = () => {
     setHovered(true)
@@ -61,6 +62,7 @@ function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
   return (
     <Typography
       component="span"
+      ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       sx={{

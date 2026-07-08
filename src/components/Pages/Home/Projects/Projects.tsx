@@ -132,8 +132,8 @@ function SectionTitle({
   // y: centres in viewport (below navbar) → moves to top  over 0 → TITLE_END
   const y = useTransform(scrollYProgress, [0, TITLE_END], ['42vh', '0vh'])
 
-  // title fades out as it rises — only subtitle stays pinned at the top
-  const titleOpacity = useTransform(scrollYProgress, [0, TITLE_END * 0.6], [1, 0])
+  // title (big heading) fades out as header rises — subtitle stays pinned
+  const titleOpacity = useTransform(scrollYProgress, [0, TITLE_END * 0.7], [1, 0])
 
   return (
     <motion.div style={{ y }} data-section-title>
@@ -151,6 +151,7 @@ function SectionTitle({
           pointerEvents: 'none',
         }}
       >
+        {/* subtitle stays visible at the top while projects are shown */}
         <Typography
           sx={{
             fontFamily: "'Rajdhani', sans-serif",
@@ -163,7 +164,8 @@ function SectionTitle({
         >
           {subtitle}
         </Typography>
-        {title && (
+
+         {title && (
           <motion.div style={{ opacity: titleOpacity }}>
             <Typography
               component="h2"
