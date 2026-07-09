@@ -62,6 +62,7 @@ function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
   return (
     <Typography
       component="span"
+      className="stat-number"
       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
@@ -73,7 +74,7 @@ function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
         ...sx,
       }}
     >
-      <motion.span>{displayed}</motion.span>
+      <motion.span className="stat-number">{displayed}</motion.span>
     </Typography>
   )
 }
@@ -128,10 +129,10 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
       <Stack spacing={10} sx={{ maxWidth: '100%', mx: 'auto', position: 'relative', zIndex: 1 }}>
         <Stack spacing={2} sx={{ alignItems: 'center', textAlign: 'center' }}>
           <Typography
+            component="div"
             sx={{
               color: '#0DF1D9',
-              fontSize: '12px',
-              fontFamily: '"Rajdhani", sans-serif',
+              fontSize: { xs: '13px', md: '14px' },
               fontWeight: 600,
               textTransform: 'uppercase',
               letterSpacing: '4px',
@@ -140,13 +141,13 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
             {eyebrowText}
           </Typography>
           <Typography
+            component="div"
+            variant="h2"
             sx={{
-              fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
               fontSize: { xs: '28px', md: '44px' },
               fontWeight: 700,
               color: '#FAFAFA',
               textTransform: 'uppercase',
-              letterSpacing: '1px',
             }}
           >
             {titleText}
@@ -242,6 +243,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                     >
                       {isEven ? (
                         <Typography
+                          component="div"
+                          className="stat-number"
                           sx={{
                             fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                             fontSize: { md: '56px', lg: '72px' },
@@ -273,11 +276,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                               />
                               <Typography
                                 sx={{
-                                  fontFamily: '"Rajdhani", sans-serif',
-                                  fontSize: '11px',
+                                  fontSize: '13px',
                                   color: 'rgba(255, 255, 255, 0.45)',
-                                  textTransform: 'uppercase',
-                                  letterSpacing: '0.5px',
                                   mt: 1.5,
                                   lineHeight: 1.25,
                                   fontWeight: 600,
@@ -326,11 +326,8 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                               />
                               <Typography
                                 sx={{
-                                  fontFamily: '"Rajdhani", sans-serif',
-                                  fontSize: '11px',
+                                  fontSize: '13px',
                                   color: 'rgba(255, 255, 255, 0.45)',
-                                  textTransform: 'uppercase',
-                                  letterSpacing: '0.5px',
                                   mt: 1.5,
                                   lineHeight: 1.25,
                                   fontWeight: 600,
@@ -343,10 +340,12 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                         </Stack>
                       ) : (
                         <Typography
+                          component="div"
+                          className="stat-number"
                           sx={{
                             fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                            fontSize: { md: '56px', lg: '72px' },
-                            fontWeight: 700,
+                            fontSize: "80px",
+                            // fontWeight: 700,
                             color: '#FAFAFA',
                             lineHeight: 1,
                           }}
@@ -371,16 +370,18 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                     }}
                   >
                     <Typography
+                      component="div"
+                      className="stat-number"
                       sx={{
                         fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                        fontSize: '36px',
+                        fontSize: { xs: '36px', md: '48px' },
                         fontWeight: 700,
                         color: '#FAFAFA',
                         mb: 2,
                         lineHeight: 1,
                       }}
                     >
-                      {item.year}
+                   {item.year}   
                     </Typography>
                     <Grid container spacing={2.5}>
                       {item.values.map((val: any, vIdx: number) => (

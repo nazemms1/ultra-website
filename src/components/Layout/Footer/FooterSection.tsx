@@ -203,10 +203,13 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
           left: 0,
           right: 0,
           height: '140px',
-          background: `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
+          background: isAr
+              ? `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`
+              : `linear-gradient(to bottom, ${theme.palette.background.default} 100%, transparent 100%)`,
           zIndex: 2,
           pointerEvents: 'none',
         },
+        
       }}
     >
       <Box

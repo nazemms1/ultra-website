@@ -65,7 +65,9 @@ export default async function AboutPage({ params }: Props) {
       : "Ultrawares was founded in 2018 by engineers who'd grown tired of watching great ideas die in committee. We distributed across 2 timezones, building software for teams who can't afford to wait.")
 
   const rawVideo = aboutData?.header?.video
-  const videoSrc = (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) || undefined
+  const videoSrc =
+    (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) ||
+    '/videos/colorflow-animation (3).mp4'
 
   return (
     <>

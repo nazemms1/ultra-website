@@ -63,7 +63,9 @@ export default async function GalleryPage({ params }: Props) {
       : 'A visual journey of our events, participations, and milestones.')
 
   const rawVideo = galleryData?.video
-  const videoSrc = (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) || undefined
+  const videoSrc =
+    (typeof rawVideo === 'string' ? rawVideo : rawVideo?.url) ||
+    '/videos/colorflow-animation (3).mp4'
 
   return (
     <>

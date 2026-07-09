@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha } from '@mui/material/styles'
 import { motion } from 'framer-motion'
+import { useLocale } from 'next-intl'
 import ShimmerText from '@/components/shared/ShimmerText'
 import { eyebrowBadgeSx, glowOrb } from '@/lib/theme/surfaces'
 
@@ -41,6 +42,8 @@ export default function PageHero({
   actions,
   children,
 }: PageHeroProps) {
+  const isRtl = useLocale() === 'ar'
+
   return (
     <Box
       sx={{
@@ -54,6 +57,7 @@ export default function PageHero({
         bgcolor: 'background.default',
         display: 'flex',
         alignItems: 'center',
+        isolation: 'isolate',
       }}
     >
       {videoSrc && (
@@ -63,9 +67,13 @@ export default function PageHero({
           muted
           loop
           playsInline
+          dir="ltr"
           style={{
             position: 'absolute',
-            inset: 0,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
             width: '100%',
             height: '100%',
             objectFit: 'cover',
@@ -78,10 +86,16 @@ export default function PageHero({
 
       {videoSrc && (
         <Box
+          dir="ltr"
           sx={theme => ({
             position: 'absolute',
-            inset: 0,
-            background: `linear-gradient(to top, ${theme.palette.background.default} 0%, ${alpha(theme.palette.background.default, 0.6)} 100%)`,
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: isRtl
+              ? `linear-gradient(to top, ${theme.palette.background.default} 100%, ${alpha(theme.palette.background.default, 0.3)} 40%, ${theme.palette.background.default} 100%)`
+              : `linear-gradient(to top, ${theme.palette.background.default} 0%, ${alpha(theme.palette.background.default, 0.3)} 60%, transparent 100%)`,
             zIndex: 1,
             pointerEvents: 'none',
           })}

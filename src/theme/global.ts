@@ -89,15 +89,12 @@ const GlobalStyles = () => css`
     font-family: 'Changa', sans-serif !important;
   }
 
-  /* Stat numbers — always use Ethnocentric Rg regardless of direction */
-  [dir='rtl'] .stat-number,
-  [dir='rtl'] .stat-number * {
-    font-family: 'Ethnocentric Rg', sans-serif !important;
-  }
 
-  /* 2. Clip horizontal overflow at the html level only — avoids breaking
-        minHeight / flex on section and main elements.                         */
-  html[dir='rtl'] {
+  /* 2. Clip horizontal overflow — on body so it doesn't become a containing
+        block for position:absolute children (html overflow-x:hidden does that
+        and breaks video layers in RTL pages).                                 */
+  body[dir='rtl'],
+  html[dir='rtl'] body {
     overflow-x: hidden;
   }
 
@@ -121,7 +118,7 @@ const GlobalStyles = () => css`
 
   /* 4. Body text — Changa Regular, override any inline fontFamily from sx props */
   [dir='rtl'] p,
-  [dir='rtl'] span,
+  [dir='rtl'] span:not(.stat-number, .stat-number span),
   [dir='rtl'] li,
   [dir='rtl'] label,
   [dir='rtl'] button,
@@ -149,6 +146,16 @@ const GlobalStyles = () => css`
   [dir='rtl'] .MuiTypography-caption,
   [dir='rtl'] .MuiTypography-overline {
     font-size: max(15px, 1em) !important;
+  }
+
+  /* Stat numbers — double selector to beat all RTL overrides above.
+     font-size intentionally omitted so the sx prop value is used.   */
+  [dir='rtl'] .stat-number.stat-number,
+  [dir='rtl'] .stat-number.stat-number * {
+    font-family: 'Ethnocentric Rg', sans-serif !important;
+    font-size: unset !important;
+    line-height: unset !important;
+    letter-spacing: 0 !important;
   }
 
   /* 5. Buttons: remove uppercase + wide letter-spacing (Latin-only styles)     */
