@@ -260,10 +260,7 @@ export default function ContactSection({ data }: { data?: any }) {
           left: 0,
           right: 0,
           height: '180px',
-          background:
-            theme.direction === 'rtl'
-              ? 'linear-gradient(to bottom, #121212 100%, rgba(18,18,18,0) 100%)'
-              : 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
+          background: 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
           zIndex: 0,
           pointerEvents: 'none',
         },
@@ -274,10 +271,7 @@ export default function ContactSection({ data }: { data?: any }) {
           left: 0,
           right: 0,
           height: '180px',
-          background:
-            theme.direction === 'rtl'
-              ? 'linear-gradient(to top, #121212 100%, rgba(18,18,18,0) 100%)'
-              : 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
+          background: 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
           zIndex: 0,
           pointerEvents: 'none',
         },

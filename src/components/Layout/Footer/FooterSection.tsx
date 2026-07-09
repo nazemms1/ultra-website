@@ -95,13 +95,17 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
 
   const bio = hasApiData
     ? publicDataMap.bio
-    : 'We provide cutting-edge solutions for businesses seeking to optimize their operations.'
+    : isAr
+      ? 'نقدم حلولاً متطورة للشركات الساعية إلى تحسين عملياتها.'
+      : 'We provide cutting-edge solutions for businesses seeking to optimize their operations.'
   const rawLogo = publicDataMap.logo
   const logoUrl = hasApiData ? getMediaUrl(rawLogo) : '/images/logo/logo-ultra.svg'
 
   const copyright = hasApiData
-    ? publicDataMap.copyright_information
-    : '© 2026 Ultrawares. All rights reserved.'
+    ? (publicDataMap.copyright_information || '').trim()
+    : isAr
+      ? '© 2026 Ultrawares. جميع الحقوق محفوظة.'
+      : '© 2026 Ultrawares. All rights reserved.'
   const poweredBy = hasApiData ? publicDataMap.powered_by : null
 
   const rawVideo = publicDataMap.footer_video
@@ -204,8 +208,8 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
           right: 0,
           height: '140px',
           background: isAr
-              ? `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`
-              : `linear-gradient(to bottom, ${theme.palette.background.default} 100%, transparent 100%)`,
+              ? `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%), linear-gradient(to top, ${theme.palette.background.default} 0%, transparent 100%)`
+              : `linear-gradient(to bottom, ${theme.palette.background.default} 0%, transparent 100%)`,
           zIndex: 2,
           pointerEvents: 'none',
         },
@@ -556,24 +560,49 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
             }}
           >
             {copyright}
-            {poweredBy && ` | Powered by ${poweredBy}`}
+            {poweredBy && (
+              <>
+                {' | Powered by '}
+                {typeof poweredBy === 'object' && poweredBy.url ? (
+                  <Box
+                    component="a"
+                    href={poweredBy.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    sx={{ color: 'text.tertiary', '&:hover': { color: 'primary.main' } }}
+                  >
+                    {poweredBy.title || poweredBy.url}
+                  </Box>
+                ) : (
+                  String(poweredBy)
+                )}
+              </>
+            )}
           </Typography>
           <Stack direction="row" spacing={3.5} sx={{ flexWrap: 'wrap' }}>
-            {legalLinks.map(item => (
-              <Box
-                key={item}
-                component={Link}
-                href="#"
-                sx={{
-                  fontSize: '14px',
-                  lineHeight: '21px',
-                  color: 'text.tertiary',
-                  ...footerLinkSx,
-                }}
-              >
-                {item}
-              </Box>
-            ))}
+            {legalLinks.map(item => {
+              let legalText: string = item
+              if (isAr) {
+                if (item === 'Privacy Policy') legalText = 'سياسة الخصوصية'
+                else if (item === 'Terms of Service') legalText = 'شروط الخدمة'
+                else if (item === 'Cookie Policy') legalText = 'سياسة ملفات تعريف الارتباط'
+              }
+              return (
+                <Box
+                  key={item}
+                  component={Link}
+                  href="#"
+                  sx={{
+                    fontSize: '14px',
+                    lineHeight: '21px',
+                    color: 'text.tertiary',
+                    ...footerLinkSx,
+                  }}
+                >
+                  {legalText}
+                </Box>
+              )
+            })}
           </Stack>
         </Stack>
       </Box>
