@@ -62,8 +62,7 @@ function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
   return (
     <Typography
       component="span"
-      className="stat-number"
-      ref={containerRef}
+       ref={containerRef}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       sx={{
@@ -74,7 +73,7 @@ function AnimatedCounter({ value, symbol = '', sx }: AnimatedCounterProps) {
         ...sx,
       }}
     >
-      <motion.span className="stat-number">{displayed}</motion.span>
+      <motion.span  >{displayed}</motion.span>
     </Typography>
   )
 }
@@ -244,8 +243,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                       {isEven ? (
                         <Typography
                           component="div"
-                          className="stat-number"
-                          sx={{
+                           sx={{
                             fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                             fontSize: { md: '56px', lg: '72px' },
                             fontWeight: 700,
@@ -268,7 +266,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                                 symbol={val.symbol}
                                 sx={{
                                   fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                                  fontSize: { md: '26px', lg: '30px' },
+                                  fontSize: { md: '40px', lg: '52px' },
                                   color: '#0DF1D9',
                                   fontWeight: 700,
                                   lineHeight: 1,
@@ -276,7 +274,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                               />
                               <Typography
                                 sx={{
-                                  fontSize: '13px',
+                                  fontSize: '14px',
                                   color: 'rgba(255, 255, 255, 0.45)',
                                   mt: 1.5,
                                   lineHeight: 1.25,
@@ -318,7 +316,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                                 symbol={val.symbol}
                                 sx={{
                                   fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                                  fontSize: { md: '26px', lg: '30px' },
+                                  fontSize: { md: '40px', lg: '52px' },
                                   color: '#0DF1D9',
                                   fontWeight: 700,
                                   lineHeight: 1,
@@ -326,7 +324,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                               />
                               <Typography
                                 sx={{
-                                  fontSize: '13px',
+                                  fontSize: '14px',
                                   color: 'rgba(255, 255, 255, 0.45)',
                                   mt: 1.5,
                                   lineHeight: 1.25,
@@ -341,10 +339,9 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                       ) : (
                         <Typography
                           component="div"
-                          className="stat-number"
-                          sx={{
+                           sx={{
                             fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                            fontSize: "80px",
+                            fontSize: { md: '56px', lg: '72px' },
                             // fontWeight: 700,
                             color: '#FAFAFA',
                             lineHeight: 1,
@@ -371,7 +368,6 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                   >
                     <Typography
                       component="div"
-                      className="stat-number"
                       sx={{
                         fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
                         fontSize: { xs: '36px', md: '48px' },
@@ -391,7 +387,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                             symbol={val.symbol}
                             sx={{
                               fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                              fontSize: '20px',
+                              fontSize: '28px',
                               color: '#0DF1D9',
                               fontWeight: 700,
                               lineHeight: 1,
