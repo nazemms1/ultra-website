@@ -78,6 +78,7 @@ export function phaseCardOuterGlow(theme: Theme): string {
 /** Left-column radial bloom behind the isometric illustration. */
 export function phaseCardVisualBloom(theme: Theme): SxProps<Theme> {
   const { primary } = theme.palette
+  const isRtl = theme.direction === 'rtl'
 
   return {
     pointerEvents: 'none',
@@ -86,7 +87,7 @@ export function phaseCardVisualBloom(theme: Theme): SxProps<Theme> {
     top: '-9%',
     width: '116%',
     height: '116%',
-    background: `radial-gradient(ellipse 70% 65% at 35% 28%, ${alpha(primary.main, 0.25)} 0%, ${alpha(primary.main, 0.125)} 32.5%, transparent 65%)`,
+    background: `radial-gradient(ellipse 70% 65% at ${isRtl ? '65%' : '35%'} 28%, ${alpha(primary.main, 0.25)} 0%, ${alpha(primary.main, 0.125)} 32.5%, transparent 65%)`,
   }
 }
 
@@ -159,7 +160,7 @@ export function cardGlassSurface(theme: Theme, opts?: { radius?: number | string
     backgroundClip: 'padding-box',
     borderRadius: radius,
     boxShadow: [
-      '0 8px 96px 0 rgba(0, 0, 0, 0.55)',
+      // '0 8px 96px 0 rgba(0, 0, 0, 0.55)',
       `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.71)}`,
       `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
     ].join(', '),

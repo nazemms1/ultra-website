@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { alpha, useTheme } from '@mui/material/styles'
 import Image from 'next/image'
 import SectionHeader from '@/components/shared/SectionHeader'
+import { cardGlassSurface, glassSurface } from '@/lib/theme/surfaces'
 import { shouldDisableScrollVideo } from './ScrollVideoStack/deviceUtils'
 
 interface TestimonialItem {
@@ -142,7 +143,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
       sx={{
         position: 'relative',
         backgroundColor: theme.palette.background.default,
-        py: { xs: 10, md: 15 },
+        pt: { xs: 20, md: 15 },
+        pb: { xs: 10, md: 15 },
         overflow: 'hidden',
         display: 'flex',
         flexDirection: 'column',
@@ -164,7 +166,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            zIndex: 100,
+            zIndex: 200,
             pointerEvents: 'none', // Allow clicks to pass through
           }}
         >
@@ -185,8 +187,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               top: 0,
               left: 0,
               right: 0,
-              height: '180px',
-              background: 'linear-gradient(to bottom, #121212 0%, rgba(18,18,18,0) 100%)',
+              height: '120px',
+              background: 'linear-gradient(to bottom, rgba(18,18,18,0.7) 0%, rgba(18,18,18,0) 100%)',
             },
             '&::after': {
               content: '""',
@@ -194,8 +196,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               bottom: 0,
               left: 0,
               right: 0,
-              height: '180px',
-              background: 'linear-gradient(to top, #121212 0%, rgba(18,18,18,0) 100%)',
+              height: '120px',
+              background: 'linear-gradient(to top, rgba(18,18,18,0.7) 0%, rgba(18,18,18,0) 100%)',
             },
           })}
         />
@@ -214,7 +216,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           sx={{
             position: 'relative',
             width: '100%',
-            maxWidth: 'min(90vw, 480px)',
+            height: '100%',
+            maxWidth: 'min(100vw, 500px)',
             mt: 4,
             px: 2,
             zIndex: 200,
@@ -243,115 +246,62 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 sx={{
                   flex: '0 0 100%',
                   scrollSnapAlign: 'center',
-                  position: 'relative',
                   width: '100%',
-                  p: { xs: 3.5, sm: 4.5 },
-                  background:
-                    'linear-gradient(135deg, rgba(13, 241, 217, 0.08) 0%, rgba(18, 18, 18, 0.85) 100%)',
-                  boxShadow:
-                    '0px 0px 0px 1px rgba(13, 241, 217, 0.2) inset, 0px 8px 32px rgba(0, 0, 0, 0.5)',
-                  borderRadius: '24px',
+                  background: 'transparent',
+                  boxShadow: 'none',
                   display: 'flex',
                   flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: 2.5,
                 }}
               >
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    opacity: 0.8,
-                  }}
-                >
-                  <Box
-                    component="img"
-                    src="/icons/QuoteMark.svg"
-                    alt="Quote"
-                    sx={{
-                      width: 32,
-                      height: 32,
-                      transform: isRtl ? 'none' : 'rotate(180deg)',
-                    }}
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    display: 'flex',
-                    gap: '4px',
-                  }}
-                >
-                  {[...Array(item.rating || 5)].map((_, i) => (
-                    <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, lineHeight: 1 }}>
-                      ★
-                    </Typography>
-                  ))}
-                </Box>
-
-                <Typography
-                  sx={{
-                    textAlign: 'center',
-                    color: 'white',
-                    fontSize: isRtl ? '14px' : '15px',
+                {/* Single bottom card */}
+                <Box sx={{
+                  width: '100%',
+                  p: { xs: 2.5, sm: 3 },
+                  ...cardGlassSurface(theme, { radius: '20px' }),
+                  display: 'flex',
+                  // backgroundColor: 'rgba(238, 0, 0, 0.75)',
+                  flexDirection: 'column',
+                  gap: 1.5,
+                }}>
+                  {/* Review text */}
+                  <Typography sx={{
+                    textAlign: isRtl ? 'right' : 'left',
+                    color: 'rgba(255,255,255,0.9)',
+                    fontSize: isRtl ? '13px' : '15px',
                     fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
                     fontWeight: isRtl ? '400' : '500',
                     lineHeight: 1.6,
                     wordBreak: 'break-word',
-                    px: 1,
-                  }}
-                >
-                  {item.text}
-                </Typography>
+                  }}>
+                    {item.text}
+                  </Typography>
 
-                <Box
-                  sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: 2,
-                    mt: 1,
-                    width: '100%',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <Box
-                    sx={{
-                      position: 'relative',
-                      width: 48,
-                      height: 48,
-                      borderRadius: '50%',
-                      overflow: 'hidden',
-                      border: `2px solid ${primary}`,
-                      boxShadow: `0 0 10px ${alpha(primary, 0.4)}`,
-                      flexShrink: 0,
-                    }}
-                  >
-                    <Image src={item.avatar} alt={item.name} fill style={{ objectFit: 'cover' }} />
-                  </Box>
+                  {/* Divider */}
+                  <Box sx={{ width: '100%', height: '1px', background: 'linear-gradient(to right, transparent, rgba(13,241,217,0.3), transparent)' }} />
 
-                  <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start' }}>
-                    <Typography
-                      sx={{
-                        color: 'white',
-                        fontSize: '14px',
-                        fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif",
-                        fontWeight: '700',
-                        lineHeight: '1.2',
-                      }}
-                    >
-                      {item.name}
-                    </Typography>
-                    <Typography
-                      sx={{
-                        color: 'rgba(255, 255, 255, 0.6)',
-                        fontSize: '11px',
-                        fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
-                        mt: '2px',
-                      }}
-                    >
-                      {item.role}
-                    </Typography>
+                  {/* Bottom row: avatar+name on right, stars on left */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', direction: 'rtl' }}>
+                    {/* Right: avatar + name */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
+                      <Box sx={{ position: 'relative', width: 38, height: 38, borderRadius: '50%', overflow: 'hidden', border: `2px solid ${primary}`, boxShadow: `0 0 8px ${alpha(primary, 0.5)}`, flexShrink: 0 }}>
+                        <Image src={item.avatar} alt={item.name} fill style={{ objectFit: 'cover' }} />
+                      </Box>
+                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1px' }}>
+                        <Typography sx={{ color: 'white', fontSize: '13px', fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif", fontWeight: '700', lineHeight: 1.2 }}>
+                          {item.name}
+                        </Typography>
+                        <Typography sx={{ color: primary, fontSize: '10px', fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: '500' }}>
+                          {item.role}
+                        </Typography>
+                      </Box>
+                    </Box>
+
+                    {/* Left: stars */}
+                    <Box sx={{ display: 'flex', gap: '2px', alignItems: 'center' }}>
+                      {[...Array(item.rating || 5)].map((_, i) => (
+                        <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 13, lineHeight: 1 }}>★</Typography>
+                      ))}
+                    </Box>
                   </Box>
                 </Box>
               </Box>
@@ -428,7 +378,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
-              zIndex: 90,
+              zIndex: 200,
+              direction: 'ltr',
             }}
           >
             <div
@@ -449,7 +400,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 width: 600,
                 height: 600,
                 padding: '32px',
-                background: 'radial-gradient(ellipse 70.71% 70.71% at 50.00% 50.00%, rgba(13, 241, 217, 0.65) 0%, rgba(18, 18, 18, 0.95) 70%)',
+                background: 'radial-gradient(circle at 50% 50%, rgba(13, 241, 217, 0.60) 0%, rgba(13, 241, 217, 0.35) 20%, transparent 75%)',
                 boxShadow: '0px 0px 80px -10px rgba(1, 177, 177, 0.40), 0px 0px 0px 1px rgba(18, 18, 18, 0.95) inset',
                 borderRadius: "100%",
                 filter: 'blur(0px)',

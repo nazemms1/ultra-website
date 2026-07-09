@@ -63,6 +63,7 @@ export default function PhaseCard({ phase, index, total, progress }: PhaseCardPr
 
 export function PhaseCardContent({ phase }: { phase: Phase }) {
   const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
 
   return (
     <Box
@@ -146,7 +147,7 @@ export function PhaseCardContent({ phase }: { phase: Phase }) {
                 alignItems: 'center',
                 justifyContent: 'center',
                 overflow: 'hidden',
-                pt: { xs: 2, md: 0 },
+                pt: { xs: 2, md: isRtl ? 5 : 0 },
               }}
             >
               <PhaseGlyph imageUrl={phase.imageUrl} index={Number(phase.number) - 1} compact />

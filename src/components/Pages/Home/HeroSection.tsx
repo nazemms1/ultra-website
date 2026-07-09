@@ -24,7 +24,7 @@ const containerVariants: Variants = {
 const makeItemVariants = (isRtl: boolean): Variants => ({
   hidden: {
     opacity: 0,
-    x: isRtl ? 0 : -60,
+    x: isRtl ? 60 : -60,
   },
   visible: {
     opacity: 1,
@@ -165,7 +165,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            transform: 'translateZ(0)',
+            transform: isRtl ? 'translateZ(0) scaleX(-1)' : 'translateZ(0)',
             backfaceVisibility: 'hidden',
             willChange: 'transform',
           }}
