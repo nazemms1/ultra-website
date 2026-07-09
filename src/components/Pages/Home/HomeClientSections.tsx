@@ -1,6 +1,7 @@
 'use client'
 
 import dynamic from 'next/dynamic'
+import { useHashScroll } from './useHashScroll'
 
 const ScrollVideoStack = dynamic(() => import('@/components/Pages/Home/ScrollVideoStack'), {
   ssr: false,
@@ -22,9 +23,7 @@ const TestimonialsSection = dynamic(
 )
 const CTASection = dynamic(() => import('@/components/Pages/Home/CTASection'), { ssr: false })
 const FAQSection = dynamic(() => import('@/components/Pages/Home/Faqs'), { ssr: false })
-const ContactSection = dynamic(() => import('@/components/Pages/Home/ContactSection'), {
-  ssr: false,
-})
+const ContactSection = dynamic(() => import('@/components/Pages/Home/ContactSection'))
 
 interface Props {
   partnersData: any
@@ -51,6 +50,8 @@ export default function HomeClientSections({
   stillHaveQuestionsData,
   contactUsData,
 }: Props) {
+  useHashScroll()
+
   return (
     <>
       <ScrollVideoStack>

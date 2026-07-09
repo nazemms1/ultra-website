@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { AnimatePresence, LayoutGroup, motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 import OrbitalAccentRail from './OrbitalAccentRail'
 import OrbitalCard from './OrbitalCard'
 import OrbitalDeck from './OrbitalDeck'
@@ -18,7 +18,6 @@ import { shouldDisableScrollVideo } from '../ScrollVideoStack/deviceUtils'
 const EASE = [0.22, 1, 0.36, 1] as const
 const SLIDE_EASE = [0.16, 1.1, 0.3, 1] as const
 const PANEL_TRANSITION = { duration: 0.48, ease: EASE } as const
-const LAYOUT_TRANSITION = { layout: { duration: 0.55, ease: EASE } } as const
 
 const panelVariants = {
   initial: { opacity: 0, y: 18 },
@@ -397,8 +396,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                 mr: { xs: 'auto', lg: 0 },
               }}
             >
-              <LayoutGroup>
-                <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column' }}>
                   {data ? (
                     <>
                       {data.title && (
@@ -583,12 +581,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                   </AnimatePresence>
 
                   {data?.button_is_shown !== false && (
-                    <Box
-                      component={motion.div}
-                      layout
-                      transition={LAYOUT_TRANSITION}
-                      sx={{ mt: 2 }}
-                    >
+                    <Box sx={{ mt: 2 }}>
                       <AnimatedButton
                         variant="secondary"
                         href="/services"
@@ -602,7 +595,6 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                     </Box>
                   )}
                 </Box>
-              </LayoutGroup>
             </Box>
           </Grid>
 

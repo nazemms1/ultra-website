@@ -38,28 +38,45 @@ export function useOrbitalPointerParallax(
     const container = containerRef.current
     if (!container || prefersReduced) return
 
-    const handlePointerMove = (event: PointerEvent) => {
-      const rect = container.getBoundingClientRect()
+    let rafId: number | null = null
+    let pendingX = 0
+    let pendingY = 0
+
+    // Cache rect and refresh only on resize — avoids getBoundingClientRect on every move
+    let rect = container.getBoundingClientRect()
+    const updateRect = () => { rect = container.getBoundingClientRect() }
+    const resizeObserver = new ResizeObserver(updateRect)
+    resizeObserver.observe(container)
+
+    const flush = () => {
+      rafId = null
       const centerX = rect.left + rect.width / 2
       const centerY = rect.top + rect.height / 2
       const halfW = rect.width / 2
       const halfH = rect.height / 2
-
       if (halfW === 0 || halfH === 0) return
+      normalizedX.set(clamp((pendingX - centerX) / halfW, -1, 1))
+      normalizedY.set(clamp((pendingY - centerY) / halfH, -1, 1))
+    }
 
-      normalizedX.set(clamp((event.clientX - centerX) / halfW, -1, 1))
-      normalizedY.set(clamp((event.clientY - centerY) / halfH, -1, 1))
+    const handlePointerMove = (event: PointerEvent) => {
+      pendingX = event.clientX
+      pendingY = event.clientY
+      if (rafId === null) rafId = requestAnimationFrame(flush)
     }
 
     const handlePointerLeave = () => {
+      if (rafId !== null) { cancelAnimationFrame(rafId); rafId = null }
       normalizedX.set(0)
       normalizedY.set(0)
     }
 
-    container.addEventListener('pointermove', handlePointerMove)
+    container.addEventListener('pointermove', handlePointerMove, { passive: true })
     container.addEventListener('pointerleave', handlePointerLeave)
 
     return () => {
+      if (rafId !== null) cancelAnimationFrame(rafId)
+      resizeObserver.disconnect()
       container.removeEventListener('pointermove', handlePointerMove)
       container.removeEventListener('pointerleave', handlePointerLeave)
     }

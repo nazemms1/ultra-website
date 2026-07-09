@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useCallback } from 'react'
-import { usePathname } from 'next/navigation'
+import { useParams } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
@@ -11,7 +11,8 @@ import { useTheme } from '@mui/material/styles'
 import type { Theme } from '@mui/material/styles'
 import type { SxProps } from '@mui/material/styles'
 import Image from 'next/image'
-import { Link } from '@/i18n/routing'
+import { Link, useRouter } from '@/i18n/routing'
+import { useSectionScroll } from '@/lib/SectionScrollContext'
 import MenuIcon from '@mui/icons-material/Menu'
 import CloseIcon from '@mui/icons-material/Close'
 import UltraButton from '@/components/shared/UltraButton'
@@ -19,6 +20,7 @@ import { navGlassPillSurface, glassSurface } from '@/lib/theme/surfaces'
 import { navLinks, type NavLabels, type SectionId } from '@/components/Layout/navLinks'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { useNavbarScrollMode } from './useNavbarScrollMode'
+import LanguageSwitcher from './LanguageSwitcher'
 
 /** Crossfade unified ↔ split */
 const SHAPE_MS = 520
@@ -48,39 +50,46 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
   const { mergeProgress, spreadProgress } = useNavbarScrollMode()
   const [mobileOpen, setMobileOpen] = useState(false)
-  const pathname = usePathname()
-  // const router = useRouter()
+  const params = useParams()
+  const locale = (params?.locale as string) ?? 'en'
+  const router = useRouter()
+  const { requestScrollAfterNav } = useSectionScroll()
 
   const visibleNavLinks = navLinks.filter(
     link => !sectionsVisibility || sectionsVisibility[link.sectionId] !== false,
   )
 
+  const navigateToSection = useCallback(
+    (sectionId: string) => {
+      const el = document.getElementById(sectionId)
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' })
+        return
+      }
+      // Register the scroll target BEFORE navigation so the Context picks it up
+      requestScrollAfterNav(sectionId)
+      router.push('/', { locale })
+    },
+    [locale, router, requestScrollAfterNav],
+  )
+
   const handleNavClick = useCallback(
     (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
       if (!href.startsWith('/#')) return
-      const sectionId = href.slice(2)
-      const isHome = pathname === '/' || /^\/[a-z]{2}$/.test(pathname)
-      if (isHome) {
-        e.preventDefault()
-        document.getElementById(sectionId)?.scrollIntoView({ behavior: 'smooth' })
-        setMobileOpen(false)
-      }
+      e.preventDefault()
+      setMobileOpen(false)
+      navigateToSection(href.slice(2))
     },
-    [pathname],
+    [navigateToSection],
   )
 
   const handleContactClick = useCallback(
     (e?: React.MouseEvent<any>) => {
-      const hasContactSection = !!document.getElementById('contact')
-      if (hasContactSection) {
-        e?.preventDefault()
-        document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth' })
-        setMobileOpen(false)
-      } else {
-        setMobileOpen(false)
-      }
+      e?.preventDefault()
+      setMobileOpen(false)
+      navigateToSection('contact')
     },
-    [],
+    [navigateToSection],
   )
 
   const t = isDesktop ? easeInOutQuart(Math.max(0, Math.min(1, mergeProgress))) : 1
@@ -149,7 +158,6 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   const contactButton = (
     <AnimatedButton
       variant="primary"
-      href="/#contact"
       onClick={handleContactClick}
       sx={{
         display: { xs: 'none', md: 'inline-flex' },
@@ -249,7 +257,10 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
               <Box aria-hidden sx={innerSpacerSx} />
               <Box sx={splitPillSx('nav')}>{navLinksStack}</Box>
               <Box aria-hidden sx={innerSpacerSx} />
-              <Box sx={splitPillSx('cta')}>{contactButton}</Box>
+              <Box sx={{ ...splitPillSx('cta'), gap: '10px' }}>
+                <LanguageSwitcher />
+                {contactButton}
+              </Box>
               <Box aria-hidden sx={outerSpacerSx} />
             </Box>
           </Box>
@@ -297,8 +308,12 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
+              gap: '10px',
             }}
           >
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+              <LanguageSwitcher />
+            </Box>
             {contactButton}
             {mobileMenuButton}
           </Box>
@@ -398,7 +413,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
                 gap: 2,
               }}
             >
-              <UltraButton variant="primary" href="/#contact" onClick={handleContactClick}>
+              <UltraButton variant="primary" onClick={handleContactClick}>
                 {labels.contact}
               </UltraButton>
             </Box>

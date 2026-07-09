@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
@@ -49,6 +49,8 @@ export default function OrbitalDeck({
   const spin = useMotionValue(0)
   const pausedRef = useRef(false)
   const speedRef = useRef(baseSpeed)
+  const visibleRef = useRef(false)
+  const deckRef = useRef<HTMLDivElement>(null)
 
   const { scrollY } = useScroll()
   const scrollVelocity = useVelocity(scrollY)
@@ -57,8 +59,20 @@ export default function OrbitalDeck({
     stiffness: 300,
   })
 
+  // Pause animation when section is off-screen — eliminates frame loop cost
+  useEffect(() => {
+    const el = deckRef.current
+    if (!el) return
+    const observer = new IntersectionObserver(
+      ([entry]) => { visibleRef.current = entry.isIntersecting },
+      { threshold: 0 },
+    )
+    observer.observe(el)
+    return () => observer.disconnect()
+  }, [])
+
   useAnimationFrame((_, delta) => {
-    if (prefersReduced) return
+    if (prefersReduced || !visibleRef.current) return
     const dt = Math.min(delta, 64) / 1000
 
     const boost = (Math.min(Math.abs(smoothVelocity.get()), 4000) / 4000) * baseSpeed * 2.5
@@ -78,6 +92,7 @@ export default function OrbitalDeck({
 
   return (
     <Box
+      ref={deckRef}
       sx={{
         position: 'relative',
         flexShrink: 0,
@@ -186,6 +201,7 @@ function OrbitalSpoke({
         width: 0,
         height: 0,
         transformOrigin: '0px 0px',
+        willChange: 'transform',
       }}
       style={{ rotate: spokeRotate }}
     >
@@ -231,6 +247,7 @@ function OrbitalSpoke({
               rotate: cardCounterRotate,
               scale: cardScale,
               transformOrigin: `${CARD_W / 2}px ${CARD_H / 2}px`,
+              willChange: 'transform',
             }}
           >
             <OrbitalCard

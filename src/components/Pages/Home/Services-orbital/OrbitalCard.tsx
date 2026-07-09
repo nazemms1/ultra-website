@@ -134,7 +134,7 @@ export default function OrbitalCard({
           left: 0,
           top: '0.5px',
           overflow: 'visible',
-          filter: `drop-shadow(0 4px 76px rgba(0,0,0,0.76))`,
+          filter: `drop-shadow(0 4px 32px rgba(0,0,0,0.55))`,
         }}
       >
         <motion.path
@@ -308,8 +308,8 @@ export default function OrbitalCard({
             justifyContent: 'center',
             borderRadius: '50%',
             border: '1px solid',
-            backdropFilter: isDisplayingActive ? 'blur(12px)' : 'none',
-            WebkitBackdropFilter: isDisplayingActive ? 'blur(12px)' : 'none',
+            backdropFilter: 'blur(12px)',
+            WebkitBackdropFilter: 'blur(12px)',
             backgroundColor: isDisplayingActive
               ? alpha(theme.palette.background.paper, 0.2)
               : 'transparent',

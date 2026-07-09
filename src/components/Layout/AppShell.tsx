@@ -3,6 +3,7 @@ import Box from '@mui/material/Box'
 import Navbar from './Navbar/Navbar'
 import FooterSection from './Footer/FooterSection'
 import type { NavLabels } from './navLinks'
+import { SectionScrollProvider } from '@/lib/SectionScrollContext'
 
 type AppShellProps = {
   children: React.ReactNode
@@ -25,20 +26,22 @@ export default function AppShell({
   navSectionsVisibility,
 }: AppShellProps) {
   return (
-    <Box
-      sx={{
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        bgcolor: 'background.default',
-        color: 'text.primary',
-      }}
-    >
-      <Navbar labels={navLabels} sectionsVisibility={navSectionsVisibility} />
-      <Box component="main" sx={{ flex: 1, pb: 6 }}>
-        {children}
+    <SectionScrollProvider>
+      <Box
+        sx={{
+          minHeight: '100vh',
+          display: 'flex',
+          flexDirection: 'column',
+          bgcolor: 'background.default',
+          color: 'text.primary',
+        }}
+      >
+        <Navbar labels={navLabels} sectionsVisibility={navSectionsVisibility} />
+        <Box component="main" sx={{ flex: 1, pb: 6 }}>
+          {children}
+        </Box>
+        <FooterSection data={footerData} statsData={statsData} />
       </Box>
-      <FooterSection data={footerData} statsData={statsData} />
-    </Box>
+    </SectionScrollProvider>
   )
 }
