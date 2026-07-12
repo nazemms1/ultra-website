@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
@@ -9,10 +9,7 @@ import {
   useAnimationFrame,
   useMotionValue,
   useReducedMotion,
-  useScroll,
-  useSpring,
   useTransform,
-  useVelocity,
   type MotionValue,
 } from 'framer-motion'
 import OrbitalCard, { CARD_H, CARD_W } from './OrbitalCard'
@@ -49,33 +46,57 @@ export default function OrbitalDeck({
   const spin = useMotionValue(0)
   const pausedRef = useRef(false)
   const speedRef = useRef(baseSpeed)
-  const visibleRef = useRef(false)
   const deckRef = useRef<HTMLDivElement>(null)
+  const [visible, setVisible] = useState(false)
+  // Scroll velocity tracked via a plain ref — avoids subscribing framer-motion
+  // MotionValues (useScroll/useVelocity/useSpring) to global scroll events.
+  const scrollVelocityRef = useRef(0)
 
-  const { scrollY } = useScroll()
-  const scrollVelocity = useVelocity(scrollY)
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 300,
-  })
-
-  // Pause animation when section is off-screen — eliminates frame loop cost
+  // Track visibility to gate the animation frame loop
   useEffect(() => {
     const el = deckRef.current
     if (!el) return
     const observer = new IntersectionObserver(
-      ([entry]) => { visibleRef.current = entry.isIntersecting },
+      ([entry]) => setVisible(entry.isIntersecting),
       { threshold: 0 },
     )
     observer.observe(el)
     return () => observer.disconnect()
   }, [])
 
+  // Lightweight scroll velocity sampler — only active when visible
+  useEffect(() => {
+    if (!visible) return
+    let lastY = window.scrollY
+    let lastT = performance.now()
+    let rafId: number
+
+    const sample = () => {
+      const now = performance.now()
+      const dt = now - lastT
+      if (dt > 0) {
+        const dy = window.scrollY - lastY
+        // Smooth via exponential decay (equivalent to the removed useSpring)
+        const raw = Math.abs(dy / dt) * 1000
+        scrollVelocityRef.current += (raw - scrollVelocityRef.current) * 0.15
+        lastY = window.scrollY
+        lastT = now
+      }
+      rafId = requestAnimationFrame(sample)
+    }
+    rafId = requestAnimationFrame(sample)
+
+    return () => {
+      cancelAnimationFrame(rafId)
+      scrollVelocityRef.current = 0
+    }
+  }, [visible])
+
   useAnimationFrame((_, delta) => {
-    if (prefersReduced || !visibleRef.current) return
+    if (prefersReduced || !visible) return
     const dt = Math.min(delta, 64) / 1000
 
-    const boost = (Math.min(Math.abs(smoothVelocity.get()), 4000) / 4000) * baseSpeed * 2.5
+    const boost = (Math.min(scrollVelocityRef.current, 4000) / 4000) * baseSpeed * 2.5
     const target = pausedRef.current ? 0 : baseSpeed + boost
 
     const k = 1 - Math.exp(-dt * 6)

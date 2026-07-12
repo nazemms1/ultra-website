@@ -1,6 +1,4 @@
 import { SPLASH_CRITICAL_IMAGES, SPLASH_CRITICAL_VIDEOS } from './criticalAssets'
-import { preloadScrollFramesForSplash } from '@/components/Pages/Home/ScrollVideoStack/frameLoader'
-import { shouldDisableScrollVideo } from '@/components/Pages/Home/ScrollVideoStack/deviceUtils'
 
 type WaitForPageMediaOptions = {
   /** Minimum time the splash stays visible even if assets resolve instantly. */
@@ -114,18 +112,6 @@ async function waitForCriticalAssets(timeoutMs: number): Promise<void> {
     ...SPLASH_CRITICAL_VIDEOS.map(src => preloadVideo(src, timeoutMs)),
     ...SPLASH_CRITICAL_IMAGES.map(src => preloadImage(src, timeoutMs)),
   ]
-
-  // Defer scroll frame preload until after page is interactive (requestIdleCallback)
-  if (!shouldDisableScrollVideo()) {
-    const scheduleFramePreload = () => {
-      void preloadScrollFramesForSplash()
-    }
-    if (typeof requestIdleCallback !== 'undefined') {
-      requestIdleCallback(scheduleFramePreload, { timeout: 3000 })
-    } else {
-      setTimeout(scheduleFramePreload, 2000)
-    }
-  }
 
   return Promise.all(tasks).then(() => undefined)
 }

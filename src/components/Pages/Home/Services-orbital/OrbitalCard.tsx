@@ -118,6 +118,7 @@ export default function OrbitalCard({
         height: CARD_H,
         transformOrigin: 'center center',
         isolation: 'isolate',
+        contain: 'layout style',
         ...sx,
       }}
     >
@@ -135,6 +136,7 @@ export default function OrbitalCard({
           top: '0.5px',
           overflow: 'visible',
           filter: `drop-shadow(0 4px 32px rgba(0,0,0,0.55))`,
+          willChange: 'transform',
         }}
       >
         <motion.path
