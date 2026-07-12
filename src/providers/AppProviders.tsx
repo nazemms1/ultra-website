@@ -6,6 +6,7 @@ import type { Locale } from 'next-intl'
 import { SplashScreenGate } from '@/components/shared/SplashScreen'
 import ThemeProvider from './Theme'
 import { SmoothScroll } from './SmoothScroll'
+import { NavigationLoadingProvider } from './NavigationLoadingContext'
 
 type AppProvidersProps = {
   locale: Locale
@@ -17,9 +18,11 @@ export default function AppProviders({ locale, messages, children }: AppProvider
   return (
     <ThemeProvider locale={locale}>
       <NextIntlClientProvider locale={locale} messages={messages}>
-        <SplashScreenGate>
+        <NavigationLoadingProvider>
+          <SplashScreenGate>
             <SmoothScroll>{children}</SmoothScroll>
           </SplashScreenGate>
+        </NavigationLoadingProvider>
       </NextIntlClientProvider>
     </ThemeProvider>
   )

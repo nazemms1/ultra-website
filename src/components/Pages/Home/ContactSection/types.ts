@@ -44,6 +44,7 @@ export interface InputFieldProps {
   type?: string
   value: string
   onChange: (value: string) => void
+  readOnly?: boolean
 }
 
 export interface ContactSubmitButtonProps {

@@ -1,7 +1,7 @@
 import { alpha } from '@mui/material/styles'
 import { useState } from 'react'
 import { Box, Typography, Collapse } from '@mui/material'
-import { Minus, Plus } from 'lucide-react'
+import Image from 'next/image'
 import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 export default function FAQCard({ question, answer }: { question: string; answer: string }) {
@@ -55,7 +55,7 @@ export default function FAQCard({ question, answer }: { question: string; answer
           justifyContent: 'space-between',
           gap: '1.5rem',
           px: { xs: '1.25rem', md: '1.75rem' },
-          py: '1.375rem',
+          minHeight: 98,
         }}
       >
         <Typography
@@ -72,40 +72,21 @@ export default function FAQCard({ question, answer }: { question: string; answer
         </Typography>
 
         <Box
-          sx={theme => ({
+          sx={{
             flexShrink: 0,
-            width: '30px',
-            height: '30px',
-            borderRadius: '9999px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            color: 'primary.main',
-            border: '1px solid transparent',
-            bgcolor: alpha(theme.palette.primary.main, 0.1),
-            backdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
-            WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
-            boxShadow: [
-              `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
-              `inset -1px -1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
-            ].join(', '),
-            transition:
-              'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease',
+            transition: 'transform 0.4s cubic-bezier(0.16, 1, 0.3, 1)',
             '.faq-card-root:hover &': {
               transform: 'scale(1.08)',
-              bgcolor: alpha(theme.palette.primary.main, 0.125),
-              boxShadow: [
-                `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
-                `0 8px 96px 0 ${alpha(theme.palette.common.white, 0.25)}`,
-                `inset -1px -1px 0 0 ${alpha(theme.palette.primary.main, 0.5)}`,
-              ].join(', '),
             },
-          })}
+          }}
         >
           {open ? (
-            <Minus size={13} color="currentColor" />
+            <Image src="/icons/mins.svg" alt="collapse" width={60} height={60} />
           ) : (
-            <Plus size={13} color="currentColor" />
+            <Image src="/icons/plus.svg" alt="expand" width={40} height={40} />
           )}
         </Box>
       </Box>

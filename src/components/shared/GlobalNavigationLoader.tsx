@@ -1,123 +1,121 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { usePathname, useSearchParams } from 'next/navigation'
 import Box from '@mui/material/Box'
 import { AnimatePresence, motion } from 'framer-motion'
+import { useTheme } from '@mui/material/styles'
+import { paletteAlpha } from '@/lib/theme/paletteAlpha'
+import { useNavigationLoading } from '@/providers/NavigationLoadingContext'
+import {
+  SPLASH_SPINNER_BOTTOM_ARC_PATH,
+  SPLASH_SPINNER_ROTATE_DURATION_S,
+  SPLASH_SPINNER_TOP_ARC_PATH,
+  SPLASH_SPINNER_VIEWBOX,
+} from './SplashScreen/spinnerPaths'
+
+const LOGO_DISPLAY_SIZE = 64
 
 export default function GlobalNavigationLoader() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
-  const [isNavigating, setIsNavigating] = useState(false)
-  const [progress, setProgress] = useState(0)
+  const { isNavigating, startNavigation, finishNavigation } = useNavigationLoading()
+  const theme = useTheme()
 
-  // Scroll to top after the new page has painted
-  useEffect(() => {
-    // Double rAF ensures we scroll only after the browser has committed the new layout
-    const raf1 = requestAnimationFrame(() => {
-      const raf2 = requestAnimationFrame(() => {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-      })
-      return () => cancelAnimationFrame(raf2)
-    })
-    return () => cancelAnimationFrame(raf1)
-  }, [pathname])
+  const logoHeight =
+    (LOGO_DISPLAY_SIZE * SPLASH_SPINNER_VIEWBOX.height) / SPLASH_SPINNER_VIEWBOX.width
 
-  // Reset progress and hide loader on page load completion
+  const topArcFill = `color-mix(in srgb, ${theme.palette.primary.lighter} 14%, ${theme.palette.text.primary})`
+  const bottomArcFill = theme.palette.primary.darker
+
+  // When the route settles, release the anchor-click pending slot
   useEffect(() => {
     if (isNavigating) {
-      setProgress(100)
-      const timer = setTimeout(() => {
-        setIsNavigating(false)
-        setProgress(0)
-      }, 400) // allow transition to finish
-      return () => clearTimeout(timer)
+      finishNavigation()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname, searchParams])
 
-  // Trickle progress while navigating
-  useEffect(() => {
-    if (isNavigating && progress < 90) {
-      const timer = setTimeout(() => {
-        setProgress(prev => {
-          const diff = Math.random() * 8 + 2
-          return Math.min(prev + diff, 90)
-        })
-      }, 150)
-      return () => clearTimeout(timer)
-    }
-  }, [isNavigating, progress])
-
+  // Intercept internal anchor clicks
   useEffect(() => {
     const handleAnchorClick = (event: MouseEvent) => {
       const anchor = (event.target as HTMLElement).closest('a')
-
       if (!anchor) return
-
-      const target = anchor.getAttribute('target')
-      if (target === '_blank' || anchor.hasAttribute('download')) {
-        return
-      }
-
-      const targetHref = anchor.href
-      const currentHref = window.location.href
+      if (anchor.getAttribute('target') === '_blank' || anchor.hasAttribute('download')) return
 
       try {
-        const targetUrl = new URL(targetHref)
-        const currentUrl = new URL(currentHref)
-
-        // Only intercept internal links with same origin
-        if (targetUrl.origin === currentUrl.origin) {
-          // If the pathname or search parameters are different (ignoring hash shifts)
-          if (
-            targetUrl.pathname !== currentUrl.pathname ||
-            targetUrl.search !== currentUrl.search
-          ) {
-            setIsNavigating(true)
-            setProgress(15) // start at 15%
-          }
+        const targetUrl = new URL(anchor.href)
+        const currentUrl = new URL(window.location.href)
+        if (
+          targetUrl.origin === currentUrl.origin &&
+          (targetUrl.pathname !== currentUrl.pathname ||
+            targetUrl.search !== currentUrl.search)
+        ) {
+          startNavigation()
         }
-      } catch (e) {
-        // Fallback
+      } catch {
+        // ignore malformed URLs
       }
     }
 
     document.addEventListener('click', handleAnchorClick)
-    return () => {
-      document.removeEventListener('click', handleAnchorClick)
-    }
-  }, [])
+    return () => document.removeEventListener('click', handleAnchorClick)
+  }, [startNavigation])
 
   return (
     <AnimatePresence>
       {isNavigating && (
         <Box
           component={motion.div}
+          key="nav-loader"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           sx={{
             position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '3px',
+            inset: 0,
             zIndex: 99999,
             pointerEvents: 'none',
+            backdropFilter: 'blur(24px) saturate(1.08) brightness(0.82)',
+            WebkitBackdropFilter: 'blur(24px) saturate(1.08) brightness(0.82)',
+            bgcolor: paletteAlpha(theme.vars!.palette.background.default, 0.55),
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
           }}
         >
           <Box
             component={motion.div}
-            initial={{ width: '0%' }}
-            animate={{ width: `${progress}%` }}
-            transition={{ type: 'spring', stiffness: 70, damping: 20 }}
-            sx={{
-              height: '100%',
-              bgcolor: '#0DF1D9',
-              boxShadow: '0 0 8px #0DF1D9, 0 0 15px rgba(13, 241, 217, 0.6)',
+            role="status"
+            aria-label="Loading"
+            animate={{ rotate: 360 }}
+            transition={{
+              duration: SPLASH_SPINNER_ROTATE_DURATION_S,
+              repeat: Infinity,
+              ease: 'linear',
             }}
-          />
+            sx={{
+              width: LOGO_DISPLAY_SIZE,
+              height: logoHeight,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              willChange: 'transform',
+              filter: `drop-shadow(0 0 14px ${paletteAlpha(theme.palette.primary.main, 0.6)})`,
+            }}
+          >
+            <Box
+              component="svg"
+              viewBox={`0 0 ${SPLASH_SPINNER_VIEWBOX.width} ${SPLASH_SPINNER_VIEWBOX.height}`}
+              xmlns="http://www.w3.org/2000/svg"
+              aria-hidden
+              sx={{ width: '100%', height: '100%', display: 'block', overflow: 'visible' }}
+            >
+              <path d={SPLASH_SPINNER_TOP_ARC_PATH} fill={topArcFill} />
+              <path d={SPLASH_SPINNER_BOTTOM_ARC_PATH} fill={bottomArcFill} />
+            </Box>
+          </Box>
         </Box>
       )}
     </AnimatePresence>

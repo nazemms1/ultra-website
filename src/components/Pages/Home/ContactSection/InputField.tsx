@@ -12,6 +12,7 @@ export default function InputField({
   type = 'text',
   value,
   onChange,
+  readOnly = false,
 }: InputFieldProps) {
   const theme = useTheme()
 
@@ -24,6 +25,7 @@ export default function InputField({
       onChange={e => onChange(e.target.value)}
       slotProps={{
         input: {
+          readOnly,
           startAdornment: Icon ? (
             <InputAdornment position="start">
               <Icon size={16} color={theme.palette.primary.main} strokeWidth={1.5} />
@@ -31,7 +33,13 @@ export default function InputField({
           ) : undefined,
         },
       }}
-      sx={contactFieldSx(theme)}
+      sx={{
+        ...contactFieldSx(theme),
+        ...(readOnly && {
+          '& .MuiInputBase-root': { cursor: 'default' },
+          '& .MuiInputBase-input': { cursor: 'default' },
+        }),
+      }}
     />
   )
 }

@@ -566,6 +566,7 @@ export default function ContactSection({ data }: { data?: any }) {
                       icon={MapPin}
                       value={address}
                       onChange={setAddress}
+                      readOnly
                     />
                   </Box>
                 </Box>
