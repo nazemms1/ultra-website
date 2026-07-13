@@ -9,6 +9,7 @@ import { useSplashComplete } from '@/components/shared/SplashScreen'
 import { motion, Variants } from 'framer-motion'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -52,6 +53,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
   const splashComplete = useSplashComplete()
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const itemVariants = makeItemVariants(isRtl)
 
   // Track whether the entrance animation has already fired so it never re-hides.
@@ -152,29 +154,41 @@ export default function HeroSection({ data }: HeroSectionProps) {
           zIndex: 0,
         }}
       >
-        <Box
-          component="video"
-          autoPlay
-          muted
-          loop
-          playsInline
-          preload="metadata"
-          width={1920}
-          height={1080}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transform: isRtl ? 'translateZ(0) scaleX(-1)' : 'translateZ(0)',
-            backfaceVisibility: 'hidden',
-            willChange: 'transform',
-          }}
-        >
-          <source
-            src={data?.background_video?.url || '/videos/hero.mp4'}
-            type="video/mp4"
+        {isMobile ? (
+          /* Mobile: static dark gradient background — no video download */
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              background: 'linear-gradient(135deg, #0a0a0a 0%, #121212 50%, #0d1a1a 100%)',
+            }}
           />
-        </Box>
+        ) : (
+          /* Desktop: full video */
+          <Box
+            component="video"
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            width={1920}
+            height={1080}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transform: isRtl ? 'translateZ(0) scaleX(-1)' : 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              willChange: 'transform',
+            }}
+          >
+            <source
+              src={data?.background_video?.url || '/videos/hero.mp4'}
+              type="video/mp4"
+            />
+          </Box>
+        )}
       </Box>
 
       <Box

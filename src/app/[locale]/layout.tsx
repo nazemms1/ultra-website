@@ -100,6 +100,9 @@ export default async function LocaleLayout({ children, params }: Props) {
         {/* Preconnect to font origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preconnect to backend API for faster image/data loading */}
+        <link rel="preconnect" href="https://newwebsite-dev-back.ultrawares.com" />
+        <link rel="dns-prefetch" href="https://newwebsite-dev-back.ultrawares.com" />
         {/* Preload critical custom fonts */}
         <link rel="preload" as="font" href="/fonts/Nulshock Bd.otf" type="font/otf" crossOrigin="anonymous" />
         {isArabic && (
