@@ -8,7 +8,6 @@ import { alpha, useTheme } from '@mui/material/styles'
 import Image from 'next/image'
 import SectionHeader from '@/components/shared/SectionHeader'
 import { glassSurface } from '@/lib/theme/surfaces'
-import { shouldDisableScrollVideo } from './ScrollVideoStack/deviceUtils'
 
 interface TestimonialItem {
   id: number
@@ -48,13 +47,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   const primary = theme.palette.primary.main
   const isRtl = theme.direction === 'rtl'
 
-  const [isMobile, setIsMobile] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    setIsMobile(shouldDisableScrollVideo())
-  }, [])
 
   useEffect(() => {
     const section = sectionRef.current
@@ -129,16 +123,16 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           component="video"
           autoPlay
           muted
-         
           playsInline
           sx={{
+            display: { xs: 'none', md: 'block' },
             position: 'absolute',
             inset: 0,
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            zIndex: 100,
-            
+            zIndex: 200,
+            pointerEvents: 'none', // Allow clicks to pass through
           }}
         >
           <source src={videoUrl} type={videoUrl.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
@@ -148,10 +142,11 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
       {videoUrl && (
         <Box
           sx={theme => ({
+            display: { xs: 'none', md: 'block' },
             position: 'absolute',
             inset: 0,
-            zIndex: 0,
-            pointerEvents: 'none', 
+            zIndex: 102,
+            pointerEvents: 'none', // Allow clicks to pass through
             '&::before': {
               content: '""',
               position: 'absolute',
@@ -182,20 +177,20 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         />
       </Box>
 
-      {isMobile ? (
-        <Box
-          sx={{
-            position: 'relative',
-            width: '100%',
-            mt: 4,
-            zIndex: 200,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            px: 0,  
-            gap: 3,
-          }}
-        >
+      {/* Mobile Layout (Pure CSS flow) */}
+      <Box
+        sx={{
+          display: { xs: 'flex', md: 'none' },
+          position: 'relative',
+          width: '100%',
+          mt: 4,
+          zIndex: 200,
+          flexDirection: 'column',
+          alignItems: 'center',
+          px: 0,  
+          gap: 3,
+        }}
+      >
            <Box
             sx={{
               position: 'relative',
@@ -363,13 +358,14 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             })}
           </Box>
         </Box>
-      ) : (
+
+        {/* Desktop Layout (Orbiting structure) */}
         <Box
           sx={{
+            display: { xs: 'none', md: 'flex' },
             position: 'relative',
             width: ORBIT_RADIUS * 2 + 100,
             height: ORBIT_RADIUS * 2 + 100,
-            display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             mt: 4,
@@ -759,8 +755,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                       animation: 'avatarRotate 60s linear infinite',
                     }}
                   >
-                    {/* Inner wrapper - handles scale, shadow, padding, etc. */}
-                    <motion.div
+                     <motion.div
                       animate={{
                         scale: isActive ? 1.5625 : 1,
                       }}
@@ -810,7 +805,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             })}
           </div>
         </Box>
-      )}
-    </Box>
+      </Box>
+   
   )
 }

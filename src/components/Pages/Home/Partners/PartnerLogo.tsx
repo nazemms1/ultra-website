@@ -14,12 +14,10 @@ const MotionBox = motion.create(Box)
 export default function PartnerLogo({ partner, index, visible }: PartnerLogoProps) {
   const reduceMotion = useReducedMotion()
   const [hovered, setHovered] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
   const [active, setActive] = useState(false)
   const timeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
-    setIsMobile(shouldDisableScrollVideo())
     return () => {
       if (timeoutRef.current) {
         clearTimeout(timeoutRef.current)
@@ -28,10 +26,10 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
   }, [])
 
   const handleTap = () => {
-    if (!isMobile) return
+    const isMobileDevice = shouldDisableScrollVideo()
+    if (!isMobileDevice) return
 
     if (partner.url) {
-      window.open(partner.url, '_blank', 'noopener,noreferrer')
       return
     }
 
@@ -46,21 +44,21 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
     }, 1800)
   }
 
-  const showColor = reduceMotion || hovered || (isMobile && active)
+  const showColor = reduceMotion || hovered || active
 
   const inner = (
     <MotionBox
       tabIndex={partner.url ? -1 : reduceMotion ? -1 : 0}
       role="img"
       aria-label={partner.name}
-      onMouseEnter={() => !isMobile && setHovered(true)}
-      onMouseLeave={() => !isMobile && setHovered(false)}
-      onFocus={() => !isMobile && setHovered(true)}
-      onBlur={() => !isMobile && setHovered(false)}
+      onMouseEnter={() => !shouldDisableScrollVideo() && setHovered(true)}
+      onMouseLeave={() => !shouldDisableScrollVideo() && setHovered(false)}
+      onFocus={() => !shouldDisableScrollVideo() && setHovered(true)}
+      onBlur={() => !shouldDisableScrollVideo() && setHovered(false)}
       onClick={handleTap}
       animate={{
         scale:
-          (showColor && !reduceMotion && !isMobile) || (isMobile && active) ? HOVER_SCALE : 1,
+          (showColor && !reduceMotion && !shouldDisableScrollVideo()) || active ? HOVER_SCALE : 1,
       }}
       transition={HOVER_TRANSITION}
       sx={{
@@ -81,7 +79,7 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
           width: '100%',
           height: '100%',
           filter:
-            (showColor && !isMobile) || (isMobile && active)
+            (showColor && !shouldDisableScrollVideo()) || active
               ? theme => `drop-shadow(0 0 37.5px ${alpha(theme.palette.primary.main, 0.55)})`
               : 'none',
           transition: 'filter 0.3s ease',
@@ -141,7 +139,7 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
         transitionDelay: visible ? `${index * REVEAL_STAGGER_S}s` : '0s',
       }}
     >
-      {partner.url && !isMobile ? (
+      {partner.url ? (
         <Box
           component="a"
           href={partner.url}

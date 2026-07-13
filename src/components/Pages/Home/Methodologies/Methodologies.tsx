@@ -37,13 +37,6 @@ export default function Methodologies({ data }: MethodologiesProps) {
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
 
-  const [disabled, setDisabled] = useState(true)
-
-  useEffect(() => {
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setDisabled(!!reduce || shouldDisableScrollVideo())
-  }, [reduce])
-
   const items = data?.items || []
   const mappedPhases = items.map(item => ({
     number: String(item.phase_number).padStart(2, '0'),
@@ -79,7 +72,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
 
   if (data?.is_shown === false) return null
 
-  if (disabled) {
+  if (reduce) {
     return (
       <Box
         component="section"
@@ -110,14 +103,44 @@ export default function Methodologies({ data }: MethodologiesProps) {
       component="section" 
       id="methodologies"
       ref={trackRef}
-      // aria-label="How we turn ideas into reality"
-      sx={{ position: 'relative', height: '250vh' }}
+      sx={{
+        position: 'relative',
+        height: { xs: 'auto', md: '250vh' },
+        px: { xs: 3, md: 0 },
+        py: { xs: 8, md: 0 },
+        overflow: { xs: 'hidden', md: 'visible' },
+      }}
     >
+      {/* Mobile Layout (Pure CSS flow) */}
       <Box
         sx={{
+          display: { xs: 'block', md: 'none' },
+          width: '100%',
+        }}
+      >
+        <Header title={data?.title} description={data?.description} />
+        <Box
+          sx={{
+            mx: 'auto',
+            mt: 7,
+            display: 'flex',
+            maxWidth: 700,
+            flexDirection: 'column',
+            gap: 4,
+          }}
+        >
+          {phasesList.map(phase => (
+            <PhaseCardContent key={phase.number} phase={phase} />
+          ))}
+        </Box>
+      </Box>
+
+      {/* Desktop Sticky Deck Timeline */}
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'flex' },
           position: 'sticky',
           top: 0,
-          display: 'flex',
           height: '100dvh',
           minHeight: 700,
           width: '100%',

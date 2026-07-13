@@ -53,7 +53,6 @@ const TITLE_END = 0.15
 export default function Projects({ data }: { data?: any }) {
   const reduce = useReducedMotion()
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const trackRef = useRef<HTMLDivElement>(null)
 
   if (data?.is_shown === false) return null
@@ -63,8 +62,8 @@ export default function Projects({ data }: { data?: any }) {
 
   const { subtitle, title } = getSectionText(data)
 
-  /* ── mobile / reduced-motion: simple scrollable layout, no jank ── */
-  if (reduce || isMobile) {
+  /* ── reduced-motion: simple scrollable layout, no jank ── */
+  if (reduce) {
     return (
       <Box
         component="section"
@@ -89,20 +88,47 @@ export default function Projects({ data }: { data?: any }) {
     )
   }
 
-  /* ── desktop: scroll-jacked layout ──
-     Height = 1 viewport for the title intro + 1 per project
-  ── */
+  /* ── scroll-jacked layout — height depends on device ── */
   const totalVh = 1 + projects.length
   return (
     <Box
       component="section"
       id="projects"
       ref={trackRef}
-      sx={{ position: 'relative', height: `${totalVh * 100}vh` }}
+      sx={{
+        position: 'relative',
+        height: { xs: 'auto', md: `${totalVh * 100}vh` },
+        px: { xs: 3, sm: 5, md: 0 },
+        py: { xs: 8, md: 0 },
+      }}
     >
-      {/* Sticky frame */}
+      {/* Mobile Layout (Pure CSS flow) */}
       <Box
         sx={{
+          display: { xs: 'block', md: 'none' },
+          width: '100%',
+        }}
+      >
+        <SectionHeader align="center" subtitle={subtitle} title={title || undefined} />
+        <Box sx={{ mx: 'auto', mt: 6, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {projects.map((p, i) => (
+            <motion.div
+              key={p.id}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0 }}
+            >
+              <MobileProjectRow project={p} index={i} />
+            </motion.div>
+          ))}
+        </Box>
+      </Box>
+
+      {/* Desktop Sticky Frame */}
+      <Box
+        sx={{
+          display: { xs: 'none', md: 'block' },
           position: 'sticky',
           top: 0,
           height: '100vh',

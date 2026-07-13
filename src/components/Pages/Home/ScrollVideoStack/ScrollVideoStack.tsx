@@ -49,40 +49,39 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
 
   return (
     <Box ref={containerRef} sx={{ position: 'relative' }}>
-      {!disabled && (
+      <Box
+        ref={viewportRef}
+        aria-hidden
+        sx={{
+          display: { xs: 'none', md: 'block' },
+          position: 'sticky',
+          top: 0,
+          height: '100vh',
+          width: '100%',
+          zIndex: 0,
+          pointerEvents: 'none',
+          bgcolor: 'transparent',
+        }}
+      >
         <Box
-          ref={viewportRef}
-          aria-hidden
+          component={motion.div}
+          style={{ opacity: layerOpacity }}
           sx={{
-            position: 'sticky',
-            top: 0,
-            height: '100vh',
-            width: '100%',
-            zIndex: 0,
-            pointerEvents: 'none',
-            bgcolor: 'transparent',
+            position: 'absolute',
+            inset: 0,
+            visibility: isReady ? 'visible' : 'hidden',
           }}
         >
-          <Box
-            component={motion.div}
-            style={{ opacity: layerOpacity }}
-            sx={{
-              position: 'absolute',
-              inset: 0,
-              visibility: isReady ? 'visible' : 'hidden',
-            }}
-          >
-            <Box component="canvas" ref={canvasRef} sx={canvasSx} />
-          </Box>
+          <Box component="canvas" ref={canvasRef} sx={canvasSx} />
         </Box>
-      )}
+      </Box>
 
       <Box
         sx={{
           position: 'relative',
           zIndex: 1,
           overflow: 'visible',
-          ...(!disabled && { mt: '-100vh' }),
+          mt: { xs: 0, md: '-100vh' },
         }}
       >
         {children}
