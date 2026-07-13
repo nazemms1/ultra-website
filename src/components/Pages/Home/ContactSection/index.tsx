@@ -382,13 +382,7 @@ export default function ContactSection({ data }: { data?: any }) {
               </Typography>
             )}
 
-            {isCaptchaShown && (
-              <CaptchaBox
-                checked={captchaDone}
-                onToggle={() => setCaptchaDone(prev => !prev)}
-                label={t('captchaLabel')}
-              />
-            )}
+
           </Box>
         </Box>
 
@@ -472,12 +466,13 @@ export default function ContactSection({ data }: { data?: any }) {
               <SectionDivider />
               <StepLabel imageSrc="/images/contact/step-04.svg" label={t('step4')} />
               {isOnlineShown && isOnsiteShown && (
-                <Box sx={{ display: 'flex', gap: '10px', flexWrap: 'wrap', mb: '20px' }}>
+                <Box sx={{ display: 'flex', gap: '8px', flexWrap: 'nowrap', width: '100%', mb: '20px' }}>
                   <RadioOption
                     name="consultation-type"
                     label={t('onlineConsultation')}
                     checked={consultationType === 'online'}
                     onChange={() => setConsultationType('online')}
+                    sx={{ flex: 1 }}
                   />
                   <RadioOption
                     name="consultation-type"
@@ -491,6 +486,7 @@ export default function ContactSection({ data }: { data?: any }) {
                         setRegion('syria')
                       }
                     }}
+                    sx={{ flex: 1 }}
                   />
                 </Box>
               )}
@@ -577,6 +573,15 @@ export default function ContactSection({ data }: { data?: any }) {
           <SectionDivider />
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+            {isCaptchaShown && (
+              <Box sx={{ mb: '8px' }}>
+                <CaptchaBox
+                  checked={captchaDone}
+                  onToggle={() => setCaptchaDone(prev => !prev)}
+                  label={t('captchaLabel')}
+                />
+              </Box>
+            )}
             <ContactSubmitButton disabled={!canSubmit} label={t('submitButton')} />
             {submitSuccess === true && (
               <Typography sx={{ color: 'success.main', mt: 1 }}>{t('successMessage')}</Typography>

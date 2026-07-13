@@ -4,7 +4,7 @@ import type { RefObject } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
-import { useTheme, alpha } from '@mui/material/styles'
+import { alpha, useTheme } from '@mui/material/styles'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import Image from 'next/image'
 import AnimatedButton from '@/components/shared/AnimatedButton'
@@ -60,20 +60,6 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
   // ── slide up on enter ────────────────────────────────────
   const y = useTransform(scrollYProgress, [enterStart, enterEnd], ['40px', '0px'])
 
-  // ── image slides in from its edge ───────────────────────
-  const imageX = useTransform(
-    scrollYProgress,
-    [enterStart, enterEnd],
-    imageFirst ? ['-50px', '0px'] : ['50px', '0px'],
-  )
-
-  // ── text slides in from opposite edge ───────────────────
-  const textX = useTransform(
-    scrollYProgress,
-    [enterStart, enterEnd],
-    imageFirst ? ['50px', '0px'] : ['-50px', '0px'],
-  )
-
   return (
     <motion.div
       style={{ opacity, y, position: 'absolute', inset: 0 }}
@@ -116,9 +102,8 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
           }}
         >
           {/* Mockup */}
-          <motion.div
-            style={{
-              x: imageX,
+          <Box
+            sx={{
               order: imageFirst ? 0 : 1,
               display: 'flex',
               justifyContent: 'center',
@@ -145,12 +130,11 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
                 loading={index === 0 ? 'eager' : 'lazy'}
               />
             </Box>
-          </motion.div>
+          </Box>
 
           {/* Text block */}
-          <motion.div
-            style={{
-              x: textX,
+          <Box
+            sx={{
               order: imageFirst ? 1 : 0,
               display: 'flex',
               flexDirection: 'column',
@@ -195,7 +179,7 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
                 {isRtl ? 'عرض التفاصيل' : 'See full details'}
               </AnimatedButton>
             </Box>
-          </motion.div>
+          </Box>
         </Box>
       </Box>
     </motion.div>

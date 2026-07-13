@@ -36,6 +36,7 @@ export interface RadioOptionProps {
   onChange: () => void
   name: string
   disabled?: boolean
+  sx?: any
 }
 
 export interface InputFieldProps {

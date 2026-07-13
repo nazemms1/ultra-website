@@ -41,15 +41,13 @@ export default function Stats({ data }: StatsProps) {
       ref={sectionRef}
       component="section"
       id="stats"
-      sx={() => {
-        return {
-          position: 'relative',
-          width: '100%',
-          mt: { xs: -6, md: -8 },
-          pt: { xs: 7, md: '52px' },
-          pb: { xs: 6, md: 8 },
-          overflow: 'visible',
-        }
+      sx={{
+        position: 'relative',
+        width: '100%',
+        mt: { xs: -6, md: -8 },
+        pt: { xs: 7, md: '52px' },
+        pb: { xs: 6, md: 8 },
+        overflow: { xs: 'hidden', md: 'visible' },
       }}
     >
       <Box
@@ -57,12 +55,12 @@ export default function Stats({ data }: StatsProps) {
           maxWidth: theme.breakpoints.values.xl,
           mx: 'auto',
           px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
-          display: 'flex',
-          flexDirection: 'row',
-          flexWrap: 'nowrap',
-          overflowX: { xs: 'auto', md: 'visible' },
-          justifyContent: { xs: 'flex-start', md: 'center' },
-          alignItems: 'flex-start',
+          display: { xs: 'grid', md: 'flex' },
+          gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(2, 1fr)' },
+          flexDirection: { md: 'row' },
+          flexWrap: { md: 'nowrap' },
+          justifyContent: { md: 'center' },
+          alignItems: { xs: 'center', md: 'flex-start' },
           gap: { xs: 4, md: 4 },
           pb: { xs: 2, md: 0 },
           scrollbarWidth: 'none',

@@ -7,7 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { alpha, useTheme } from '@mui/material/styles'
 import Image from 'next/image'
 import SectionHeader from '@/components/shared/SectionHeader'
-import { cardGlassSurface, glassSurface } from '@/lib/theme/surfaces'
+import { glassSurface } from '@/lib/theme/surfaces'
 import { shouldDisableScrollVideo } from './ScrollVideoStack/deviceUtils'
 
 interface TestimonialItem {
@@ -49,7 +49,6 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   const isRtl = theme.direction === 'rtl'
 
   const [isMobile, setIsMobile] = useState(false)
-  const scrollRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
 
@@ -92,34 +91,6 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   const testimonialsList: TestimonialItem[] = mappedTestimonials
   const activeTestimonial = testimonialsList[activeIndex] || testimonialsList[0]
-
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    const container = e.currentTarget
-    const scrollLeft = container.scrollLeft
-    const width = container.clientWidth
-    if (width > 0) {
-      const scrollIndex = Math.round(Math.abs(scrollLeft) / width)
-      if (
-        scrollIndex !== activeIndex &&
-        scrollIndex >= 0 &&
-        scrollIndex < testimonialsList.length
-      ) {
-        setActiveIndex(scrollIndex)
-      }
-    }
-  }
-
-  const scrollToCard = (index: number) => {
-    if (scrollRef.current) {
-      const width = scrollRef.current.clientWidth
-      const multiplier = isRtl ? -1 : 1
-      scrollRef.current.scrollTo({
-        left: index * width * multiplier,
-        behavior: 'smooth',
-      })
-      setActiveIndex(index)
-    }
-  }
 
   const getAvatarPosition = (index: number) => {
     const angleOffset = Math.PI / 2 // 90 degrees
@@ -166,8 +137,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             width: '100%',
             height: '100%',
             objectFit: 'cover',
-            zIndex: 200,
-            pointerEvents: 'none', // Allow clicks to pass through
+            zIndex: 100,
+            
           }}
         >
           <source src={videoUrl} type={videoUrl.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
@@ -179,8 +150,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           sx={theme => ({
             position: 'absolute',
             inset: 0,
-            zIndex: 102,
-            pointerEvents: 'none', // Allow clicks to pass through
+            zIndex: 0,
+            pointerEvents: 'none', 
             '&::before': {
               content: '""',
               position: 'absolute',
@@ -216,122 +187,180 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           sx={{
             position: 'relative',
             width: '100%',
-            height: '100%',
-            maxWidth: 'min(100vw, 500px)',
             mt: 4,
-            px: 2,
             zIndex: 200,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
+            px: 0,  
+            gap: 3,
           }}
         >
-          {/* Horizontal scroll container with scroll snapping */}
-          <Box
-            ref={scrollRef}
-            onScroll={handleScroll}
+           <Box
             sx={{
-              display: 'flex',
-              gap: '16px',
+              position: 'relative',
               width: '100%',
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
-              scrollbarWidth: 'none',
-              '&::-webkit-scrollbar': { display: 'none' },
-            }}
-          >
-            {testimonialsList.map((item, idx) => (
-              <Box
-                key={item.id}
-                sx={{
-                  flex: '0 0 100%',
-                  scrollSnapAlign: 'center',
-                  width: '100%',
-                  background: 'transparent',
-                  boxShadow: 'none',
-                  display: 'flex',
-                  flexDirection: 'column',
-                }}
-              >
-                {/* Single bottom card */}
-                <Box sx={{
-                  width: '100%',
-                  p: { xs: 2.5, sm: 3 },
-                  ...cardGlassSurface(theme, { radius: '20px' }),
-                  display: 'flex',
-                  // backgroundColor: 'rgba(238, 0, 0, 0.75)',
-                  flexDirection: 'column',
-                  gap: 1.5,
-                }}>
-                  {/* Review text */}
-                  <Typography sx={{
-                    textAlign: isRtl ? 'right' : 'left',
-                    color: 'rgba(255,255,255,0.9)',
-                    fontSize: isRtl ? '13px' : '15px',
-                    fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
-                    fontWeight: isRtl ? '400' : '500',
-                    lineHeight: 1.6,
-                    wordBreak: 'break-word',
-                  }}>
-                    {item.text}
-                  </Typography>
-
-                  {/* Divider */}
-                  <Box sx={{ width: '100%', height: '1px', background: 'linear-gradient(to right, transparent, rgba(13,241,217,0.3), transparent)' }} />
-
-                  {/* Bottom row: avatar+name on right, stars on left */}
-                  <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', direction: 'rtl' }}>
-                    {/* Right: avatar + name */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.2 }}>
-                      <Box sx={{ position: 'relative', width: 38, height: 38, borderRadius: '50%', overflow: 'hidden', border: `2px solid ${primary}`, boxShadow: `0 0 8px ${alpha(primary, 0.5)}`, flexShrink: 0 }}>
-                        <Image src={item.avatar} alt={item.name} fill style={{ objectFit: 'cover' }} />
-                      </Box>
-                      <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: '1px' }}>
-                        <Typography sx={{ color: 'white', fontSize: '13px', fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif", fontWeight: '700', lineHeight: 1.2 }}>
-                          {item.name}
-                        </Typography>
-                        <Typography sx={{ color: primary, fontSize: '10px', fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: '500' }}>
-                          {item.role}
-                        </Typography>
-                      </Box>
-                    </Box>
-
-                    {/* Left: stars */}
-                    <Box sx={{ display: 'flex', gap: '2px', alignItems: 'center' }}>
-                      {[...Array(item.rating || 5)].map((_, i) => (
-                        <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 13, lineHeight: 1 }}>★</Typography>
-                      ))}
-                    </Box>
-                  </Box>
-                </Box>
-              </Box>
-            ))}
-          </Box>
-
-          {/* Dots Indicator (Synced with Scroll) */}
-          <Box
-            sx={{
+              maxWidth: '100%',  
+              px: '20%',  
+              pt: '22%',
+              pb: '22%',
               display: 'flex',
-              gap: 1.5,
-              mt: 3,
+              flexDirection: 'column',
               justifyContent: 'center',
               alignItems: 'center',
             }}
           >
-            {testimonialsList.map((_, idx) => (
-              <Box
-                key={idx}
-                onClick={() => scrollToCard(idx)}
-                sx={{
-                  width: idx === activeIndex ? 20 : 8,
-                  height: 8,
-                  borderRadius: '4px',
-                  backgroundColor: idx === activeIndex ? primary : 'rgba(255, 255, 255, 0.3)',
-                  transition: 'all 0.3s ease',
-                  cursor: 'pointer',
-                }}
-              />
-            ))}
+             <Box
+              component="img"
+              src="/icons/Container.svg"
+              alt=""
+              sx={{
+                position: 'absolute',
+                top: '-15.66%',
+                bottom: '-15.66%',
+                left: '-19.44%',
+                right: '-19.44%',
+                width: '138.88%',
+                height: '131.32%',
+                objectFit: 'fill',
+                pointerEvents: 'none',
+                zIndex: 0,
+              }}
+            />
+
+            {/* Inner column */}
+            <Box
+              sx={{
+                position: 'relative',
+                zIndex: 1,
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                gap: '16px',
+              }}
+            >
+
+              {/* Pixel-art icon — 84×84 from Figma */}
+              
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeIndex}
+                  initial={{ opacity: 0, y: 6 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -6 }}
+                  transition={{ duration: 0.35, ease: 'easeInOut' }}
+                  style={{ alignSelf: 'stretch', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
+                >
+               
+                  <Typography
+                    sx={{
+                      alignSelf: 'stretch',
+                      textAlign: 'center',
+                      color: '#fff',
+                      fontSize: isRtl ? '15px' : '16px',
+                      fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
+                      fontWeight: isRtl ? 400 : 500,
+                      lineHeight: '26px',
+                      wordBreak: 'break-word',
+                      mb: '22px',
+                      top: 10,
+                    }}
+                  >
+                    {activeTestimonial.text}
+                  </Typography>
+
+                  {/* Stars — Figma: fontSize 16, Inter, color #0DF1D9, gap 4 */}
+                  <Box sx={{ display: 'flex', gap: '4px', alignItems: 'flex-start', mb: '8px' }}>
+                    {[...Array(activeTestimonial.rating ?? 5)].map((_, i) => (
+                      <Typography key={i} sx={{ color: '#0DF1D9', fontSize: 16, fontFamily: 'Inter, sans-serif', fontWeight: 400, lineHeight: '24px' }}>★</Typography>
+                    ))}
+                  </Box>
+
+                  {/* Name block — Figma: paddingTop 8, gap 4 */}
+                  <Box sx={{ width: 235.3, pt: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+                    {/* Name — Figma: Nulshock 700, 14px, letterSpacing 1, lineHeight 21 */}
+                    <Typography
+                      sx={{
+                        textAlign: 'center',
+                        color: '#fff',
+                        fontSize: '14px',
+                        fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif",
+                        fontWeight: 700,
+                        lineHeight: '21px',
+                        letterSpacing: '1px',
+                        wordBreak: 'break-word',
+                      }}
+                    >
+                      {activeTestimonial.name}
+                    </Typography>
+
+                    {/* Role — Figma: Rajdhani 400, 13px, uppercase, letterSpacing 2, lineHeight 19.5 */}
+                    <Box sx={{ textAlign: 'center', width: '100%' }}>
+                      {activeTestimonial.role.includes('·') ? (
+                        <>
+                          <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
+                            {activeTestimonial.role.split('·')[0]}·{' '}
+                          </Typography>
+                          <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
+                            {activeTestimonial.role.split('·')[1]}
+                          </Typography>
+                        </>
+                      ) : (
+                        <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
+                          {activeTestimonial.role}
+                        </Typography>
+                      )}
+                    </Box>
+                  </Box>
+                </motion.div>
+              </AnimatePresence>
+            </Box>
+          </Box>
+
+          {/* ── Avatar row — outside the card ── */}
+          <Box
+            sx={{
+              display: 'flex',
+              gap: '16px',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            {testimonialsList.map((item, idx) => {
+              const isActive = idx === activeIndex
+              return (
+                <Box
+                  key={item.id}
+                  onClick={() => setActiveIndex(idx)}
+                  sx={{
+                    position: 'relative',
+                    width: isActive ? 56 : 44,
+                    height: isActive ? 56 : 44,
+                    borderRadius: '50%',
+                    overflow: 'hidden',
+                    border: `2px solid ${isActive ? primary : alpha(primary, 0.18)}`,
+                    boxShadow: isActive
+                      ? `0 0 0 3px ${alpha(primary, 0.25)}, 0 0 20px ${alpha(primary, 0.55)}`
+                      : 'none',
+                    transition: 'all 0.3s ease',
+                    cursor: 'pointer',
+                    flexShrink: 0,
+                  }}
+                >
+                  <Image
+                    src={item.avatar}
+                    alt={item.name}
+                    fill
+                    style={{
+                      objectFit: 'cover',
+                      opacity: isActive ? 1 : 0.45,
+                      transition: 'opacity 0.3s ease',
+                    }}
+                  />
+                </Box>
+              )
+            })}
           </Box>
         </Box>
       ) : (

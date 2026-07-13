@@ -14,6 +14,7 @@ export default function RadioOption({
   onChange,
   name,
   disabled = false,
+  sx,
 }: RadioOptionProps) {
   const theme = useTheme()
 
@@ -32,6 +33,7 @@ export default function RadioOption({
             color: 'primary.main',
           },
         },
+        ...sx,
       }}
     >
       <Radio
@@ -53,7 +55,7 @@ export default function RadioOption({
       <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",
-          fontSize: '15px',
+          fontSize: { xs: '13px', sm: '15px' },
           fontWeight: 500,
           letterSpacing: '0.02em',
           color: checked ? 'text.primary' : alpha(theme.palette.text.primary, 0.65),

@@ -5,6 +5,8 @@ import { useRef } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import useMediaQuery from '@mui/material/useMediaQuery'
+import { useTheme } from '@mui/material/styles'
 import SectionHeader from '@/components/shared/SectionHeader'
 import { StaticProjectRow } from './StaticProjectRow'
 import { PROJECTS } from './data'
@@ -50,6 +52,8 @@ const TITLE_END = 0.15
 
 export default function Projects({ data }: { data?: any }) {
   const reduce = useReducedMotion()
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const trackRef = useRef<HTMLDivElement>(null)
 
   if (data?.is_shown === false) return null
@@ -59,23 +63,33 @@ export default function Projects({ data }: { data?: any }) {
 
   const { subtitle, title } = getSectionText(data)
 
-  /* ── reduced-motion fallback ── */
-  if (reduce) {
+  /* ── mobile / reduced-motion: simple scrollable layout, no jank ── */
+  if (reduce || isMobile) {
     return (
       <Box
         component="section"
         id="projects"
-        sx={{ px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' }, py: 12 }}
+        sx={{ px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' }, py: { xs: 8, md: 12 } }}
       >
         <SectionHeader align="center" subtitle={subtitle} title={title || undefined} />
-        <Box sx={{ mx: 'auto', mt: 8, maxWidth: 1480, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {projects.map(p => <StaticProjectRow key={p.id} project={p} />)}
+        <Box sx={{ mx: 'auto', mt: { xs: 6, md: 8 }, maxWidth: 1480, display: 'flex', flexDirection: 'column', gap: { xs: 10, md: 10 } }}>
+          {projects.map((p, i) => (
+            <motion.div
+              key={p.id}
+              initial={{ opacity: 0, y: 32 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0 }}
+            >
+              <MobileProjectRow project={p} index={i} />
+            </motion.div>
+          ))}
         </Box>
       </Box>
     )
   }
 
-  /* ── scroll-jacked layout ──
+  /* ── desktop: scroll-jacked layout ──
      Height = 1 viewport for the title intro + 1 per project
   ── */
   const totalVh = 1 + projects.length
@@ -108,6 +122,100 @@ export default function Projects({ data }: { data?: any }) {
             trackRef={trackRef}
           />
         ))}
+      </Box>
+    </Box>
+  )
+}
+
+/* ─── MobileProjectRow ────────────────────────────────
+   Image first, then title + description + button.
+   No scroll transforms — pure CSS, zero jank.
+─────────────────────────────────────────────────────── */
+
+import Image from 'next/image'
+import { ArrowRight, ArrowLeft } from 'lucide-react'
+import AnimatedButton from '@/components/shared/AnimatedButton'
+import { alpha } from '@mui/material/styles'
+
+function MobileProjectRow({ project, index }: { project: ProjectItem; index: number }) {
+  const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
+  const isMobileMockup = project.mockup.kind === 'mobile'
+
+  return (
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+      {/* Image */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          maxWidth: isMobileMockup ? 200 : '100%',
+          mx: 'auto',
+          aspectRatio: isMobileMockup ? '9/16' : '16/9',
+          transform: isMobileMockup ? 'rotate(2deg)' : 'none',
+          filter: 'drop-shadow(0 24px 48px rgba(0,0,0,0.45))',
+        }}
+      >
+        {/* Subtle glow */}
+        <Box
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            inset: 0,
+            borderRadius: 3,
+            background: index % 2 === 0
+              ? `radial-gradient(ellipse 80% 60% at 20% 70%, ${alpha(theme.palette.primary.main, 0.09)} 0%, transparent 70%)`
+              : `radial-gradient(ellipse 80% 60% at 80% 70%, ${alpha(theme.palette.primary.main, 0.09)} 0%, transparent 70%)`,
+            pointerEvents: 'none',
+          }}
+        />
+        <Image
+          src={project.mockup.src}
+          alt={project.mockup.alt}
+          fill
+          sizes="(max-width: 600px) 90vw, 45vw"
+          style={{ objectFit: 'contain' }}
+          loading={index === 0 ? 'eager' : 'lazy'}
+        />
+      </Box>
+
+      {/* Text + button */}
+      <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+        <Typography
+          component="h3"
+          sx={{
+            fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+            fontSize: { xs: '1.5rem', sm: '2rem' },
+            lineHeight: 1.1,
+            letterSpacing: '0.02em',
+            textTransform: 'uppercase',
+            color: 'text.primary',
+          }}
+        >
+          {project.title}
+        </Typography>
+
+        <Box sx={{ width: 48, height: 2, borderRadius: 1, background: theme.palette.primary.main }} />
+
+        <Typography
+          sx={{
+            fontFamily: "'Rajdhani', sans-serif",
+            fontSize: { xs: '0.95rem', sm: '1.05rem' },
+            lineHeight: 1.75,
+            color: 'text.secondary',
+          }}
+        >
+          {project.description}
+        </Typography>
+
+        <AnimatedButton
+          variant="secondary"
+          href={project.href}
+          endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
+          sx={{ alignSelf: 'flex-start', px: 3, mt: 1 }}
+        >
+          {isRtl ? 'عرض التفاصيل' : 'See full details'}
+        </AnimatedButton>
       </Box>
     </Box>
   )

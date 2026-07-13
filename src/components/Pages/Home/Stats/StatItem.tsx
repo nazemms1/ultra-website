@@ -23,7 +23,7 @@ export default function StatItem({ stat, active }: StatItemProps) {
         display: 'flex',
         justifyContent: 'center',
         flexShrink: 0,
-        width: { xs: 180, sm: 200, md: 206.5 },
+        width: { xs: '100%', md: 206.5 },
         minHeight: { xs: 90, md: 110 },
       }}
     >
