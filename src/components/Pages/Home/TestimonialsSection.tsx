@@ -121,7 +121,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         playsInline
         preload="none"
         style={{
-          display: 'block',
+          display: 'none',
           position: 'absolute',
           inset: 0,
           width: '100%',
@@ -130,6 +130,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           zIndex: 0,
           pointerEvents: 'none',
         }}
+        className="desktop-only-video"
       >
         <source src={videoUrl} type={videoUrl.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
       </video>

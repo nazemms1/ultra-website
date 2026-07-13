@@ -1,7 +1,6 @@
 import { alpha } from '@mui/material/styles'
 import { useState } from 'react'
 import { Box, Typography, Collapse } from '@mui/material'
-import Image from 'next/image'
 import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 export default function FAQCard({ question, answer }: { question: string; answer: string }) {
@@ -84,9 +83,9 @@ export default function FAQCard({ question, answer }: { question: string; answer
           }}
         >
           {open ? (
-            <Image src="/icons/mins.svg" alt="collapse" width={60} height={60} />
+            <Box component="img" src="/icons/mins.svg" alt="collapse" sx={{ width: 40, height: 40, display: 'block' }} />
           ) : (
-            <Image src="/icons/plus.svg" alt="expand" width={40} height={40} />
+            <Box component="img" src="/icons/plus.svg" alt="expand" sx={{ width: 40, height: 40, display: 'block' }} />
           )}
         </Box>
       </Box>

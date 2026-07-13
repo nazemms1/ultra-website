@@ -61,6 +61,12 @@ const GlobalStyles = () => css`
     background: color-mix(in srgb, var(--ultra-palette-primary-main) 50%, transparent);
   }
 
+  @media (min-width: 900px) {
+    .desktop-only-video {
+      display: block !important;
+    }
+  }
+
   html {
     margin: 0;
     padding: 0;

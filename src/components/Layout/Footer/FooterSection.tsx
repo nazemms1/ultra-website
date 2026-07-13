@@ -275,7 +275,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
         >
           <Stack
             direction={{ xs: 'column', md: 'row' }}
-            spacing={{ xs: 5, md: 0 }}
+            spacing={{ xs: 4, md: 0 }}
             sx={{
               pt: { md: '56px' },
               width: '100%',
@@ -378,7 +378,18 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
               )}
             </Stack>
 
-            <Stack spacing={2} sx={{ width: { md: 192 } }}>
+            {/* Useful Links + Services side by side on mobile */}
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: { xs: 4, md: 0 },
+                justifyContent: { xs: 'flex-start', md: 'space-between' },
+                width: { xs: '100%', md: 'auto' },
+                flexWrap: 'nowrap',
+              }}
+            >
+            <Stack spacing={2} sx={{ width: { xs: '50%', md: 192 } }}>
               <Typography variant="h5" sx={footerSectionTitleSx}>
                 {isAr ? 'روابط مفيدة' : 'Useful Links'}
               </Typography>
@@ -412,12 +423,15 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
               </Stack>
             </Stack>
 
-            <Stack spacing={2} sx={{ width: { md: 174 } }}>
+            <Stack spacing={2} sx={{ width: { xs: '50%', md: 174 } }}>
               <Typography variant="h5" sx={footerSectionTitleSx}>
                 {isAr ? 'خدماتنا' : 'Services'}
               </Typography>
               <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
-                {serviceItems.map(item => {
+                {(hasApiData && data?.services?.length > 0
+                  ? data.services.slice(0, 4).map((s: any) => s.title || s.name || s)
+                  : serviceItems
+                ).map((item: string) => {
                   let itemText: string = item
                   if (isAr) {
                     if (item === 'Business Analysis') itemText = 'تحليل الأعمال'
@@ -442,6 +456,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                 })}
               </Stack>
             </Stack>
+            </Box>
 
             {(address || mobile || phone || email) && (
               <Stack spacing={2} sx={{ width: { md: 220 } }}>
@@ -481,50 +496,39 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
           </Stack>
 
           {showStats && (
-            <Box sx={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-              <Box
-                component={motion.div}
-                initial={{ opacity: 0, y: 16 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-                // style bypasses stylis-plugin-rtl so backdropFilter is never stripped in RTL
-                style={{
-                  backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
-                  WebkitBackdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
-                }}
-                sx={{
-                  ...glassSurface(theme, { radius: '16px' }),
-                  width: '100%',
-                  color: '#0DF1D9',
-                  maxWidth: '100%',
-                  minHeight: { xs: 'auto', md: 120 },
-                  overflow: 'hidden',
-                }}
-              >
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' },
+                gap: { xs: 2, md: 3 },
+                width: '100%',
+              }}
+            >
+              {finalFooterStats.map((stat, i) => (
                 <Box
+                  key={stat.label}
+                  component={motion.div}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: '-40px' }}
+                  transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                  style={{
+                    backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+                    WebkitBackdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+                  }}
                   sx={{
-                    width: '100%',
+                    ...glassSurface(theme, { radius: '16px' }),
                     display: 'flex',
-                    flexDirection: 'row',
-                    flexWrap: 'nowrap',
-                    overflowX: 'auto',
-                    justifyContent: { xs: 'flex-start', md: 'space-around' },
+                    justifyContent: 'center',
                     alignItems: 'center',
                     py: 3,
                     px: 2,
-                    gap: 3,
-                    scrollbarWidth: 'none',
-                    '&::-webkit-scrollbar': {
-                      display: 'none',
-                    },
+                    color: '#0DF1D9',
                   }}
                 >
-                  {finalFooterStats.map(stat => (
-                    <StatItem key={stat.label} stat={stat} active />
-                  ))}
+                  <StatItem stat={stat} active />
                 </Box>
-              </Box>
+              ))}
             </Box>
           )}
         </Stack>
