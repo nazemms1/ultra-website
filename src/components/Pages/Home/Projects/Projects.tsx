@@ -1,10 +1,10 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { motion, useReducedMotion, useScroll, useTransform } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
 import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import SectionHeader from '@/components/shared/SectionHeader'
@@ -264,11 +264,14 @@ function SectionTitle({
     offset: ['start start', 'end end'],
   })
 
-  // y: centres in viewport (below navbar) → moves to top  over 0 → TITLE_END
+  // y: centres in viewport (below navbar) → moves to top over 0 → TITLE_END
   const y = useTransform(scrollYProgress, [0, TITLE_END], ['42vh', '0vh'])
 
-  // both subtitle and title fade out as the header rises to the top
-  const titleOpacity = useTransform(scrollYProgress, [0, TITLE_END * 0.7], [1, 0])
+  // title disappears instantly once scroll starts
+  const [titleVisible, setTitleVisible] = useState(true)
+  useMotionValueEvent(scrollYProgress, 'change', v => {
+    setTitleVisible(v < 0.01)
+  })
 
   return (
     <motion.div style={{ y }} data-section-title>
@@ -286,40 +289,39 @@ function SectionTitle({
           pointerEvents: 'none',
         }}
       >
-        <motion.div style={{ opacity: titleOpacity }}>
+        {/* subtitle always visible */}
+        <Typography
+          sx={{
+            fontFamily: "'Rajdhani', sans-serif",
+            fontSize: { xs: 11, md: 15 },
+            letterSpacing: 5,
+            textTransform: 'uppercase',
+            color: 'primary.main',
+            mb: 0.75,
+          }}
+        >
+          {subtitle}
+        </Typography>
+
+        {/* title visible only at scroll start, disappears instantly on scroll */}
+        {title && titleVisible && (
           <Typography
+            component="h2"
             sx={{
-              fontFamily: "'Rajdhani', sans-serif",
-              fontSize: { xs: 11, md: 15 },
-              letterSpacing: 5,
+              fontFamily: "'Nulshock', sans-serif",
+              fontSize: { xs: '1.5rem', md: '3.25rem' },
+              fontWeight: 700,
               textTransform: 'uppercase',
-              color: 'primary.main',
-              mb: 0.75,
+              color: 'text.primary',
+              lineHeight: 1.25,
+              mx: 'auto',
+              wordBreak: 'break-word',
             }}
           >
-            {subtitle}
+            {title}
           </Typography>
-        </motion.div>
-
-         {title && (
-          <motion.div style={{ opacity: titleOpacity }}>
-            <Typography
-              component="h2"
-              sx={{
-                fontFamily: "'Nulshock', sans-serif",
-                fontSize: { xs: '1.5rem', md: '3.25rem' },
-                fontWeight: 700,
-                textTransform: 'uppercase',
-                color: 'text.primary',
-                lineHeight: 1.25,
-                mx: 'auto',
-                wordBreak: 'break-word',
-              }}
-            >
-              {title}
-            </Typography>
-          </motion.div>
         )}
+
       </Box>
     </motion.div>
   )

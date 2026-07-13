@@ -161,12 +161,16 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
       onClick={handleContactClick}
       sx={{
         display: { xs: 'none', md: 'inline-flex' },
-        minHeight: 42,
-        maxHeight: 42,
-        fontSize: '14px',
-        letterSpacing: '0.62px',
-        px: 2.5,
-        py: 1.5,
+        fontSize: '12px',
+        fontFamily: "'Rajdhani', sans-serif",
+        fontWeight: 700,
+        letterSpacing: '0.49px',
+        textTransform: 'uppercase',
+ zIndex: 500,
+        '&:hover': {
+          color: '#121212',
+          boxShadow: '0px 0px 28px rgba(1, 177, 177, 0.70)',
+        },
       }}
     >
       {labels.contact}
