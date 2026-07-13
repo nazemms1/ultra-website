@@ -78,43 +78,23 @@ export default function PartnerLogo({ partner, index, visible }: PartnerLogoProp
           position: 'relative',
           width: '100%',
           height: '100%',
-          filter:
-            (showColor && !shouldDisableScrollVideo()) || active
-              ? theme => `drop-shadow(0 0 37.5px ${alpha(theme.palette.primary.main, 0.55)})`
-              : 'none',
-          transition: 'filter 0.3s ease',
         }}
       >
-        <MotionBox
-          aria-hidden={showColor}
-          animate={{ opacity: showColor ? 0 : 1 }}
-          transition={HOVER_TRANSITION}
-          sx={{ position: 'absolute', inset: 0 }}
-        >
-          <Image
-            src={partner.cyanSrc}
-            alt=""
-            fill
-            sizes="(max-width: 600px) 45vw, 200px"
-            priority={index < 2}
-            style={{ objectFit: 'contain' }}
-          />
-        </MotionBox>
-
-        <MotionBox
-          aria-hidden={!showColor}
-          animate={{ opacity: showColor ? 1 : 0 }}
-          transition={HOVER_TRANSITION}
-          sx={{ position: 'absolute', inset: 0 }}
-        >
-          <Image
-            src={partner.colorSrc}
-            alt=""
-            fill
-            sizes="(max-width: 600px) 45vw, 200px"
-            style={{ objectFit: 'contain' }}
-          />
-        </MotionBox>
+        <Image
+          src={showColor ? partner.colorSrc : partner.cyanSrc}
+          alt=""
+          fill
+          sizes="(max-width: 600px) 45vw, 200px"
+          priority={index < 2}
+          style={{
+            objectFit: 'contain',
+            transition: 'filter 0.3s ease',
+            filter:
+              (showColor && !shouldDisableScrollVideo()) || active
+                ? 'drop-shadow(0 0 37.5px rgba(13,241,217,0.55))'
+                : 'none',
+          }}
+        />
       </Box>
     </MotionBox>
   )

@@ -158,8 +158,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
           muted
           loop
           playsInline
-          preload="auto"
-           width={1920}
+          preload="metadata"
+          width={1920}
           height={1080}
           style={{
             width: '100%',

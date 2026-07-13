@@ -7,6 +7,11 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
 
   useEffect(() => {
+    // Disable smooth scroll for users who prefer reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    // Disable on touch-only devices — native momentum scroll is better
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
     const lenis = new Lenis({
       duration: 1.4,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),

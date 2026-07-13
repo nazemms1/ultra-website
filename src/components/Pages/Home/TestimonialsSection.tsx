@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useRef } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -47,29 +47,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
   const primary = theme.palette.primary.main
   const isRtl = theme.direction === 'rtl'
 
-  const videoRef = useRef<HTMLVideoElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          const video = videoRef.current
-          if (video) {
-            video.currentTime = 0
-            video.play().catch(() => {})
-          }
-        }
-      },
-      { threshold: 0.2 }
-    )
-
-    observer.observe(section)
-    return () => observer.disconnect()
-  }, [])
 
   if (data?.is_shown === false) return null
 
@@ -98,9 +76,6 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   if (!activeTestimonial) return null
 
-  const videoUrl =
-    (typeof data?.video === 'string' ? data.video : data?.video?.url) || '/videos/bg-video.webm'
-
   return (
     <Box
       ref={sectionRef}
@@ -114,62 +89,16 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        // color: '#fff',
       }}
     >
-      {videoUrl && (
+      <Box sx={{ zIndex: 200, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 3 }}>
+        {/* Logo above the section header */}
         <Box
-          ref={videoRef}
-          component="video"
-          autoPlay
-          muted
-          playsInline
-          sx={{
-            display: { xs: 'none', md: 'block' },
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: 200,
-            pointerEvents: 'none', // Allow clicks to pass through
-          }}
-        >
-          <source src={videoUrl} type={videoUrl.endsWith('.webm') ? 'video/webm' : 'video/mp4'} />
-        </Box>
-      )}
-
-      {videoUrl && (
-        <Box
-          sx={theme => ({
-            display: { xs: 'none', md: 'block' },
-            position: 'absolute',
-            inset: 0,
-            zIndex: 102,
-            pointerEvents: 'none', // Allow clicks to pass through
-            '&::before': {
-              content: '""',
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '120px',
-              background: 'linear-gradient(to bottom, rgba(18,18,18,0.7) 0%, rgba(18,18,18,0) 100%)',
-            },
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '120px',
-              background: 'linear-gradient(to top, rgba(18,18,18,0.7) 0%, rgba(18,18,18,0) 100%)',
-            },
-          })}
+          component="img"
+          src="/images/logo/logo-ultra.svg"
+          alt="Ultra logo"
+          sx={{ width: { xs: 72, md: 96 }, height: 'auto', opacity: 0.9 }}
         />
-      )}
-
-      <Box sx={{ zIndex: 200 }}>
         <SectionHeader
           title={data?.title ?? 'What Customers Say About Us'}
           subtitle={data?.subtitle ?? 'Voices from the field'}
@@ -187,7 +116,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           zIndex: 200,
           flexDirection: 'column',
           alignItems: 'center',
-          px: 0,  
+          px: 3,
           gap: 3,
         }}
       >
@@ -195,10 +124,10 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             sx={{
               position: 'relative',
               width: '100%',
-              maxWidth: '100%',  
-              px: '20%',  
-              pt: '22%',
-              pb: '22%',
+              maxWidth: '100%',
+              px: '18%',
+              pt: '42%',
+              pb: '42%',
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'center',
@@ -236,8 +165,14 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               }}
             >
 
-              {/* Pixel-art icon — 84×84 from Figma */}
-              
+              {/* Logo above comment text */}
+              <Box
+                component="img"
+                src="/icons/Frame 202.svg"
+                alt="Ultra logo"
+                sx={{ width: 84, height: 84, objectFit: 'contain', opacity: 0.85, mb: 1 }}
+              />
+
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
@@ -247,7 +182,6 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transition={{ duration: 0.35, ease: 'easeInOut' }}
                   style={{ alignSelf: 'stretch', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
                 >
-               
                   <Typography
                     sx={{
                       alignSelf: 'stretch',
@@ -347,6 +281,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                     src={item.avatar}
                     alt={item.name}
                     fill
+                    sizes="56px"
                     style={{
                       objectFit: 'cover',
                       opacity: isActive ? 1 : 0.45,
@@ -512,7 +447,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   transition={{ duration: 0.4, ease: 'easeInOut' }}
                   style={{
                     position: 'absolute',
-                    top: '345px',
+                    top: '305px',
                     left: '80px',
                     width: '440px',
                     flexDirection: 'column',
@@ -522,6 +457,13 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                     display: 'flex',
                   }}
                 >
+                  {/* Logo above comment text */}
+                  <Box
+                    component="img"
+                    src="/images/logo/logo-ultra.svg"
+                    alt="Ultra logo"
+                    sx={{ width: 52, height: 'auto', opacity: 0.85, mb: 0.5 }}
+                  />
                   <Typography
                     sx={{
                       width: '440px',
@@ -791,6 +733,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                           src={testimonial.avatar}
                           alt={testimonial.name}
                           fill
+                          sizes="100px"
                           style={{
                             objectFit: 'cover',
                             opacity: isActive ? 1 : 0.6,

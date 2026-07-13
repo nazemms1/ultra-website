@@ -89,25 +89,15 @@ export default function Projects({ data }: { data?: any }) {
   }
 
   /* ── scroll-jacked layout — height depends on device ── */
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const totalVh = 1 + projects.length
-  return (
-    <Box
-      component="section"
-      id="projects"
-      ref={trackRef}
-      sx={{
-        position: 'relative',
-        height: { xs: 'auto', md: `${totalVh * 100}vh` },
-        px: { xs: 3, sm: 5, md: 0 },
-        py: { xs: 8, md: 0 },
-      }}
-    >
-      {/* Mobile Layout (Pure CSS flow) */}
+
+  if (isMobile) {
+    return (
       <Box
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          width: '100%',
-        }}
+        component="section"
+        id="projects"
+        sx={{ px: { xs: 3, sm: 5 }, py: { xs: 8 } }}
       >
         <SectionHeader align="center" subtitle={subtitle} title={title || undefined} />
         <Box sx={{ mx: 'auto', mt: 6, display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -124,11 +114,22 @@ export default function Projects({ data }: { data?: any }) {
           ))}
         </Box>
       </Box>
+    )
+  }
 
+  return (
+    <Box
+      component="section"
+      id="projects"
+      ref={trackRef}
+      sx={{
+        position: 'relative',
+        height: `${totalVh * 100}vh`,
+      }}
+    >
       {/* Desktop Sticky Frame */}
       <Box
         sx={{
-          display: { xs: 'none', md: 'block' },
           position: 'sticky',
           top: 0,
           height: '100vh',
@@ -266,7 +267,7 @@ function SectionTitle({
   // y: centres in viewport (below navbar) → moves to top  over 0 → TITLE_END
   const y = useTransform(scrollYProgress, [0, TITLE_END], ['42vh', '0vh'])
 
-  // title (big heading) fades out as header rises — subtitle stays pinned
+  // both subtitle and title fade out as the header rises to the top
   const titleOpacity = useTransform(scrollYProgress, [0, TITLE_END * 0.7], [1, 0])
 
   return (
@@ -285,19 +286,20 @@ function SectionTitle({
           pointerEvents: 'none',
         }}
       >
-        {/* subtitle stays visible at the top while projects are shown */}
-        <Typography
-          sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontSize: { xs: 11, md: 15 },
-            letterSpacing: 5,
-            textTransform: 'uppercase',
-            color: 'primary.main',
-            mb: 0.75,
-          }}
-        >
-          {subtitle}
-        </Typography>
+        <motion.div style={{ opacity: titleOpacity }}>
+          <Typography
+            sx={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontSize: { xs: 11, md: 15 },
+              letterSpacing: 5,
+              textTransform: 'uppercase',
+              color: 'primary.main',
+              mb: 0.75,
+            }}
+          >
+            {subtitle}
+          </Typography>
+        </motion.div>
 
          {title && (
           <motion.div style={{ opacity: titleOpacity }}>

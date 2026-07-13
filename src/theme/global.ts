@@ -17,7 +17,7 @@ const GlobalStyles = () => css`
     font-family: 'Ethnocentric Rg';
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
+    font-display: optional;
     src: url('/fonts/Ethnocentric-Regular.otf') format('opentype');
   }
 
@@ -25,7 +25,7 @@ const GlobalStyles = () => css`
     font-family: 'Nulshock';
     font-style: normal;
     font-weight: 700;
-    font-display: swap;
+    font-display: optional;
     src: url('/fonts/Nulshock Bd.otf') format('opentype');
   }
 
@@ -33,7 +33,7 @@ const GlobalStyles = () => css`
     font-family: 'Almarai';
     font-style: normal;
     font-weight: 700;
-    font-display: swap;
+    font-display: optional;
     src: url('/fonts/Almarai-Bold.ttf') format('truetype');
   }
 
@@ -41,7 +41,7 @@ const GlobalStyles = () => css`
     font-family: 'Changa';
     font-style: normal;
     font-weight: 400;
-    font-display: swap;
+    font-display: optional;
     src: url('/fonts/Changa-Regular.ttf') format('truetype');
   }
 

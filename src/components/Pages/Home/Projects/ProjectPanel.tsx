@@ -4,11 +4,11 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import { useTheme } from '@mui/material/styles'
-import { useMotionTemplate, useTransform } from 'framer-motion'
+import { useTransform } from 'framer-motion'
 import Image from 'next/image'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { MotionBox } from './MotionBox'
-import { BLUR_MAX, CLIP_OPEN, getPanelRanges } from './constants'
+import { CLIP_OPEN, getPanelRanges } from './constants'
 import type { ProjectPanelProps } from './types'
 
 export default function ProjectPanel({ project, index, total, progress }: ProjectPanelProps) {
@@ -55,20 +55,9 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
     hasExit ? ['0%', imageExit] : ['0%', '0%'],
   )
 
-  // Depth-of-field blur: cards arrive sharp, then blur out as they leave so a
-  // transitioning pair never reads as two overlapping screens at once.
-  // First card starts sharp (0 blur) since it's visible from the beginning.
-  const blurEnterValue = isFirst ? 0 : BLUR_MAX
-  const blur = useTransform(
-    progress,
-    hasExit ? [enterStart, enterEnd, exitStart, exitEnd] : [enterStart, enterEnd],
-    hasExit ? [blurEnterValue, 0, 0, BLUR_MAX] : [blurEnterValue, 0],
-  )
-  const filter = useMotionTemplate`blur(${blur}px)`
-
   return (
     <MotionBox
-      style={{ opacity, y, filter }}
+      style={{ opacity, y }}
       sx={{
         position: 'absolute',
         inset: 0,

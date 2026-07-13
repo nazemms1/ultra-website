@@ -97,11 +97,17 @@ export default async function LocaleLayout({ children, params }: Props) {
       style={{ scrollBehavior: 'smooth' }}
     >
       <head>
-        {/* Preload hero video to improve LCP */}
-        <link rel="preload" as="video" href="/videos/hero.mp4" type="video/mp4" />
         {/* Preconnect to font origins */}
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* Preload critical custom fonts */}
+        <link rel="preload" as="font" href="/fonts/Nulshock Bd.otf" type="font/otf" crossOrigin="anonymous" />
+        {isArabic && (
+          <>
+            <link rel="preload" as="font" href="/fonts/Almarai-Bold.ttf" type="font/ttf" crossOrigin="anonymous" />
+            <link rel="preload" as="font" href="/fonts/Changa-Regular.ttf" type="font/ttf" crossOrigin="anonymous" />
+          </>
+        )}
       </head>
       <body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>

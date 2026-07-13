@@ -1,16 +1,18 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useHashScroll } from './useHashScroll'
-import ScrollVideoStack from '@/components/Pages/Home/ScrollVideoStack'
-import PartnersSection from '@/components/Pages/Home/Partners'
-import Stats from '@/components/Pages/Home/Stats/Stats'
-import ServicesOrbital from '@/components/Pages/Home/Services-orbital/ServicesOrbital'
-import Projects from '@/components/Pages/Home/Projects/Projects'
-import Methodologies from '@/components/Pages/Home/Methodologies/Methodologies'
-import TestimonialsSection from '@/components/Pages/Home/TestimonialsSection'
-import CTASection from '@/components/Pages/Home/CTASection'
-import FAQSection from '@/components/Pages/Home/Faqs'
-import ContactSection from '@/components/Pages/Home/ContactSection'
+
+const ScrollVideoStack = dynamic(() => import('@/components/Pages/Home/ScrollVideoStack'), { ssr: false })
+const PartnersSection  = dynamic(() => import('@/components/Pages/Home/Partners'),         { ssr: false })
+const Stats            = dynamic(() => import('@/components/Pages/Home/Stats/Stats'),       { ssr: false })
+const ServicesOrbital  = dynamic(() => import('@/components/Pages/Home/Services-orbital/ServicesOrbital'), { ssr: false })
+const Projects         = dynamic(() => import('@/components/Pages/Home/Projects/Projects'), { ssr: false })
+const Methodologies    = dynamic(() => import('@/components/Pages/Home/Methodologies/Methodologies'), { ssr: false })
+const TestimonialsSection = dynamic(() => import('@/components/Pages/Home/TestimonialsSection'), { ssr: false })
+const CTASection       = dynamic(() => import('@/components/Pages/Home/CTASection'),        { ssr: false })
+const FAQSection       = dynamic(() => import('@/components/Pages/Home/Faqs'),              { ssr: false })
+const ContactSection   = dynamic(() => import('@/components/Pages/Home/ContactSection'),    { ssr: false })
 
 interface Props {
   partnersData: any

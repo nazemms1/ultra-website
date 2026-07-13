@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { motion, useReducedMotion, useScroll, useSpring } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import SectionHeader from '@/components/shared/SectionHeader'
@@ -36,6 +37,7 @@ export default function Methodologies({ data }: MethodologiesProps) {
   const reduce = useReducedMotion()
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
   const items = data?.items || []
   const mappedPhases = items.map(item => ({
@@ -98,25 +100,12 @@ export default function Methodologies({ data }: MethodologiesProps) {
     )
   }
 
-  return (
-    <Box
-      component="section" 
-      id="methodologies"
-      ref={trackRef}
-      sx={{
-        position: 'relative',
-        height: { xs: 'auto', md: '250vh' },
-        px: { xs: 3, md: 0 },
-        py: { xs: 8, md: 0 },
-        overflow: { xs: 'hidden', md: 'visible' },
-      }}
-    >
-      {/* Mobile Layout (Pure CSS flow) */}
+  if (isMobile) {
+    return (
       <Box
-        sx={{
-          display: { xs: 'block', md: 'none' },
-          width: '100%',
-        }}
+        component="section"
+        id="methodologies"
+        sx={{ position: 'relative', overflow: 'hidden', px: 3, py: 8 }}
       >
         <Header title={data?.title} description={data?.description} />
         <Box
@@ -134,11 +123,24 @@ export default function Methodologies({ data }: MethodologiesProps) {
           ))}
         </Box>
       </Box>
+    )
+  }
 
+  return (
+    <Box
+      component="section"
+      id="methodologies"
+      ref={trackRef}
+      sx={{
+        position: 'relative',
+        height: '250vh',
+        overflow: 'visible',
+      }}
+    >
       {/* Desktop Sticky Deck Timeline */}
       <Box
         sx={{
-          display: { xs: 'none', md: 'flex' },
+          display: 'flex',
           position: 'sticky',
           top: 0,
           height: '100dvh',
