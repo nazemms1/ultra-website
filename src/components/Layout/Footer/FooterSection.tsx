@@ -497,11 +497,47 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
 
           {showStats && (
             <Box
+              component={motion.div}
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-40px' }}
+              transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+              style={{
+                backdropFilter: 'var(--parent-backdrop-filter)',
+                WebkitBackdropFilter: 'var(--parent-backdrop-filter)',
+              }}
               sx={{
                 display: 'grid',
                 gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' },
-                gap: { xs: 2, md: 3 },
+                gap: { xs: 2, md: 0 },
                 width: '100%',
+                '--parent-backdrop-filter': {
+                  xs: 'none',
+                  md: 'blur(26px) brightness(1.08) saturate(1.2)',
+                },
+                ...glassSurface(theme, { radius: '16px' }),
+                background: {
+                  xs: 'none',
+                  md: glassSurface(theme, { radius: '16px' }).background,
+                },
+                border: {
+                  xs: 'none',
+                  md: glassSurface(theme, { radius: '16px' }).border,
+                },
+                backgroundClip: {
+                  xs: 'unset',
+                  md: 'padding-box',
+                },
+                borderRadius: {
+                  xs: '0px',
+                  md: '16px',
+                },
+                boxShadow: {
+                  xs: 'none',
+                  md: glassSurface(theme, { radius: '16px' }).boxShadow,
+                },
+                py: { xs: 0, md: 3 },
+                px: { xs: 0, md: 2 },
               }}
             >
               {finalFooterStats.map((stat, i) => (
@@ -513,17 +549,45 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                   viewport={{ once: true, margin: '-40px' }}
                   transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
                   style={{
-                    backdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
-                    WebkitBackdropFilter: 'blur(26px) brightness(1.08) saturate(1.2)',
+                    backdropFilter: 'var(--child-backdrop-filter)',
+                    WebkitBackdropFilter: 'var(--child-backdrop-filter)',
                   }}
                   sx={{
-                    ...glassSurface(theme, { radius: '16px' }),
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    py: 3,
-                    px: 2,
+                    py: { xs: 3, md: 1 },
+                    px: { xs: 2, md: 1 },
                     color: '#0DF1D9',
+                    '--child-backdrop-filter': {
+                      xs: 'blur(26px) brightness(1.08) saturate(1.2)',
+                      md: 'none',
+                    },
+                    ...glassSurface(theme, { radius: '16px' }),
+                    background: {
+                      xs: glassSurface(theme, { radius: '16px' }).background,
+                      md: 'transparent',
+                    },
+                    border: {
+                      xs: glassSurface(theme, { radius: '16px' }).border,
+                      md: 'none',
+                    },
+                    backgroundClip: {
+                      xs: 'padding-box',
+                      md: 'unset',
+                    },
+                    borderRadius: {
+                      xs: '16px',
+                      md: '0px',
+                    },
+                    boxShadow: {
+                      xs: glassSurface(theme, { radius: '16px' }).boxShadow,
+                      md: 'none',
+                    },
+                    borderInlineEnd: {
+                      xs: 'none',
+                      md: i < finalFooterStats.length - 1 ? `1px solid ${alpha(theme.palette.common.white, 0.08)}` : 'none',
+                    },
                   }}
                 >
                   <StatItem stat={stat} active />

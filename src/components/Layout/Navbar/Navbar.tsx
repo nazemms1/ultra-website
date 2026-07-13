@@ -160,13 +160,17 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
       variant="primary"
       onClick={handleContactClick}
       sx={{
-        display: { xs: 'none', md: 'inline-flex' },
-        fontSize: '12px',
+        display: 'inline-flex',
+        minHeight: { xs: 36, md: 44 },
+        maxHeight: { xs: 36, md: 44 },
+        fontSize: { xs: '11px', md: '12px' },
         fontFamily: "'Rajdhani', sans-serif",
         fontWeight: 700,
         letterSpacing: '0.49px',
         textTransform: 'uppercase',
- zIndex: 500,
+        zIndex: 500,
+        py: { xs: 0, md: '10px' },
+        px: { xs: '12px', md: '20px' },
         '&:hover': {
           color: '#121212',
           boxShadow: '0px 0px 28px rgba(1, 177, 177, 0.70)',
@@ -280,7 +284,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
             alignItems: 'center',
             justifyContent: 'space-between',
             height: NAV_HEIGHT,
-            px: '25px',
+            px: { xs: '12px', md: '25px' },
             py: '13px',
             opacity: isDesktop ? unifiedOpacity : 1,
             transform: `scale(${lerp(0.97, 1, unifiedOpacity)}) translateY(${lerp(-6, 0, unifiedOpacity)}px)`,
@@ -312,10 +316,10 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              gap: '10px',
+              gap: { xs: '6px', md: '10px' },
             }}
           >
-            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
+            <Box sx={{ display: 'flex' }}>
               <LanguageSwitcher />
             </Box>
             {contactButton}
@@ -409,18 +413,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
               ))}
             </Stack>
 
-            <Box
-              sx={{
-                width: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                gap: 2,
-              }}
-            >
-              <UltraButton variant="primary" onClick={handleContactClick}>
-                {labels.contact}
-              </UltraButton>
-            </Box>
+
           </Box>
         )}
       </AnimatePresence>

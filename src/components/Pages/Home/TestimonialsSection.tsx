@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, memo } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { motion, AnimatePresence } from 'framer-motion'
@@ -20,6 +20,21 @@ interface TestimonialItem {
 
 const ORBIT_RADIUS = 360
 const INNER_RADIUS = 360
+
+const OrbitStyles = memo(function OrbitStyles() {
+  return (
+    <style>{`
+      @keyframes orbitRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(-360deg); }
+      }
+      @keyframes avatarRotate {
+        from { transform: rotate(0deg); }
+        to { transform: rotate(360deg); }
+      }
+    `}</style>
+  )
+})
 
 interface TestimonialsSectionProps {
   data?: {
@@ -49,6 +64,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   const sectionRef = useRef<HTMLDivElement>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
+  const avatarsContainerRef = useRef<HTMLDivElement | null>(null)
+  const timerRef = useRef<NodeJS.Timeout | null>(null)
 
   useEffect(() => {
     const section = sectionRef.current
@@ -84,6 +101,48 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
   const testimonialsList: TestimonialItem[] = mappedTestimonials
   const activeTestimonial = testimonialsList[activeIndex] || testimonialsList[0]
+
+  const resetTimer = () => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current)
+    }
+    if (testimonialsList.length > 1) {
+      timerRef.current = setInterval(() => {
+        setActiveIndex(prev => (prev + 1) % testimonialsList.length)
+      }, 5000)
+    }
+  }
+
+  useEffect(() => {
+    resetTimer()
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current)
+      }
+    }
+  }, [testimonialsList.length])
+
+  // Scroll active avatar to center on mobile
+  useEffect(() => {
+    if (avatarsContainerRef.current) {
+      const container = avatarsContainerRef.current
+      const activeChild = container.children[activeIndex] as HTMLElement
+      if (activeChild) {
+        const containerWidth = container.clientWidth
+        const childLeft = activeChild.offsetLeft
+        const childWidth = activeChild.clientWidth
+        container.scrollTo({
+          left: childLeft - containerWidth / 2 + childWidth / 2,
+          behavior: 'smooth',
+        })
+      }
+    }
+  }, [activeIndex])
+
+  const handleAvatarClick = (index: number) => {
+    setActiveIndex(index)
+    resetTimer()
+  }
 
   const getAvatarPosition = (index: number) => {
     const angleOffset = Math.PI / 2 // 90 degrees
@@ -238,9 +297,9 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               <AnimatePresence mode="wait">
                 <motion.div
                   key={activeIndex}
-                  initial={{ opacity: 0, y: 6 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -6 }}
+                  initial={{ opacity: 0, x: 40 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -40 }}
                   transition={{ duration: 0.35, ease: 'easeInOut' }}
                   style={{ alignSelf: 'stretch', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}
                 >
@@ -311,11 +370,21 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
 
           {/* ── Avatar row — outside the card ── */}
           <Box
+            ref={avatarsContainerRef}
             sx={{
               display: 'flex',
               gap: '16px',
-              justifyContent: 'center',
+              overflowX: 'auto',
+              width: '100%',
+              justifyContent: testimonialsList.length > 4 ? 'flex-start' : 'center',
               alignItems: 'center',
+              py: 2,
+              px: 2,
+              msOverflowStyle: 'none',
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': {
+                display: 'none',
+              },
             }}
           >
             {testimonialsList.map((item, idx) => {
@@ -323,11 +392,11 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               return (
                 <Box
                   key={item.id}
-                  onClick={() => setActiveIndex(idx)}
+                  onClick={() => handleAvatarClick(idx)}
                   sx={{
                     position: 'relative',
-                    width: isActive ? 56 : 44,
-                    height: isActive ? 56 : 44,
+                    width: isActive ? 76 : 60,
+                    height: isActive ? 76 : 60,
                     borderRadius: '50%',
                     overflow: 'hidden',
                     border: `2px solid ${isActive ? primary : alpha(primary, 0.18)}`,
@@ -343,7 +412,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                     src={item.avatar}
                     alt={item.name}
                     fill
-                    sizes="56px"
+                    sizes="76px"
                     style={{
                       objectFit: 'cover',
                       opacity: isActive ? 1 : 0.45,
@@ -369,16 +438,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
             zIndex: 'auto',
           }}
         >
-          <style>{`
-            @keyframes orbitRotate {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(-360deg); }
-            }
-            @keyframes avatarRotate {
-              from { transform: rotate(0deg); }
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
+          <OrbitStyles />
 
           {/* Outer solid border */}
           <Box
@@ -712,7 +772,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
               return (
                 <Box
                   key={testimonial.id}
-                  onClick={() => setActiveIndex(idx)}
+                  onClick={() => handleAvatarClick(idx)}
                   sx={{
                     position: 'absolute',
                     left: '50%',
