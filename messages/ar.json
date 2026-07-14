@@ -28,7 +28,8 @@
     "googlePlay": "جوجل بلاي",
     "appStore": "آب ستور",
     "demo": "العرض التوضيحي",
-    "moreProjects": "مشاريع أخرى"
+    "moreProjects": "مشاريع أخرى",
+    "scrollHint": "مرر داخل مجسم الجهاز"
   },
   "Methodologies": {
     "label": "منهجياتنا",

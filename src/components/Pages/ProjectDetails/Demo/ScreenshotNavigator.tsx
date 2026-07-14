@@ -26,8 +26,16 @@ export default function ScreenshotNavigator({
   const thumbTop = trackHeight > 0 ? (thumbOffset / trackHeight) * 100 : 0
 
   return (
-    <Box sx={{ ...screenshotPanelSx, display: 'flex', gap: 1.875, alignItems: 'flex-start' }}>
-      {/* Scroll indicator — left edge */}
+    <Box
+      sx={{
+        ...screenshotPanelSx(theme),
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        gap: { xs: 1.5, md: 1.875 },
+        alignItems: 'stretch',
+      }}
+    >
+      {/* Scroll indicator — left edge (Desktop only) */}
       {screenshots.length > 1 && (
         <Box
           sx={{
@@ -39,6 +47,7 @@ export default function ScreenshotNavigator({
             opacity: 0.5,
             flexShrink: 0,
             mt: '52px', // align with first thumb (title height)
+            display: { xs: 'none', md: 'block' },
           }}
         >
           <Box
@@ -57,8 +66,18 @@ export default function ScreenshotNavigator({
       )}
 
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={screenshotTitleSx}>Screenshots</Typography>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1.25 }}>
+        <Typography sx={{ ...screenshotTitleSx, mb: { xs: 1.5, md: 1.75 } }}>Screenshots</Typography>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: { xs: 'row', md: 'column' },
+            gap: 1.25,
+            overflowX: { xs: 'auto', md: 'visible' },
+            pb: { xs: 1, md: 0 },
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
+          }}
+        >
           {screenshots.map((shot, index) => (
             <Box
               key={shot.id}

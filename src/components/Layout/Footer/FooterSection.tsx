@@ -508,8 +508,9 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
               }}
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' },
-                gap: { xs: 2, md: 0 },
+                gridTemplateColumns: { xs: 'repeat(2, 161px)', md: 'repeat(4, 1fr)' },
+                justifyContent: { xs: 'center', md: 'stretch' },
+                gap: { xs: 1.5, md: 0 },
                 width: '100%',
                 '--parent-backdrop-filter': {
                   xs: 'none',
@@ -556,20 +557,23 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                     display: 'flex',
                     justifyContent: 'center',
                     alignItems: 'center',
-                    py: { xs: 3, md: 1 },
-                    px: { xs: 2, md: 1 },
+                    width: { xs: '161px', md: '100%' },
+                    height: { xs: '74.88888549804688px', md: 'auto' },
+                    py: { xs: 0, md: 1 },
+                    px: { xs: 0, md: 1 },
+                    p: { xs: '14.69px', md: 'unset' },
                     color: '#0DF1D9',
                     '--child-backdrop-filter': {
                       xs: 'blur(26px) brightness(1.08) saturate(1.2)',
                       md: 'none',
                     },
-                    ...glassSurface(theme, { radius: '16px' }),
+                    ...glassSurface(theme, { radius: '14.69px' }),
                     background: {
-                      xs: glassSurface(theme, { radius: '16px' }).background,
+                      xs: glassSurface(theme, { radius: '14.69px' }).background,
                       md: 'transparent',
                     },
                     border: {
-                      xs: glassSurface(theme, { radius: '16px' }).border,
+                      xs: glassSurface(theme, { radius: '14.69px' }).border,
                       md: 'none',
                     },
                     backgroundClip: {
@@ -577,16 +581,24 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                       md: 'unset',
                     },
                     borderRadius: {
-                      xs: '16px',
+                      xs: '14.69px',
                       md: '0px',
                     },
                     boxShadow: {
-                      xs: glassSurface(theme, { radius: '16px' }).boxShadow,
+                      xs: glassSurface(theme, { radius: '14.69px' }).boxShadow,
                       md: 'none',
                     },
-                    borderInlineEnd: {
-                      xs: 'none',
-                      md: i < finalFooterStats.length - 1 ? `1px solid ${alpha(theme.palette.common.white, 0.08)}` : 'none',
+                    borderInlineEnd: 'none',
+                    '& .stat-number': {
+                      fontSize: { xs: '18px', md: '54.85px' },
+                      lineHeight: { xs: '20px', md: '82.275px' },
+                      color: '#0DF1D9',
+                    },
+                    '& .stat-label': {
+                      fontSize: { xs: '8px', md: '14px' },
+                      lineHeight: { xs: '10px', md: '20px' },
+                      color: 'text.secondary',
+                      mt: 0,
                     },
                   }}
                 >

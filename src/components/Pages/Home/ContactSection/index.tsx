@@ -382,7 +382,15 @@ export default function ContactSection({ data }: { data?: any }) {
               </Typography>
             )}
 
-
+            {isCaptchaShown && (
+              <Box sx={{ display: { xs: 'none', lg: 'block' }, mb: '40px', maxWidth: 480 }}>
+                <CaptchaBox
+                  checked={captchaDone}
+                  onToggle={() => setCaptchaDone(prev => !prev)}
+                  label={t('captchaLabel')}
+                />
+              </Box>
+            )}
           </Box>
         </Box>
 
@@ -574,7 +582,7 @@ export default function ContactSection({ data }: { data?: any }) {
 
           <Box sx={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
             {isCaptchaShown && (
-              <Box sx={{ mb: '8px' }}>
+              <Box sx={{ display: { xs: 'block', lg: 'none' }, mb: '8px' }}>
                 <CaptchaBox
                   checked={captchaDone}
                   onToggle={() => setCaptchaDone(prev => !prev)}

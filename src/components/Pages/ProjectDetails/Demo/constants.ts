@@ -1,6 +1,7 @@
 import type { Theme } from '@mui/material/styles'
 import { alpha } from '@mui/material/styles'
 import type { SxProps } from '@mui/material/styles'
+import { cardGlassSurface } from '@/lib/theme/surfaces'
 
 export const demoSectionSx: SxProps<Theme> = {
   width: '100%',
@@ -42,14 +43,13 @@ export function demoChipSx(theme: Theme, active: boolean): SxProps<Theme> {
   }
 }
 
-export const screenshotPanelSx: SxProps<Theme> = {
+export const screenshotPanelSx = (theme: Theme): SxProps<Theme> => ({
   width: { xs: '100%', md: 257 },
   flexShrink: 0,
   p: 2.5,
-  borderRadius: '25px',
-  background: theme =>
-    `linear-gradient(180deg, ${alpha(theme.palette.primary.light, 0.03)} 0%, ${alpha(theme.palette.common.black, 0)} 100%)`,
-}
+  ...cardGlassSurface(theme, { radius: '25px' }),
+  background: `linear-gradient(180deg, ${alpha(theme.palette.primary.light, 0.05)} 0%, rgba(0,0,0,0) 100%)`,
+})
 
 export const screenshotTitleSx: SxProps<Theme> = {
   fontFamily: "'Rajdhani', sans-serif",
@@ -79,8 +79,9 @@ export function screenshotThumbSx(theme: Theme, active: boolean): SxProps<Theme>
 export const demoStageSx: SxProps<Theme> = {
   position: 'relative',
   flex: 1,
-  minHeight: { xs: 380, md: 546 },
+  minHeight: { xs: 440, md: 546 },
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  overflow: 'hidden',
 }

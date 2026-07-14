@@ -32,7 +32,8 @@
     "googlePlay": "Google Play",
     "appStore": "App Store",
     "demo": "Demo",
-    "moreProjects": "More Projects"
+    "moreProjects": "More Projects",
+    "scrollHint": "Scroll inside the device mockup"
   },
   "Methodologies": {
     "label": "Our methodologies",

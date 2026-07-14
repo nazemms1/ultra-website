@@ -11,7 +11,7 @@ export const briefSectionSx: SxProps<Theme> = {
 
 export const briefGridSx: SxProps<Theme> = {
   display: 'flex',
-  flexDirection: { xs: 'column', lg: 'row' },
+  flexDirection: { xs: 'column-reverse', lg: 'row' },
   justifyContent: { lg: 'space-between' },
   gap: { xs: 6, lg: 8 },
   alignItems: 'flex-start',
@@ -25,6 +25,10 @@ export const briefArticlesSx: SxProps<Theme> = {
   flex: 1,
   minWidth: 0,
   maxWidth: { lg: 832 },
+  bgcolor: { xs: 'background.default', lg: 'transparent' },
+  p: { xs: '24px 0px', lg: 0 },
+  position: 'relative',
+  zIndex: 2,
 }
 
 export const briefNumberSx: SxProps<Theme> = {

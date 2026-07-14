@@ -1,10 +1,11 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { motion } from 'framer-motion'
+import { animate, useMotionValue, motion } from 'framer-motion'
 import type { ProjectMetrics } from '../types'
 import CornerBrackets from '../shared/CornerBrackets'
 import { feedbackCardSx, metaCardSx, metaLabelSx, toolPillSx } from './constants'
@@ -25,6 +26,21 @@ const itemVariants = {
 export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
   const theme = useTheme()
   const progressWidth = `${metrics.successRate}%`
+
+  const count = useMotionValue(0)
+  const [displayValue, setDisplayValue] = useState('0.00')
+
+  useEffect(() => {
+    const controls = animate(count, metrics.successRate, {
+      duration: 1.5,
+      ease: 'easeOut',
+      delay: 0.2,
+      onUpdate: (latest) => {
+        setDisplayValue(latest.toFixed(2))
+      },
+    })
+    return () => controls.stop()
+  }, [count, metrics.successRate])
 
   return (
     <Stack
@@ -69,7 +85,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
                 color: 'primary.light',
               }}
             >
-              {metrics.successRate.toFixed(2)}%
+              {displayValue}%
             </Typography>
           </Box>
 
@@ -82,12 +98,26 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
             }}
           >
             <Box
+              component={motion.div}
+              initial={{ width: 0 }}
+              animate={{ width: progressWidth }}
+              transition={{ duration: 1.5, ease: 'easeOut', delay: 0.2 }}
               sx={{
                 height: '100%',
-                width: progressWidth,
                 borderRadius: 'inherit',
-                bgcolor: 'primary.light',
+                background: `linear-gradient(90deg, 
+                  ${theme.palette.primary.light} 0%, 
+                  ${alpha(theme.palette.primary.light, 0.6)} 25%, 
+                  #ffffff 50%, 
+                  ${alpha(theme.palette.primary.light, 0.6)} 75%, 
+                  ${theme.palette.primary.light} 100%)`,
+                backgroundSize: '200% 100%',
                 boxShadow: `0 0 16px ${alpha(theme.palette.primary.light, 0.7)}`,
+                animation: 'progressShimmer 2.5s linear infinite',
+                '@keyframes progressShimmer': {
+                  '0%': { backgroundPosition: '200% 0' },
+                  '100%': { backgroundPosition: '-200% 0' },
+                },
               }}
             />
           </Box>

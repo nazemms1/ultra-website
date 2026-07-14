@@ -1,12 +1,13 @@
 'use client'
 
-import { useRef } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import Chip from '@mui/material/Chip'
 import Rating from '@mui/material/Rating'
 import { alpha, useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import {
   motion,
   useScroll,
@@ -498,6 +499,184 @@ export interface ServiceItemNormalized {
   tools: ToolData[]
 }
 
+interface ServiceCardContentProps {
+  service: ServiceItemNormalized
+}
+
+function ServiceCardContent({ service }: ServiceCardContentProps) {
+  const theme = useTheme()
+  return (
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        p: { xs: 3.5, md: 5.5 },
+        minHeight: { xs: 580, sm: 620, md: 'auto' },
+        cursor: 'default',
+        ...glassSurface(theme, { radius: '24px' }),
+        background: `linear-gradient(90deg, ${alpha(theme.palette.primary.main, 0.06)} 0%, ${alpha(theme.palette.primary.main, 0.015)} 45%, rgba(0, 0, 0, 0.4) 75%, rgba(0, 0, 0, 0.7) 100%)`,
+        borderColor: alpha(theme.palette.primary.main, 0.2),
+        boxShadow: [
+          `0 30px 60px ${alpha(theme.palette.common.black, 0.55)}`,
+          `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.25)}`,
+          `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
+        ].join(', '),
+        transition: 'border-color 0.3s, box-shadow 0.3s',
+        '&:hover': {
+          borderColor: alpha(theme.palette.primary.main, 0.55),
+          boxShadow: [
+            `0 40px 80px ${alpha(theme.palette.common.black, 0.65)}`,
+            `0 0 40px ${alpha(theme.palette.primary.main, 0.12)}`,
+            `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.45)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+          ].join(', '),
+        },
+        display: 'flex',
+        flexDirection: { xs: 'column', md: 'row' },
+        justifyContent: { xs: 'center', md: 'flex-start' },
+        alignItems: 'center',
+        gap: { xs: 3, md: 6 },
+      }}
+    >
+      <Box
+        sx={{
+          position: 'absolute',
+          top: 20,
+          left: 20,
+          width: 14,
+          height: 14,
+          borderTop: `2px solid ${theme.palette.primary.main}`,
+          borderLeft: `2px solid ${theme.palette.primary.main}`,
+        }}
+      />
+
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: 20,
+          right: 20,
+          width: 14,
+          height: 14,
+          borderBottom: `2px solid ${theme.palette.primary.main}`,
+          borderRight: `2px solid ${theme.palette.primary.main}`,
+        }}
+      />
+
+      {/* Left Side: 3D Illustration */}
+      <Box
+        component={motion.div}
+        whileHover={{ y: -8, rotate: 2 }}
+        transition={{ type: 'spring', stiffness: 200, damping: 18 }}
+        sx={{
+          width: { xs: 160, md: 280 },
+          height: { xs: 160, md: 280 },
+          flexShrink: 0,
+          position: 'relative',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <Image
+          src={service.image}
+          alt={service.title}
+          width={280}
+          height={280}
+          style={{
+            width: '100%',
+            height: '100%',
+            objectFit: 'contain',
+            filter: `drop-shadow(0 10px 25px ${alpha(theme.palette.primary.main, 0.3)})`,
+          }}
+        />
+      </Box>
+
+      {/* Right Side: Text & Tags */}
+      <Stack spacing={2} sx={{ flex: 1, alignItems: 'flex-start', width: '100%' }}>
+        <Typography
+          variant="h4"
+          sx={{
+            fontFamily: '"Rajdhani", sans-serif',
+            fontWeight: 600,
+            color: '#ffffff',
+            letterSpacing: '0.02em',
+            fontSize: { xs: '20px', md: '24px' },
+          }}
+        >
+          {service.title}
+        </Typography>
+
+        <Typography
+          variant="body1"
+          sx={{
+            fontFamily: '"Rajdhani", sans-serif',
+            color: '#CEFAFE99',
+            lineHeight: 1.62,
+            fontSize: { xs: '12px', md: '12px' },
+          }}
+        >
+          {service.description}
+        </Typography>
+
+        <Stack spacing={1.25} sx={{ pt: 1.5, width: '100%' }}>
+          <Typography
+            variant="caption"
+            sx={{
+              color: 'primary.main',
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              fontSize: '11px',
+            }}
+          >
+            Tools Used
+          </Typography>
+          <Stack direction="row" spacing={1.5} sx={{ flexWrap: 'wrap', gap: 1 }}>
+            {service.tools.map(tool => (
+              <Chip
+                key={tool.id}
+                label={
+                  <Box sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
+                    {tool.icon?.url ? (
+                      <Box
+                        component="img"
+                        src={tool.icon.url}
+                        alt=""
+                        sx={{ width: 14, height: 14, marginRight: 1, objectFit: 'contain' }}
+                      />
+                    ) : (
+                      tagIcons[tool.name]
+                    )}
+                    <Box component="span" sx={{ color: '#ffffff' }}>
+                      {tool.name}
+                    </Box>
+                  </Box>
+                }
+                size="medium"
+                sx={{
+                  bgcolor: 'rgba(0, 0, 0, 0.35)',
+                  border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
+                  color: '#ffffff',
+                  fontWeight: 500,
+                  fontSize: '13px',
+                  borderRadius: '100px',
+                  px: 0.5,
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    borderColor: 'primary.main',
+                    bgcolor: alpha(theme.palette.primary.main, 0.08),
+                    boxShadow: `0 0 12px ${alpha(theme.palette.primary.main, 0.3)}`,
+                  },
+                }}
+              />
+            ))}
+          </Stack>
+        </Stack>
+      </Stack>
+    </Box>
+  )
+}
+
 interface CardWrapperProps {
   service: ServiceItemNormalized
   index: number
@@ -584,175 +763,180 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
         component={motion.div}
         whileHover={{ scale: 1.012 }}
         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
+      >
+        <ServiceCardContent service={service} />
+      </Box>
+    </Box>
+  )
+}
+
+function MobileServiceCardItem({
+  service,
+  index,
+  total,
+  progress,
+}: {
+  service: ServiceItemNormalized
+  index: number
+  total: number
+  progress: MotionValue<number>
+}) {
+  const n = total - 1
+  const enterAt = (index - 1) / n
+  const settleAt = index / n
+
+  const motionY = useTransform(
+    progress,
+    index === 0
+      ? [0, 1]
+      : [0, enterAt, settleAt, 1],
+    index === 0
+      ? ['0%', '0%']
+      : ['100%', '100%', '0%', '0%']
+  )
+
+  const fadeStart = index / n
+  const fadeEnd = Math.min((index + 1) / n, 1)
+  const motionOpacity = useTransform(
+    progress,
+    index === total - 1 ? [0, 1] : [0, fadeStart, fadeEnd, 1],
+    index === total - 1 ? [1, 1] : [1, 1, 0, 0]
+  )
+
+  return (
+    <Box
+      component={motion.div}
+      style={{ y: motionY, zIndex: index, opacity: motionOpacity }}
+      sx={{ position: 'absolute', inset: 0 }}
+    >
+      <ServiceCardContent service={service} />
+    </Box>
+  )
+}
+
+function MobileServicesCardDeck({
+  services,
+  progress,
+}: {
+  services: ServiceItemNormalized[]
+  progress: MotionValue<number>
+}) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const [cardHeight, setCardHeight] = useState<number | null>(null)
+
+  useEffect(() => {
+    if (!cardRef.current) return
+    const measure = () => setCardHeight(cardRef.current!.offsetHeight)
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(cardRef.current)
+    return () => ro.disconnect()
+  }, [])
+
+  return (
+    <Box
+      sx={{
+        flexShrink: 0,
+        position: 'relative',
+        mx: 2,
+        width: 'min(92vw, 1120px)',
+        height: cardHeight ?? 'auto',
+        overflow: 'hidden',
+      }}
+    >
+      <Box
+        ref={cardRef}
+        aria-hidden
+        sx={{ visibility: 'hidden', pointerEvents: 'none' }}
+      >
+        <ServiceCardContent service={services[0]} />
+      </Box>
+
+      {services.map((service, i) => (
+        <MobileServiceCardItem
+          key={service.title}
+          service={service}
+          index={i}
+          total={services.length}
+          progress={progress}
+        />
+      ))}
+    </Box>
+  )
+}
+
+function MobileServicesCardStack({
+  services,
+}: {
+  services: ServiceItemNormalized[]
+}) {
+  const trackRef = useRef<HTMLDivElement>(null)
+
+  const { scrollYProgress } = useScroll({
+    target: trackRef,
+    offset: ['start start', 'end end'],
+  })
+
+  const [activeIndex, setActiveIndex] = useState(0)
+  useEffect(() => {
+    return scrollYProgress.on('change', v => {
+      setActiveIndex(Math.min(Math.floor(v * services.length), services.length - 1))
+    })
+  }, [scrollYProgress, services.length])
+
+  return (
+    <Box
+      ref={trackRef}
+      sx={{
+        position: 'relative',
+        height: `${services.length * 65}dvh`,
+        bgcolor: 'background.default',
+      }}
+    >
+      <Box
         sx={{
-          position: 'relative',
-          width: '100%',
-          p: { xs: 3.5, md: 5.5 },
-          cursor: 'default',
-          ...glassSurface(theme, { radius: '24px' }),
-          background: `linear-gradient(90deg, ${alpha(theme.palette.primary.main, 0.06)} 0%, ${alpha(theme.palette.primary.main, 0.015)} 45%, rgba(0, 0, 0, 0.4) 75%, rgba(0, 0, 0, 0.7) 100%)`,
-          borderColor: alpha(theme.palette.primary.main, 0.2),
-          boxShadow: [
-            `0 30px 60px ${alpha(theme.palette.common.black, 0.55)}`,
-            `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.25)}`,
-            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
-          ].join(', '),
-          transition: 'border-color 0.3s, box-shadow 0.3s',
-          '&:hover': {
-            borderColor: alpha(theme.palette.primary.main, 0.55),
-            boxShadow: [
-              `0 40px 80px ${alpha(theme.palette.common.black, 0.65)}`,
-              `0 0 40px ${alpha(theme.palette.primary.main, 0.12)}`,
-              `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.45)}`,
-              `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
-            ].join(', '),
-          },
+          position: 'sticky',
+          top: 0,
+          height: '100dvh',
           display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
+          flexDirection: 'column',
           alignItems: 'center',
-          gap: { xs: 3, md: 6 },
+          justifyContent: 'center',
+          overflow: 'hidden',
         }}
       >
-        <Box
-          sx={{
-            position: 'absolute',
-            top: 20,
-            left: 20,
-            width: 14,
-            height: 14,
-            borderTop: `2px solid ${theme.palette.primary.main}`,
-            borderLeft: `2px solid ${theme.palette.primary.main}`,
-          }}
-        />
+        <MobileServicesCardDeck services={services} progress={scrollYProgress} />
 
         <Box
           sx={{
-            position: 'absolute',
-            bottom: 20,
-            right: 20,
-            width: 14,
-            height: 14,
-            borderBottom: `2px solid ${theme.palette.primary.main}`,
-            borderRight: `2px solid ${theme.palette.primary.main}`,
-          }}
-        />
-
-        {/* Left Side: 3D Illustration */}
-        <Box
-          component={motion.div}
-          whileHover={{ y: -8, rotate: 2 }}
-          transition={{ type: 'spring', stiffness: 200, damping: 18 }}
-          sx={{
-            width: { xs: 160, md: 280 },
-            height: { xs: 160, md: 280 },
-            flexShrink: 0,
-            position: 'relative',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            gap: 1,
+            mt: 4,
           }}
         >
-          <Image
-            src={service.image}
-            alt={service.title}
-            width={280}
-            height={280}
-            style={{
-              objectFit: 'contain',
-              filter: `drop-shadow(0 10px 25px ${alpha(theme.palette.primary.main, 0.3)})`,
-            }}
-          />
-        </Box>
-
-        {/* Right Side: Text & Tags */}
-        <Stack spacing={2} sx={{ flex: 1, alignItems: 'flex-start' }}>
-          <Typography
-            variant="h4"
-            sx={{
-              fontFamily: '"Rajdhani", sans-serif',
-              fontWeight: 600,
-              color: '#ffffff',
-              letterSpacing: '0.02em',
-              fontSize: { xs: '20px', md: '24px' },
-            }}
-          >
-            {service.title}
-          </Typography>
-
-          <Typography
-            variant="body1"
-            sx={{
-              fontFamily: '"Rajdhani", sans-serif',
-              color: '#CEFAFE99',
-              lineHeight: 1.62,
-              fontSize: { xs: '12px', md: '12px' },
-              // letterSpacing: '0.015em',
-            }}
-          >
-            {service.description}
-          </Typography>
-
-          <Stack spacing={1.25} sx={{ pt: 1.5 }}>
-            <Typography
-              variant="caption"
+          {services.map((_, i) => (
+            <Box
+              key={i}
               sx={{
-                color: 'primary.main',
-                fontWeight: 700,
-                letterSpacing: '0.12em',
-                textTransform: 'uppercase',
-                fontSize: '11px',
+                width: i === activeIndex ? 20 : 8,
+                height: 8,
+                borderRadius: 4,
+                bgcolor: i === activeIndex ? 'primary.main' : 'rgba(255,255,255,0.25)',
+                transition: 'all 0.35s ease',
               }}
-            >
-              Tools Used
-            </Typography>
-            <Stack direction="row" spacing={1.5} sx={{ flexWrap: 'wrap', gap: 1 }}>
-              {service.tools.map(tool => (
-                <Chip
-                  key={tool.id}
-                  label={
-                    <Box sx={{ display: 'flex', alignItems: 'center', color: 'primary.main' }}>
-                      {tool.icon?.url ? (
-                        <Box
-                          component="img"
-                          src={tool.icon.url}
-                          alt=""
-                          sx={{ width: 14, height: 14, marginRight: 1, objectFit: 'contain' }}
-                        />
-                      ) : (
-                        tagIcons[tool.name]
-                      )}
-                      <Box component="span" sx={{ color: '#ffffff' }}>
-                        {tool.name}
-                      </Box>
-                    </Box>
-                  }
-                  size="medium"
-                  sx={{
-                    bgcolor: 'rgba(0, 0, 0, 0.35)',
-                    border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
-                    color: '#ffffff',
-                    fontWeight: 500,
-                    fontSize: '13px',
-                    borderRadius: '100px',
-                    px: 0.5,
-                    transition: 'all 0.3s ease',
-                    '&:hover': {
-                      borderColor: 'primary.main',
-                      bgcolor: alpha(theme.palette.primary.main, 0.08),
-                      boxShadow: `0 0 12px ${alpha(theme.palette.primary.main, 0.3)}`,
-                    },
-                  }}
-                />
-              ))}
-            </Stack>
-          </Stack>
-        </Stack>
+            />
+          ))}
+        </Box>
       </Box>
     </Box>
   )
 }
 
 export default function ServicesCardStack({ data }: ServicesCardStackProps) {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const trackRef = useRef<HTMLDivElement>(null)
 
   const items = data?.items || []
@@ -770,11 +954,15 @@ export default function ServicesCardStack({ data }: ServicesCardStackProps) {
   })
 
   const progress = useSpring(scrollYProgress, {
-    stiffness: 80,
-    damping: 24,
-    mass: 0.3,
-    restDelta: 0.001,
+    stiffness: 400,
+    damping: 40,
+    mass: 0.1,
+    restDelta: 0.0005,
   })
+
+  if (isMobile) {
+    return <MobileServicesCardStack services={services} />
+  }
 
   return (
     <Box

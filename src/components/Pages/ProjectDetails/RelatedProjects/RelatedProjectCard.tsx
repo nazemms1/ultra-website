@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { useTheme } from '@mui/material/styles'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
@@ -43,6 +44,7 @@ type RelatedProjectCardProps = {
 
 export default function RelatedProjectCard({ project }: RelatedProjectCardProps) {
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const [hovered, setHovered] = useState(false)
   const innerRef = useRef<HTMLDivElement>(null)
 
@@ -103,7 +105,7 @@ export default function RelatedProjectCard({ project }: RelatedProjectCardProps)
             sx={{
               position: 'relative',
               width: '100%',
-              height: 150,
+              height: { xs: 80, sm: 150 },
               transformStyle: 'preserve-3d',
               transition: 'transform 0.65s cubic-bezier(0.4, 0, 0.2, 1)',
               transform: hovered ? 'rotateY(180deg)' : 'rotateY(0deg)',
@@ -164,7 +166,7 @@ export default function RelatedProjectCard({ project }: RelatedProjectCardProps)
         </Box>
 
         <Box sx={relatedArrowSx}>
-          <ArrowUpRight size={20} color={theme.palette.primary.light} strokeWidth={2} />
+          <ArrowUpRight size={isMobile ? 12 : 20} color={theme.palette.primary.light} strokeWidth={2} />
         </Box>
       </Box>
     </Box>

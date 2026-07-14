@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import Box from '@mui/material/Box'
+import { useTranslations } from 'next-intl'
 import { alpha, useTheme } from '@mui/material/styles'
 import { AnimatePresence, motion } from 'framer-motion'
 import type { DemoScreenshot } from '../types'
@@ -89,25 +90,29 @@ function useScrollHint(scrollRef: React.RefObject<HTMLElement | null>) {
 }
 
 function ScrollHintOverlay({ visible, onDismiss }: { visible: boolean; onDismiss: () => void }) {
+  const t = useTranslations('ProjectDetails')
+
   return (
     <AnimatePresence>
       {visible && (
-        <motion.div
+        <Box
+          component={motion.div}
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 4 }}
           transition={{ duration: 0.1, ease: 'easeOut' }}
           onClick={onDismiss}
-          style={{
+          sx={{
             position: 'absolute',
-            top: '50%',
-            right: -48,
-            transform: 'translateY(-50%)',
-            zIndex: 20,
+            top: { xs: '-100px', md: '50%' },
+            left: { xs: '25%', md: 'unset' },
+            right: { xs: 'unset', md: -48 },
+            transform: { xs: 'translateX(-50%)', md: 'translateY(-50%)' },
+            zIndex: 2000,
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: 4,
+            gap: 0.5,
             pointerEvents: 'auto',
             cursor: 'default',
           }}
@@ -149,19 +154,20 @@ function ScrollHintOverlay({ visible, onDismiss }: { visible: boolean; onDismiss
           {/* Label */}
           <Box
             sx={{
-              color: 'rgba(255,255,255,0.7)',
-              fontSize: '9px',
+              color: 'rgba(255,255,255,0.85)',
+              fontSize: '10px',
               fontFamily: "'Rajdhani', sans-serif",
               fontWeight: 600,
-              letterSpacing: '0.12em',
+              letterSpacing: '0.04em',
               textTransform: 'uppercase',
               whiteSpace: 'nowrap',
-              textShadow: '0 1px 4px rgba(0,0,0,0.6)',
+              textShadow: '0 1px 4px rgba(0,0,0,0.8)',
+              mt: 1,
             }}
           >
-            Scroll
+            {t('scrollHint')}
           </Box>
-        </motion.div>
+        </Box>
       )}
     </AnimatePresence>
   )
@@ -174,8 +180,17 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
   useWheelScroll(scrollRef)
 
   return (
-    // Outer: aspect-ratio box sized to the bezel image (no filter — avoids stacking context)
-    <Box sx={{ position: 'relative', width: '100%', maxWidth: 930, mx: 'auto' }}>
+    // Outer: aspect-ratio box sized to the bezel image - wider & centered on mobile/tablet to show bezel clearly
+    <Box
+      sx={{
+        position: 'relative',
+        width: { xs: '135%', sm: '115%', md: '100%' },
+        maxWidth: 930,
+        left: { xs: '50%', md: 'auto' },
+        transform: { xs: 'translateX(-50%)', md: 'none' },
+        mx: 'auto',
+      }}
+    >
 
       {/* Invisible bezel — sets parent height, no visual output */}
       <Box
@@ -186,7 +201,7 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
         sx={{ width: '100%', height: 'auto', display: 'block', visibility: 'hidden' }}
       />
 
-      {/* Screenshot scroll area */}
+      {/* Screenshot scroll area — positioned on top of bezel (zIndex: 1001) for perfect touch scrolling */}
       <Box
         ref={scrollRef}
         sx={{
@@ -197,8 +212,11 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
           right: '13.3%',
           overflowY: 'auto',
           bgcolor: 'common.black',
-          zIndex: 1000,
+          zIndex: 1001,
           borderRadius: '4px',
+          WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-y',
+          pointerEvents: 'auto',
           '&::-webkit-scrollbar': { width: '4px' },
           '&::-webkit-scrollbar-track': { background: 'rgba(0,0,0,0.1)' },
           '&::-webkit-scrollbar-thumb': { background: 'rgba(255,255,255,0.15)', borderRadius: '2px' },
@@ -266,10 +284,16 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
   useWheelScroll(scrollRef)
 
   return (
-    // Outer: sizing + centering only — no filter to avoid breaking stacking context
-    <Box sx={{ position: 'relative', width: '100%', maxWidth: 245, mx: 'auto' }}>
-
-      {/* Screenshot scroll area — sits below bezel, fully interactive */}
+    // Outer: sizing + centering only — significantly larger on mobile/tablet
+    <Box
+      sx={{
+        position: 'relative',
+        width: '100%',
+        maxWidth: { xs: 340, sm: 390, md: 245 },
+        mx: 'auto',
+      }}
+    >
+      {/* Screenshot scroll area — positioned on top of bezel (zIndex: 2) to ensure perfect touch scrolling */}
       <Box
         ref={scrollRef}
         sx={{
@@ -281,7 +305,10 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
           borderRadius: '32px',
           overflowY: 'auto',
           bgcolor: 'background.paper',
-          zIndex: 0,
+          zIndex: 2,
+          WebkitOverflowScrolling: 'touch',
+          touchAction: 'pan-y',
+          pointerEvents: 'auto',
           '&::-webkit-scrollbar': { display: 'none' },
           scrollbarWidth: 'none',
           msOverflowStyle: 'none',
@@ -302,7 +329,7 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
             left: 0,
             right: 0,
             height: 148,
-            mt: ' 38px',
+            mt: '38px',
             borderRadius: '0 0 32px 32px',
             background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)',
             pointerEvents: 'none',
@@ -312,7 +339,7 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
         />
       </Box>
 
-      {/* Bezel on top — filter applied here only, isolated */}
+      {/* Bezel behind scroll area (zIndex: 1) */}
       <Box
         component="img"
         src="/images/mobile-mock.png"

@@ -50,11 +50,11 @@ export default function PageHero({
         position: 'relative',
         height: height || 'auto',
         minHeight: height ? 'auto' : { xs: 'auto', md: 'auto' },
-        pt: { xs: '120px', md: '140px' },
-        pb: { xs: 6, md: 8 },
+        pt: { xs: '110px', md: '140px' },
+        pb: { xs: 8, md: 8 },
         px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         overflow: 'hidden',
-        bgcolor: 'background.default',
+        bgcolor: 'transparent',
         display: 'flex',
         alignItems: 'center',
         isolation: 'isolate',
@@ -151,13 +151,38 @@ export default function PageHero({
                 maxWidth: { md: 695 },
                 flex: 1,
                 pr: { md: 5 },
+                width: '100%',
               }}
             >
+              {/* Mobile-only children (FlipLogoCard) - renders at the very top on mobile */}
+              {children && (
+                <Box
+                  component={motion.div}
+                  variants={itemVariants}
+                  sx={{
+                    display: { xs: 'flex', md: 'none' },
+                    justifyContent: 'center',
+                    width: '100%',
+                    my: 1.5,
+                  }}
+                >
+                  {children}
+                </Box>
+              )}
+
               {aboveTitle && (
-                <Box component={motion.div} variants={itemVariants} sx={{ mb: 1.5 }}>
+                <Box
+                  component={motion.div}
+                  variants={itemVariants}
+                  sx={{
+                    mb: 1.5,
+                    display: { xs: 'none', md: 'block' },
+                  }}
+                >
                   {aboveTitle}
                 </Box>
               )}
+
               <Box component={motion.div} variants={itemVariants}>
                 <Box
                   sx={{
@@ -234,10 +259,11 @@ export default function PageHero({
               )}
             </Stack>
 
+            {/* Desktop-only children (FlipLogoCard) */}
             <Box
               sx={{
                 width: { xs: '100%', md: 'auto' },
-                display: 'flex',
+                display: { xs: 'none', md: 'flex' },
                 justifyContent: 'center',
               }}
             >

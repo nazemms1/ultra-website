@@ -9,9 +9,15 @@ export const relatedSectionSx: SxProps<Theme> = {
 }
 
 export const relatedGridSx: SxProps<Theme> = {
-  display: 'grid',
+  display: { xs: 'flex', sm: 'grid' },
+  flexDirection: 'row',
+  overflowX: { xs: 'auto', sm: 'visible' },
+  mx: { xs: -3, sm: 0 },
+  px: { xs: 3, sm: 0 },
+  pb: { xs: 2, sm: 0 },
+  scrollbarWidth: 'none',
+  '&::-webkit-scrollbar': { display: 'none' },
   gridTemplateColumns: {
-    xs: '1fr',
     sm: 'repeat(2, 1fr)',
     lg: 'repeat(3, 1fr)',
   },
@@ -22,7 +28,9 @@ export function relatedCardSx(theme: Theme, hovered: boolean): SxProps<Theme> {
   return {
     position: 'relative',
     display: 'block',
-    height: 428.5,
+    width: { xs: '198.97860717773438px', sm: '100%' },
+    flexShrink: { xs: 0, sm: 1 },
+    height: { xs: '219px', sm: 428.5 },
     borderRadius: '16px',
     overflow: 'hidden',
     bgcolor: 'background.default',
@@ -47,7 +55,7 @@ export function relatedCardSx(theme: Theme, hovered: boolean): SxProps<Theme> {
 
 export const relatedLogoSlotSx: SxProps<Theme> = {
   position: 'absolute',
-  top: '26%',
+  top: { xs: '16%', sm: '26%' },
   left: '50%',
   transform: 'translateX(-50%)',
   width: '68%',
@@ -63,30 +71,28 @@ export const relatedFooterSx: SxProps<Theme> = {
   position: 'absolute',
   insetInline: 0,
   bottom: 0,
-  p: 4,
-  // backdropFilter: 'blur(25px)',
+  p: { xs: 2.2, sm: 4 },
   display: 'flex',
   alignItems: 'flex-end',
   justifyContent: 'space-between',
-  gap: 2,
-  minHeight: 115,
-  // zIndex: 100,
+  gap: 1.5,
+  minHeight: { xs: 65, sm: 115 },
 }
 
 export const relatedTitleSx: SxProps<Theme> = {
   fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-  fontSize: 26,
+  fontSize: { xs: 15, sm: 26 },
   fontWeight: 700,
-  lineHeight: '34px',
+  lineHeight: { xs: '20px', sm: '34px' },
   textTransform: 'uppercase',
   color: 'text.primary',
 }
 
 export const relatedDescriptionSx: SxProps<Theme> = {
   fontFamily: "'Rajdhani', sans-serif",
-  fontSize: 14,
+  fontSize: { xs: 10, sm: 14 },
   fontWeight: 400,
-  lineHeight: '20px',
+  lineHeight: { xs: '14px', sm: '20px' },
   color: theme => alpha(theme.palette.common.white, 0.65),
   mt: 0.5,
 }
@@ -95,7 +101,7 @@ export const relatedArrowSx: SxProps<Theme> = {
   display: 'inline-flex',
   alignItems: 'center',
   justifyContent: 'center',
-  p: 1.5,
+  p: { xs: 0.8, sm: 1.5 },
   borderRadius: '100px',
   bgcolor: theme => alpha(theme.palette.background.default, 0.2),
   flexShrink: 0,

@@ -24,12 +24,13 @@ export default function StatItem({ stat, active }: StatItemProps) {
         justifyContent: 'center',
         flexShrink: 0,
         width: { xs: '100%', md: 206.5 },
-        minHeight: { xs: 90, md: 110 },
+        minHeight: { xs: 'auto', md: 110 },
       }}
     >
       <Box
         component={reduce ? 'div' : motion.div}
         onClick={() => setClickTrigger(prev => prev + 1)}
+        onMouseEnter={() => setClickTrigger(prev => prev + 1)}
         {...(!reduce && {
           initial: { opacity: 0, y: 28, filter: 'blur(6px)' },
           animate: active
@@ -54,9 +55,14 @@ export default function StatItem({ stat, active }: StatItemProps) {
           maxWidth: 206.5,
           textAlign: 'center',
           cursor: 'pointer',
-          padding: 2,
+          padding: { xs: 0, md: 2 },
           borderRadius: 2,
           transition: 'all 0.3s ease',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: { xs: '5.51px', md: 1 },
         }}
       >
         <AnimatedNumber
@@ -68,7 +74,7 @@ export default function StatItem({ stat, active }: StatItemProps) {
           clickTrigger={clickTrigger}
         />
 
-        <Typography sx={statLabelSx}>{stat.label}</Typography>
+        <Typography className="stat-label" sx={statLabelSx}>{stat.label}</Typography>
       </Box>
     </Box>
   )
