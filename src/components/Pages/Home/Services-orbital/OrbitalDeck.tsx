@@ -7,6 +7,7 @@ import type { SxProps, Theme } from '@mui/material/styles'
 import {
   motion,
   useAnimationFrame,
+  useInView,
   useMotionValue,
   useReducedMotion,
   useTransform,
@@ -57,6 +58,9 @@ export default function OrbitalDeck({
 }: OrbitalDeckProps) {
   const prefersReduced = useReducedMotion()
   const deckRef        = useRef<HTMLDivElement>(null)
+  
+  // Local useInView with amount: 0.5 on deckRef so it triggers exactly when the deck itself is visible!
+  const localIsInView = useInView(deckRef, { once: true, amount: 0.5 })
 
   // spin drives all spoke transforms via useTransform chains
   const spin     = useMotionValue(0)
@@ -74,7 +78,7 @@ export default function OrbitalDeck({
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
 
-    if (isInView) {
+    if (localIsInView) {
       timerRef.current = setTimeout(() => setReady(true), SPIN_DELAY_MS)
     } else {
       setReady(false)
@@ -84,7 +88,7 @@ export default function OrbitalDeck({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [isInView])
+  }, [localIsInView])
 
   // ── 3. Passive scroll handler to capture scroll velocity ────────────────
   useEffect(() => {
@@ -179,7 +183,7 @@ export default function OrbitalDeck({
           onSelect={onActivate}
           onHoverStart={handleHoverStartParent}
           onHoverEnd={handleHoverEndParent}
-          visible={isInView}
+          visible={localIsInView}
         />
       ))}
 
@@ -264,6 +268,14 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
       <Box
         component={motion.div}
         aria-hidden
+        initial={{ scale: 0 }}
+        animate={visible ? { scale: 1 } : { scale: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 120,
+          damping: 14,
+          delay: visible ? 0.3 + index * 0.08 : 0,
+        }}
         style={{ opacity: cardOpacity }}
         sx={{
           position:     'absolute',
