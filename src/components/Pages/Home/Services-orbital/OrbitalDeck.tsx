@@ -234,8 +234,6 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
   const primary = theme.palette.primary.main
   const { baseAngle } = service
 
-  const cardRef = useRef<HTMLDivElement>(null)
-
   // Derived motion values — update on the GPU thread, no React re-render
   const spokeRotate     = useTransform(spin, s => baseAngle + s)
   const cardCounterRot  = useTransform(spin, s => -(baseAngle + s))
@@ -243,24 +241,9 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
   const cardOpacity = useTransform(spin, s => {
     const angle = (((baseAngle + s) % 360) + 360) % 360
     const dist  = Math.abs(angle - 180)
-    return clamp((90 - dist) / 30, 0, 1)   // fade 60°–90° from back
+    return clamp((90 - dist) / 30, 0.001, 1)   // fade 60°–90° from back
   })
   const cardScale   = useTransform(cardOpacity, o => 0.82 + 0.18 * o)
-  const cardVisibility = useTransform(cardOpacity, o => (o < 0.05 ? 'hidden' : 'visible'))
-
-  // Direct DOM side-effect: disable pointer-events on faded/hidden cards at the back
-  // This avoids React re-renders and stops pointer-events checks on every frame
-  useEffect(() => {
-    const unsubscribe = cardOpacity.on("change", (latest: number) => {
-      if (cardRef.current) {
-        const target = latest < 0.25 ? 'none' : 'auto'
-        if (cardRef.current.style.pointerEvents !== target) {
-          cardRef.current.style.pointerEvents = target
-        }
-      }
-    })
-    return () => unsubscribe()
-  }, [cardOpacity])
 
   return (
     // Outer div rotates the whole spoke arm
@@ -299,11 +282,17 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
       {/* Card wrapper — counter-rotates so the card stays upright */}
       <Box
         component={motion.div}
-        sx={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0 }}
-        style={{ opacity: cardOpacity, visibility: cardVisibility }}
+        sx={{
+          position: 'absolute',
+          left: 0,
+          top: 0,
+          width: 0,
+          height: 0,
+          willChange: 'transform, opacity',
+        }}
+        style={{ opacity: cardOpacity }}
       >
         <Box
-          ref={cardRef}
           component={motion.div}
           sx={{
             position: 'absolute',
@@ -313,6 +302,7 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
             height:   CARD_H,
             ml:       `${-CARD_W / 2.5}px`,
             mt:       `${-CARD_H / 2}px`,
+            willChange: 'transform, opacity',
           }}
         >
           <Box
@@ -321,13 +311,13 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
               rotate:          cardCounterRot,
               scale:           cardScale,
               transformOrigin: `${CARD_W / 2}px ${CARD_H / 2}px`,
-              willChange:      'transform',
+              willChange:      'transform, opacity',
             }}
           >
             <Box
               component={motion.div}
-              initial={{ x: -60, opacity: 0 }}
-              animate={visible ? { x: 0, opacity: 1 } : { x: -60, opacity: 0 }}
+              initial={{ x: -60, opacity: 0.001 }}
+              animate={visible ? { x: 0, opacity: 1 } : { x: -60, opacity: 0.001 }}
               transition={{
                 type: 'tween',
                 duration: 0.8,
@@ -343,8 +333,16 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
                 tools={service.tools}
                 selected={isSelected}
                 active={isActive}
-                onClick={useCallback(() => onSelect(index), [index, onSelect])}
-                onHoverStart={useCallback(() => onHoverStart(index), [index, onHoverStart])}
+                onClick={useCallback(() => {
+                  if (cardOpacity.get() >= 0.25) {
+                    onSelect(index)
+                  }
+                }, [index, onSelect, cardOpacity])}
+                onHoverStart={useCallback(() => {
+                  if (cardOpacity.get() >= 0.25) {
+                    onHoverStart(index)
+                  }
+                }, [index, onHoverStart, cardOpacity])}
                 onHoverEnd={onHoverEnd}
               />
             </Box>

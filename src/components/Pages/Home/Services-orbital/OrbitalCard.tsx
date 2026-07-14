@@ -302,6 +302,7 @@ export default function OrbitalCard({
                 component="img"
                 src={Icon}
                 alt=""
+                decoding="async"
                 sx={{
                   width: 24,
                   height: 24,
@@ -383,6 +384,7 @@ export default function OrbitalCard({
                     component="img"
                     src={tool.icon.url}
                     alt=""
+                    decoding="async"
                     sx={{ width: 11, height: 11, objectFit: 'contain' }}
                   />
                 )}
