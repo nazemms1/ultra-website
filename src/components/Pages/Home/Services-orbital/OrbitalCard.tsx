@@ -119,6 +119,8 @@ export default function OrbitalCard({
         transformOrigin: 'center center',
         isolation: 'isolate',
         contain: 'layout style',
+        borderRadius: '16px',
+        // boxShadow: `0 8px 32px 0 ${alpha(theme.palette.common.black, 0.45)}`,
         ...sx,
       }}
     >
@@ -135,37 +137,17 @@ export default function OrbitalCard({
           left: 0,
           top: '0.5px',
           overflow: 'visible',
-          filter: `drop-shadow(0 4px 32px rgba(0,0,0,0.55))`,
           willChange: 'transform',
         }}
       >
         <motion.path
-          initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
-          animate={{
-            d: isDisplayingActive
-              ? isRtl
-                ? HOVER_CARD_PATH_RTL
-                : HOVER_CARD_PATH
-              : isRtl
-                ? CARD_PATH_RTL
-                : CARD_PATH,
-          }}
-          transition={springTransition}
           fill={`url(#${fillId})`}
         />
 
         <motion.path
-          initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive
-              ? isRtl
-                ? HOVER_CARD_PATH_RTL
-                : HOVER_CARD_PATH
-              : isRtl
-                ? CARD_PATH_RTL
-                : CARD_PATH,
             opacity: isDisplayingActive ? 0.04 : 0,
           }}
           transition={springTransition}
@@ -173,16 +155,8 @@ export default function OrbitalCard({
         />
 
         <motion.path
-          initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive
-              ? isRtl
-                ? HOVER_CARD_PATH_RTL
-                : HOVER_CARD_PATH
-              : isRtl
-                ? CARD_PATH_RTL
-                : CARD_PATH,
             opacity: isDisplayingActive ? 0 : 1,
           }}
           transition={springTransition}
@@ -192,16 +166,8 @@ export default function OrbitalCard({
         />
 
         <motion.path
-          initial={false}
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
           animate={{
-            d: isDisplayingActive
-              ? isRtl
-                ? HOVER_CARD_PATH_RTL
-                : HOVER_CARD_PATH
-              : isRtl
-                ? CARD_PATH_RTL
-                : CARD_PATH,
             opacity: isDisplayingActive ? 1 : 0,
           }}
           transition={springTransition}
@@ -310,11 +276,9 @@ export default function OrbitalCard({
             justifyContent: 'center',
             borderRadius: '50%',
             border: '1px solid',
-            backdropFilter: 'blur(12px)',
-            WebkitBackdropFilter: 'blur(12px)',
             backgroundColor: isDisplayingActive
-              ? alpha(theme.palette.background.paper, 0.2)
-              : 'transparent',
+              ? alpha(theme.palette.background.paper, 0.45)
+              : 'rgba(255, 255, 255, 0.03)',
             borderColor: isDisplayingActive
               ? alpha(primary, 0.7)
               : alpha(theme.palette.common.white, 0.12),

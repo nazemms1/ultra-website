@@ -188,10 +188,10 @@ function MobileProjectCard({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: 4,
+        gap: { xs: 2, sm: 4 },
         px: 3,
-        pt: '160px',
-        pb: 4,
+        pt: { xs: '24px', sm: '40px' },
+        pb: 8,
       }}
     >
       {/* الصورة تتحرك للأسفل/الأعلى */}

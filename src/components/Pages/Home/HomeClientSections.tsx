@@ -2,11 +2,11 @@
 
 import dynamic from 'next/dynamic'
 import { useHashScroll } from './useHashScroll'
+import ServicesOrbital from '@/components/Pages/Home/Services-orbital/ServicesOrbital'
 
 const ScrollVideoStack = dynamic(() => import('@/components/Pages/Home/ScrollVideoStack'), { ssr: false })
 const PartnersSection  = dynamic(() => import('@/components/Pages/Home/Partners'),         { ssr: false })
 const Stats            = dynamic(() => import('@/components/Pages/Home/Stats/Stats'),       { ssr: false })
-const ServicesOrbital  = dynamic(() => import('@/components/Pages/Home/Services-orbital/ServicesOrbital'), { ssr: false })
 const Projects         = dynamic(() => import('@/components/Pages/Home/Projects/Projects'), { ssr: false })
 const Methodologies    = dynamic(() => import('@/components/Pages/Home/Methodologies/Methodologies'), { ssr: false })
 const TestimonialsSection = dynamic(() => import('@/components/Pages/Home/TestimonialsSection'), { ssr: false })

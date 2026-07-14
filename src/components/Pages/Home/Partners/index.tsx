@@ -36,6 +36,7 @@ export default function PartnersSection({ data }: PartnersSectionProps) {
       id="partners"
       sx={{
         position: 'relative',
+        zIndex: 2,
         width: '100%',
         py: { xs: 5, md: '42px' },
         px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },

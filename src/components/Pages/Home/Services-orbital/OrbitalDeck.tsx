@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, memo, useCallback } from 'react'
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
 import type { SxProps, Theme } from '@mui/material/styles'
@@ -18,6 +18,7 @@ import { type ServiceItem } from './data'
 
 // ─── Layout ──────────────────────────────────────────────────────────────────
 
+const EASE = [0.22, 1, 0.36, 1] as const
 const R_DOT    = 140
 const R_CARD   = R_DOT + 8 + CARD_W / 2
 const DECK     = (R_CARD + CARD_H / 2 + 40) * 2
@@ -38,6 +39,7 @@ interface OrbitalDeckProps {
   selectedIndex: number | null
   eyeOffsetX:    MotionValue<number>
   eyeOffsetY:    MotionValue<number>
+  isInView:      boolean
 }
 
 // ─── OrbitalDeck ─────────────────────────────────────────────────────────────
@@ -51,6 +53,7 @@ export default function OrbitalDeck({
   selectedIndex,
   eyeOffsetX,
   eyeOffsetY,
+  isInView,
 }: OrbitalDeckProps) {
   const prefersReduced = useReducedMotion()
   const deckRef        = useRef<HTMLDivElement>(null)
@@ -60,33 +63,18 @@ export default function OrbitalDeck({
   const pausedRef = useRef(false)
   const speedRef  = useRef(baseSpeed)
 
-  // Visibility + delayed ready flag — gates the animation loop
-  const [visible, setVisible] = useState(false)
+  // Delayed ready flag — gates the animation loop
   const [ready,   setReady]   = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Scroll velocity — sampled inside the single rAF below (no second loop)
-  const scrollVelRef   = useRef(0)
-  const lastScrollYRef = useRef(0)
-  const lastScrollTRef = useRef(0)
+  // Scroll velocity ref — populated by a passive window scroll listener to avoid layout thrashing
+  const scrollVelRef = useRef(0)
 
-  // ── 1. Visibility observer ──────────────────────────────────────────────
-  useEffect(() => {
-    const el = deckRef.current
-    if (!el) return
-    const io = new IntersectionObserver(
-      ([entry]) => setVisible(entry.isIntersecting),
-      { threshold: 0 },
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
-
-  // ── 2. Delayed activation — waits for entrance animation to finish ──────
+  // ── Delayed activation — waits for entrance animation to finish ──────
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
 
-    if (visible) {
+    if (isInView) {
       timerRef.current = setTimeout(() => setReady(true), SPIN_DELAY_MS)
     } else {
       setReady(false)
@@ -96,24 +84,56 @@ export default function OrbitalDeck({
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
     }
-  }, [visible])
+  }, [isInView])
 
-  // ── 3. Single animation frame — spin + scroll velocity in one loop ──────
+  // ── 3. Passive scroll handler to capture scroll velocity ────────────────
+  useEffect(() => {
+    if (prefersReduced) return
+
+    let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0
+    let lastScrollTime = performance.now()
+    let scrollTimeout: ReturnType<typeof setTimeout> | null = null
+
+    const handleScroll = () => {
+      const now = performance.now()
+      const scrollDt = now - lastScrollTime
+      const currentScrollY = window.scrollY
+
+      // Disable pointer events temporarily during active scroll to prevent hover state flooding in React
+      if (deckRef.current && deckRef.current.style.pointerEvents !== 'none') {
+        deckRef.current.style.pointerEvents = 'none'
+      }
+
+      if (scrollTimeout) clearTimeout(scrollTimeout)
+      scrollTimeout = setTimeout(() => {
+        if (deckRef.current) {
+          deckRef.current.style.pointerEvents = 'auto'
+        }
+      }, 120) // restore interaction after 120ms of scroll pause
+
+      if (scrollDt > 0) {
+        const dy = currentScrollY - lastScrollY
+        // Convert px/ms to px/sec
+        const raw = Math.abs(dy / scrollDt) * 1000
+        // Smooth out scroll velocity transitions
+        scrollVelRef.current += (raw - scrollVelRef.current) * 0.18
+      }
+      lastScrollY = currentScrollY
+      lastScrollTime = now
+    }
+
+    window.addEventListener('scroll', handleScroll, { passive: true })
+    return () => {
+      window.removeEventListener('scroll', handleScroll)
+      if (scrollTimeout) clearTimeout(scrollTimeout)
+    }
+  }, [prefersReduced])
+
+  // ── 4. Single animation frame — spin + scroll velocity decay in one loop ──
   useAnimationFrame((_, delta) => {
     if (prefersReduced || !ready) return
 
     const dt = Math.min(delta, 64) / 1000
-
-    // Sample scroll velocity (replaces the old second rAF loop)
-    const now = performance.now()
-    const scrollDt = now - lastScrollTRef.current
-    if (scrollDt > 0) {
-      const dy  = window.scrollY - lastScrollYRef.current
-      const raw = Math.abs(dy / scrollDt) * 1000
-      scrollVelRef.current   += (raw - scrollVelRef.current) * 0.15
-      lastScrollYRef.current  = window.scrollY
-      lastScrollTRef.current  = now
-    }
 
     // Speed with scroll boost, smoothed via exponential decay
     const boost  = (Math.min(scrollVelRef.current, 4000) / 4000) * baseSpeed * 2.5
@@ -121,10 +141,23 @@ export default function OrbitalDeck({
     const k      = 1 - Math.exp(-dt * 6)
     speedRef.current += (target - speedRef.current) * k
     spin.set(spin.get() - speedRef.current * dt)
+
+    // Decay the scroll velocity over time so it returns to 0 when scrolling stops
+    scrollVelRef.current += (0 - scrollVelRef.current) * (1 - Math.exp(-dt * 3))
   })
 
-  const pause  = () => { pausedRef.current = true  }
-  const resume = () => { pausedRef.current = false }
+  const pause  = useCallback(() => { pausedRef.current = true  }, [])
+  const resume = useCallback(() => { pausedRef.current = false }, [])
+
+  const handleHoverStartParent = useCallback((index: number) => {
+    onHover(index)
+    pause()
+  }, [onHover, pause])
+
+  const handleHoverEndParent = useCallback(() => {
+    onHover(null)
+    resume()
+  }, [onHover, resume])
 
   // ── Render ───────────────────────────────────────────────────────────────
   return (
@@ -133,18 +166,20 @@ export default function OrbitalDeck({
       sx={{ position: 'relative', flexShrink: 0, width: DECK, height: DECK }}
       aria-label="Orbiting services"
     >
-      <OrbitalCenter offsetX={eyeOffsetX} offsetY={eyeOffsetY} />
+      <OrbitalCenter offsetX={eyeOffsetX} offsetY={eyeOffsetY} visible={isInView} />
 
       {items.map((service, i) => (
         <OrbitalSpoke
           key={service.title}
           spin={spin}
           service={service}
+          index={i}
           isSelected={i === selectedIndex}
           isActive={i === activeIndex}
-          onSelect={     () => onActivate(i)}
-          onHoverStart={ () => { onHover(i);    pause()  }}
-          onHoverEnd={   () => { onHover(null); resume() }}
+          onSelect={onActivate}
+          onHoverStart={handleHoverStartParent}
+          onHoverEnd={handleHoverEndParent}
+          visible={isInView}
         />
       ))}
 
@@ -175,25 +210,31 @@ export default function OrbitalDeck({
 interface OrbitalSpokeProps {
   spin:         MotionValue<number>
   service:      ServiceItem
+  index:        number
   isSelected:   boolean
   isActive:     boolean
-  onSelect:     () => void
-  onHoverStart: () => void
+  onSelect:     (index: number | null) => void
+  onHoverStart: (index: number) => void
   onHoverEnd:   () => void
+  visible:      boolean
 }
 
-function OrbitalSpoke({
+const OrbitalSpoke = memo(function OrbitalSpoke({
   spin,
   service,
+  index,
   isSelected,
   isActive,
   onSelect,
   onHoverStart,
   onHoverEnd,
+  visible,
 }: OrbitalSpokeProps) {
   const theme   = useTheme()
   const primary = theme.palette.primary.main
   const { baseAngle } = service
+
+  const cardRef = useRef<HTMLDivElement>(null)
 
   // Derived motion values — update on the GPU thread, no React re-render
   const spokeRotate     = useTransform(spin, s => baseAngle + s)
@@ -205,7 +246,21 @@ function OrbitalSpoke({
     return clamp((90 - dist) / 30, 0, 1)   // fade 60°–90° from back
   })
   const cardScale   = useTransform(cardOpacity, o => 0.82 + 0.18 * o)
-  const cardPointer = useTransform(cardOpacity, o => (o < 0.25 ? 'none' : 'auto'))
+  const cardVisibility = useTransform(cardOpacity, o => (o < 0.05 ? 'hidden' : 'visible'))
+
+  // Direct DOM side-effect: disable pointer-events on faded/hidden cards at the back
+  // This avoids React re-renders and stops pointer-events checks on every frame
+  useEffect(() => {
+    const unsubscribe = cardOpacity.on("change", (latest: number) => {
+      if (cardRef.current) {
+        const target = latest < 0.25 ? 'none' : 'auto'
+        if (cardRef.current.style.pointerEvents !== target) {
+          cardRef.current.style.pointerEvents = target
+        }
+      }
+    })
+    return () => unsubscribe()
+  }, [cardOpacity])
 
   return (
     // Outer div rotates the whole spoke arm
@@ -245,9 +300,10 @@ function OrbitalSpoke({
       <Box
         component={motion.div}
         sx={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0 }}
-        style={{ opacity: cardOpacity }}
+        style={{ opacity: cardOpacity, visibility: cardVisibility }}
       >
         <Box
+          ref={cardRef}
           component={motion.div}
           sx={{
             position: 'absolute',
@@ -258,7 +314,6 @@ function OrbitalSpoke({
             ml:       `${-CARD_W / 2.5}px`,
             mt:       `${-CARD_H / 2}px`,
           }}
-          style={{ pointerEvents: cardPointer }}
         >
           <Box
             component={motion.div}
@@ -269,32 +324,46 @@ function OrbitalSpoke({
               willChange:      'transform',
             }}
           >
-            <OrbitalCard
-              title={service.title}
-              description={service.cardDescription}
-              Icon={service.Icon}
-              tools={service.tools}
-              selected={isSelected}
-              active={isActive}
-              onClick={onSelect}
-              onHoverStart={onHoverStart}
-              onHoverEnd={onHoverEnd}
-            />
+            <Box
+              component={motion.div}
+              initial={{ x: -60, opacity: 0 }}
+              animate={visible ? { x: 0, opacity: 1 } : { x: -60, opacity: 0 }}
+              transition={{
+                type: 'tween',
+                duration: 0.8,
+                ease: EASE,
+                delay: visible ? 0.8 + index * 0.12 : 0,
+              }}
+              sx={{ width: '100%', height: '100%' }}
+            >
+              <OrbitalCard
+                title={service.title}
+                description={service.cardDescription}
+                Icon={service.Icon}
+                tools={service.tools}
+                selected={isSelected}
+                active={isActive}
+                onClick={useCallback(() => onSelect(index), [index, onSelect])}
+                onHoverStart={useCallback(() => onHoverStart(index), [index, onHoverStart])}
+                onHoverEnd={onHoverEnd}
+              />
+            </Box>
           </Box>
         </Box>
       </Box>
     </Box>
   )
-}
+})
 
 // ─── OrbitalCenter ────────────────────────────────────────────────────────────
 
 interface OrbitalCenterProps {
   offsetX: MotionValue<number>
   offsetY: MotionValue<number>
+  visible: boolean
 }
 
-function OrbitalCenter({ offsetX, offsetY }: OrbitalCenterProps) {
+function OrbitalCenter({ offsetX, offsetY, visible }: OrbitalCenterProps) {
   return (
     <Box
       sx={{
@@ -306,8 +375,8 @@ function OrbitalCenter({ offsetX, offsetY }: OrbitalCenterProps) {
         height:        0,
       }}
     >
-      <Ring diameter={384} sx={{ borderColor: '#244D59' }} />
-      <Ring diameter={280} sx={{ borderColor: '#2A5A68' }} />
+      <Ring diameter={384} sx={{ borderColor: '#244D59' }} delay={0.2} visible={visible} />
+      <Ring diameter={280} sx={{ borderColor: '#2A5A68' }} delay={0.35} visible={visible} />
       <Ring
         diameter={200}
         sx={{
@@ -315,10 +384,16 @@ function OrbitalCenter({ offsetX, offsetY }: OrbitalCenterProps) {
           boxShadow:
             `inset 0 0 30px ${alpha('#00E6D2', 0.2)}, 0 0 40px ${alpha('#00E6D2', 0.2)}`,
         }}
+        delay={0.5}
+        visible={visible}
       />
 
       {/* Central radial glow */}
       <Box
+        component={motion.div}
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={visible ? { opacity: 1, scale: 1 } : { opacity: 0, scale: 0.5 }}
+        transition={{ duration: 0.8, delay: visible ? 0.6 : 0 }}
         aria-hidden
         sx={{
           position:     'absolute',
@@ -334,16 +409,48 @@ function OrbitalCenter({ offsetX, offsetY }: OrbitalCenterProps) {
         }}
       />
 
-      <OrbitalEmblem offsetX={offsetX} offsetY={offsetY} />
+      <Box
+        component={motion.div}
+        initial={{ scale: 0, opacity: 0 }}
+        animate={visible ? { scale: 1, opacity: 1 } : { scale: 0, opacity: 0 }}
+        transition={{
+          type: 'spring',
+          stiffness: 100,
+          damping: 15,
+          delay: visible ? 0.7 : 0,
+        }}
+        sx={{ position: 'absolute', inset: 0 }}
+      >
+        <OrbitalEmblem offsetX={offsetX} offsetY={offsetY} />
+      </Box>
     </Box>
   )
 }
 
 // ─── Ring ─────────────────────────────────────────────────────────────────────
 
-function Ring({ diameter, sx }: { diameter: number; sx?: SxProps<Theme> }) {
+function Ring({
+  diameter,
+  sx,
+  delay = 0,
+  visible,
+}: {
+  diameter: number
+  sx?: SxProps<Theme>
+  delay?: number
+  visible: boolean
+}) {
   return (
     <Box
+      component={motion.div}
+      initial={{ scale: 0.3, opacity: 0 }}
+      animate={visible ? { scale: 1, opacity: 1 } : { scale: 0.3, opacity: 0 }}
+      transition={{
+        type: 'spring',
+        stiffness: 90,
+        damping: 15,
+        delay: visible ? delay : 0,
+      }}
       sx={{
         position:     'absolute',
         left:         -diameter / 2,

@@ -77,7 +77,7 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
         }}
       />
 
-      {/* Card content */}
+  
       <Box
         sx={{
           position: 'absolute',
@@ -85,8 +85,8 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          // Push content below the pinned title header
-          pt: { xs: '140px', md: '160px' },
+          
+          pt: { xs: '180px', md: '300px' },
           pb: { xs: 4, md: 6 },
           px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         }}

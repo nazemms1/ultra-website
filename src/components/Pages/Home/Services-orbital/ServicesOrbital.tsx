@@ -5,7 +5,7 @@ import Box from '@mui/material/Box'
 import Grid from '@mui/material/Grid'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useInView } from 'framer-motion'
 import OrbitalAccentRail from './OrbitalAccentRail'
 import OrbitalDeck from './OrbitalDeck'
 import { SERVICES } from './data'
@@ -47,6 +47,7 @@ interface ServicesOrbitalProps {
 
 export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
   const sectionRef = useRef<HTMLElement>(null)
+  const isInView = useInView(sectionRef, { once: true, amount: 0.45 })
   const [selectedIndex, setSelectedIndex] = useState<number | null>(0)
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const theme = useTheme()
@@ -282,6 +283,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
       selectedIndex={selectedIndex}
       eyeOffsetX={offsetX}
       eyeOffsetY={offsetY}
+      isInView={isInView}
     />
   )
 
@@ -374,10 +376,10 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
         <Grid size={{ lg: 6 }}>
           <Box
             component={motion.div}
-            initial={{ opacity: 0, x: isRtl ? 80 : -80, scale: 0.95 }}
+            initial={{ opacity: 0, x: isRtl ? 40 : -40, scale: 0.97 }}
             whileInView={{ opacity: 1, x: 0, scale: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.9, ease: SLIDE_EASE }}
+            viewport={{ once: true, amount: 0.35 }}
+            transition={{ type: 'tween', duration: 1.8, ease: EASE }}
             sx={{
               maxWidth: 576,
               ml: { lg: 8, xl: 'calc(max((100vw - 1920px) / 2 + 220px, 6px))' },
@@ -407,11 +409,6 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
 
         <Grid size={{ lg: 6 }}>
           <Box
-            component={motion.div}
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true, amount: 0.1 }}
-            transition={{ duration: 0.55, ease: EASE, delay: 0.1 }}
             sx={{
               display: 'flex',
               alignItems: 'center',
