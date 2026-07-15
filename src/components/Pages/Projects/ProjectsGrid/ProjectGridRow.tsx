@@ -6,6 +6,8 @@ import Typography from '@mui/material/Typography'
 import { useTheme } from '@mui/material/styles'
 import Link from 'next/link'
 import { useTranslations } from 'next-intl'
+import { useState } from 'react'
+import { motion } from 'framer-motion'
 import {
   coverEdgeFade,
   hoverDescriptionSx,
@@ -39,13 +41,12 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         position: 'relative',
         width: '100%',
         isolation: 'isolate',
-        // Clamps layout heights perfectly during transition so rows don't bleed or overlap
         height: { xs: 'auto', md: layout.imageIdleHeight },
-        marginTop: index > 0 ? { xs: 3, md: 0 } : 0,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        overflow: 'visible',
+        marginTop: index > 0 ? { xs: 0, md: 0 } : 0,
+        display: { xs: 'block', md: 'flex' },
+        alignItems: { md: 'center' },
+        justifyContent: { md: 'center' },
+        overflow: { xs: 'visible', md: 'visible' },
         transform: 'scale(1)',
         transition: HOVER_TRANSITION,
         '&:hover': {
@@ -92,7 +93,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         className="row-inner"
         sx={{
           position: 'relative',
-          display: 'flex',
+          display: { xs: 'none', md: 'flex' },
           flexDirection: {
             xs: 'column',
             md: isReversed ? 'row-reverse' : 'row',
@@ -114,6 +115,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         <Box
           className="image-block"
           sx={{
+            display: { xs: 'none', md: 'block' },
             position: { xs: 'relative', md: 'absolute' },
             left: imageOnLeft ? 0 : 'auto',
             right: !imageOnLeft ? 0 : 'auto',
@@ -277,78 +279,143 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           </Box>
         </Box>
 
-        {/* Mobile card — xs only */}
+      </Box>
+
+      {/* Mobile card — xs only, outside row-inner */}
+      <Box sx={{ display: { xs: 'block', md: 'none' }, width: '100%' }}>
+        <MobileCard item={item} t={t} />
+      </Box>
+    </Box>
+  )
+}
+
+/* ─── Mobile Card ────────────────────────────────────────
+   Collapsed: cover image + title
+   Expanded:  + description + View More button
+   Animation: 300ms ease-out
+──────────────────────────────────────────────────────── */
+
+function MobileCard({ item, t }: { item: ProjectGridItem; t: (key: string) => string }) {
+  const [expanded, setExpanded] = useState(false)
+
+  return (
+    <Box
+      onClick={() => setExpanded(prev => !prev)}
+      sx={{ width: '100%', cursor: 'pointer' }}
+    >
+      {/* الجزء الأول: الصورة — ثابتة 149px دائماً */}
+      <Box
+        sx={{
+          position: 'relative',
+          width: '100%',
+          height: 149,
+          borderRadius: '20px 20px 0 0',
+          overflow: 'hidden',
+          flexShrink: 0,
+        }}
+      >
+        {item.coverSrc && (
+          <Box
+            component="img"
+            src={item.coverSrc}
+            alt={item.coverAlt}
+            sx={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+          />
+        )}
         <Box
           sx={{
-            display: { xs: 'flex', md: 'none' },
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: 2,
-            width: '100%',
-            px: 2,
-            py: 2.5,
-            borderRadius: '20px',
-            background: theme => `linear-gradient(135deg, rgba(0,0,0,0.55) 0%, rgba(0,0,0,0.3) 100%)`,
-            backdropFilter: 'blur(14px)',
-            WebkitBackdropFilter: 'blur(14px)',
-            border: theme => `1px solid rgba(255,255,255,0.08)`,
+            position: 'absolute',
+            inset: 0,
+            bgcolor: 'rgba(0,0,0,0.38)',
+          }}
+        />
+        <Box
+          sx={{
+            position: 'absolute',
+            bottom: 0,
+            left: 0,
+            right: 0,
+            height: '70%',
+            background: 'linear-gradient(to bottom, transparent 0%, rgba(10,10,10,0.98) 85%, #0a0a0a 100%)',
+            pointerEvents: 'none',
+          }}
+        />
+        {item.logo.src && (
+          <Box
+            component="img"
+            src={item.logo.src}
+            alt={item.logo.alt}
+            sx={{
+              position: 'absolute',
+              top: '42%',
+              left: '50%',
+              transform: 'translate(-50%, -50%)',
+              width: 120,
+              height: 70,
+              objectFit: 'contain',
+            }}
+          />
+        )}
+        <Typography
+          sx={{
+            position: 'absolute',
+            bottom: 16,
+            left: 0,
+            right: 0,
+            textAlign: 'center',
+            fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+            fontSize: 15,
+            fontWeight: 700,
+            textTransform: 'uppercase',
+            color: '#fff',
+            letterSpacing: '0.05em',
+            lineHeight: 1,
           }}
         >
-          {/* Logo thumbnail */}
-          {item.logo.src && (
-            <Box
-              component="img"
-              src={item.logo.src}
-              alt={item.logo.alt}
-              sx={{
-                width: 64,
-                height: 64,
-                objectFit: 'contain',
-                flexShrink: 0,
-                borderRadius: '12px',
-                background: 'rgba(255,255,255,0.06)',
-                p: '8px',
-              }}
-            />
-          )}
+          {item.title}
+        </Typography>
+      </Box>
 
-          {/* Text + CTA */}
-          <Box sx={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 0.75 }}>
-            <Typography sx={{ ...titleSx, fontSize: 18, lineHeight: '24px' }}>
-              {item.title}
-            </Typography>
-            <Typography
-              sx={{
-                ...hoverDescriptionSx,
-                fontSize: 13,
-                lineHeight: '18px',
-                opacity: 0.7,
-                display: '-webkit-box',
-                WebkitLineClamp: 2,
-                WebkitBoxOrient: 'vertical',
-                overflow: 'hidden',
-              }}
-            >
-              {item.description}
-            </Typography>
-            <Box
-              component={Link}
-              href={item.href}
-              sx={{
-                ...viewMoreButtonSx,
-                fontSize: 12,
-                px: '14px',
-                py: '6px',
-                mt: 0.5,
-                alignSelf: 'flex-start',
-              }}
-            >
-              {t('viewMore')}
-              <ArrowUpRight size={14} color="currentColor" strokeWidth={1.75} />
-            </Box>
+      {/* الجزء الثاني: التفاصيل — يظهر تحت الصورة عند النقر */}
+      <motion.div
+        initial={false}
+        animate={expanded ? { height: 'auto', opacity: 1 } : { height: 0, opacity: 0 }}
+        transition={{ duration: 0.3, ease: 'easeOut' }}
+        style={{ overflow: 'hidden' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            pt: 2.5,
+            pb: 2.5,
+            px: 2,
+            gap: 1.5,
+          }}
+        >
+          <Typography
+            sx={{
+              fontFamily: "'Rajdhani', sans-serif",
+              fontSize: 13,
+              lineHeight: 1.6,
+              color: 'rgba(255,255,255,0.7)',
+            }}
+          >
+            {item.description}
+          </Typography>
+          <Box
+            component={Link}
+            href={item.href}
+            sx={{ ...viewMoreButtonSx, fontSize: 12, px: '20px', py: '8px', alignSelf: 'center' }}
+          >
+            {t('viewMore')}
+            <ArrowUpRight size={14} color="currentColor" strokeWidth={1.75} />
           </Box>
         </Box>
-      </Box>
+      </motion.div>
     </Box>
   )
 }

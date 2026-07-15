@@ -168,18 +168,6 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
             }}
           />
 
-          <Box
-            sx={{
-              position: 'absolute',
-              left: '16px',
-              top: 0,
-              bottom: 0,
-              width: '2px',
-              background:
-                'linear-gradient(to bottom, rgba(13, 241, 217, 0) 0%, rgba(13, 241, 217, 0.20) 10%, rgba(13, 241, 217, 0.20) 90%, rgba(13, 241, 217, 0) 100%)',
-              display: { xs: 'block', md: 'none' },
-            }}
-          />
 
           <Stack spacing={{ xs: 4, md: 12 }}>
             {years.map((item, index) => {
@@ -207,14 +195,14 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                   <Box
                     sx={{
                       position: 'absolute',
-                      left: '16px',
-                      top: '24px',
-                      width: '21.18px',
-                      height: '21.18px',
+                      left: '50%',
+                      bottom: '-14px',
+                      width: '12px',
+                      height: '12px',
                       borderRadius: '50%',
                       bgcolor: '#0DF1D9',
                       boxShadow: '0 0 10px rgba(13, 241, 217, 0.6)',
-                      transform: 'translate(-50%, -50%)',
+                      transform: 'translate(-50%, 0)',
                       zIndex: 2,
                       display: { xs: 'block', md: 'none' },
                     }}
@@ -361,33 +349,39 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                     viewport={{ once: true, margin: '-40px' }}
                     transition={{ duration: 0.6 }}
                     sx={{
-                      display: { xs: 'block', md: 'none' },
-                      pl: 5,
-                      pb: 2,
+                      display: { xs: 'flex', md: 'none' },
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                      textAlign: 'center',
+                      pb: 6,
                     }}
                   >
                     <Typography
                       component="div"
                       sx={{
                         fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                        fontSize: { xs: '36px', md: '48px' },
+                        fontSize: '52px',
                         fontWeight: 700,
                         color: '#FAFAFA',
-                        mb: 2,
+                        mb: 2.5,
                         lineHeight: 1,
                       }}
                     >
-                   {item.year}   
+                      {item.year}
                     </Typography>
-                    <Grid container spacing={2.5}>
+                    <Stack
+                      direction="row"
+                      spacing={3}
+                      sx={{ justifyContent: 'center', flexWrap: 'wrap' }}
+                    >
                       {item.values.map((val: any, vIdx: number) => (
-                        <Grid key={vIdx} size={{ xs: 6 }}>
+                        <Box key={vIdx} sx={{ textAlign: 'center', minWidth: '70px' }}>
                           <AnimatedCounter
                             value={val.value}
                             symbol={val.symbol}
                             sx={{
                               fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-                              fontSize: '28px',
+                              fontSize: '26px',
                               color: '#0DF1D9',
                               fontWeight: 700,
                               lineHeight: 1,
@@ -396,7 +390,7 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                           <Typography
                             sx={{
                               fontFamily: '"Rajdhani", sans-serif',
-                              fontSize: '10px',
+                              fontSize: '9px',
                               color: 'rgba(255, 255, 255, 0.45)',
                               textTransform: 'uppercase',
                               letterSpacing: '0.5px',
@@ -407,9 +401,9 @@ export default function AboutTimeline({ statisticsData, locale }: AboutTimelineP
                           >
                             {val.title}
                           </Typography>
-                        </Grid>
+                        </Box>
                       ))}
-                    </Grid>
+                    </Stack>
                   </Box>
                 </Box>
               )

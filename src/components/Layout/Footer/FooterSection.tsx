@@ -116,6 +116,18 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
   const phone = hasApiData ? publicDataMap.phone : null
   const email = hasApiData ? publicDataMap.email : null
 
+  const footerTextObj = publicDataMap.footer_text
+  const showFooterText = !!(
+    hasApiData &&
+    footerTextObj &&
+    (footerTextObj.show_text_in_footer === true ||
+      footerTextObj.show_text_in_footer === 'true' ||
+      footerTextObj.show_text_in_footer === 1 ||
+      footerTextObj.show_text_in_footer === '1') &&
+    footerTextObj.text
+  )
+  const footerText = footerTextObj?.text || ''
+
   // const getSocialIcon = (key: string) => {
   //   const lowKey = key.toLowerCase()
   //   if (lowKey.includes('linkedin')) {
@@ -495,7 +507,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
             )}
           </Stack>
 
-          {showStats && (
+          {showFooterText ? (
             <Box
               component={motion.div}
               initial={{ opacity: 0, y: 16 }}
@@ -507,105 +519,147 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                 WebkitBackdropFilter: 'var(--parent-backdrop-filter)',
               }}
               sx={{
-                display: 'grid',
-                gridTemplateColumns: { xs: 'repeat(2, 161px)', md: 'repeat(4, 1fr)' },
-                justifyContent: { xs: 'center', md: 'stretch' },
-                gap: { xs: 1.5, md: 0 },
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                textAlign: 'center',
                 width: '100%',
-                '--parent-backdrop-filter': {
-                  xs: 'none',
-                  md: 'blur(26px) brightness(1.08) saturate(1.2)',
-                },
+                '--parent-backdrop-filter': 'blur(26px) brightness(1.08) saturate(1.2)',
                 ...glassSurface(theme, { radius: '16px' }),
-                background: {
-                  xs: 'none',
-                  md: glassSurface(theme, { radius: '16px' }).background,
-                },
-                border: {
-                  xs: 'none',
-                  md: glassSurface(theme, { radius: '16px' }).border,
-                },
-                backgroundClip: {
-                  xs: 'unset',
-                  md: 'padding-box',
-                },
-                borderRadius: {
-                  xs: '0px',
-                  md: '16px',
-                },
-                boxShadow: {
-                  xs: 'none',
-                  md: glassSurface(theme, { radius: '16px' }).boxShadow,
-                },
-                py: { xs: 0, md: 3 },
-                px: { xs: 0, md: 2 },
+                background: glassSurface(theme, { radius: '16px' }).background,
+                border: glassSurface(theme, { radius: '16px' }).border,
+                backgroundClip: 'padding-box',
+                borderRadius: '16px',
+                boxShadow: glassSurface(theme, { radius: '16px' }).boxShadow,
+                py: { xs: 3, md: 4 },
+                px: { xs: 3, md: 4 },
               }}
             >
-              {finalFooterStats.map((stat, i) => (
-                <Box
-                  key={stat.label}
-                  component={motion.div}
-                  initial={{ opacity: 0, y: 16 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, margin: '-40px' }}
-                  transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
-                  style={{
-                    backdropFilter: 'var(--child-backdrop-filter)',
-                    WebkitBackdropFilter: 'var(--child-backdrop-filter)',
-                  }}
-                  sx={{
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                    width: { xs: '161px', md: '100%' },
-                    height: { xs: '74.88888549804688px', md: 'auto' },
-                    py: { xs: 0, md: 1 },
-                    px: { xs: 0, md: 1 },
-                    p: { xs: '14.69px', md: 'unset' },
-                    color: '#0DF1D9',
-                    '--child-backdrop-filter': {
-                      xs: 'blur(26px) brightness(1.08) saturate(1.2)',
-                      md: 'none',
-                    },
-                    ...glassSurface(theme, { radius: '14.69px' }),
-                    background: {
-                      xs: glassSurface(theme, { radius: '14.69px' }).background,
-                      md: 'transparent',
-                    },
-                    border: {
-                      xs: glassSurface(theme, { radius: '14.69px' }).border,
-                      md: 'none',
-                    },
-                    backgroundClip: {
-                      xs: 'padding-box',
-                      md: 'unset',
-                    },
-                    borderRadius: {
-                      xs: '14.69px',
-                      md: '0px',
-                    },
-                    boxShadow: {
-                      xs: glassSurface(theme, { radius: '14.69px' }).boxShadow,
-                      md: 'none',
-                    },
-                    borderInlineEnd: 'none',
-                    '& .stat-number': {
-                      fontSize: { xs: '18px', md: '54.85px' },
-                      lineHeight: { xs: '20px', md: '82.275px' },
-                      color: '#0DF1D9',
-                    },
-                    '& .stat-label': {
-                      fontSize: { xs: '8px', md: '14px' },
-                      lineHeight: { xs: '10px', md: '20px' },
-                      color: 'text.secondary',
-                      mt: 0,
-                    },
-                  }}
-                >
-                  <StatItem stat={stat} active />
-                </Box>
-              ))}
+              <Typography
+                sx={{
+                  color: '#0DF1D9',
+                  fontSize: { xs: '16px', md: '20px' },
+                  fontWeight: 500,
+                  lineHeight: 1.6,
+                  whiteSpace: 'pre-line',
+                }}
+              >
+                {footerText}
+              </Typography>
             </Box>
+          ) : (
+            showStats && (
+              <Box
+                component={motion.div}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-40px' }}
+                transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+                style={{
+                  backdropFilter: 'var(--parent-backdrop-filter)',
+                  WebkitBackdropFilter: 'var(--parent-backdrop-filter)',
+                }}
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: { xs: 'repeat(2, 161px)', md: 'repeat(4, 1fr)' },
+                  justifyContent: { xs: 'center', md: 'stretch' },
+                  gap: { xs: 1.5, md: 0 },
+                  width: '100%',
+                  '--parent-backdrop-filter': {
+                    xs: 'none',
+                    md: 'blur(26px) brightness(1.08) saturate(1.2)',
+                  },
+                  ...glassSurface(theme, { radius: '16px' }),
+                  background: {
+                    xs: 'none',
+                    md: glassSurface(theme, { radius: '16px' }).background,
+                  },
+                  border: {
+                    xs: 'none',
+                    md: glassSurface(theme, { radius: '16px' }).border,
+                  },
+                  backgroundClip: {
+                    xs: 'unset',
+                    md: 'padding-box',
+                  },
+                  borderRadius: {
+                    xs: '0px',
+                    md: '16px',
+                  },
+                  boxShadow: {
+                    xs: 'none',
+                    md: glassSurface(theme, { radius: '16px' }).boxShadow,
+                  },
+                  py: { xs: 0, md: 3 },
+                  px: { xs: 0, md: 2 },
+                }}
+              >
+                {finalFooterStats.map((stat, i) => (
+                  <Box
+                    key={stat.label}
+                    component={motion.div}
+                    initial={{ opacity: 0, y: 16 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true, margin: '-40px' }}
+                    transition={{ duration: 0.5, delay: i * 0.08, ease: [0.22, 1, 0.36, 1] }}
+                    style={{
+                      backdropFilter: 'var(--child-backdrop-filter)',
+                      WebkitBackdropFilter: 'var(--child-backdrop-filter)',
+                    }}
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      width: { xs: '161px', md: '100%' },
+                      height: { xs: '74.88888549804688px', md: 'auto' },
+                      py: { xs: 0, md: 1 },
+                      px: { xs: 0, md: 1 },
+                      p: { xs: '14.69px', md: 'unset' },
+                      color: '#0DF1D9',
+                      '--child-backdrop-filter': {
+                        xs: 'blur(26px) brightness(1.08) saturate(1.2)',
+                        md: 'none',
+                      },
+                      ...glassSurface(theme, { radius: '14.69px' }),
+                      background: {
+                        xs: glassSurface(theme, { radius: '14.69px' }).background,
+                        md: 'transparent',
+                      },
+                      border: {
+                        xs: glassSurface(theme, { radius: '14.69px' }).border,
+                        md: 'none',
+                      },
+                      backgroundClip: {
+                        xs: 'padding-box',
+                        md: 'unset',
+                      },
+                      borderRadius: {
+                        xs: '14.69px',
+                        md: '0px',
+                      },
+                      boxShadow: {
+                        xs: glassSurface(theme, { radius: '14.69px' }).boxShadow,
+                        md: 'none',
+                      },
+                      borderInlineEnd: 'none',
+                      '& .stat-number': {
+                        fontSize: { xs: '18px', md: '54.85px' },
+                        lineHeight: { xs: '20px', md: '82.275px' },
+                        color: '#0DF1D9',
+                      },
+                      '& .stat-label': {
+                        fontSize: { xs: '8px', md: '14px' },
+                        lineHeight: { xs: '10px', md: '20px' },
+                        color: 'text.secondary',
+                        mt: 0,
+                      },
+                    }}
+                  >
+                    <StatItem stat={stat} active />
+                  </Box>
+                ))}
+              </Box>
+            )
           )}
         </Stack>
 

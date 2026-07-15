@@ -31,8 +31,9 @@ export const panelSx: SxProps<Theme> = {
 export const rowsListSx: SxProps<Theme> = {
   display: 'flex',
   flexDirection: 'column',
-  gap: 0,
+  gap: { xs: '22px', md: 0 },
   width: '100%',
+  px: { xs: '20px', md: 0 },
 }
 
 export type RowLayout = {
