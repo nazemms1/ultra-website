@@ -17,6 +17,7 @@ const rajdhani = Rajdhani({
   display: 'swap',
 })
 
+
 export function generateStaticParams() {
   return routing.locales.map(locale => ({ locale }))
 }

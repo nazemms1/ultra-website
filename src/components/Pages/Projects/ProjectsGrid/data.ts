@@ -35,6 +35,7 @@ function mapApiItemToGridItem(item: PortfoliosApiItem): ProjectGridItem | null {
       height: 87,
     } : null,
     href: `/projects/${id}`,
+    order: item.order != null ? Number(item.order) : undefined,
   }
 }
 
@@ -44,23 +45,21 @@ export function parsePortfoliosApiData(value: unknown): PortfoliosApiData | null
 }
 
 export function resolveProjectGridItems(data?: PortfoliosApiData | null): ProjectGridItem[] {
+  let items: ProjectGridItem[] = []
+
   if (data?.projects && data.projects.length > 0) {
-    return data.projects
+    items = data.projects
+      .map(item => mapApiItemToGridItem(item))
+      .filter((item): item is ProjectGridItem => item !== null)
+  } else if (data?.data && data.data.length > 0) {
+    items = data.data
+      .map(item => mapApiItemToGridItem(item))
+      .filter((item): item is ProjectGridItem => item !== null)
+  } else if (data?.items && data.items.length > 0) {
+    items = data.items
       .map(item => mapApiItemToGridItem(item))
       .filter((item): item is ProjectGridItem => item !== null)
   }
 
-  if (data?.data && data.data.length > 0) {
-    return data.data
-      .map(item => mapApiItemToGridItem(item))
-      .filter((item): item is ProjectGridItem => item !== null)
-  }
-
-  if (data?.items && data.items.length > 0) {
-    return data.items
-      .map(item => mapApiItemToGridItem(item))
-      .filter((item): item is ProjectGridItem => item !== null)
-  }
-
-  return []
+  return [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
 }

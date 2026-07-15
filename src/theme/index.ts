@@ -101,11 +101,11 @@ export function createAppTheme(direction: 'ltr' | 'rtl' = 'ltr') {
         h4: { fontFamily: arabicDisplayFont },
         h5: { fontFamily: arabicDisplayFont },
         h6: { fontFamily: arabicDisplayFont },
-        body1: { fontFamily: arabicBodyFont },
-        body2: { fontFamily: arabicBodyFont },
-        caption: { fontFamily: arabicBodyFont },
-        overline: { fontFamily: arabicBodyFont },
-        button: { fontFamily: arabicBodyFont },
+        body1: { fontFamily: arabicBodyFont, fontSize: '1.125rem' },
+        body2: { fontFamily: arabicBodyFont, fontSize: '1rem' },
+        caption: { fontFamily: arabicBodyFont, fontSize: '0.875rem' },
+        overline: { fontFamily: arabicBodyFont, fontSize: '0.8125rem' },
+        button: { fontFamily: arabicBodyFont, fontSize: '1rem' },
       },
     }) as Theme & CssVarsTheme
   }

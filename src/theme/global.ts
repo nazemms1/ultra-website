@@ -122,7 +122,9 @@ const GlobalStyles = () => css`
     line-height: 1.4;
   }
 
-  /* 4. Body text — Changa Regular, override any inline fontFamily from sx props */
+  /* 4. Body text — Changa Regular, override any inline fontFamily from sx props.
+        font-size is intentionally NOT set here — let the RTL theme values and
+        sx props control sizing without interference. */
   [dir='rtl'] p,
   [dir='rtl'] span:not(.stat-number, .stat-number span),
   [dir='rtl'] li,
@@ -147,8 +149,9 @@ const GlobalStyles = () => css`
 
   /* 7. Small section labels — clamp font-size so Arabic glyphs are never
         rendered below 15px (Latin labels are typically 11-13px which is
-        unreadable in Arabic). max() keeps larger text untouched. */
-  [dir='rtl'] p,
+        unreadable in Arabic). max() keeps larger text untouched.
+        Note: p and body1 are intentionally excluded so sx-prop font sizes
+        (e.g. fontSize: 25 in Hero) are not clamped. */
   [dir='rtl'] .MuiTypography-caption,
   [dir='rtl'] .MuiTypography-overline {
     font-size: max(15px, 1em) !important;

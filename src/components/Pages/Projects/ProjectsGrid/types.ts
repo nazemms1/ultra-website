@@ -15,6 +15,7 @@ export type ProjectGridItem = {
   readonly logo: ProjectGridLogo
   readonly logoFlip?: ProjectGridLogo | null
   readonly href: string
+  readonly order?: number
 }
 
 export type PortfoliosApiItem = {
@@ -28,6 +29,7 @@ export type PortfoliosApiItem = {
   readonly logo?: string | { url?: string } | null
   readonly logo_flip?: string | { url?: string } | null
   readonly image?: string | { url?: string } | null
+  readonly order?: number
 }
 
 export type PortfoliosApiData = {
