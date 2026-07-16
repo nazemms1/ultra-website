@@ -1,7 +1,7 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { type ReactNode } from 'react'
+import { useEffect, useRef, type ReactNode } from 'react'
 import Image from 'next/image'
 import { Link } from '@/i18n/routing'
 import Box from '@mui/material/Box'
@@ -60,6 +60,31 @@ const socials = [
 
 export default function FooterSection({ data, statsData }: { data?: any; statsData?: any }) {
   const theme = useTheme()
+  const rootRef = useRef<HTMLElement | null>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+
+  // Defer the background video: only load & play once the footer approaches
+  // the viewport (it sits below the fold on every page), pause when it leaves.
+  useEffect(() => {
+    const root = rootRef.current
+    if (!root) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        const video = videoRef.current
+        if (!video) return
+        if (entry.isIntersecting) {
+          video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { rootMargin: '400px 0px' },
+    )
+    observer.observe(root)
+    return () => observer.disconnect()
+  }, [])
+
   const params = useParams()
   const isAr = params?.locale === 'ar'
   const contactTitle = isAr ? 'اتصل بنا' : 'Contact Us'
@@ -155,6 +180,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
   return (
     <Box
       component="footer"
+      ref={rootRef}
       sx={{
         position: 'relative',
         zIndex: 1,
@@ -181,7 +207,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
       <Box
         component="video"
         key={videoUrl}
-        autoPlay
+        ref={videoRef}
         loop
         muted
         playsInline
@@ -264,7 +290,6 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                     alt="Ultrawares"
                     width={83}
                     height={42}
-                    priority
                     style={{ display: 'block', objectFit: 'contain' }}
                   />
                 </Box>

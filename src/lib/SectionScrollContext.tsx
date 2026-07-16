@@ -6,11 +6,14 @@ import { usePathname } from '@/i18n/routing'
 interface SectionScrollContextValue {
   scrollToSection: (sectionId: string) => void
   requestScrollAfterNav: (sectionId: string) => void
+  /** Section id a pending post-navigation scroll is waiting for, if any. */
+  getPendingSectionId: () => string | null
 }
 
 const SectionScrollContext = createContext<SectionScrollContextValue>({
   scrollToSection: () => {},
   requestScrollAfterNav: () => {},
+  getPendingSectionId: () => null,
 })
 
 export function useSectionScroll() {
@@ -75,8 +78,12 @@ export function SectionScrollProvider({ children }: { children: React.ReactNode 
     pendingRef.current = sectionId
   }, [])
 
+  const getPendingSectionId = useCallback(() => pendingRef.current, [])
+
   return (
-    <SectionScrollContext.Provider value={{ scrollToSection, requestScrollAfterNav }}>
+    <SectionScrollContext.Provider
+      value={{ scrollToSection, requestScrollAfterNav, getPendingSectionId }}
+    >
       {children}
     </SectionScrollContext.Provider>
   )

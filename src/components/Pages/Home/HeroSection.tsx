@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { ArrowRight, ArrowLeft } from 'lucide-react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
@@ -55,9 +55,18 @@ export default function HeroSection({ data }: HeroSectionProps) {
   const itemVariants = makeItemVariants(isRtl)
 
   // Track whether the entrance animation has already fired so it never re-hides.
-  // Initialise to true if splash was already complete at mount (returning visitor).
-  const hasAnimatedRef = useRef(splashComplete)
-  const [heroVisible, setHeroVisible] = useState(splashComplete)
+  const hasAnimatedRef = useRef(false)
+  // Starts true so the server-rendered HTML paints the headline immediately —
+  // the browser records LCP at first paint even though the opaque splash cover
+  // sits on top. The layout effect below re-hides it before the first client
+  // paint, so the entrance animation still plays exactly as before.
+  const [heroVisible, setHeroVisible] = useState(true)
+
+  useLayoutEffect(() => {
+    if (!splashComplete && !hasAnimatedRef.current) {
+      setHeroVisible(false)
+    }
+  }, [splashComplete])
 
   useEffect(() => {
     if (splashComplete && !hasAnimatedRef.current) {
@@ -211,7 +220,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
         <Box
           component={motion.div}
           variants={containerVariants}
-          initial="hidden"
+          initial={false}
           animate={heroVisible ? 'visible' : 'hidden'}
           sx={{
             display: 'flex',

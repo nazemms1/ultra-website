@@ -98,9 +98,6 @@ export default async function LocaleLayout({ children, params }: Props) {
       style={{ scrollBehavior: 'smooth' }}
     >
       <head>
-        {/* Preconnect to font origins */}
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         {/* Preconnect to backend API for faster image/data loading */}
         <link rel="preconnect" href="https://newwebsite-dev-back.ultrawares.com" />
         <link rel="dns-prefetch" href="https://newwebsite-dev-back.ultrawares.com" />

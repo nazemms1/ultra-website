@@ -43,7 +43,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
   const theme = useTheme()
   const [isHovered, setIsHovered] = useState(false)
 
-  const resolvedBaseColor = baseColor ?? theme.palette.primary.main
+  const resolvedBaseColor = baseColor ?? theme.palette.primary.light
   const resolvedSweepColor = sweepColor ?? alpha(theme.palette.common.white, 0.8)
   const secondaryFill = alpha(theme.palette.common.white, 0.18)
 
@@ -63,14 +63,14 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
         ? {
             bgcolor: resolvedBaseColor,
             color: theme.palette.primary.contrastText,
-            boxShadow: '0px 0px 23.23px 0px #01B1B180',
+            boxShadow: `0px 0px 23.23px 0px ${alpha(resolvedBaseColor, 0.5)}`,
             transition: theme.transitions.create('box-shadow', {
               duration: theme.transitions.duration.standard,
               easing: theme.transitions.easing.easeOut,
             }),
             '&:hover': {
               bgcolor: resolvedBaseColor,
-              boxShadow: '0px 0px 36px 0px #01B1B1B3',
+              boxShadow: `0px 0px 36px 0px ${alpha(resolvedBaseColor, 0.7)}`,
             },
           }
         : {

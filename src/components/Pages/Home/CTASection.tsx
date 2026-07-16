@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useEffect } from 'react'
+import { useRef, useEffect, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
@@ -21,6 +21,8 @@ interface CTASectionProps {
 export default function CTASection({ data }: CTASectionProps) {
   const cardRef = useRef<HTMLDivElement>(null)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const [inView, setInView] = useState(false)
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
 
@@ -28,7 +30,32 @@ export default function CTASection({ data }: CTASectionProps) {
   const current = useRef({ x: 0, y: 0 })
   const rafId = useRef<number | null>(null)
 
+  // Defer the background video until the section approaches the viewport,
+  // and only run the parallax rAF loop while the section is visible.
   useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setInView(entry.isIntersecting)
+        const video = videoRef.current
+        if (!video) return
+        if (entry.isIntersecting) {
+          video.play().catch(() => {})
+        } else {
+          video.pause()
+        }
+      },
+      { rootMargin: '400px 0px' },
+    )
+    observer.observe(section)
+    return () => observer.disconnect()
+  }, [])
+
+  useEffect(() => {
+    if (!inView) return
+
     const lerp = (a: number, b: number, t: number) => a + (b - a) * t
 
     const tick = () => {
@@ -49,7 +76,7 @@ export default function CTASection({ data }: CTASectionProps) {
     return () => {
       if (rafId.current) cancelAnimationFrame(rafId.current)
     }
-  }, [])
+  }, [inView])
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     const section = sectionRef.current
@@ -154,7 +181,7 @@ export default function CTASection({ data }: CTASectionProps) {
       }}
     >
       <video
-        autoPlay
+        ref={videoRef}
         loop
         muted
         playsInline
