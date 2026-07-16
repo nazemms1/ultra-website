@@ -360,7 +360,7 @@ function MobileMethodologies({
           flexDirection: 'column',
         }}
       >
-        <Box sx={{ flexShrink: 0, pt: 10, pb: 3, px: 3 }}>
+        <Box sx={{ flexShrink: 0, pt: { xs: 8, sm: 10 }, pb: 3, px: 3 }}>
           <Header title={data?.title} description={data?.description} />
         </Box>
 
