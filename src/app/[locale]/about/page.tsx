@@ -3,6 +3,7 @@ import PageHero from '@/components/shared/PageHero'
 import AboutContent from '@/components/Pages/About/AboutContent'
 import AboutTimeline from '@/components/Pages/About/AboutTimeline'
 import CTASection from '@/components/Pages/Home/CTASection'
+import { setRequestLocale } from 'next-intl/server'
 import { fetchAPI } from '@/lib/api'
 import ContactSection from '@/components/Pages/Home/ContactSection'
 
@@ -27,6 +28,7 @@ function formatHeroTitle(text: string) {
 
 export default async function AboutPage({ params }: Props) {
   const { locale } = await params
+  setRequestLocale(locale)
 
   // Fetch page configuration, CTA content, and Contact content concurrently
   const [aboutData, startProjectData, contactUsData] = await Promise.all([

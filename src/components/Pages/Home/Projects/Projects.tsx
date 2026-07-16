@@ -17,22 +17,32 @@ import ProjectCard from './ProjectCard'
 
 function processProjects(data: any): ProjectItem[] {
   const raw = data ? data.projects || data.items || [] : PROJECTS
-  return raw.map((item: any, i: number): ProjectItem => {
-    if (item.mockup) return item
-    const title = item.title || ''
-    const description = item.subtitle || item.description || ''
-    const src = item.image?.url || item.image || item.cover_image?.url || item.cover_image || ''
-    const isMobile =
-      [title, description].join(' ').toLowerCase().match(/mobile|app/) !== null
-    return {
-      id: String(item.id),
-      title,
-      description,
-      href: item.id ? `/projects/${item.id}` : '#projects',
-      mockup: { src, alt: title, kind: isMobile ? 'mobile' : 'desktop' },
-      imageSide: i % 2 === 0 ? 'left' : 'right',
-    }
-  })
+  return (
+    raw
+      // Hidden items must be dropped BEFORE mapping so the scroll-track height,
+      // segment ranges and dot indicators all derive from the rendered count —
+      // otherwise the last scroll segment shows an empty screen.
+      .filter((item: any) => item?.show_in_homepage !== false)
+      .map((item: any, i: number): ProjectItem => {
+        if (item.mockup) return item
+        const title = item.title || ''
+        const description = item.subtitle || item.description || ''
+        const src = item.image?.url || item.image || item.cover_image?.url || item.cover_image || ''
+        const isMobile =
+          [title, description].join(' ').toLowerCase().match(/mobile|app/) !== null
+        return {
+          id: String(item.id),
+          title,
+          description,
+          href: item.id ? `/projects/${item.id}` : '#projects',
+          mockup: { src, alt: title, kind: isMobile ? 'mobile' : 'desktop' },
+          imageSide: i % 2 === 0 ? 'left' : 'right',
+        }
+      })
+      // An item with neither title nor image renders a blank full-viewport
+      // panel — exclude it entirely instead.
+      .filter((p: ProjectItem) => p.title || p.mockup.src)
+  )
 }
 
 function getSectionText(data: any) {

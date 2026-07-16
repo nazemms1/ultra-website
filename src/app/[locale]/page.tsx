@@ -1,10 +1,17 @@
 import HeroSection from '@/components/Pages/Home/HeroSection'
 import HomeClientSections from '@/components/Pages/Home/HomeClientSections'
-import { getLocale } from 'next-intl/server'
+import { setRequestLocale } from 'next-intl/server'
 import { fetchAPI } from '@/lib/api'
 
-export default async function HomePage() {
-  const locale = await getLocale()
+type Props = {
+  params: Promise<{ locale: string }>
+}
+
+export default async function HomePage({ params }: Props) {
+  // Locale must come from the URL segment — getLocale() falls back to the
+  // default locale during static rendering, so /ar could render in English.
+  const { locale } = await params
+  setRequestLocale(locale)
 
   const [
     heroData,
