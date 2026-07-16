@@ -292,14 +292,26 @@ function MobileCardStack({
         mx: 2,
         height: cardHeight ?? 'auto',
         overflow: 'hidden',
+        touchAction: 'pan-y',
       }}
     >
        <Box
         ref={cardRef}
         aria-hidden
-        sx={{ visibility: 'hidden', pointerEvents: 'none' }}
+        sx={{
+          display: 'grid',
+          visibility: 'hidden',
+          pointerEvents: 'none',
+          position: 'absolute',
+          left: 0,
+          right: 0,
+        }}
       >
-        <PhaseCardContent phase={phasesList[0]} />
+        {phasesList.map((phase) => (
+          <Box key={phase.number} sx={{ gridArea: '1 / 1 / 2 / 2' }}>
+            <PhaseCardContent phase={phase} />
+          </Box>
+        ))}
       </Box>
 
       {phasesList.map((phase, i) => (
@@ -370,12 +382,12 @@ function MobileMethodologies({
         {/* Dot indicators */}
         <Box
           sx={{
-            flex: 1,
             display: 'flex',
-            alignItems: 'flex-end',
+            alignItems: 'center',
             justifyContent: 'center',
             gap: 1,
-            pb: 4,
+            mt: 3.5,
+            pb: 1.5,
           }}
         >
           {phasesList.map((_, i) => (

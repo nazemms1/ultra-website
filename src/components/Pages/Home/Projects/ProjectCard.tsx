@@ -43,9 +43,9 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
   const enterStart = segStart
   const enterEnd = segStart + segSize * 0.4
 
-  // Exit window: last 40% of segment (not for the last card — it stays)
-  const exitStart = segEnd - segSize * 0.4
-  const exitEnd = segEnd
+  // Exit window: overlaps with next card's enter
+  const exitStart = segEnd
+  const exitEnd = segEnd + segSize * 0.4
 
   // ── opacity ──────────────────────────────────────────────
   const opacityPoints = isLast
@@ -55,10 +55,10 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
     ? [0, 1]
     : [0, 1, 1, 0]
 
-  const opacity = useTransform(scrollYProgress, opacityPoints, opacityValues)
+  const opacity = useTransform(scrollYProgress, opacityPoints, opacityValues, { clamp: true })
 
   // ── slide up on enter ────────────────────────────────────
-  const y = useTransform(scrollYProgress, [enterStart, enterEnd], ['40px', '0px'])
+  const y = useTransform(scrollYProgress, [enterStart, enterEnd], [40, 0], { clamp: true })
 
   return (
     <motion.div

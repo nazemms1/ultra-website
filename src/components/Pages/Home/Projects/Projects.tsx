@@ -157,28 +157,31 @@ function MobileProjectCard({
 
   const enterStart = segStart
   const enterEnd   = segStart + segSize * 0.4
-  const exitStart  = segEnd   - segSize * 0.4
-  const exitEnd    = segEnd
+  const exitStart  = segEnd
+  const exitEnd    = segEnd + segSize * 0.4
 
   // opacity — نفس الديسكتوب
   const opacity = useTransform(
     scrollYProgress,
     isLast ? [enterStart, enterEnd] : [enterStart, enterEnd, exitStart, exitEnd],
-    isLast ? [0, 1]                  : [0, 1, 1, 0]
+    isLast ? [0, 1]                  : [0, 1, 1, 0],
+    { clamp: true }
   )
 
-  // الصورة: تدخل من الأسفل (+60px → 0), تخرج للأعلى (0 → -60px)
+  // الصورة: تدخل من الأسفل (+60 → 0), تخرج للأعلى (0 → -60)
   const imgY = useTransform(
     scrollYProgress,
     isLast ? [enterStart, enterEnd] : [enterStart, enterEnd, exitStart, exitEnd],
-    isLast ? ['60px', '0px']         : ['60px', '0px', '0px', '-60px']
+    isLast ? [60, 0]                 : [60, 0, 0, -60],
+    { clamp: true }
   )
 
-  // النص: تدخل من الأعلى (-60px → 0), تخرج للأسفل (0 → +60px)
+  // النص: تدخل من الأعلى (-60 → 0), تخرج للأسفل (0 → +60)
   const txtY = useTransform(
     scrollYProgress,
     isLast ? [enterStart, enterEnd] : [enterStart, enterEnd, exitStart, exitEnd],
-    isLast ? ['-60px', '0px']        : ['-60px', '0px', '0px', '60px']
+    isLast ? [-60, 0]                : [-60, 0, 0, 60],
+    { clamp: true }
   )
 
   return (
@@ -188,10 +191,10 @@ function MobileProjectCard({
       sx={{
         display: 'flex',
         flexDirection: 'column',
-        gap: { xs: 2, sm: 4 },
+        gap: { xs: 1.5, sm: 4 },
         px: 3,
-        pt: { xs: '24px', sm: '40px' },
-        pb: 8,
+        pt: { xs: '12px', sm: '40px' },
+        pb: { xs: 4, sm: 8 },
       }}
     >
       {/* الصورة تتحرك للأسفل/الأعلى */}
@@ -286,7 +289,8 @@ function MobileProjects({
           height: '100dvh',
           display: 'flex',
           flexDirection: 'column',
-          overflow: 'hidden',
+          overflow: 'visible',
+          touchAction: 'pan-y',
         }}
       >
         {/* Header — يأخذ مساحته الطبيعية */}
@@ -303,6 +307,7 @@ function MobileProjects({
             flex: 1,
             position: 'relative',
             overflow: 'hidden',
+            touchAction: 'pan-y',
           }}
         >
           {projects.map((project, i) => (
@@ -361,7 +366,7 @@ function MobileProjectImage({ project, index }: { project: ProjectItem; index: n
       sx={{
         position: 'relative',
         width: '100%',
-        maxWidth: isMobileMockup ? 200 : '100%',
+        maxWidth: isMobileMockup ? { xs: 120, sm: 200 } : { xs: 240, sm: '100%' },
         mx: 'auto',
         aspectRatio: isMobileMockup ? '9/16' : '16/9',
         transform: isMobileMockup ? 'rotate(2deg)' : 'none',
@@ -393,12 +398,12 @@ function MobileProjectText({ project }: { project: ProjectItem }) {
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
   return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1, sm: 2 } }}>
       <Typography
         component="h3"
         sx={{
           fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-          fontSize: { xs: '1.5rem', sm: '2rem' },
+          fontSize: { xs: '1.2rem', sm: '2rem' },
           lineHeight: 1.1, letterSpacing: '0.02em',
           textTransform: 'uppercase', color: 'text.primary',
         }}
@@ -409,8 +414,12 @@ function MobileProjectText({ project }: { project: ProjectItem }) {
       <Typography
         sx={{
           fontFamily: "'Rajdhani', sans-serif",
-          fontSize: { xs: '0.95rem', sm: '1.05rem' },
-          lineHeight: 1.75, color: 'text.secondary',
+          fontSize: { xs: '0.85rem', sm: '1.05rem' },
+          lineHeight: 1.5, color: 'text.secondary',
+          display: { xs: '-webkit-box', sm: 'block' },
+          WebkitLineClamp: { xs: 3, sm: 'none' },
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
         }}
       >
         {project.description}
@@ -419,7 +428,7 @@ function MobileProjectText({ project }: { project: ProjectItem }) {
         variant="secondary"
         href={project.href}
         endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
-        sx={{ alignSelf: 'flex-start', px: 3, mt: 1 }}
+        sx={{ alignSelf: 'flex-start', px: { xs: 2.5, sm: 3 }, mt: 0.5, py: { xs: 0.5, sm: 1 }, fontSize: { xs: '11px', sm: '13px' } }}
       >
         {isRtl ? 'عرض التفاصيل' : 'See full details'}
       </AnimatedButton>
