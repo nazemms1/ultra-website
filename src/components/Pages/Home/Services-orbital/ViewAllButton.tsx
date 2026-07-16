@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import { motion, type Transition } from 'framer-motion'
 import { useState } from 'react'
+import { Link } from '@/i18n/routing'
 
 interface ViewAllButtonProps {
   label?: string
@@ -42,9 +43,11 @@ export default function ViewAllButton({
     setIsHovered(false)
   }
 
+  const isInternal = typeof href === 'string' && href.startsWith('/') && !href.startsWith('//')
+
   return (
     <Box
-      component="a"
+      component={isInternal ? Link : 'a'}
       href={href}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}

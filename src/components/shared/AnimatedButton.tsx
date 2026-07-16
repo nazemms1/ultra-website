@@ -6,6 +6,7 @@ import { alpha, useTheme } from '@mui/material/styles'
 import { navGlassPillSurface } from '@/lib/theme/surfaces'
 import { motion, type Transition } from 'framer-motion'
 import { forwardRef, useMemo, useState, type MouseEvent } from 'react'
+import { Link } from '@/i18n/routing'
 
 const SWEEP_EASE = [0.22, 1, 0.36, 1] as const
 const SWEEP_DURATION = 0.55
@@ -42,6 +43,10 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
 ) {
   const theme = useTheme()
   const [isHovered, setIsHovered] = useState(false)
+
+  const { href, component, ...restButtonProps } = buttonProps
+  const isInternal = typeof href === 'string' && href.startsWith('/') && !href.startsWith('//')
+  const resolvedComponent = component ?? (isInternal ? Link : href ? 'a' : undefined)
 
   const resolvedBaseColor = baseColor ?? theme.palette.primary.light
   const resolvedSweepColor = sweepColor ?? alpha(theme.palette.common.white, 0.8)
@@ -103,7 +108,8 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
       disableElevation
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      {...buttonProps}
+       href={href}
+      {...restButtonProps}
       sx={[
         {
           position: 'relative',
