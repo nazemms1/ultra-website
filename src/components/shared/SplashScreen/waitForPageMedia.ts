@@ -12,9 +12,9 @@ type WaitForPageMediaOptions = {
 }
 
 const DEFAULT_MIN_DURATION_MS = 0
-const DEFAULT_MAX_DURATION_MS = 1_500
+const DEFAULT_MAX_DURATION_MS = typeof window !== 'undefined' && ('ontouchstart' in window || window.navigator.maxTouchPoints > 0) ? 800 : 1_500
 const DEFAULT_SETTLE_MS = 50
-const DEFAULT_PER_ASSET_TIMEOUT_MS = 1_000
+const DEFAULT_PER_ASSET_TIMEOUT_MS = typeof window !== 'undefined' && ('ontouchstart' in window || window.navigator.maxTouchPoints > 0) ? 600 : 1_000
 /** Resolve DOM wait when no img/video appears (e.g. lightweight routes). */
 const DEFAULT_EMPTY_DOM_RESOLVE_MS = 200
 
@@ -116,11 +116,19 @@ async function waitForCriticalAssets(timeoutMs: number): Promise<void> {
   return Promise.all(tasks).then(() => undefined)
 }
 
+function isAboveFold(el: HTMLElement): boolean {
+  const rect = el.getBoundingClientRect()
+  // Consider an element above the fold if its top is within 1.5x the viewport height
+  return rect.top < window.innerHeight * 1.5
+}
+
 function collectDomMedia(root: ParentNode): {
   images: HTMLImageElement[]
   videos: HTMLVideoElement[]
 } {
-  const images = Array.from(root.querySelectorAll('img'))
+  const allImages = Array.from(root.querySelectorAll('img'))
+  // Only wait for: non-lazy images that are above the fold (critical for LCP)
+  const images = allImages.filter(img => img.loading !== 'lazy' && isAboveFold(img))
   const videos = Array.from(root.querySelectorAll('video'))
   return { images, videos }
 }

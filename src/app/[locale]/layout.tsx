@@ -104,14 +104,6 @@ export default async function LocaleLayout({ children, params }: Props) {
         {/* Preconnect to backend API for faster image/data loading */}
         <link rel="preconnect" href="https://newwebsite-dev-back.ultrawares.com" />
         <link rel="dns-prefetch" href="https://newwebsite-dev-back.ultrawares.com" />
-        {/* Preload critical custom fonts */}
-        <link rel="preload" as="font" href="/fonts/Nulshock Bd.otf" type="font/otf" crossOrigin="anonymous" />
-        {isArabic && (
-          <>
-            <link rel="preload" as="font" href="/fonts/Almarai-Bold.ttf" type="font/ttf" crossOrigin="anonymous" />
-            <link rel="preload" as="font" href="/fonts/Changa-Regular.ttf" type="font/ttf" crossOrigin="anonymous" />
-          </>
-        )}
       </head>
       <body suppressHydrationWarning>
         <AppProviders locale={locale as AppLocale} messages={messages}>

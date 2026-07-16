@@ -9,10 +9,10 @@ const PartnersSection  = dynamic(() => import('@/components/Pages/Home/Partners'
 const Stats            = dynamic(() => import('@/components/Pages/Home/Stats/Stats'),       { ssr: false })
 const Projects         = dynamic(() => import('@/components/Pages/Home/Projects/Projects'), { ssr: false })
 const Methodologies    = dynamic(() => import('@/components/Pages/Home/Methodologies/Methodologies'), { ssr: false })
-const TestimonialsSection = dynamic(() => import('@/components/Pages/Home/TestimonialsSection'), { ssr: false })
-const CTASection       = dynamic(() => import('@/components/Pages/Home/CTASection'),        { ssr: false })
-const FAQSection       = dynamic(() => import('@/components/Pages/Home/Faqs'),              { ssr: false })
-const ContactSection   = dynamic(() => import('@/components/Pages/Home/ContactSection'),    { ssr: false })
+const TestimonialsSection = dynamic(() => import('@/components/Pages/Home/TestimonialsSection'), { ssr: false, loading: () => null })
+const CTASection       = dynamic(() => import('@/components/Pages/Home/CTASection'),        { ssr: false, loading: () => null })
+const FAQSection       = dynamic(() => import('@/components/Pages/Home/Faqs'),              { ssr: false, loading: () => null })
+const ContactSection   = dynamic(() => import('@/components/Pages/Home/ContactSection'),    { ssr: false, loading: () => null })
 
 interface Props {
   partnersData: any

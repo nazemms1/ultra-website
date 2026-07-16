@@ -158,6 +158,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   const contactButton = (
     <AnimatedButton
       variant="primary"
+      baseColor="#0DF1D9"
       onClick={handleContactClick}
       sx={{
         display: 'inline-flex',
@@ -171,9 +172,10 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
         zIndex: 500,
         py: { xs: 0, md: '10px' },
         px: { xs: '12px', md: '20px' },
+        boxShadow: '0px 0px 23.23px 0px rgba(13, 241, 217, 0.50)',
         '&:hover': {
           color: '#121212',
-          boxShadow: '0px 0px 28px rgba(1, 177, 177, 0.70)',
+          boxShadow: '0px 0px 28px rgba(13, 241, 217, 0.80)',
         },
       }}
     >
@@ -319,7 +321,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
               gap: { xs: '6px', md: '10px' },
             }}
           >
-            <Box sx={{ display: 'flex' }}>
+            <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
               <LanguageSwitcher />
             </Box>
             {contactButton}
@@ -413,7 +415,16 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
               ))}
             </Stack>
 
-
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'center',
+                width: '100%',
+                pb: 2,
+              }}
+            >
+              <LanguageSwitcher />
+            </Box>
           </Box>
         )}
       </AnimatePresence>
