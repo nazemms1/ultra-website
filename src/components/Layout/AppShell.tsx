@@ -34,11 +34,10 @@ export default function AppShell({
           flexDirection: 'column',
           bgcolor: 'background.default',
           color: 'text.primary',
-          overflowX: 'hidden',
         }}
       >
         <Navbar labels={navLabels} sectionsVisibility={navSectionsVisibility} />
-        <Box component="main" sx={{ flex: 1, pb: 6, width: '100%', overflowX: 'hidden' }}>
+        <Box component="main" sx={{ flex: 1, pb: 6 }}>
           {children}
         </Box>
         <FooterSection data={footerData} statsData={statsData} />

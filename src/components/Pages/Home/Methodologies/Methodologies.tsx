@@ -367,19 +367,15 @@ function MobileMethodologies({
         {/* Wrapper: يأخذ ارتفاع الكارد الأولى (المرجع) ويقص ما يخرج عنه */}
         <MobileCardStack phasesList={phasesList} progress={progress} />
 
-        {/* Dot indicators — pt/minHeight guarantee a gap to the card above even
-            when the flexible space collapses on short viewports */}
+        {/* Dot indicators */}
         <Box
           sx={{
             flex: 1,
-            flexShrink: 0,
             display: 'flex',
             alignItems: 'flex-end',
             justifyContent: 'center',
             gap: 1,
-            pt: 3,
             pb: 4,
-            minHeight: 64,
           }}
         >
           {phasesList.map((_, i) => (

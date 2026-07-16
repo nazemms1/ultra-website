@@ -1,8 +1,9 @@
 import PageHero from '@/components/shared/PageHero'
 import ProjectsGrid from '@/components/Pages/Projects/ProjectsGrid/ProjectsGrid'
 import { parsePortfoliosApiData } from '@/components/Pages/Projects/ProjectsGrid/data'
-import { getTranslations, setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 import { fetchAPI } from '@/lib/api'
+import { getTranslations } from 'next-intl/server'
 import Box from '@mui/material/Box'
 
 type MediaField = string | { url?: string } | null | undefined
@@ -12,16 +13,9 @@ function resolveMediaUrl(value: MediaField): string | undefined {
   return value?.url
 }
 
-type Props = {
-  params: Promise<{ locale: string }>
-}
-
-export default async function ProjectsPage({ params }: Props) {
-  // Locale must come from the URL segment — getLocale() falls back to the
-  // default locale during static rendering, which broke /ar/projects.
-  const { locale } = await params
-  setRequestLocale(locale)
-  const t = await getTranslations({ locale, namespace: 'ProjectsPage' })
+export default async function ProjectsPage() {
+  const locale = await getLocale()
+  const t = await getTranslations('ProjectsPage')
 
   const [portfoliosData] = await Promise.all([fetchAPI('/api/portfolios-data', locale)])
 

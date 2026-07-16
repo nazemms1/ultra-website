@@ -4,7 +4,6 @@ import dynamic from 'next/dynamic'
 import { useEffect, useRef, useState } from 'react'
 import { useHashScroll } from './useHashScroll'
 import { useSectionScroll } from '@/lib/SectionScrollContext'
-import DeferredSection from '@/components/shared/DeferredSection'
 import ServicesOrbital from '@/components/Pages/Home/Services-orbital/ServicesOrbital'
 
 const ScrollVideoStack = dynamic(() => import('@/components/Pages/Home/ScrollVideoStack'), { ssr: false })
@@ -154,20 +153,10 @@ export default function HomeClientSections({
       <div ref={sentinelRef} aria-hidden />
       {belowFoldReady && (
         <>
-          {/* Each section mounts (and fetches its chunk) only as the user
-              approaches it; fixed-height placeholders prevent CLS. */}
-          <DeferredSection estimatedHeight="100vh">
-            <TestimonialsSection data={reviewsData} />
-          </DeferredSection>
-          <DeferredSection estimatedHeight={520}>
-            <CTASection data={ctaData} />
-          </DeferredSection>
-          <DeferredSection estimatedHeight="100vh">
-            <FAQSection data={faqsData} stillHaveQuestionsData={stillHaveQuestionsData} />
-          </DeferredSection>
-          <DeferredSection estimatedHeight="120vh" id="contact">
-            <ContactSection data={contactUsData} />
-          </DeferredSection>
+          <TestimonialsSection data={reviewsData} />
+          <CTASection data={ctaData} />
+          <FAQSection data={faqsData} stillHaveQuestionsData={stillHaveQuestionsData} />
+          <ContactSection data={contactUsData} />
         </>
       )}
     </>

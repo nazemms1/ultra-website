@@ -71,7 +71,6 @@ const GlobalStyles = () => css`
     margin: 0;
     padding: 0;
     background-color: var(--ultra-palette-background-default);
-    overflow-x: hidden;
   }
 
   * {
@@ -87,7 +86,6 @@ const GlobalStyles = () => css`
     font-family: 'Rajdhani', sans-serif;
     background-color: var(--ultra-palette-background-default);
     color: var(--ultra-palette-text-primary);
-    overflow-x: hidden;
   }
 
   /* ─── Arabic / RTL overrides ─────────────────────────────────────────────── */
@@ -157,22 +155,6 @@ const GlobalStyles = () => css`
   [dir='rtl'] .MuiTypography-caption,
   [dir='rtl'] .MuiTypography-overline {
     font-size: max(15px, 1em) !important;
-  }
-
-  /* 8. Mobile-only Arabic type scale — Arabic fonts (Changa/Almarai) render
-        visually smaller than Latin at the same font-size. On small screens
-        bump the root size so every rem-based size scales up together (~6%),
-        and give body variants the taller line-height Arabic script needs.
-        Scoped to [lang='ar'] / [dir='rtl'] only — the LTR layout is untouched. */
-  @media (max-width: 899.95px) {
-    html[lang='ar'] {
-      font-size: 106.25%;
-    }
-
-    [dir='rtl'] .MuiTypography-body1,
-    [dir='rtl'] .MuiTypography-body2 {
-      line-height: 1.7;
-    }
   }
 
   /* Stat numbers — double selector to beat all RTL overrides above.

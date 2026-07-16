@@ -2,7 +2,6 @@ import Box from '@mui/material/Box'
 import PageHero from '@/components/shared/PageHero'
 import GalleryContent from '@/components/Pages/Gallery/GalleryContent'
 import CTASection from '@/components/Pages/Home/CTASection'
-import { setRequestLocale } from 'next-intl/server'
 import { fetchAPI } from '@/lib/api'
 
 type Props = {
@@ -29,7 +28,6 @@ function formatHeroTitle(text: string) {
 
 export default async function GalleryPage({ params }: Props) {
   const { locale } = await params
-  setRequestLocale(locale)
 
   // Fetch page configuration and CTA content
   const [galleryData, startProjectData] = await Promise.all([

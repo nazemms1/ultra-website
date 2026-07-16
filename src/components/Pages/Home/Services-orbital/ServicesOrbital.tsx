@@ -332,12 +332,6 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
             display: 'flex',
             justifyContent: 'flex-end',
             overflow: 'hidden',
-            // Orbiting cards are wider than the viewport — fade them out at the
-            // screen edges instead of letting them clip hard against them.
-            maskImage:
-              'linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 12px), transparent 100%)',
-            WebkitMaskImage:
-              'linear-gradient(to right, transparent 0, #000 28px, #000 calc(100% - 12px), transparent 100%)',
           }}
         >
           <Box

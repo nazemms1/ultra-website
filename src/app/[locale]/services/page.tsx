@@ -2,7 +2,7 @@ import Box from '@mui/material/Box'
 import PageHero from '@/components/shared/PageHero'
 import ServicesCardStack from '@/components/Pages/Service/ServicesCardStack'
 import CTASection from '@/components/Pages/Home/CTASection'
-import { setRequestLocale } from 'next-intl/server'
+import { getLocale } from 'next-intl/server'
 import { fetchAPI } from '@/lib/api'
 
 type Props = {
@@ -11,7 +11,6 @@ type Props = {
 
 export default async function ServicesPage({ params }: Props) {
   const { locale } = await params
-  setRequestLocale(locale)
 
   // Fetch services data and CTA content concurrently
   const [servicesData, startProjectData] = await Promise.all([

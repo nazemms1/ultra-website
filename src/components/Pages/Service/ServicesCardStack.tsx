@@ -838,9 +838,8 @@ function MobileServicesCardDeck({
       sx={{
         flexShrink: 0,
         position: 'relative',
-        // Fixed 16px gutter on each side — 92vw left cards nearly touching the
-        // screen edges on small viewports.
-        width: 'min(calc(100vw - 32px), 1120px)',
+        mx: 2,
+        width: 'min(92vw, 1120px)',
         height: cardHeight ?? 'auto',
         overflow: 'hidden',
       }}

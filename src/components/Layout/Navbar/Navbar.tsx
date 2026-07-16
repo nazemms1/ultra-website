@@ -143,22 +143,14 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
   )
 
   const logo = (
-    // minWidth + flexShrink guard against iOS Safari collapsing the flex item
-    // to width 0; explicit CSS width/height keep the SVG sized even when the
-    // intrinsic attribute sizing is ignored.
-    <Link
-      href="/"
-      aria-label="Ultra Home"
-      style={{ display: 'flex', alignItems: 'center', minWidth: 83, flexShrink: 0 }}
-    >
+    <Link href="/" aria-label="Ultra Home" style={{ display: 'flex', alignItems: 'center' }}>
       <Image
         src="/images/logo/logo-ultra.svg"
         alt="Ultrawares"
         width={83}
         height={42}
         priority
-        unoptimized
-        style={{ objectFit: 'contain', width: 83, height: 42, minWidth: 83 }}
+        style={{ objectFit: 'contain' }}
       />
     </Link>
   )
@@ -170,16 +162,16 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
       onClick={handleContactClick}
       sx={{
         display: 'inline-flex',
-        minHeight: { xs: 32, sm: 36, md: 44 },
-        maxHeight: { xs: 32, sm: 36, md: 44 },
-        fontSize: { xs: '10px', sm: '11px', md: '12px' },
+        minHeight: { xs: 36, md: 44 },
+        maxHeight: { xs: 36, md: 44 },
+        fontSize: { xs: '11px', md: '12px' },
         fontFamily: "'Rajdhani', sans-serif",
         fontWeight: 700,
         letterSpacing: '0.49px',
         textTransform: 'uppercase',
         zIndex: 500,
         py: { xs: 0, md: '10px' },
-        px: { xs: '8px', sm: '12px', md: '20px' },
+        px: { xs: '12px', md: '20px' },
         boxShadow: '0px 0px 23.23px 0px rgba(13, 241, 217, 0.50)',
         '&:hover': {
           color: '#121212',
@@ -197,8 +189,8 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
       onClick={() => setMobileOpen(v => !v)}
       sx={{
         display: { xs: 'inline-flex', md: 'none' },
-        width: { xs: 32, sm: 36 },
-        height: { xs: 32, sm: 36 },
+        width: 36,
+        height: 36,
         bgcolor: theme => `color-mix(in srgb, ${theme.palette.primary.main} 10%, transparent)`,
         border: theme =>
           `1px solid color-mix(in srgb, ${theme.palette.primary.main} 25%, transparent)`,
@@ -238,7 +230,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
         flexDirection: 'column',
         alignItems: 'center',
         pt: 2.5,
-        px: { xs: 1.5, sm: 2, md: 'max(16px, calc((100vw - 1920px) / 2 + 10px))' },
+        px: { xs: 2, md: 'max(16px, calc((100vw - 1920px) / 2 + 10px))' },
       }}
     >
       <Box
@@ -294,7 +286,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
             alignItems: 'center',
             justifyContent: 'space-between',
             height: NAV_HEIGHT,
-            px: { xs: '10px', sm: '16px', md: '25px' },
+            px: { xs: '12px', md: '25px' },
             py: '13px',
             opacity: isDesktop ? unifiedOpacity : 1,
             transform: `scale(${lerp(0.97, 1, unifiedOpacity)}) translateY(${lerp(-6, 0, unifiedOpacity)}px)`,
@@ -326,7 +318,7 @@ export default function Navbar({ labels, sectionsVisibility }: NavbarProps) {
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'flex-end',
-              gap: { xs: '4px', sm: '6px', md: '10px' },
+              gap: { xs: '6px', md: '10px' },
             }}
           >
             <Box sx={{ display: { xs: 'none', md: 'flex' } }}>
