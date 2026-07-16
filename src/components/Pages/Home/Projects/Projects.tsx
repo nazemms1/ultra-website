@@ -290,7 +290,7 @@ function MobileProjects({
         }}
       >
         {/* Header — يأخذ مساحته الطبيعية */}
-        <Box sx={{ flexShrink: 0, pt: 10, pb: 2, px: 3, zIndex: 10 }}>
+        <Box sx={{ flexShrink: 0, pt: { xs: 8, sm: 10 }, pb: 2, px: 3, zIndex: 10 }}>
           <MobileProjectsHeader
             subtitle={subtitle}
             title={title}

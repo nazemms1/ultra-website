@@ -236,8 +236,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
                 variant="h1"
                 sx={theme => ({
                   mb: '10px',
-                  fontSize: { lg: theme.typography.pxToRem(50) },
-                  lineHeight: '78px',
+                  fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem', lg: theme.typography.pxToRem(50) },
+                  lineHeight: { xs: '38px', sm: '48px', md: '60px', lg: '78px' },
                 })}
               >
                 {renderTitle(data?.title)}

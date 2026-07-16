@@ -56,8 +56,15 @@ interface TestimonialsSectionProps {
   }
 }
 
+// Mobile comment clamp: 4 lines × 26px line-height. The text block always
+// reserves this height so switching comments never shifts the layout.
+const MOBILE_CLAMP_LINES = 4
+const MOBILE_LINE_HEIGHT = 26
+const MOBILE_TEXT_MIN_HEIGHT = MOBILE_CLAMP_LINES * MOBILE_LINE_HEIGHT
+
 export default function TestimonialsSection({ data }: TestimonialsSectionProps) {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [expanded, setExpanded] = useState(false)
   const theme = useTheme()
   const primary = theme.palette.primary.main
   const isRtl = theme.direction === 'rtl'
@@ -106,7 +113,8 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
     if (timerRef.current) {
       clearInterval(timerRef.current)
     }
-    if (testimonialsList.length > 1) {
+    // Don't auto-advance while the user is reading an expanded comment.
+    if (testimonialsList.length > 1 && !expanded) {
       timerRef.current = setInterval(() => {
         setActiveIndex(prev => (prev + 1) % testimonialsList.length)
       }, 5000)
@@ -120,7 +128,12 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
         clearInterval(timerRef.current)
       }
     }
-  }, [testimonialsList.length])
+  }, [testimonialsList.length, expanded])
+
+  // Collapse the expanded comment whenever the active testimonial changes.
+  useEffect(() => {
+    setExpanded(false)
+  }, [activeIndex])
 
   // Scroll active avatar to center on mobile
   useEffect(() => {
@@ -291,7 +304,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                 component="img"
                 src="/icons/Frame 202.svg"
                 alt="Ultra logo"
-                sx={{ width: 84, height: 84, objectFit: 'contain', opacity: 0.85, mb: 1 }}
+                sx={{ width: 120, height: 84, objectFit: 'contain', opacity: 0.85, mb: 1 }}
               />
 
               <AnimatePresence mode="wait">
@@ -308,17 +321,33 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                       alignSelf: 'stretch',
                       textAlign: 'center',
                       color: '#fff',
-                      fontSize: isRtl ? '15px' : '16px',
+                      // Arabic (Changa) renders visually smaller than Rajdhani —
+                      // never below the Latin size.
+                      fontSize: '16px',
                       fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif",
                       fontWeight: isRtl ? 400 : 500,
-                      lineHeight: '26px',
+                      lineHeight: `${MOBILE_LINE_HEIGHT}px`,
                       wordBreak: 'break-word',
-                      mb: '22px',
-                      top: 10,
+                      // The text block has a FIXED height so the card — and the
+                      // Container.svg frame image behind it — never changes size:
+                      // collapsed = clamped with ellipsis, expanded = the full
+                      // text scrolls inside the same area.
+                      height: `${MOBILE_TEXT_MIN_HEIGHT}px`,
+                      ...(expanded
+                        ? { overflowY: 'auto', WebkitOverflowScrolling: 'touch' }
+                        : {
+                            display: '-webkit-box',
+                            WebkitBoxOrient: 'vertical',
+                            WebkitLineClamp: MOBILE_CLAMP_LINES,
+                            overflow: 'hidden',
+                          }),
+                      mb: '6px',
                     }}
                   >
                     {activeTestimonial.text}
                   </Typography>
+ 
+                
 
                   {/* Stars — Figma: fontSize 16, Inter, color #0DF1D9, gap 4 */}
                   <Box sx={{ display: 'flex', gap: '4px', alignItems: 'flex-start', mb: '8px' }}>
@@ -328,41 +357,44 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
                   </Box>
 
                   {/* Name block — Figma: paddingTop 8, gap 4 */}
-                  <Box sx={{ width: 235.3, pt: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
-                    {/* Name — Figma: Nulshock 700, 14px, letterSpacing 1, lineHeight 21 */}
-                    <Typography
-                      sx={{
-                        textAlign: 'center',
-                        color: '#fff',
-                        fontSize: '14px',
-                        fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif",
-                        fontWeight: 700,
-                        lineHeight: '21px',
-                        letterSpacing: '1px',
-                        wordBreak: 'break-word',
-                      }}
-                    >
-                      {activeTestimonial.name}
-                    </Typography>
+              <Box sx={{ width: 235.3, pt: '8px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '4px' }}>
+  {/* Name — Figma: Nulshock 700, 14px, letterSpacing 1, lineHeight 21 */}
+  <Typography
+    sx={{
+      color: '#fff',
+      fontSize: '12px',
+      fontFamily: isRtl ? "'Almarai', sans-serif" : "'Nulshock', sans-serif",
+      fontWeight: 700,
+      lineHeight: '15px',
+      width: '100%',
+      letterSpacing: '1px',
+      wordBreak: 'break-word',     // يسمح بكسر الكلمات الطويلة
+      whiteSpace: 'normal',        // يسمح بالتفاف النص
+      overflowWrap: 'break-word',  // يضمن كسر الكلمات الطويلة
+      textAlign: 'center',         // توسيط النص
+    }}
+  >
+    {activeTestimonial.name}
+  </Typography>
 
-                    {/* Role — Figma: Rajdhani 400, 13px, uppercase, letterSpacing 2, lineHeight 19.5 */}
-                    <Box sx={{ textAlign: 'center', width: '100%' }}>
-                      {activeTestimonial.role.includes('·') ? (
-                        <>
-                          <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
-                            {activeTestimonial.role.split('·')[0]}·{' '}
-                          </Typography>
-                          <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
-                            {activeTestimonial.role.split('·')[1]}
-                          </Typography>
-                        </>
-                      ) : (
-                        <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
-                          {activeTestimonial.role}
-                        </Typography>
-                      )}
-                    </Box>
-                  </Box>
+  {/* Role — Figma: Rajdhani 400, 13px, uppercase, letterSpacing 2, lineHeight 19.5 */}
+  <Box sx={{ textAlign: 'center', width: '100%' }}>
+    {activeTestimonial.role.includes('·') ? (
+      <>
+        <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
+          {activeTestimonial.role.split('·')[0]}·{' '}
+        </Typography>
+        <Typography component="span" sx={{ color: '#0DF1D9', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
+          {activeTestimonial.role.split('·')[1]}
+        </Typography>
+      </>
+    ) : (
+      <Typography component="span" sx={{ color: 'rgba(255,255,255,0.60)', fontSize: 13, fontFamily: isRtl ? "'Changa', sans-serif" : "'Rajdhani', sans-serif", fontWeight: 400, textTransform: isRtl ? 'none' : 'uppercase', lineHeight: '19.5px', letterSpacing: '2px', wordBreak: 'break-word' }}>
+        {activeTestimonial.role}
+      </Typography>
+    )}
+  </Box>
+</Box>
                 </motion.div>
               </AnimatePresence>
             </Box>
