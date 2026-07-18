@@ -45,7 +45,7 @@ export default function AnimatedNumber({
 
   if (reduce) {
     return (
-      <Typography component="span" className="stat-number" sx={statNumberSx}>
+      <Typography component="span" sx={statNumberSx}>
         {value}
         {suffix}
       </Typography>
@@ -53,7 +53,7 @@ export default function AnimatedNumber({
   }
 
   return (
-    <Typography component={motion.span} className="stat-number" sx={statNumberSx}>
+    <Typography component={motion.span} sx={statNumberSx}>
       <MotionNumber value={display} />
       {suffix}
     </Typography>

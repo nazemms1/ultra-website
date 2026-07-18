@@ -273,21 +273,31 @@ export const sectionMaxWidthSx: SxProps<Theme> = {
   zIndex: 1,
 }
 
-export const statNumberSx: SxProps<Theme> = (theme: Theme) => ({
-  fontFamily: "'Ethnocentric Rg', sans-serif !important",
-  fontSize: { xs: '40px', sm: '48px', md: '54.85px' },
-  lineHeight: { xs: '48px', sm: '60px', md: '82.275px' },
-  color: theme.palette.primary.main,
-  display: 'block',
-  fontVariantNumeric: 'tabular-nums',
-})
+export const statNumberSx: SxProps<Theme> = (theme: Theme) => {
+  const isRtl = theme.direction === 'rtl'
+  return {
+    fontFamily: "'Ethnocentric Rg', sans-serif !important",
+    fontSize: isRtl
+      ? { xs: '44px', sm: '52px', md: '60px' }
+      : { xs: '40px', sm: '48px', md: '54.85px' },
+    lineHeight: isRtl
+      ? { xs: '52px', sm: '64px', md: '88px' }
+      : { xs: '48px', sm: '60px', md: '82.275px' },
+    color: theme.palette.primary.main,
+    display: 'block',
+    fontVariantNumeric: 'tabular-nums',
+  }
+}
 
-export const statLabelSx: SxProps<Theme> = {
-  mt: 1,
-  fontWeight: 400,
-  fontSize: '14px',
-  lineHeight: '20px',
-  letterSpacing: '0.7px',
-  textTransform: 'uppercase',
-  color: 'text.secondary',
+export const statLabelSx: SxProps<Theme> = (theme: Theme) => {
+  const isRtl = theme.direction === 'rtl'
+  return {
+    mt: 1,
+    fontWeight: 400,
+    fontSize: isRtl ? { xs: '18px', md: '20px' } : '14px',
+    lineHeight: isRtl ? { xs: '26px', md: '28px' } : '20px',
+    letterSpacing: isRtl ? 'normal' : '0.7px',
+    textTransform: isRtl ? 'none' : 'uppercase',
+    color: 'text.secondary',
+  }
 }

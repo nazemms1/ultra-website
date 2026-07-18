@@ -36,7 +36,6 @@ export default function AppShell({
           color: 'text.primary',
           overflowX: 'clip',
         }}
-        
       >
         <Navbar labels={navLabels} sectionsVisibility={navSectionsVisibility} />
         <Box component="main" sx={{ flex: 1, pb: 6, width: '100%', overflowX: 'clip' }}>

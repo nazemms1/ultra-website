@@ -11,7 +11,7 @@ import AnimatedButton from '@/components/shared/AnimatedButton'
 import type { ProjectItem } from './types'
 
 // Must match Projects.tsx
-const TITLE_END = 0.15
+const TITLE_END = 0.06
 
 interface ProjectCardProps {
   project: ProjectItem
@@ -39,9 +39,11 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
   const segStart = TITLE_END + index * segSize
   const segEnd = segStart + segSize
 
-  // Enter window: first 40% of segment
+  // Enter window: first 40% of segment — last card enters across its
+  // entire segment instead, so it stays visible through to the end of
+  // scroll with no dead zone before the next section
   const enterStart = segStart
-  const enterEnd = segStart + segSize * 0.4
+  const enterEnd = isLast ? segEnd : segStart + segSize * 0.4
 
   // Exit window: overlaps with next card's enter
   const exitStart = segEnd

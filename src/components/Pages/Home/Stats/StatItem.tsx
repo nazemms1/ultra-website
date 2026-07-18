@@ -24,7 +24,7 @@ export default function StatItem({ stat, active }: StatItemProps) {
         justifyContent: 'center',
         flexShrink: 0,
         width: { xs: '100%', md: 206.5 },
-        minHeight: { xs: 'auto', md: 110 },
+        minHeight: { xs: '50%', md: 110 },
       }}
     >
       <Box
@@ -74,7 +74,9 @@ export default function StatItem({ stat, active }: StatItemProps) {
           clickTrigger={clickTrigger}
         />
 
-        <Typography className="stat-label" sx={statLabelSx}>{stat.label}</Typography>
+        <Typography className="stat-label" sx={statLabelSx}>
+          {stat.label}
+        </Typography>
       </Box>
     </Box>
   )

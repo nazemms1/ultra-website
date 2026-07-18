@@ -46,7 +46,7 @@ function getSectionText(data: any) {
 /* ─── scroll timeline ─────────────────────────────── */
 // 0 → TITLE_END  : title rises from centre → pinned top
 // TITLE_END → 1  : projects swap one by one
-const TITLE_END = 0.15
+const TITLE_END = 0.06
 
 /* ─── component ───────────────────────────────────── */
 
@@ -156,7 +156,9 @@ function MobileProjectCard({
   const isLast   = index === total - 1
 
   const enterStart = segStart
-  const enterEnd   = segStart + segSize * 0.4
+  // آخر مشروع: يمتد دخوله حتى نهاية القسم بالكامل بدل 40% فقط،
+  // كي لا تبقى منطقة تمرير "ميتة" بعد اكتمال ظهوره وقبل الانتقال للقسم التالي
+  const enterEnd   = isLast ? segEnd : segStart + segSize * 0.4
   const exitStart  = segEnd
   const exitEnd    = segEnd + segSize * 0.4
 
@@ -191,9 +193,9 @@ function MobileProjectCard({
       sx={{
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
         gap: { xs: 1.5, sm: 4 },
         px: 3,
-        pt: { xs: '12px', sm: '40px' },
         pb: { xs: 4, sm: 8 },
       }}
     >
@@ -321,15 +323,15 @@ function MobileProjects({
           ))}
         </Box>
 
-        {/* Dot indicators */}
+        {/* Dot indicators — ضمن التدفق الطبيعي مباشرة تحت الكاردات، بلا حجز مساحة سفلية ثابتة */}
         <Box
           sx={{
-            position: 'absolute',
-            bottom: 0, left: 0, right: 0,
+            flexShrink: 0,
             display: 'flex',
             justifyContent: 'center',
             gap: 1,
-            pb: 4,
+            pt: 2,
+            pb: { xs: 3, sm: 4 },
             zIndex: 10,
           }}
         >
