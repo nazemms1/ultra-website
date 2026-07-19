@@ -9,6 +9,7 @@ import { useSplashComplete } from '@/components/shared/SplashScreen'
 import { motion, Variants } from 'framer-motion'
 import AnimatedButton from '@/components/shared/AnimatedButton'
 import { useTheme } from '@mui/material/styles'
+import useMediaQuery from '@mui/material/useMediaQuery'
 
 const containerVariants: Variants = {
   hidden: { opacity: 0 },
@@ -45,12 +46,28 @@ interface HeroSectionProps {
     get_in_touch_button_label?: string
     background_video?: {
       url: string
+      mime_type?: string
+    }
+    background_mobile_video?: {
+      url: string
+      mime_type?: string
     }
   }
 }
+const getVideoType = (url?: string, mimeType?: string) => {
+  if (!url) return 'video/mp4'
+  const cleanUrl = url.split('?')[0].toLowerCase()
+  if (cleanUrl.endsWith('.mp4')) return 'video/mp4'
+  if (cleanUrl.endsWith('.webm')) return 'video/webm'
+  if (cleanUrl.endsWith('.ogg')) return 'video/ogg'
+  if (cleanUrl.endsWith('.mov')) return 'video/quicktime'
+  return mimeType || 'video/mp4'
+}
+
 export default function HeroSection({ data }: HeroSectionProps) {
   const splashComplete = useSplashComplete()
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const isRtl = theme.direction === 'rtl'
   const itemVariants = makeItemVariants(isRtl)
 
@@ -164,8 +181,9 @@ export default function HeroSection({ data }: HeroSectionProps) {
       >
         <Box
           component="video"
+          key={isMobile ? 'mobile' : 'desktop'}
           autoPlay
-          muted
+          muted={isMobile}
           loop
           playsInline
           preload="metadata"
@@ -181,8 +199,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
           }}
         >
           <source
-            src={data?.background_video?.url || '/videos/hero.mp4'}
-            type="video/mp4"
+            src={isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.url : (data?.background_video?.url || '/videos/hero.mp4')}
+            type={getVideoType(
+              isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.url : (data?.background_video?.url || '/videos/hero.mp4'),
+              isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.mime_type : data?.background_video?.mime_type
+            )}
           />
         </Box>
       </Box>
