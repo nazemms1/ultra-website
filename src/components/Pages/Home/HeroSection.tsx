@@ -78,6 +78,11 @@ export default function HeroSection({ data }: HeroSectionProps) {
   // sits on top. The layout effect below re-hides it before the first client
   // paint, so the entrance animation still plays exactly as before.
   const [heroVisible, setHeroVisible] = useState(true)
+  const [mounted, setMounted] = useState(false)
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
 
   useLayoutEffect(() => {
     if (!splashComplete && !hasAnimatedRef.current) {
@@ -179,33 +184,35 @@ export default function HeroSection({ data }: HeroSectionProps) {
           background: 'linear-gradient(135deg, #0a0a0a 0%, #121212 50%, #0d1a1a 100%)',
         }}
       >
-        <Box
-          component="video"
-          key={isMobile ? 'mobile' : 'desktop'}
-          autoPlay
-          muted={isMobile}
-          loop
-          playsInline
-          preload="metadata"
-          width={1920}
-          height={1080}
-          style={{
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            transform: isRtl ? 'translateZ(0) scaleX(-1)' : 'translateZ(0)',
-            backfaceVisibility: 'hidden',
-            willChange: 'transform',
-          }}
-        >
-          <source
-            src={isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.url : (data?.background_video?.url || '/videos/hero.mp4')}
-            type={getVideoType(
-              isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.url : (data?.background_video?.url || '/videos/hero.mp4'),
-              isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.mime_type : data?.background_video?.mime_type
-            )}
-          />
-        </Box>
+        {mounted && (
+          <Box
+            component="video"
+            key={isMobile ? 'mobile' : 'desktop'}
+            autoPlay
+            muted
+            loop
+            playsInline
+            preload="metadata"
+            width={1920}
+            height={1080}
+            style={{
+              width: '100%',
+              height: '100%',
+              objectFit: 'cover',
+              transform: isRtl ? 'translateZ(0) scaleX(-1)' : 'translateZ(0)',
+              backfaceVisibility: 'hidden',
+              willChange: 'transform',
+            }}
+          >
+            <source
+              src={isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.url : (data?.background_video?.url || '/videos/hero.mp4')}
+              type={getVideoType(
+                isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.url : (data?.background_video?.url || '/videos/hero.mp4'),
+                isMobile && data?.background_mobile_video?.url ? data.background_mobile_video.mime_type : data?.background_video?.mime_type
+              )}
+            />
+          </Box>
+        )}
       </Box>
 
       <Box
