@@ -13,7 +13,7 @@ export const sectionSx: SxProps<Theme> = {
   flexDirection: 'column',
   alignItems: 'center',
   width: '100%',
-  pt: { xs: 6, md: 10 },
+  pt: { xs: 3, md: 5 },
   pb: { xs: 5, md: 7.5 },
 }
 

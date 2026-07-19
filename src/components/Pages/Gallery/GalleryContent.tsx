@@ -741,7 +741,8 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
   return (
     <Box
       sx={{
-        py: { xs: 8, md: 12 },
+        pt: { xs: 4, md: 6 },
+        pb: { xs: 8, md: 12 },
         px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
 
         position: 'relative',

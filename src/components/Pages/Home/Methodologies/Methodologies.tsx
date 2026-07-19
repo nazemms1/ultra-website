@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import { alpha, useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
-import { motion, useReducedMotion, useScroll, useSpring, useTransform, type MotionValue } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useSpring, useTransform, useMotionTemplate, type MotionValue } from 'framer-motion'
 import { useTranslations } from 'next-intl'
 import SectionHeader from '@/components/shared/SectionHeader'
 import PhaseCard, { PhaseCardContent } from './PhaseCard'
@@ -231,7 +231,7 @@ function MobileCardItem({
   // الكارد الأولى (index=0) ثابتة دائماً في مكانها
   // كل كارد تالية: تبدأ من أسفل (100%) وتنزلق لـ 0% عند دورها وتبقى ثابتة
   // n انتقال → كل انتقال يشغل 1/n من التقدم
-  const n = total - 1
+  const n = total > 1 ? total - 1 : 1
   const enterAt = (index - 1) / n  // متى تبدأ بالدخول
   const settleAt = index / n        // متى تستقر فوق السابقة
 
@@ -254,10 +254,30 @@ function MobileCardItem({
     index === total - 1 ? [1, 1] : [1, 1, 0, 0]
   )
 
+  // كل كارد تصبح مغبشة (blur) عندما تخرج فقط
+  let progressInput: number[]
+  let blurOutput: number[]
+
+  if (index === total - 1) {
+    progressInput = [0, 1]
+    blurOutput = [0, 0]
+  } else {
+    progressInput = [0, fadeStart, fadeEnd, 1]
+    blurOutput = [0, 0, 40, 40]
+  }
+
+  const motionBlurVal = useTransform(progress, progressInput, blurOutput)
+  const motionFilter = useMotionTemplate`blur(${motionBlurVal}px)`
+
   return (
     <Box
       component={motion.div}
-      style={{ y: motionY, zIndex: index, opacity: motionOpacity }}
+      style={{
+        y: motionY,
+        zIndex: index,
+        opacity: motionOpacity,
+        filter: motionFilter,
+      }}
       sx={{ position: 'absolute', inset: 0 }}
     >
       <PhaseCardContent phase={phase} />

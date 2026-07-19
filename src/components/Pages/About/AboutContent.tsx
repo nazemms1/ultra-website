@@ -43,7 +43,8 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
   return (
     <Box
       sx={{
-        py: { xs: 8, md: 12 },
+        pt: { xs: 4, md: 6 },
+        pb: { xs: 8, md: 12 },
         // px: { xs: 1, md: 'max(80px, calc((100vw - 100%) / 2 + 120px))' },
         bgcolor: '#121212',
         position: 'relative',

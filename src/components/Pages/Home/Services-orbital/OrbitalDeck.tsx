@@ -59,8 +59,8 @@ export default function OrbitalDeck({
   const prefersReduced = useReducedMotion()
   const deckRef        = useRef<HTMLDivElement>(null)
   
-  // Local useInView with amount: 0.5 on deckRef so it triggers exactly when the deck itself is visible!
-  const localIsInView = useInView(deckRef, { once: true, amount: 0.5 })
+  // Local useInView with amount: 0.2 on deckRef so it triggers exactly when the deck itself is visible!
+  const localIsInView = useInView(deckRef, { once: false, amount: 0.2 })
 
   // spin drives all spoke transforms via useTransform chains
   const spin     = useMotionValue(0)

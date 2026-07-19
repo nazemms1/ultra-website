@@ -418,7 +418,7 @@ function MobileProjectText({ project }: { project: ProjectItem }) {
           fontFamily: "'Rajdhani', sans-serif",
           fontSize: { xs: '0.85rem', sm: '1.05rem' },
           lineHeight: 1.5, color: 'text.secondary',
-          display: { xs: '-webkit-box', sm: 'block' },
+          // display: { xs: '-webkit-box', sm: 'block' },
           WebkitLineClamp: { xs: 3, sm: 'none' },
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',

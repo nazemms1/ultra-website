@@ -133,6 +133,8 @@ export function useScrollVideoScrub({
 
   const schedulePaint = useCallback(
     (value: number) => {
+      if (disabled) return
+
       latestProgressRef.current = value
 
       if (rafRef.current !== null) return
@@ -142,7 +144,7 @@ export function useScrollVideoScrub({
         paintFrame(latestProgressRef.current)
       })
     },
-    [paintFrame],
+    [paintFrame, disabled],
   )
 
   useEffect(() => {

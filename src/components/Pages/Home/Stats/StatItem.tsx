@@ -32,10 +32,10 @@ export default function StatItem({ stat, active }: StatItemProps) {
         onClick={() => setClickTrigger(prev => prev + 1)}
         onMouseEnter={() => setClickTrigger(prev => prev + 1)}
         {...(!reduce && {
-          initial: { opacity: 0, y: 28, filter: 'blur(6px)' },
+          initial: { opacity: 0, y: 28 },
           animate: active
-            ? { opacity: 1, y: 0, filter: 'blur(0px)' }
-            : { opacity: 0, y: 28, filter: 'blur(6px)' },
+            ? { opacity: 1, y: 0 }
+            : { opacity: 0, y: 28 },
           transition: {
             duration: stat.entranceDuration,
             delay: stat.entranceDelay,

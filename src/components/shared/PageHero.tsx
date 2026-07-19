@@ -51,7 +51,7 @@ export default function PageHero({
         height: height || 'auto',
         minHeight: height ? 'auto' : { xs: 'auto', md: 'auto' },
         pt: { xs: '110px', md: '140px' },
-        pb: { xs: 8, md: 8 },
+        pb: { xs: 4, md: 4 },
         px: { xs: 3, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         overflow: 'hidden',
         bgcolor: 'transparent',

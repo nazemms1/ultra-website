@@ -182,10 +182,11 @@ export default function CTASection({ data }: CTASectionProps) {
     >
       <video
         ref={videoRef}
+        autoPlay
         loop
         muted
         playsInline
-        preload="none"
+        preload="metadata"
         style={{
           position: 'absolute',
           inset: 0,

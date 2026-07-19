@@ -178,7 +178,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
       sx={{
         position: 'relative',
         backgroundColor: theme.palette.background.default,
-        pt: { xs: 20, md: 15 },
+        pt: { xs: 10, md: 15 },
         pb: { xs: 10, md: 15 },
         overflow: 'hidden',
         display: 'flex',
@@ -246,7 +246,7 @@ export default function TestimonialsSection({ data }: TestimonialsSectionProps) 
           display: { xs: 'flex', md: 'none' },
           position: 'relative',
           width: '100%',
-          mt: 4,
+          mt: -6,
           zIndex: 200,
           flexDirection: 'column',
           alignItems: 'center',

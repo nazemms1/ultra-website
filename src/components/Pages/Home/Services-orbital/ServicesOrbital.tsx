@@ -337,7 +337,16 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           <Box
             sx={{
               transformOrigin: 'center right',
-              transform: { xs: 'scale(0.72) translateX(30%)', sm: 'scale(0.88) translateX(28%)' },
+              transform: {
+                xs: 'scale(0.64) translateX(40%) translateY(-140px)',
+                sm: 'scale(0.80) translateX(35%) translateY(-140px)',
+              },
+              '@media (max-width: 360px)': {
+                transform: 'scale(0.58) translateX(42%) translateY(-140px)',
+              },
+              '@media (max-width: 320px)': {
+                transform: 'scale(0.50) translateX(42%) translateY(-140px)',
+              },
             }}
           >
             {orbitalDeck}
@@ -345,7 +354,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
         </Box>
 
         {/* Detail panel revealed on card click */}
-        <Box sx={{ px: { xs: 3, sm: 5 }, mt: 2 }}>
+        <Box sx={{ px: { xs: 3, sm: 5 }, mt: { xs: -12, sm: -8, md: 2 } }}>
           {detailPanel}
         </Box>
 

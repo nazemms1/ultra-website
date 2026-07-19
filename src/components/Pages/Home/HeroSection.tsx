@@ -264,7 +264,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
                 variant="h1"
                 sx={theme => ({
                   mb: '10px',
-                  fontSize: { xs: '1.8rem', sm: '2.2rem', md: '2.5rem', lg: theme.typography.pxToRem(50) },
+                  fontSize: {  lg: theme.typography.pxToRem(50) },
                   lineHeight: { xs: '38px', sm: '48px', md: '60px', lg: '78px' },
                 })}
               >
@@ -276,8 +276,8 @@ export default function HeroSection({ data }: HeroSectionProps) {
           {(!data || data.description) && (
             <motion.div variants={itemVariants}>
               <Typography
-                variant="body1"
-                sx={{ mb: 5, maxWidth: 625, color: 'text.secondary', fontSize: 25 }}
+             
+                sx={{ mb: 5, maxWidth: 625, color: 'text.secondary', fontSize: isMobile ? 16 : 25 ,fontWeight: 400, lineHeight: isMobile ? '24px' : '32px'}}
               >
                 {data
                   ? data.description

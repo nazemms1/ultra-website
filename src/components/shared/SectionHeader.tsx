@@ -134,7 +134,7 @@ export default function SectionHeader({
       sx={[
         alignSx[align],
         {
-          mb: { xs: 5, md: 6 },
+          mb: { xs: 3, md: 4 },
         },
         ...(Array.isArray(sx) ? sx : sx ? [sx] : []),
       ]}
@@ -147,7 +147,7 @@ export default function SectionHeader({
             fontWeight: 400,
             fontSize: 16,
             lineHeight: '24px',
-            letterSpacing: 8,
+            letterSpacing: 5,
              textTransform: 'uppercase',
             color: '#0DF1D9',
             wordWrap: 'break-word',
@@ -165,10 +165,10 @@ export default function SectionHeader({
           fontSize: { xs: '1.75rem', md: '43.88px' },
           fontFamily: "'Nulshock', 'Almarai', sans-serif !important",
           fontWeight: '700 !important',
-          lineHeight: '52.66px',
+          // lineHeight: '52.66px',
           width: '100%',
           textTransform: 'uppercase',
-          wordWrap: 'break-word',
+          // wordWrap: 'break-word',
           px: { xs: 2, sm: 4 },
         }}
       >

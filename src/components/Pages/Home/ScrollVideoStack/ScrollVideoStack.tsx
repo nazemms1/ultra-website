@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode } from 'react'
 import Box from '@mui/material/Box'
-import { motion, useReducedMotion, useScroll } from 'framer-motion'
+import { motion, useReducedMotion, useScroll, useSpring, useTransform } from 'framer-motion'
 import { useScrollVideoScrub } from './useScrollVideoScrub'
 import { shouldDisableScrollVideo } from './deviceUtils'
 
@@ -40,12 +40,27 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
     offset: ['start start', 'end end'],
   })
 
+  // Damped progress for buttery smooth 3D camera transforms
+  const smoothProgress = useSpring(scrollYProgress, {
+    stiffness: 50,
+    damping: 22,
+    mass: 0.4,
+    restDelta: 0.001,
+  })
+
+  // Use the raw scroll progress for frame rendering to prevent image decoding bottlenecks and lag
   const { isReady, layerOpacity } = useScrollVideoScrub({
     progress: scrollYProgress,
     canvasRef,
     viewportRef,
     disabled,
   })
+
+  // 3D parallax camera tilt and scale effects on scroll use smooth spring progress
+  const scale = useTransform(smoothProgress, [0, 0.5, 1], [1.04, 1.0, 1.04])
+  const rotateX = useTransform(smoothProgress, [0, 0.5, 1], [2, 0, -2])
+  const rotateY = useTransform(smoothProgress, [0, 0.5, 1], [-2.5, 0, 2.5])
+  const translateZ = useTransform(smoothProgress, [0, 0.5, 1], [10, 0, 10])
 
   return (
     <Box ref={containerRef} sx={{ position: 'relative' }}>
@@ -65,11 +80,19 @@ export default function ScrollVideoStack({ children }: ScrollVideoStackProps) {
       >
         <Box
           component={motion.div}
-          style={{ opacity: layerOpacity }}
+          style={{
+            opacity: layerOpacity,
+            scale,
+            rotateX,
+            rotateY,
+            z: translateZ,
+            transformStyle: 'preserve-3d',
+          }}
           sx={{
             position: 'absolute',
             inset: 0,
             visibility: isReady ? 'visible' : 'hidden',
+            perspective: 1200,
           }}
         >
           <Box component="canvas" ref={canvasRef} sx={canvasSx} />

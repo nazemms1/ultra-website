@@ -208,10 +208,11 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
         component="video"
         key={videoUrl}
         ref={videoRef}
+        autoPlay
         loop
         muted
         playsInline
-        preload="none"
+        preload="metadata"
         aria-hidden
         sx={{
           position: 'absolute',
