@@ -126,6 +126,7 @@ const AnimatedButton = forwardRef<HTMLButtonElement, AnimatedButtonProps>(functi
           '&:active:not(:disabled)': {
             transform: 'scale(0.98)',
           },
+          
           '& .MuiButton-startIcon, & .MuiButton-endIcon': {
             position: 'relative',
             zIndex: 1,
