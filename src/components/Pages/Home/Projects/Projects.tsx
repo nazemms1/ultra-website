@@ -169,6 +169,7 @@ function MobileProjectCard({
     isLast ? [0, 1]                  : [0, 1, 1, 0],
     { clamp: true }
   )
+  const pointerEvents = useTransform(opacity, (val) => (val > 0.5 ? 'auto' : 'none'))
 
   // الصورة: تدخل من الأسفل (+60 → 0), تخرج للأعلى (0 → -60)
   const imgY = useTransform(
@@ -189,7 +190,7 @@ function MobileProjectCard({
   return (
     <Box
       component={motion.div}
-      style={{ opacity, position: 'absolute', inset: 0 }}
+      style={{ opacity, pointerEvents, position: 'absolute', inset: 0 }}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -418,10 +419,11 @@ function MobileProjectText({ project }: { project: ProjectItem }) {
           fontFamily: "'Rajdhani', sans-serif",
           fontSize: { xs: '0.85rem', sm: '1.05rem' },
           lineHeight: 1.5, color: 'text.secondary',
-          // display: { xs: '-webkit-box', sm: 'block' },
-          WebkitLineClamp: { xs: 3, sm: 'none' },
+          display: '-webkit-box',
+          WebkitLineClamp: 8,
           WebkitBoxOrient: 'vertical',
           overflow: 'hidden',
+          textOverflow: 'ellipsis',
         }}
       >
         {project.description}

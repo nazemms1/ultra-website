@@ -402,6 +402,11 @@ function MobileCard({ item, t }: { item: ProjectGridItem; t: (key: string) => st
               fontSize: 13,
               lineHeight: 1.6,
               color: 'rgba(255,255,255,0.7)',
+              display: '-webkit-box',
+              WebkitLineClamp: 8,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {item.description}

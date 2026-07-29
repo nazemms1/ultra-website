@@ -247,6 +247,11 @@ function ProjectCard({ project }: { project: (typeof projects)[number] }) {
               lineHeight: 1.625,
               color: 'text.secondary',
               mb: 3,
+              display: '-webkit-box',
+              WebkitLineClamp: 8,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {project.description}

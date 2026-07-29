@@ -76,11 +76,26 @@ export default function ProjectDetailsHero({ project }: ProjectDetailsHeroProps)
     </Stack>
   )
 
+  const subtitleNode = project.shortDescription ? (
+    <Box
+      component="span"
+      sx={{
+        display: '-webkit-box',
+        WebkitLineClamp: 8,
+        WebkitBoxOrient: 'vertical',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+      }}
+    >
+      {project.shortDescription}
+    </Box>
+  ) : undefined
+
   return (
     <PageHero
       eyebrow={metaLabel}
       title={project.title}
-      subtitle={project.shortDescription}
+      subtitle={subtitleNode}
       videoSrc={videoSrc}
       aboveTitle={<BackLink label={t('backToProjects')} href="/projects" />}
       actions={actions}

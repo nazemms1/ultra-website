@@ -246,6 +246,7 @@ export default function PageHero({
                     fontWeight: 400,
                     lineHeight: '26px',
                     letterSpacing: '0.015em',
+                    whiteSpace: 'pre-line',
                   }}
                 >
                   {subtitle}
@@ -350,6 +351,7 @@ export default function PageHero({
                   fontWeight: 400,
                   lineHeight: '26px',
                   letterSpacing: '0.015em',
+                  whiteSpace: 'pre-line',
                 }}
               >
                 {subtitle}

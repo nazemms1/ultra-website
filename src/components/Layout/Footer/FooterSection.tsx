@@ -8,6 +8,7 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Stack from '@mui/material/Stack'
 import Grid from '@mui/material/Grid'
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { alpha, useTheme } from '@mui/material/styles'
 import { motion } from 'framer-motion'
 import { useParams } from 'next/navigation'
@@ -60,6 +61,7 @@ const socials = [
 
 export default function FooterSection({ data, statsData }: { data?: any; statsData?: any }) {
   const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const rootRef = useRef<HTMLElement | null>(null)
   const videoRef = useRef<HTMLVideoElement | null>(null)
 
@@ -204,30 +206,32 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
         
       }}
     >
-      <Box
-        component="video"
-        key={videoUrl}
-        ref={videoRef}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="metadata"
-        aria-hidden
-        sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-          zIndex: -1,
-          opacity: 0.5,
-          pointerEvents: 'none',
-        }}
-      >
-        <source src={videoUrl} type="video/mp4" />
-      </Box>
+      {!isMobile && (
+        <Box
+          component="video"
+          key={videoUrl}
+          ref={videoRef}
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="metadata"
+          aria-hidden
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            zIndex: -1,
+            opacity: 0.5,
+            pointerEvents: 'none',
+          }}
+        >
+          <source src={videoUrl} type="video/mp4" />
+        </Box>
+      )}
 
       <Box
         component={motion.div}

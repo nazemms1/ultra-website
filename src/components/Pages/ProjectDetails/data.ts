@@ -273,7 +273,7 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
 
   const id = String(apiData.id)
   const title = apiData.title || ''
-  const subtitle = apiData.subtitle || ''
+  const subtitle = apiData.subtitle || apiData.short_description || apiData.description || ''
   const platform = apiData.platform || 'website'
   
   let metaCategory = 'Website'

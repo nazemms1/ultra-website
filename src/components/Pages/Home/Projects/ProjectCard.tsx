@@ -58,13 +58,14 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
     : [0, 1, 1, 0]
 
   const opacity = useTransform(scrollYProgress, opacityPoints, opacityValues, { clamp: true })
+  const pointerEvents = useTransform(opacity, (val) => (val > 0.5 ? 'auto' : 'none'))
 
   // ── slide up on enter ────────────────────────────────────
   const y = useTransform(scrollYProgress, [enterStart, enterEnd], [40, 0], { clamp: true })
 
   return (
     <motion.div
-      style={{ opacity, y, position: 'absolute', inset: 0 }}
+      style={{ opacity, y, pointerEvents, position: 'absolute', inset: 0 }}
     >
       {/* Subtle radial glow per card */}
       <Box
@@ -167,6 +168,11 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
                   fontSize: { xs: '0.95rem', md: '1.1rem' },
                   lineHeight: 1.75,
                   color: 'text.secondary',
+                  display: '-webkit-box',
+                  WebkitLineClamp: 8,
+                  WebkitBoxOrient: 'vertical',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
                 }}
               >
                 {project.description}

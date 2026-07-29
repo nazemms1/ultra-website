@@ -87,6 +87,11 @@ export function StaticProjectRow({ project }: StaticProjectRowProps) {
               lineHeight: { xs: 1.45, md: 1.65 },
               color: 'text.secondary',
               textAlign: 'justify',
+              display: '-webkit-box',
+              WebkitLineClamp: 8,
+              WebkitBoxOrient: 'vertical',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis',
             }}
           >
             {project.description}

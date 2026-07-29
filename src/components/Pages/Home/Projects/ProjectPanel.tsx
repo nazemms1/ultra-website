@@ -150,8 +150,9 @@ export default function ProjectPanel({ project, index, total, progress }: Projec
                 textAlign: 'justify',
                 display: '-webkit-box',
                 WebkitBoxOrient: 'vertical',
-                WebkitLineClamp: { xs: 5, sm: 8, md: 'unset' },
-                overflow: { xs: 'hidden', md: 'visible' },
+                WebkitLineClamp: 8,
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
               }}
             >
               {project.description}

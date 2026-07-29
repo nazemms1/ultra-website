@@ -93,6 +93,10 @@ export const hoverDescriptionSx: SxProps<Theme> = {
   color: theme => alpha(theme.palette.common.white, 0.7),
   maxWidth: 540,
   transition: HOVER_TRANSITION,
+  display: '-webkit-box',
+  WebkitLineClamp: 8,
+  WebkitBoxOrient: 'vertical',
+  textOverflow: 'ellipsis',
 }
 
 export const viewMoreButtonSx: SxProps<Theme> = {
