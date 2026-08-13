@@ -71,9 +71,6 @@ export default function OrbitalDeck({
   const [ready,   setReady]   = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
-  // Scroll velocity ref — populated by a passive window scroll listener to avoid layout thrashing
-  const scrollVelRef = useRef(0)
-
   // ── Delayed activation — waits for entrance animation to finish ──────
   useEffect(() => {
     if (timerRef.current) clearTimeout(timerRef.current)
@@ -82,7 +79,6 @@ export default function OrbitalDeck({
       timerRef.current = setTimeout(() => setReady(true), SPIN_DELAY_MS)
     } else {
       setReady(false)
-      scrollVelRef.current = 0
     }
 
     return () => {
@@ -90,64 +86,46 @@ export default function OrbitalDeck({
     }
   }, [localIsInView])
 
-  // ── 3. Passive scroll handler to capture scroll velocity ────────────────
+  // ── Pause pointer interaction while the user is actively scrolling ───────
+  // Only mounted while the deck is on-screen. This prevents hover-state
+  // flooding through React during scroll without running a global scroll
+  // listener for the whole page lifetime. The former scroll→spin-speed boost
+  // was removed: accelerating the animation mid-scroll spiked frame cost
+  // exactly when the browser was busiest, compounding the jank/freeze.
   useEffect(() => {
-    if (prefersReduced) return
+    if (prefersReduced || !localIsInView) return
 
-    let lastScrollY = typeof window !== 'undefined' ? window.scrollY : 0
-    let lastScrollTime = performance.now()
     let scrollTimeout: ReturnType<typeof setTimeout> | null = null
 
     const handleScroll = () => {
-      const now = performance.now()
-      const scrollDt = now - lastScrollTime
-      const currentScrollY = window.scrollY
-
-      // Disable pointer events temporarily during active scroll to prevent hover state flooding in React
       if (deckRef.current && deckRef.current.style.pointerEvents !== 'none') {
         deckRef.current.style.pointerEvents = 'none'
       }
-
       if (scrollTimeout) clearTimeout(scrollTimeout)
       scrollTimeout = setTimeout(() => {
-        if (deckRef.current) {
-          deckRef.current.style.pointerEvents = 'auto'
-        }
+        if (deckRef.current) deckRef.current.style.pointerEvents = 'auto'
       }, 120) // restore interaction after 120ms of scroll pause
-
-      if (scrollDt > 0) {
-        const dy = currentScrollY - lastScrollY
-        // Convert px/ms to px/sec
-        const raw = Math.abs(dy / scrollDt) * 1000
-        // Smooth out scroll velocity transitions
-        scrollVelRef.current += (raw - scrollVelRef.current) * 0.18
-      }
-      lastScrollY = currentScrollY
-      lastScrollTime = now
     }
 
     window.addEventListener('scroll', handleScroll, { passive: true })
     return () => {
       window.removeEventListener('scroll', handleScroll)
       if (scrollTimeout) clearTimeout(scrollTimeout)
+      if (deckRef.current) deckRef.current.style.pointerEvents = 'auto'
     }
-  }, [prefersReduced])
+  }, [prefersReduced, localIsInView])
 
-  // ── 4. Single animation frame — spin + scroll velocity decay in one loop ──
+  // ── Single animation frame — ambient spin only ───────────────────────────
+  // Gated on `ready` (set only after the deck scrolls into view), so no spin
+  // work happens while the section is off-screen.
   useAnimationFrame((_, delta) => {
     if (prefersReduced || !ready) return
 
     const dt = Math.min(delta, 64) / 1000
-
-    // Speed with scroll boost, smoothed via exponential decay
-    const boost  = (Math.min(scrollVelRef.current, 4000) / 4000) * baseSpeed * 2.5
-    const target = pausedRef.current ? 0 : baseSpeed + boost
+    const target = pausedRef.current ? 0 : baseSpeed
     const k      = 1 - Math.exp(-dt * 6)
     speedRef.current += (target - speedRef.current) * k
     spin.set(spin.get() - speedRef.current * dt)
-
-    // Decay the scroll velocity over time so it returns to 0 when scrolling stops
-    scrollVelRef.current += (0 - scrollVelRef.current) * (1 - Math.exp(-dt * 3))
   })
 
   const pause  = useCallback(() => { pausedRef.current = true  }, [])
@@ -291,7 +269,11 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
         }}
       />
 
-      {/* Card wrapper — counter-rotates so the card stays upright */}
+      {/* Card wrapper — counter-rotates so the card stays upright.
+          will-change is intentionally NOT set on these nested layers: only the
+          outer spoke arm is GPU-promoted. Promoting every nested layer for all
+          8 spokes created dozens of permanent composite layers and was the main
+          cause of the GPU-memory blowup / tab crash on entering this section. */}
       <Box
         component={motion.div}
         sx={{
@@ -300,12 +282,10 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
           top: 0,
           width: 0,
           height: 0,
-          willChange: 'transform, opacity',
         }}
         style={{ opacity: cardOpacity }}
       >
         <Box
-          component={motion.div}
           sx={{
             position: 'absolute',
             left:     R_CARD,
@@ -314,7 +294,6 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
             height:   CARD_H,
             ml:       `${-CARD_W / 2.5}px`,
             mt:       `${-CARD_H / 2}px`,
-            willChange: 'transform, opacity',
           }}
         >
           <Box
@@ -323,7 +302,6 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
               rotate:          cardCounterRot,
               scale:           cardScale,
               transformOrigin: `${CARD_W / 2}px ${CARD_H / 2}px`,
-              willChange:      'transform, opacity',
             }}
           >
             <Box
@@ -412,9 +390,13 @@ function OrbitalCenter({ offsetX, offsetY, visible }: OrbitalCenterProps) {
           width:        400,
           height:       400,
           borderRadius: '50%',
+          // The radial gradient already feathers to transparent, so the former
+          // blur(40px) was redundant softening. Dropping the filter removes a
+          // large filtered layer that was being re-rasterized under the
+          // continuously spinning cards; the falloff is widened slightly to
+          // reproduce the same soft glow.
           background:
-            'radial-gradient(ellipse 70.71% 70.71% at 50% 50%, rgba(13,241,217,0.18) 0%, rgba(18,18,18,0) 65%)',
-          filter:        'blur(40px)',
+            'radial-gradient(ellipse 72% 72% at 50% 50%, rgba(13,241,217,0.18) 0%, rgba(18,18,18,0) 72%)',
           pointerEvents: 'none',
         }}
       />

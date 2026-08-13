@@ -49,10 +49,15 @@ export default function OrbitalEmblem({ offsetX, offsetY }: OrbitalEmblemProps) 
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
         aria-hidden
-        sx={{ overflow: 'visible', filter: `drop-shadow(0 0 18px ${alpha(primary, 0.65)})` }}
+        sx={{ overflow: 'visible' }}
       >
-        <path d={EMBLEM_PATH_A} fill={primary} />
-        <path d={EMBLEM_PATH_B} fill={theme.palette.secondary.main} />
+        {/* The drop-shadow lives on the static emblem group only. Keeping it off
+            the SVG root means the parallax-driven eye group below does not force
+            the (expensive) filtered subtree to re-rasterize every pointer frame. */}
+        <g style={{ filter: `drop-shadow(0 0 18px ${alpha(primary, 0.65)})` }}>
+          <path d={EMBLEM_PATH_A} fill={primary} />
+          <path d={EMBLEM_PATH_B} fill={theme.palette.secondary.main} />
+        </g>
 
         <motion.g style={{ x: offsetX, y: offsetY }}>
           <g transform={EYE_GROUP_TRANSFORM}>

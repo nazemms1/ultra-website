@@ -71,16 +71,10 @@ export default function OrbitalCard({
   const isRtl = theme.direction === 'rtl'
   const primary = theme.palette.primary.main
   const id = useId().replace(/:/g, '')
-  const fillId = `orbital-card-fill-${id}`
   const strokeId = `orbital-card-stroke-${id}`
   const strokeHoverId = `orbital-card-stroke-hover-${id}`
   const [hovered, setHovered] = useState(false)
   const isDisplayingActive = active || hovered
-
-  // Fully transparent fill — glass effect lives in border only
-  const fillStart = 'transparent'
-  const fillMid = 'transparent'
-  const fillEnd = 'transparent'
 
   const cardVariants = {
     rest: { scale: 1 },
@@ -124,7 +118,11 @@ export default function OrbitalCard({
         ...sx,
       }}
     >
-      {/* Morphing Background Plate */}
+      {/* Static border plate.
+          Perf: the fill path was fully transparent (adds nothing) and is
+          dropped. Rest + hover strokes are two static <path>s crossfaded via
+          CSS opacity on their wrappers — no per-frame motion.path work, so the
+          8 continuously-orbiting cards no longer re-rasterize this SVG. */}
       <Box
         component="svg"
         width={UNION_W}
@@ -137,59 +135,31 @@ export default function OrbitalCard({
           left: 0,
           top: '0.5px',
           overflow: 'visible',
-          willChange: 'transform',
         }}
       >
-        <motion.path
+        <path
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
-          fill={`url(#${fillId})`}
-        />
-
-        <motion.path
-          d={isRtl ? CARD_PATH_RTL : CARD_PATH}
-          animate={{
-            opacity: isDisplayingActive ? 0.04 : 0,
-          }}
-          transition={springTransition}
-          fill={primary}
-        />
-
-        <motion.path
-          d={isRtl ? CARD_PATH_RTL : CARD_PATH}
-          animate={{
-            opacity: isDisplayingActive ? 0 : 1,
-          }}
-          transition={springTransition}
           stroke={`url(#${strokeId})`}
           strokeWidth={1}
           vectorEffect="non-scaling-stroke"
+          style={{
+            opacity: isDisplayingActive ? 0 : 1,
+            transition: 'opacity 0.3s ease',
+          }}
         />
 
-        <motion.path
+        <path
           d={isRtl ? CARD_PATH_RTL : CARD_PATH}
-          animate={{
-            opacity: isDisplayingActive ? 1 : 0,
-          }}
-          transition={springTransition}
           stroke={`url(#${strokeHoverId})`}
           strokeWidth={1.25}
           vectorEffect="non-scaling-stroke"
+          style={{
+            opacity: isDisplayingActive ? 1 : 0,
+            transition: 'opacity 0.3s ease',
+          }}
         />
 
         <defs>
-          <linearGradient
-            id={fillId}
-            x1="0"
-            y1={UNION_H}
-            x2={UNION_W}
-            y2="0"
-            gradientUnits="userSpaceOnUse"
-          >
-            <stop stopColor={fillStart} stopOpacity="1" />
-            <stop offset="0.45" stopColor={fillMid} stopOpacity="1" />
-            <stop offset="1" stopColor={fillEnd} stopOpacity="1" />
-          </linearGradient>
-
           <linearGradient
             id={strokeId}
             x1="0"
