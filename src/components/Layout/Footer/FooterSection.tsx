@@ -325,17 +325,15 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                         alignItems: 'center',
                         justifyContent: 'center',
                         transition: 'all 0.3s ease',
+                        width: 36,
+                        height: 36,
                         ...(social.iconUrl
                           ? {
-                              width: 'auto',
-                              height: 'auto',
                               '&:hover': {
                                 transform: 'translateY(-3px) scale(1.1)',
                               },
                             }
                           : {
-                              width: 36,
-                              height: 36,
                               borderRadius: '10px',
                               bgcolor: alpha(theme.palette.common.white, 0.03),
                               border: `1px solid ${alpha(theme.palette.common.white, 0.1)}`,
@@ -356,8 +354,8 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                           src={social.iconUrl}
                           alt={social.label}
                           sx={{
-                            width: 24,
-                            height: 24,
+                            width: 36,
+                            height: 36,
                             objectFit: 'contain',
                           }}
                         />

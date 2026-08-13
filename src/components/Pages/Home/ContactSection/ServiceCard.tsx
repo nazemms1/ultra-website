@@ -16,7 +16,7 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
         cursor: 'pointer',
         width: '100%',
         height: 147.5,
-        p: '21px',
+        p: '16px',
         display: 'flex',
         flexDirection: 'column',
         overflow: 'hidden',
@@ -58,6 +58,7 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
           width: 48,
           height: 48,
           flexShrink: 0,
+          mb: '4px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
@@ -108,8 +109,10 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
           fontWeight: 600,
           color: 'text.primary',
           lineHeight: '25.5px',
-          mt: '14px',
-        }}
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
+         }}
       >
         {service.title}
       </Typography>
@@ -121,6 +124,9 @@ export default function ServiceCard({ service, selected, onSelect }: ServiceCard
           color: alpha(theme.palette.common.white, 0.45),
           lineHeight: '18px',
           mt: '4px',
+          whiteSpace: 'nowrap',
+          overflow: 'hidden',
+          textOverflow: 'ellipsis',
         }}
       >
         {service.subtitle}

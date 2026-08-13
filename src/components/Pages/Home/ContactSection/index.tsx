@@ -340,11 +340,11 @@ export default function ContactSection({ data }: { data?: any }) {
             <Typography
               sx={{
                 fontFamily: "'Rajdhani', sans-serif",
-                fontSize: '12px',
-                fontWeight: 700,
-                letterSpacing: '0.22em',
+                fontSize: '16px',
+                fontWeight: 400,
+                letterSpacing: '0.22rem',
                 textTransform: 'uppercase',
-                color: 'primary.main',
+                color: '#0DF1D9',
                 mb: '20px',
               }}
             >

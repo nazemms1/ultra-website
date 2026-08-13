@@ -205,9 +205,9 @@ export default function ServiceCarousel({
               key={service.id}
               sx={{
                 flex: '0 0 auto',
-                minWidth: { xs: '68%', sm: 191 },
-                width: 191,
-                maxWidth: 191,
+                minWidth: { xs: '78%', sm: 230 },
+                width: 230,
+                maxWidth: 230,
                 height: 147.5,
               }}
             >
