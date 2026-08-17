@@ -14,6 +14,7 @@ import {
   useSpring,
   useTransform,
   useMotionTemplate,
+  useMotionValue,
   type MotionValue,
 } from 'framer-motion'
 import Image from 'next/image'
@@ -501,10 +502,29 @@ export interface ServiceItemNormalized {
 
 interface ServiceCardContentProps {
   service: ServiceItemNormalized
+  active?: MotionValue<number>
 }
 
-function ServiceCardContent({ service }: ServiceCardContentProps) {
+function ServiceCardContent({ service, active }: ServiceCardContentProps) {
   const theme = useTheme()
+
+  // Glowing border that intensifies as the card reaches the centered (active) state.
+  const fallbackActive = useMotionValue(1)
+  const glow = active ?? fallbackActive
+  const activeBorderColor = useTransform(
+    glow,
+    [0, 1],
+    [alpha(theme.palette.primary.main, 0), theme.palette.primary.main],
+  )
+  const activeBoxShadow = useTransform(
+    glow,
+    [0, 1],
+    [
+      `0 0 0 rgba(0,0,0,0)`,
+      `0 0 28px ${alpha(theme.palette.primary.main, 0.55)}, inset 0 0 22px ${alpha(theme.palette.primary.main, 0.18)}`,
+    ],
+  )
+
   return (
     <Box
       sx={{
@@ -538,6 +558,23 @@ function ServiceCardContent({ service }: ServiceCardContentProps) {
         gap: { xs: 3, md: 6 },
       }}
     >
+      {/* Active-state glowing border overlay (brightens when the card is centered) */}
+      <Box
+        component={motion.div}
+        aria-hidden
+        style={{
+          borderColor: activeBorderColor,
+          boxShadow: activeBoxShadow,
+        }}
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          borderRadius: '24px',
+          border: '2px solid transparent',
+          pointerEvents: 'none',
+          zIndex: 2,
+        }}
+      />
       <Box
         sx={{
           position: 'absolute',
@@ -568,8 +605,8 @@ function ServiceCardContent({ service }: ServiceCardContentProps) {
         whileHover={{ y: -8, rotate: 2 }}
         transition={{ type: 'spring', stiffness: 200, damping: 18 }}
         sx={{
-          width: { xs: 160, md: 280 },
-          height: { xs: 160, md: 280 },
+          width: { xs: 280, md: 420 },
+          aspectRatio: '4 / 3',
           flexShrink: 0,
           position: 'relative',
           display: 'flex',
@@ -580,13 +617,13 @@ function ServiceCardContent({ service }: ServiceCardContentProps) {
         <Image
           src={service.image}
           alt={service.title}
-          width={280}
-          height={280}
+          width={400}
+          height={300}
           style={{
             width: '100%',
             height: '100%',
             objectFit: 'contain',
-            filter: `drop-shadow(0 10px 25px ${alpha(theme.palette.primary.main, 0.3)})`,
+            // filter: `drop-shadow(0 10px 25px ${alpha(theme.palette.primary.main, 0.3)})`,
           }}
         />
       </Box>
@@ -612,8 +649,7 @@ function ServiceCardContent({ service }: ServiceCardContentProps) {
             fontFamily: '"Rajdhani", sans-serif',
             color: '#CEFAFE99',
             lineHeight: 1.62,
-            fontSize: { xs: '12px', md: '12px' },
-          }}
+           }}
         >
           {service.description}
         </Typography>
@@ -642,7 +678,7 @@ function ServiceCardContent({ service }: ServiceCardContentProps) {
                         component="img"
                         src={tool.icon.url}
                         alt=""
-                        sx={{ width: 14, height: 14, marginRight: 1, objectFit: 'contain' }}
+                        sx={{ width: 20, height: 20, marginRight: 1, objectFit: 'contain' }}
                       />
                     ) : (
                       tagIcons[tool.name]
@@ -740,6 +776,16 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
   )
   const pointerEvents = total > 1 ? pointerEventsVal : 'auto'
 
+  // Active-ness: 1 when this card is centered, 0 when it is a step away.
+  const activeVal = useTransform(
+    progress,
+    [progressActive - step, progressActive, progressActive + step],
+    [0, 1, 0],
+  )
+  // When there is only one card, leave `active` undefined so the card falls back
+  // to a permanent full glow.
+  const active = total > 1 ? activeVal : undefined
+
   return (
     <Box
       component={motion.div}
@@ -764,7 +810,7 @@ function CardWrapper({ service, index, total, progress }: CardWrapperProps) {
         whileHover={{ scale: 1.012 }}
         transition={{ type: 'spring', stiffness: 260, damping: 22 }}
       >
-        <ServiceCardContent service={service} />
+        <ServiceCardContent service={service} active={active} />
       </Box>
     </Box>
   )

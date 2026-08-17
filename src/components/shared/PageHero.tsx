@@ -126,7 +126,7 @@ export default function PageHero({
         spacing={2.5}
         sx={{
           width: '100%',
-          maxWidth: 1480,
+        
           mx: 'auto',
           position: 'relative',
           zIndex: 2,
@@ -260,8 +260,7 @@ export default function PageHero({
               )}
             </Stack>
 
-            {/* Desktop-only children (FlipLogoCard) */}
-            <Box
+             <Box
               sx={{
                 width: { xs: '100%', md: 'auto' },
                 display: { xs: 'none', md: 'flex' },
@@ -344,7 +343,7 @@ export default function PageHero({
                 variants={itemVariants}
                 variant="body1"
                 sx={{
-                  maxWidth: 1120,
+                
                   color: 'rgba(206, 250, 254, 0.60)',
                   fontSize: { xs: '14px', md: '16px' },
                   fontFamily: '"Rajdhani", sans-serif',
