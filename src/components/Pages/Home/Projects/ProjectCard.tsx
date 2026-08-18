@@ -110,6 +110,7 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
               order: imageFirst ? 0 : 1,
               display: 'flex',
               justifyContent: 'center',
+              minWidth: 0,
             }}
           >
             <Box
@@ -129,7 +130,7 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
                 alt={project.mockup.alt}
                 fill
                 sizes="(max-width: 600px) 90vw, (max-width: 900px) 45vw, 520px"
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'cover' }}
                 loading={index === 0 ? 'eager' : 'lazy'}
               />
             </Box>
@@ -141,6 +142,7 @@ export default function ProjectCard({ project, index, total, trackRef }: Project
               order: imageFirst ? 1 : 0,
               display: 'flex',
               flexDirection: 'column',
+              minWidth: 0,
             }}
           >
 

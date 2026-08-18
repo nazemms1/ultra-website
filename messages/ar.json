@@ -29,7 +29,11 @@
     "appStore": "آب ستور",
     "demo": "العرض التوضيحي",
     "moreProjects": "مشاريع أخرى",
-    "scrollHint": "مرر داخل مجسم الجهاز"
+    "scrollHint": "مرر داخل مجسم الجهاز",
+    "feedback": "التقييم",
+    "success": "نسبة النجاح",
+    "servicesDeployed": "الخدمات المقدّمة",
+    "usedTools": "الأدوات المستخدمة"
   },
   "Methodologies": {
     "label": "منهجياتنا",

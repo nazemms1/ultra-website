@@ -337,14 +337,14 @@ export function parseProjectDetailApiData(apiData: any): ProjectDetail | null {
  
         const screenshots = Array.isArray(demo.images)
           ? demo.images.map((img: any, imgIdx: number) => ({
-              id: `${title}-shot-${imgIdx + 1}`,
+              id: `${title}-${idx}-shot-${imgIdx + 1}`,
               src: img.url || '',
               alt: `${title} screenshot ${imgIdx + 1}`,
             }))
           : []
- 
+
         return {
-          id: title,
+          id: `${title}-${idx}`,
           label: title,
           device,
           icon: demo.icon?.url || '',

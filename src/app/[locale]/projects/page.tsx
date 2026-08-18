@@ -17,7 +17,10 @@ export default async function ProjectsPage() {
   const locale = await getLocale()
   const t = await getTranslations('ProjectsPage')
 
-  const [portfoliosData] = await Promise.all([fetchAPI('/api/portfolios-data', locale)])
+  const [portfoliosData, projectsData] = await Promise.all([
+    fetchAPI('/api/portfolios-data', locale),
+    fetchAPI('/api/projects', locale),
+  ])
 
   const videoSrc = resolveMediaUrl(portfoliosData?.video) ?? '/videos/colorflow-animation (3).mp4'
 
@@ -45,7 +48,7 @@ export default async function ProjectsPage() {
         subtitle={descriptionText}
         videoSrc={videoSrc}
       />
-      <ProjectsGrid data={parsePortfoliosApiData(portfoliosData)} />
+      <ProjectsGrid data={parsePortfoliosApiData(projectsData)} />
     </>
   )
 }

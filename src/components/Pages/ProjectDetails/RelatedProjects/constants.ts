@@ -95,6 +95,11 @@ export const relatedDescriptionSx: SxProps<Theme> = {
   lineHeight: { xs: '14px', sm: '20px' },
   color: theme => alpha(theme.palette.common.white, 0.65),
   mt: 0.5,
+  display: '-webkit-box',
+  WebkitLineClamp: 4,
+  WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
 }
 
 export const relatedArrowSx: SxProps<Theme> = {

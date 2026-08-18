@@ -6,6 +6,7 @@ import Stack from '@mui/material/Stack'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import { animate, useMotionValue, motion } from 'framer-motion'
+import { useTranslations } from 'next-intl'
 import type { ProjectMetrics } from '../types'
 import CornerBrackets from '../shared/CornerBrackets'
 import { feedbackCardSx, metaCardSx, metaLabelSx, toolPillSx } from './constants'
@@ -25,6 +26,7 @@ const itemVariants = {
 
 export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
   const theme = useTheme()
+  const t = useTranslations('ProjectDetails')
   const progressWidth = `${metrics.successRate}%`
 
   const count = useMotionValue(0)
@@ -61,7 +63,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
         sx={feedbackCardSx(theme)}
       >
         <CornerBrackets inset={12} />
-        <Typography sx={metaLabelSx}>Feedback</Typography>
+        <Typography sx={metaLabelSx}>{t('feedback')}</Typography>
 
         <Stack spacing={0.75} sx={{ pt: 2.5, pb: 2.5 }}>
           <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
@@ -75,7 +77,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
                 color: alpha(theme.palette.common.white, 0.7),
               }}
             >
-              Success
+              {t('success')}
             </Typography>
             <Typography
               sx={{
@@ -129,7 +131,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
         variants={itemVariants}
         sx={metaCardSx(theme)}
       >
-        <Typography sx={metaLabelSx}>Services Deployed</Typography>
+        <Typography sx={metaLabelSx}>{t('servicesDeployed')}</Typography>
         <Stack spacing={1.5} sx={{ pt: 2 }}>
           {metrics.services.map(service => (
             <Box key={service} sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -162,7 +164,7 @@ export default function MetricsSidebar({ metrics }: MetricsSidebarProps) {
         variants={itemVariants}
         sx={metaCardSx(theme)}
       >
-        <Typography sx={metaLabelSx}>Used tools</Typography>
+        <Typography sx={metaLabelSx}>{t('usedTools')}</Typography>
         <Box
           sx={{
             display: 'flex',

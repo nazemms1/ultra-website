@@ -15,7 +15,6 @@ import {
   rowGradient,
   titleSx,
   viewMoreButtonSx,
-  rowLayoutForIndex,
   type RowLayout,
 } from './constants'
 import type { ProjectGridItem } from './types'
@@ -32,7 +31,11 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
   const t = useTranslations('ProjectsPage')
   const isReversed = index % 2 === 1
   const imageOnLeft = !isReversed
-  const prevLayout = index > 0 ? rowLayoutForIndex(index - 1) : null
+
+  // The clip-path bevels ~15% off the top and bottom of each row on the image
+  // side, leaving a transparent gap between stacked rows. Pull each row (after
+  // the first) up by that bevel so its notch tucks into the previous row's cut.
+  const rowOverlap = index > 0 ? Math.round(layout.imageIdleHeight * 0.15) : 0
 
   return (
     <Box
@@ -42,7 +45,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         width: '100%',
         isolation: 'isolate',
         height: { xs: 'auto', md: layout.imageIdleHeight },
-        marginTop: index > 0 ? { xs: 0, md: 0 } : 0,
+        marginTop: { xs: 0, md: `-${rowOverlap}px` },
         display: { xs: 'block', md: 'flex' },
         alignItems: { md: 'center' },
         justifyContent: { md: 'center' },
@@ -83,9 +86,6 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             transform: 'translateY(0)',
             pointerEvents: 'auto',
           },
-        },
-        '&:hover + .project-grid-row': {
-          marginTop: { md: 0 },
         },
       }}
     >

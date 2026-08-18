@@ -94,8 +94,9 @@ export const hoverDescriptionSx: SxProps<Theme> = {
   maxWidth: 540,
   transition: HOVER_TRANSITION,
   display: '-webkit-box',
-  WebkitLineClamp: 8,
+  WebkitLineClamp: 3,
   WebkitBoxOrient: 'vertical',
+  overflow: 'hidden',
   textOverflow: 'ellipsis',
 }
 

@@ -33,7 +33,11 @@
     "appStore": "App Store",
     "demo": "Demo",
     "moreProjects": "More Projects",
-    "scrollHint": "Scroll inside the device mockup"
+    "scrollHint": "Scroll inside the device mockup",
+    "feedback": "Feedback",
+    "success": "Success",
+    "servicesDeployed": "Services Deployed",
+    "usedTools": "Used tools"
   },
   "Methodologies": {
     "label": "Our methodologies",

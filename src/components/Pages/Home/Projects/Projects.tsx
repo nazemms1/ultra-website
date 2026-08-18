@@ -23,7 +23,7 @@ function processProjects(data: any): ProjectItem[] {
     const description = item.subtitle || item.description || ''
     const src = item.image?.url || item.image || item.cover_image?.url || item.cover_image || ''
     const isMobile =
-      [title, description].join(' ').toLowerCase().match(/mobile|app/) !== null
+      [title, description].join(' ').toLowerCase().match(/\b(mobile|app)\b/) !== null
     return {
       id: String(item.id),
       title,
