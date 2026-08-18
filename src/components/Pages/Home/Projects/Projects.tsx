@@ -1,19 +1,19 @@
 'use client'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useEffect, useRef, useState } from 'react'
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
-import { motion, useReducedMotion, useScroll, useTransform, useMotionValueEvent } from 'framer-motion'
-import useMediaQuery from '@mui/material/useMediaQuery'
-import { useTheme } from '@mui/material/styles'
+import Image from 'next/image'
+import { ArrowRight, ArrowLeft } from 'lucide-react'
+import { alpha, useTheme } from '@mui/material/styles'
+import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } from 'framer-motion'
+import { useRef } from 'react'
 import SectionHeader from '@/components/shared/SectionHeader'
-import { StaticProjectRow } from './StaticProjectRow'
+import AnimatedButton from '@/components/shared/AnimatedButton'
 import { PROJECTS } from './data'
 import type { ProjectItem } from './types'
-import ProjectCard from './ProjectCard'
 
-/* ─── helpers ─────────────────────────────────────── */
+/* ─── data mapping ────────────────────────────────────── */
 
 function processProjects(data: any): ProjectItem[] {
   const raw = data ? data.projects || data.items || [] : PROJECTS
@@ -22,8 +22,7 @@ function processProjects(data: any): ProjectItem[] {
     const title = item.title || ''
     const description = item.subtitle || item.description || ''
     const src = item.image?.url || item.image || item.cover_image?.url || item.cover_image || ''
-    const isMobile =
-      [title, description].join(' ').toLowerCase().match(/\b(mobile|app)\b/) !== null
+    const isMobile = [title, description].join(' ').toLowerCase().match(/\b(mobile|app)\b/) !== null
     return {
       id: String(item.id),
       title,
@@ -43,17 +42,18 @@ function getSectionText(data: any) {
   }
 }
 
-/* ─── scroll timeline ─────────────────────────────── */
-// 0 → TITLE_END  : title rises from centre → pinned top
-// TITLE_END → 1  : projects swap one by one
-const TITLE_END = 0.06
+/* ─── section ─────────────────────────────────────────────
+   One pinned viewport; projects cross-fade in place as you scroll.
 
-/* ─── component ───────────────────────────────────── */
+   The whole timeline is derived from `projects.length` — no magic numbers,
+   no per-file syncing, no special-casing the last project. The track is
+   `total` viewports tall, so every project (the last included) owns an equal
+   scroll slice and holds fully visible across it. That equal-slice math is
+   exactly what stops the last project from being skipped or left blank.
+─────────────────────────────────────────────────────────── */
 
 export default function Projects({ data }: { data?: any }) {
   const reduce = useReducedMotion()
-  const theme = useTheme()
-  const trackRef = useRef<HTMLDivElement>(null)
 
   if (data?.is_shown === false) return null
 
@@ -62,202 +62,16 @@ export default function Projects({ data }: { data?: any }) {
 
   const { subtitle, title } = getSectionText(data)
 
-  /* ── reduced-motion: simple scrollable layout, no jank ── */
-  if (reduce) {
-    return (
-      <Box
-        component="section"
-        id="projects"
-        sx={{ px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' }, py: { xs: 8, md: 12 } }}
-      >
-        <SectionHeader align="center" subtitle={subtitle} title={title || undefined} />
-        <Box sx={{ mx: 'auto', mt: { xs: 6, md: 8 }, maxWidth: 1480, display: 'flex', flexDirection: 'column', gap: { xs: 10, md: 10 } }}>
-          {projects.map((p, i) => (
-            <motion.div
-              key={p.id}
-              initial={{ opacity: 0, y: 32 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.15 }}
-              transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0 }}
-            >
-              <MobileProjectRow project={p} index={i} />
-            </motion.div>
-          ))}
-        </Box>
-      </Box>
-    )
-  }
-
-  /* ── scroll-jacked layout — height depends on device ── */
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const totalVh = 1 + projects.length
-
-  if (isMobile) {
-    return <MobileProjects projects={projects} subtitle={subtitle} title={title} />
-  }
-
-  return (
-    <Box
-      component="section"
-      id="projects"
-      ref={trackRef}
-      sx={{
-        position: 'relative',
-        height: `${totalVh * 100}vh`,
-      }}
-    >
-      {/* Desktop Sticky Frame */}
-      <Box
-        sx={{
-          position: 'sticky',
-          top: 0,
-          height: '100vh',
-          overflow: 'hidden',
-        }}
-      >
-        {/* ① Animated title — starts centred, rises to top */}
-        <SectionTitle trackRef={trackRef} subtitle={subtitle} title={title} />
-
-        {/* ② Project cards — each one fades in/out driven by scroll */}
-        {projects.map((project, index) => (
-          <ProjectCard
-            key={project.id}
-            project={project}
-            index={index}
-            total={projects.length}
-            trackRef={trackRef}
-          />
-        ))}
-      </Box>
-    </Box>
+  return reduce ? (
+    <StackedProjects projects={projects} subtitle={subtitle} title={title} />
+  ) : (
+    <PinnedProjects projects={projects} subtitle={subtitle} title={title} />
   )
 }
 
-/* ─── MobileProjects ──────────────────────────────────
-   نفس منطق الديسكتوب لكن عمودي:
-   الصورة تدخل من الأسفل، النص من الأعلى — وكلاهما يخرج
-   بالاتجاه المعاكس عند الانتقال للمشروع التالي.
-─────────────────────────────────────────────────────── */
+/* ─── pinned, cross-fading variant (default) ──────────── */
 
-function MobileProjectCard({
-  project,
-  index,
-  total,
-  scrollYProgress,
-}: {
-  project: ProjectItem
-  index: number
-  total: number
-  scrollYProgress: ReturnType<typeof useScroll>['scrollYProgress']
-}) {
-  const segSize = 1 / total
-  const segStart = index * segSize
-  const segEnd   = segStart + segSize
-  const isLast   = index === total - 1
-
-  const enterStart = segStart
-  // آخر مشروع: يمتد دخوله حتى نهاية القسم بالكامل بدل 40% فقط،
-  // كي لا تبقى منطقة تمرير "ميتة" بعد اكتمال ظهوره وقبل الانتقال للقسم التالي
-  const enterEnd   = isLast ? segEnd : segStart + segSize * 0.4
-  const exitStart  = segEnd
-  const exitEnd    = segEnd + segSize * 0.4
-
-  // opacity — نفس الديسكتوب
-  const opacity = useTransform(
-    scrollYProgress,
-    isLast ? [enterStart, enterEnd] : [enterStart, enterEnd, exitStart, exitEnd],
-    isLast ? [0, 1]                  : [0, 1, 1, 0],
-    { clamp: true }
-  )
-  const pointerEvents = useTransform(opacity, (val) => (val > 0.5 ? 'auto' : 'none'))
-
-  // الصورة: تدخل من الأسفل (+60 → 0), تخرج للأعلى (0 → -60)
-  const imgY = useTransform(
-    scrollYProgress,
-    isLast ? [enterStart, enterEnd] : [enterStart, enterEnd, exitStart, exitEnd],
-    isLast ? [60, 0]                 : [60, 0, 0, -60],
-    { clamp: true }
-  )
-
-  // النص: تدخل من الأعلى (-60 → 0), تخرج للأسفل (0 → +60)
-  const txtY = useTransform(
-    scrollYProgress,
-    isLast ? [enterStart, enterEnd] : [enterStart, enterEnd, exitStart, exitEnd],
-    isLast ? [-60, 0]                : [-60, 0, 0, 60],
-    { clamp: true }
-  )
-
-  return (
-    <Box
-      component={motion.div}
-      style={{ opacity, pointerEvents, position: 'absolute', inset: 0 }}
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        gap: { xs: 1.5, sm: 4 },
-        px: 3,
-        pb: { xs: 4, sm: 8 },
-      }}
-    >
-      {/* الصورة تتحرك للأسفل/الأعلى */}
-      <Box component={motion.div} style={{ y: imgY }}>
-        <MobileProjectImage project={project} index={index} />
-      </Box>
-
-      {/* النص يتحرك للأعلى/الأسفل */}
-      <Box component={motion.div} style={{ y: txtY }}>
-        <MobileProjectText project={project} />
-      </Box>
-    </Box>
-  )
-}
-
-function MobileProjectsHeader({
-  subtitle,
-  title,
-}: {
-  subtitle: string
-  title: string
-}) {
-  return (
-    <Box>
-      <Typography
-        sx={{
-          fontFamily: "'Rajdhani', sans-serif",
-          fontSize: 11,
-          letterSpacing: 5,
-          textTransform: 'uppercase',
-          color: 'primary.main',
-          mb: 0.75,
-          textAlign: 'center',
-        }}
-      >
-        {subtitle}
-      </Typography>
-
-      {title && (
-        <Typography
-          component="h2"
-          sx={{
-            fontFamily: "'Nulshock', sans-serif",
-            fontSize: '1.5rem',
-            fontWeight: 700,
-            textTransform: 'uppercase',
-            color: 'text.primary',
-            lineHeight: 1.25,
-            textAlign: 'center',
-            wordBreak: 'break-word',
-          }}
-        >
-          {title}
-        </Typography>
-      )}
-    </Box>
-  )
-}
-
-function MobileProjects({
+function PinnedProjects({
   projects,
   subtitle,
   title,
@@ -267,255 +81,281 @@ function MobileProjects({
   title: string
 }) {
   const trackRef = useRef<HTMLDivElement>(null)
-
   const { scrollYProgress } = useScroll({
     target: trackRef,
     offset: ['start start', 'end end'],
   })
-
-  const [activeIndex, setActiveIndex] = useState(0)
-  useMotionValueEvent(scrollYProgress, 'change', v =>
-    setActiveIndex(Math.min(Math.floor(v * projects.length), projects.length - 1))
-  )
 
   return (
     <Box
       component="section"
       id="projects"
       ref={trackRef}
-      sx={{ position: 'relative', height: `${projects.length * 100}dvh` }}
+      sx={{ position: 'relative', height: `${projects.length * 100}vh` }}
     >
       <Box
         sx={{
           position: 'sticky',
           top: 0,
-          height: '100dvh',
-          display: 'flex',
-          flexDirection: 'column',
-          overflow: 'visible',
-          touchAction: 'pan-y',
+          height: { xs: '100dvh', md: '100vh' },
+          overflow: 'hidden',
         }}
       >
-        {/* Header — يأخذ مساحته الطبيعية */}
-        <Box sx={{ flexShrink: 0, pt: { xs: 8, sm: 10 }, pb: 2, px: 3, zIndex: 10 }}>
-          <MobileProjectsHeader
-            subtitle={subtitle}
-            title={title}
+        {/* Heading, pinned at the top of the frame */}
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            zIndex: 2,
+            pointerEvents: 'none',
+            pt: { xs: '80px', md: '110px' },
+            px: { xs: 3, md: 8 },
+          }}
+        >
+          <SectionHeader align="center" subtitle={subtitle} title={title || undefined} />
+        </Box>
+
+        {/* Projects — each fades/slides in place over its own scroll slice */}
+        {projects.map((project, index) => (
+          <PinnedProjectPanel
+            key={project.id}
+            project={project}
+            index={index}
+            total={projects.length}
+            progress={scrollYProgress}
           />
-        </Box>
-
-        {/* منطقة الكاردات — تأخذ ما تبقى من المساحة بعد الـ header */}
-        <Box
-          sx={{
-            flex: 1,
-            position: 'relative',
-            overflow: 'hidden',
-            touchAction: 'pan-y',
-          }}
-        >
-          {projects.map((project, i) => (
-            <MobileProjectCard
-              key={project.id}
-              project={project}
-              index={i}
-              total={projects.length}
-              scrollYProgress={scrollYProgress}
-            />
-          ))}
-        </Box>
-
-        {/* Dot indicators — ضمن التدفق الطبيعي مباشرة تحت الكاردات، بلا حجز مساحة سفلية ثابتة */}
-        <Box
-          sx={{
-            flexShrink: 0,
-            display: 'flex',
-            justifyContent: 'center',
-            gap: 1,
-            pt: 2,
-            pb: { xs: 3, sm: 4 },
-            zIndex: 10,
-          }}
-        >
-          {projects.map((_, i) => (
-            <Box
-              key={i}
-              sx={{
-                width: i === activeIndex ? 20 : 8,
-                height: 8,
-                borderRadius: 4,
-                bgcolor: i === activeIndex ? 'primary.main' : 'rgba(255,255,255,0.25)',
-                transition: 'all 0.35s ease',
-              }}
-            />
-          ))}
-        </Box>
+        ))}
       </Box>
     </Box>
   )
 }
 
-/* ─── Mobile sub-components ───────────────────────────── */
+function PinnedProjectPanel({
+  project,
+  index,
+  total,
+  progress,
+}: {
+  project: ProjectItem
+  index: number
+  total: number
+  progress: MotionValue<number>
+}) {
+  // Each project owns the scroll slice centred on (index + 0.5) / total.
+  // Everything is derived from the signed distance to that centre, so the
+  // first and last projects behave like every other one — no special-casing,
+  // and no keyframe arrays to run past the track edges (which is what made
+  // the interpolation throw). A project is fully visible at its centre and
+  // fades out one slice away on either side.
+  const slice = 1 / total
+  const center = (index + 0.5) * slice
 
-import Image from 'next/image'
-import { ArrowRight, ArrowLeft } from 'lucide-react'
-import AnimatedButton from '@/components/shared/AnimatedButton'
-import { alpha } from '@mui/material/styles'
+  // Signed, slice-normalised distance from this project's centre (…, -1, 0, 1, …)
+  const dist = useTransform(progress, (p) => (p - center) / slice)
 
-function MobileProjectImage({ project, index }: { project: ProjectItem; index: number }) {
+  // A project only fades on a side where it has a neighbour to hand off to.
+  // The first project never fades out below its centre, and — crucially — the
+  // last project never fades out above its centre, so it stays fully visible
+  // to the end of the track instead of leaving the section blank.
+  const isFirst = index === 0
+  const isLast = index === total - 1
+
+  // Fade band as a fraction of a slice. The outgoing project finishes fading
+  // before the incoming one starts, so only one project is ever visible at a
+  // time — no overlap between old and new text.
+  const FADE = 0.28
+  const opacity = useTransform(dist, (d) => {
+    // Scrolling past the top edge (d > 0): held solid if this is the last one.
+    if (d >= 0.5) return isLast ? 1 : 0
+    // Scrolling before the bottom edge (d < 0): held solid if this is the first.
+    if (d <= -0.5) return isFirst ? 1 : 0
+    const a = Math.abs(d)
+    if (a <= 0.5 - FADE) return 1 // solid core of the slice
+    // Don't fade on the held side (first→below, last→above).
+    if (d < 0 && isFirst) return 1
+    if (d > 0 && isLast) return 1
+    return (0.5 - a) / FADE // fade across the slice's outer edge
+  })
+  // Enter from below, hold at centre, exit upwards — but held projects don't
+  // drift off on their held side.
+  const y = useTransform(dist, (d) => {
+    let c = Math.max(-0.5, Math.min(0.5, d))
+    if (c < 0 && isFirst) c = 0
+    if (c > 0 && isLast) c = 0
+    return c * -96
+  })
+  const pointerEvents = useTransform(opacity, (v) => (v > 0.5 ? 'auto' : 'none'))
+
+  return (
+    <Box
+      component={motion.div}
+      style={{ opacity, y, pointerEvents }}
+      sx={{ position: 'absolute', inset: 0 }}
+    >
+      <ProjectContent project={project} index={index} withHeadingOffset />
+    </Box>
+  )
+}
+
+/* ─── reduced-motion / fallback: plain stacked layout ─── */
+
+function StackedProjects({
+  projects,
+  subtitle,
+  title,
+}: {
+  projects: ProjectItem[]
+  subtitle: string
+  title: string
+}) {
+  return (
+    <Box
+      component="section"
+      id="projects"
+      sx={{
+        px: { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
+        py: { xs: 8, md: 14 },
+      }}
+    >
+      <SectionHeader align="center" subtitle={subtitle} title={title || undefined} />
+      <Box sx={{ mx: 'auto', mt: { xs: 6, md: 10 }, maxWidth: 1480, display: 'flex', flexDirection: 'column', gap: { xs: 10, md: 14 } }}>
+        {projects.map((project, index) => (
+          <ProjectContent key={project.id} project={project} index={index} />
+        ))}
+      </Box>
+    </Box>
+  )
+}
+
+/* ─── shared content (image + text), used by both variants ── */
+
+function ProjectContent({
+  project,
+  index,
+  withHeadingOffset = false,
+}: {
+  project: ProjectItem
+  index: number
+  withHeadingOffset?: boolean
+}) {
   const theme = useTheme()
+  const isRtl = theme.direction === 'rtl'
+  const imageFirst = project.imageSide === 'left'
   const isMobileMockup = project.mockup.kind === 'mobile'
+
   return (
     <Box
       sx={{
         position: 'relative',
-        width: '100%',
-        maxWidth: isMobileMockup ? { xs: 120, sm: 200 } : { xs: 240, sm: '100%' },
-        mx: 'auto',
-        aspectRatio: isMobileMockup ? '9/16' : '16/9',
-        transform: isMobileMockup ? 'rotate(2deg)' : 'none',
-        filter: 'drop-shadow(0 24px 48px rgba(0,0,0,0.45))',
+        ...(withHeadingOffset && {
+          height: '100%',
+          display: 'flex',
+          alignItems: 'center',
+          pt: { xs: '150px', md: '210px' },
+          pb: { xs: 5, md: 7 },
+        }),
+        px: withHeadingOffset ? { xs: 3, sm: 5, md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' } : 0,
       }}
     >
+      {/* Ambient glow */}
       <Box
         aria-hidden
         sx={{
-          position: 'absolute', inset: 0, borderRadius: 3, pointerEvents: 'none',
-          background: index % 2 === 0
-            ? `radial-gradient(ellipse 80% 60% at 20% 70%, ${alpha(theme.palette.primary.main, 0.09)} 0%, transparent 70%)`
-            : `radial-gradient(ellipse 80% 60% at 80% 70%, ${alpha(theme.palette.primary.main, 0.09)} 0%, transparent 70%)`,
+          position: 'absolute',
+          inset: 0,
+          pointerEvents: 'none',
+          background:
+            index % 2 === 0
+              ? `radial-gradient(ellipse 65% 55% at 12% 50%, ${alpha(theme.palette.primary.main, 0.07)} 0%, transparent 70%)`
+              : `radial-gradient(ellipse 65% 55% at 88% 50%, ${alpha(theme.palette.primary.main, 0.07)} 0%, transparent 70%)`,
         }}
       />
-      <Image
-        src={project.mockup.src}
-        alt={project.mockup.alt}
-        fill
-        sizes="(max-width: 600px) 90vw, 45vw"
-        style={{ objectFit: 'contain' }}
-        loading={index === 0 ? 'eager' : 'lazy'}
-      />
-    </Box>
-  )
-}
 
-function MobileProjectText({ project }: { project: ProjectItem }) {
-  const theme = useTheme()
-  const isRtl = theme.direction === 'rtl'
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 1, sm: 2 } }}>
-      <Typography
-        component="h3"
-        sx={{
-          fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
-          fontSize: { xs: '1.2rem', sm: '2rem' },
-          lineHeight: 1.1, letterSpacing: '0.02em',
-          textTransform: 'uppercase', color: 'text.primary',
-        }}
-      >
-        {project.title}
-      </Typography>
-      <Box sx={{ width: 48, height: 2, borderRadius: 1, background: theme.palette.primary.main }} />
-      <Typography
-        sx={{
-          fontFamily: "'Rajdhani', sans-serif",
-          fontSize: { xs: '0.85rem', sm: '1.05rem' },
-          lineHeight: 1.5, color: 'text.secondary',
-          display: '-webkit-box',
-          WebkitLineClamp: 8,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-        }}
-      >
-        {project.description}
-      </Typography>
-      <AnimatedButton
-        variant="secondary"
-        href={project.href}
-        endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
-        sx={{ alignSelf: 'flex-start', px: { xs: 2.5, sm: 3 }, mt: 0.5, py: { xs: 0.5, sm: 1 }, fontSize: { xs: '11px', sm: '13px' } }}
-      >
-        {isRtl ? 'عرض التفاصيل' : 'See full details'}
-      </AnimatedButton>
-    </Box>
-  )
-}
-
-// للـ ghost card (قياس) والـ reduced-motion فقط
-function MobileProjectRow({ project, index }: { project: ProjectItem; index: number }) {
-  return (
-    <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
-      <MobileProjectImage project={project} index={index} />
-      <MobileProjectText project={project} />
-    </Box>
-  )
-}
-
-/* ─── SectionTitle ────────────────────────────────── */
-
-function SectionTitle({
-  trackRef,
-  subtitle,
-  title,
-}: {
-  trackRef: React.RefObject<HTMLDivElement | null>
-  subtitle: string
-  title: string
-}) {
-  const { scrollYProgress } = useScroll({
-    target: trackRef,
-    offset: ['start start', 'end end'],
-  })
-
-  // y: centres in viewport (below navbar) → moves to top over 0 → TITLE_END
-  const y = useTransform(scrollYProgress, [0, TITLE_END], ['42vh', '0vh'])
-
-  return (
-    <motion.div style={{ y }} data-section-title>
       <Box
         sx={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          zIndex: 20,
-          pt: { xs: '80px', md: '110px' },
-          pb: { xs: 2, md: 3 },
-          textAlign: 'center',
-          px: { xs: 3, md: 8 },
-          pointerEvents: 'none',
+          position: 'relative',
+          width: '100%',
+          maxWidth: 1480,
+          mx: 'auto',
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: 'repeat(2, 1fr)' },
+          alignItems: 'center',
+          gap: { xs: 5, md: 10 },
         }}
       >
-        <Typography
-          sx={{
-            fontFamily: "'Rajdhani', sans-serif",
-            fontSize: { xs: 11, md: 15 },
-            letterSpacing: 5,
-            textTransform: 'uppercase',
-            color: 'primary.main',
-            mb: 0.75,
-          }}
-        >
-          {subtitle}
-        </Typography>
-
-        {title && (
-          <Typography
-            component="h2"
+        {/* Mockup */}
+        <Box sx={{ order: { xs: 0, md: imageFirst ? 0 : 1 }, display: 'flex', justifyContent: 'center', minWidth: 0 }}>
+          <Box
             sx={{
-              fontFamily: "'Nulshock', sans-serif",
-              fontSize: { xs: '1.5rem', md: '3.25rem' },
-              fontWeight: 700,
-              textTransform: 'uppercase',
-              color: 'text.primary',
-              lineHeight: 1.25,
-              mx: 'auto',
-              wordBreak: 'break-word',
+              position: 'relative',
+              width: '100%',
+              maxWidth: isMobileMockup
+                ? { xs: 180, sm: 240, md: 300 }
+                : { xs: '100%', md: 520 },
+              aspectRatio: isMobileMockup ? '9/16' : '16/9',
+              transform: isMobileMockup ? 'rotate(2deg)' : 'none',
+              filter: 'drop-shadow(0 40px 70px rgba(0,0,0,0.45))',
             }}
           >
-            {title}
-          </Typography>
-        )}
+            <Image
+              src={project.mockup.src}
+              alt={project.mockup.alt}
+              fill
+              sizes="(max-width: 600px) 90vw, (max-width: 900px) 45vw, 520px"
+              style={{ objectFit: 'contain' }}
+              loading={index === 0 ? 'eager' : 'lazy'}
+            />
+          </Box>
+        </Box>
+
+        {/* Text */}
+        <Box sx={{ order: { xs: 1, md: imageFirst ? 1 : 0 }, display: 'flex', flexDirection: 'column', minWidth: 0 }}>
+          <Box sx={{ display: 'flex', flexDirection: 'column', gap: { xs: 2, md: 3 } }}>
+            <Typography
+              component="h3"
+              sx={{
+                fontFamily: "'Nulshock', 'Rajdhani', sans-serif",
+                fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' },
+                lineHeight: 1.1,
+                letterSpacing: '0.02em',
+                textTransform: 'uppercase',
+                color: 'text.primary',
+              }}
+            >
+              {project.title}
+            </Typography>
+
+            <Box sx={{ width: 48, height: 2, borderRadius: 1, background: theme.palette.primary.main }} />
+
+            <Typography
+              sx={{
+                fontFamily: "'Rajdhani', sans-serif",
+                fontSize: { xs: '0.95rem', md: '1.1rem' },
+                lineHeight: 1.75,
+                color: 'text.secondary',
+                display: '-webkit-box',
+                WebkitLineClamp: 8,
+                WebkitBoxOrient: 'vertical',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+              }}
+            >
+              {project.description}
+            </Typography>
+
+            <AnimatedButton
+              variant="secondary"
+              href={project.href}
+              endIcon={isRtl ? <ArrowLeft size={14} /> : <ArrowRight size={14} />}
+              sx={{ alignSelf: 'flex-start', px: { xs: 3, md: 4 }, mt: 1 }}
+            >
+              {isRtl ? 'عرض التفاصيل' : 'See full details'}
+            </AnimatedButton>
+          </Box>
+        </Box>
       </Box>
-    </motion.div>
+    </Box>
   )
 }
