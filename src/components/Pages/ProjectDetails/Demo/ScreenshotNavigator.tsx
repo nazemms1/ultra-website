@@ -3,6 +3,7 @@
 import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
+import { useTranslations } from 'next-intl'
 import type { DemoScreenshot } from '../types'
 import { screenshotPanelSx, screenshotThumbSx, screenshotTitleSx } from './constants'
 
@@ -18,6 +19,7 @@ export default function ScreenshotNavigator({
   onSelect,
 }: ScreenshotNavigatorProps) {
   const theme = useTheme()
+  const t = useTranslations('ProjectDetails')
   const thumbHeight = 86
   const thumbGap = 10
   const trackHeight = screenshots.length * thumbHeight + (screenshots.length - 1) * thumbGap
@@ -66,7 +68,7 @@ export default function ScreenshotNavigator({
       )}
 
       <Box sx={{ flex: 1, minWidth: 0 }}>
-        <Typography sx={{ ...screenshotTitleSx, mb: { xs: 1.5, md: 1.75 } }}>Screenshots</Typography>
+        <Typography sx={{ ...screenshotTitleSx, mb: { xs: 1.5, md: 1.75 } }}>{t('screenshots')}</Typography>
         <Box
           sx={{
             display: 'flex',
