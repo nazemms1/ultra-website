@@ -82,8 +82,8 @@ export default function LogoFlipCard({ item, imageOnLeft }: LogoFlipCardProps) {
       sx={{
         position: 'absolute',
         top: '50%',
-        left: imageOnLeft ? '22.5%' : 'auto',
-        right: !imageOnLeft ? '22.5%' : 'auto',
+        left: imageOnLeft ? '16%' : 'auto',
+        right: !imageOnLeft ? '1%' : 'auto',
         translateY: '-50%',
         translateX: '-50%',
         zIndex: 10,

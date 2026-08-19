@@ -37,6 +37,13 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
   // the first) up by that bevel so its notch tucks into the previous row's cut.
   const rowOverlap = index > 0 ? Math.round(layout.imageIdleHeight * 0.15) : 0
 
+  // On hover the row grows by (imageHoverHeight - imageIdleHeight). The clip-path
+  // bevels 15% off the bottom, so the beveled notch grows by 15% of that delta —
+  // opening a thin transparent gap above the next row (its fixed marginTop was
+  // sized for the idle bevel). Pull the following row up by exactly that extra
+  // bevel to close the gap, without ever overlapping the next row's content.
+  const bevelGrowth = Math.round((layout.imageHoverHeight - layout.imageIdleHeight) * 0.15)
+
   return (
     <Box
       className="project-grid-row"
@@ -193,8 +200,8 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             justifyContent: 'center',
             alignItems: 'flex-start',
             minWidth: 0,
-            pl: imageOnLeft ? '58%' : 10,
-            pr: !imageOnLeft ? '58%' : 10,
+            pl: imageOnLeft ? '64%' : 10,
+            pr: !imageOnLeft ? '64%' : 10,
             py: 2,
             background: rowGradient(theme, layout.idleGradient, imageOnLeft),
             overflow: 'hidden',
@@ -303,8 +310,7 @@ function MobileCard({ item, t }: { item: ProjectGridItem; t: (key: string) => st
       onClick={() => setExpanded(prev => !prev)}
       sx={{ width: '100%', cursor: 'pointer' }}
     >
-      {/* الجزء الأول: الصورة — ثابتة 149px دائماً */}
-      <Box
+       <Box
         sx={{
           position: 'relative',
           width: '100%',
