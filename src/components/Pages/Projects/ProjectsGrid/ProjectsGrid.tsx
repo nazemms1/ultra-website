@@ -61,11 +61,13 @@ export default function ProjectsGrid({ data }: ProjectsGridProps) {
         </Box>
       </Box>
 
-      <ProjectsPagination
-        currentPage={safePage}
-        totalPages={totalPages}
-        onPageChange={handlePageChange}
-      />
+      <Box sx={{ mt: { xs: 4, md: 6 } }}>
+        <ProjectsPagination
+          currentPage={safePage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
+      </Box>
 
       {/* SVG Clip Paths for Projects Rows (Bottleneck layouts) */}
       <svg width="0" height="0" style={{ position: 'absolute', width: 0, height: 0, pointerEvents: 'none' }}>

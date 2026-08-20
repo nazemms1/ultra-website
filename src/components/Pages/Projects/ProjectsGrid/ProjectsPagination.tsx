@@ -4,6 +4,8 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import { alpha, useTheme } from '@mui/material/styles'
 import Image from 'next/image'
+import { useLocale } from 'next-intl'
+import { glassSurface } from '@/lib/theme/surfaces'
 
 type ProjectsPaginationProps = {
   currentPage: number
@@ -50,6 +52,8 @@ export default function ProjectsPagination({
   onPageChange,
 }: ProjectsPaginationProps) {
   const theme = useTheme()
+  const locale = useLocale()
+  const isRtl = locale === 'ar'
 
   if (totalPages <= 1) {
     return null
@@ -61,12 +65,10 @@ export default function ProjectsPagination({
     display: 'inline-flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 36,
-    height: 37,
+    width: 48,
+    height: 48,
     p: 1.5,
-    borderRadius: '100px',
-    bgcolor: alpha(theme.palette.background.default, 0.2),
-    border: 'none',
+    ...glassSurface(theme, { radius: '100px', tint: 0.1 }),
     cursor: 'pointer',
     transition: 'opacity 0.3s ease, transform 0.3s ease',
     '&:disabled': {
@@ -125,13 +127,13 @@ export default function ProjectsPagination({
         <Image
           src="/icons/ArrowWrapper.svg"
           alt=""
-          width={20}
-          height={20}
-          style={{ transform: 'rotate(180deg)' }}
+          width={26}
+          height={26}
+          style={{ transform: isRtl ? 'rotate(180deg)' : 'none' }}
         />
       </Box>
 
-      <Box sx={{ display: 'flex', alignItems: 'center' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
         {pageTokens.map((token, index) => {
           if (token === 'ellipsis') {
             return (
@@ -173,7 +175,13 @@ export default function ProjectsPagination({
         onClick={() => onPageChange(currentPage + 1)}
         sx={arrowButtonSx}
       >
-        <Image src="/icons/ArrowWrapper.svg" alt="" width={20} height={20} />
+        <Image
+          src="/icons/ArrowWrapper2.svg"
+          alt=""
+          width={26}
+          height={26}
+          style={{ transform: isRtl ? 'rotate(180deg)' : 'none' }}
+        />
       </Box>
     </Box>
   )
