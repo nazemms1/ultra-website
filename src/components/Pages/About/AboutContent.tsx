@@ -45,7 +45,7 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
       sx={{
         pt: { xs: 4, md: 6 },
         pb: { xs: 8, md: 12 },
-        // px: { xs: 1, md: 'max(80px, calc((100vw - 100%) / 2 + 120px))' },
+        px: { xs: '20px', md: 'max(80px, calc((100vw - 1920px) / 2 + 220px))' },
         bgcolor: '#121212',
         position: 'relative',
         zIndex: 1,
@@ -59,16 +59,16 @@ export default function AboutContent({ aboutData, locale }: AboutContentProps) {
         viewport={{ once: true, margin: '-100px' }}
         sx={{ maxWidth: 1480, mx: 'auto' }}
       >
-        <Stack spacing={{ xs: 6, md: 10 }}>
+        <Stack spacing={{ xs: 3, md: 10 }}>
           {items.map((item: any, index: number) => (
             <Grid
               container
               key={index}
-              spacing={{ xs: 3, md: 6 }}
+              spacing={{ xs: 1.5, md: 6 }}
               component={motion.div}
               variants={itemVariants}
               sx={{
-                pb: { xs: 6, md: 8 },
+                pb: { xs: 3, md: 8 },
               }}
             >
               {/* Left Column: Title */}
