@@ -158,8 +158,6 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
   const [loadingMap, setLoadingMap] = useState<Record<number, boolean>>({})
   // Track which items have been fetched (to avoid re-fetching on scroll)
   const fetchedRef = useRef<Set<number>>(new Set())
-  // Refs for each section element
-  const sectionRefs = useRef<Record<number, HTMLElement | null>>({})
 
   // Lightbox state
   const [lightboxOpen, setLightboxOpen] = useState(false)
@@ -190,31 +188,10 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
     [locale],
   )
 
-  // IntersectionObserver: fetch images when section scrolls into view
+  // Load every gallery section so tablet layouts never remain as empty placeholders.
   useEffect(() => {
     const items = galleryData.items || []
-    const observers: IntersectionObserver[] = []
-
-    items.forEach(item => {
-      const el = sectionRefs.current[item.id]
-      if (!el) return
-
-      const observer = new IntersectionObserver(
-        entries => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              fetchItemImages(item.id)
-              observer.disconnect()
-            }
-          })
-        },
-        { rootMargin: '200px' },
-      )
-      observer.observe(el)
-      observers.push(observer)
-    })
-
-    return () => observers.forEach(o => o.disconnect())
+    void Promise.all(items.map(item => fetchItemImages(item.id)))
   }, [galleryData.items, fetchItemImages])
 
   // Fetch images page client-side
@@ -339,7 +316,7 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
       return (
         <Box sx={{ display: 'flex', justifyContent: 'flex-start' }}>
           {renderCard(images[0], 0, images, {
-            height: { xs: 'auto', md: '500px' },
+            height: { xs: 'auto', sm: '400px', md: '500px' },
             width: { xs: '100%', md: '621.5px' },
           })}
         </Box>
@@ -352,13 +329,17 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1.5fr 1fr', md: '2.08fr 1fr' },
-            gridTemplateRows: { xs: 'auto', md: '500px' },
+            gridTemplateRows: { xs: 'auto', sm: '400px', md: '500px' },
             gap: 3,
             alignItems: 'start',
           }}
         >
-          {renderCard(images[0], 0, images, { height: { xs: 'auto', md: '500px' } })}
-          {renderCard(images[1], 1, images, { height: { xs: 'auto', md: '238px' } })}
+          {renderCard(images[0], 0, images, {
+            height: { xs: 'auto', sm: '400px', md: '500px' },
+          })}
+          {renderCard(images[1], 1, images, {
+            height: { xs: 'auto', sm: '190px', md: '238px' },
+          })}
         </Box>
       )
     }
@@ -465,7 +446,7 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
             sx={{
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', sm: '1.5fr 1fr 1fr', md: '2.08fr 1fr 1fr' },
-              gridTemplateRows: { xs: 'auto', md: '238px' },
+              gridTemplateRows: { xs: 'auto', sm: '220px', md: '238px' },
               columnGap: 3,
               rowGap: '22px',
             }}
@@ -482,7 +463,7 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
             sx={{
               display: 'grid',
               gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr 1.5fr', md: '1fr 1fr 2.08fr' },
-              gridTemplateRows: { xs: 'auto', md: '238px' },
+              gridTemplateRows: { xs: 'auto', sm: '220px', md: '238px' },
               columnGap: 3,
               rowGap: '22px',
             }}
@@ -759,9 +740,6 @@ export default function GalleryContent({ galleryData, locale }: GalleryContentPr
             <Box
               key={item.id}
               component="section"
-              ref={(el: HTMLElement | null) => {
-                sectionRefs.current[item.id] = el
-              }}
               sx={{ position: 'relative' }}
             >
               <Box
