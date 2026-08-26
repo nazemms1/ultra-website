@@ -514,14 +514,14 @@ function ServiceCardContent({ service, active }: ServiceCardContentProps) {
   const activeBorderColor = useTransform(
     glow,
     [0, 1],
-    [alpha(theme.palette.primary.main, 0), theme.palette.primary.main],
+    [alpha(theme.palette.primary.light, 0), theme.palette.primary.light],
   )
   const activeBoxShadow = useTransform(
     glow,
     [0, 1],
     [
       `0 0 0 rgba(0,0,0,0)`,
-      `0 0 28px ${alpha(theme.palette.primary.main, 0.55)}, inset 0 0 22px ${alpha(theme.palette.primary.main, 0.18)}`,
+      `0 0 32px ${alpha(theme.palette.primary.light, 0.5)}, inset 0 0 20px ${alpha(theme.palette.primary.light, 0.2)}`,
     ],
   )
 
@@ -534,21 +534,21 @@ function ServiceCardContent({ service, active }: ServiceCardContentProps) {
         minHeight: { xs: 580, sm: 620, md: 'auto' },
         cursor: 'default',
         ...glassSurface(theme, { radius: '24px' }),
-        background: `linear-gradient(90deg, ${alpha(theme.palette.primary.main, 0.06)} 0%, ${alpha(theme.palette.primary.main, 0.015)} 45%, rgba(0, 0, 0, 0.4) 75%, rgba(0, 0, 0, 0.7) 100%)`,
-        borderColor: alpha(theme.palette.primary.main, 0.2),
+        background: `linear-gradient(90deg, ${alpha(theme.palette.primary.light, 0.05)} 0%, ${alpha(theme.palette.primary.main, 0.02)} 45%, rgba(0, 0, 0, 0.4) 75%, rgba(0, 0, 0, 0.75) 100%)`,
+        borderColor: alpha(theme.palette.primary.light, 0.25),
         boxShadow: [
           `0 30px 60px ${alpha(theme.palette.common.black, 0.55)}`,
-          `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.25)}`,
+          `inset 1px 1px 0 0 ${alpha(theme.palette.primary.light, 0.25)}`,
           `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.06)}`,
         ].join(', '),
         transition: 'border-color 0.3s, box-shadow 0.3s',
         '&:hover': {
-          borderColor: alpha(theme.palette.primary.main, 0.55),
+          borderColor: theme.palette.primary.light,
           boxShadow: [
             `0 40px 80px ${alpha(theme.palette.common.black, 0.65)}`,
-            `0 0 40px ${alpha(theme.palette.primary.main, 0.12)}`,
-            `inset 1px 1px 0 0 ${alpha(theme.palette.primary.main, 0.45)}`,
-            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.08)}`,
+            `0 0 40px ${alpha(theme.palette.primary.light, 0.35)}`,
+            `inset 1px 1px 0 0 ${alpha(theme.palette.primary.light, 0.6)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.1)}`,
           ].join(', '),
         },
         display: 'flex',
@@ -582,8 +582,8 @@ function ServiceCardContent({ service, active }: ServiceCardContentProps) {
           left: 20,
           width: 14,
           height: 14,
-          borderTop: `2px solid ${theme.palette.primary.main}`,
-          borderLeft: `2px solid ${theme.palette.primary.main}`,
+          borderTop: `2px solid ${theme.palette.primary.light}`,
+          borderLeft: `2px solid ${theme.palette.primary.light}`,
         }}
       />
 
@@ -594,8 +594,8 @@ function ServiceCardContent({ service, active }: ServiceCardContentProps) {
           right: 20,
           width: 14,
           height: 14,
-          borderBottom: `2px solid ${theme.palette.primary.main}`,
-          borderRight: `2px solid ${theme.palette.primary.main}`,
+          borderBottom: `2px solid ${theme.palette.primary.light}`,
+          borderRight: `2px solid ${theme.palette.primary.light}`,
         }}
       />
 
@@ -691,7 +691,7 @@ function ServiceCardContent({ service, active }: ServiceCardContentProps) {
                 size="medium"
                 sx={{
                   bgcolor: 'rgba(0, 0, 0, 0.35)',
-                  border: `1px solid ${alpha(theme.palette.primary.main, 0.25)}`,
+                  border: `1px solid ${alpha(theme.palette.primary.light, 0.25)}`,
                   color: '#ffffff',
                   fontWeight: 500,
                   fontSize: '13px',
@@ -699,9 +699,9 @@ function ServiceCardContent({ service, active }: ServiceCardContentProps) {
                   px: 0.5,
                   transition: 'all 0.3s ease',
                   '&:hover': {
-                    borderColor: 'primary.main',
-                    bgcolor: alpha(theme.palette.primary.main, 0.08),
-                    boxShadow: `0 0 12px ${alpha(theme.palette.primary.main, 0.3)}`,
+                    borderColor: 'primary.light',
+                    bgcolor: alpha(theme.palette.primary.light, 0.12),
+                    boxShadow: `0 0 14px ${alpha(theme.palette.primary.light, 0.4)}`,
                   },
                 }}
               />

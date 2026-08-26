@@ -32,17 +32,13 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
   const isReversed = index % 2 === 1
   const imageOnLeft = !isReversed
 
-  // The clip-path bevels ~15% off the top and bottom of each row on the image
-  // side, leaving a transparent gap between stacked rows. Pull each row (after
-  // the first) up by that bevel so its notch tucks into the previous row's cut.
-  const rowOverlap = index > 0 ? Math.round(layout.imageIdleHeight * 0.15) : 0
+  const notchHeight = 42
+  const rowOverlap = index > 0 ? notchHeight : 0
+  const heightDelta = layout.imageHoverHeight - layout.imageIdleHeight
 
-  // On hover the row grows by (imageHoverHeight - imageIdleHeight). The clip-path
-  // bevels 15% off the bottom, so the beveled notch grows by 15% of that delta —
-  // opening a thin transparent gap above the next row (its fixed marginTop was
-  // sized for the idle bevel). Pull the following row up by exactly that extra
-  // bevel to close the gap, without ever overlapping the next row's content.
-  const bevelGrowth = Math.round((layout.imageHoverHeight - layout.imageIdleHeight) * 0.15)
+  const clipPathPolygon = imageOnLeft
+    ? 'polygon(0px 0px, 46% 0px, 54% 42px, 100% 42px, 100% calc(100% - 42px), 54% calc(100% - 42px), 46% 100%, 0px 100%)'
+    : 'polygon(0px 42px, 46% 42px, 54% 0px, 100% 0px, 100% 100%, 54% 100%, 46% calc(100% - 42px), 0px calc(100% - 42px))'
 
   return (
     <Box
@@ -58,10 +54,11 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
         justifyContent: { md: 'center' },
         overflow: { xs: 'visible', md: 'visible' },
         transform: 'scale(1)',
+        transformOrigin: 'top center',
         transition: HOVER_TRANSITION,
         '&:hover': {
-          transform: { md: 'scale(1.02)' },
-          height: { md: layout.imageHoverHeight }, // Smooth accordion expand/collapse
+          transform: { md: 'scale(1.015)' },
+          height: { md: layout.imageHoverHeight },
           zIndex: 5,
           '& .row-inner': {
             height: { md: layout.imageHoverHeight },
@@ -84,7 +81,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           },
           '& .hover-reveal-desc': {
             opacity: 1,
-            maxHeight: 120,
+            maxHeight: 200,
             transform: 'translateY(0)',
           },
           '& .hover-reveal-cta': {
@@ -113,7 +110,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           overflow: 'visible',
           clipPath: {
             xs: 'none',
-            md: imageOnLeft ? 'url(#row-clip-left)' : 'url(#row-clip-right)',
+            md: clipPathPolygon,
           },
           transition: HOVER_TRANSITION,
         }}
@@ -133,7 +130,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             width: '100%',
             maxWidth: '100%',
             height: { xs: 220, sm: 300, md: '100%' },
-            borderRadius: { xs: '20px', md: '40px' },
+            borderRadius: { xs: '20px', md: 0 },
             overflow: 'hidden',
             zIndex: 2,
             transition: HOVER_TRANSITION,

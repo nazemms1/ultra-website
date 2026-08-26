@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useHashScroll } from './useHashScroll'
 import { useSectionScroll } from '@/lib/SectionScrollContext'
 import ServicesOrbital from '@/components/Pages/Home/Services-orbital/ServicesOrbital'
+import SectionReveal from '@/components/shared/SectionReveal'
 
 const ScrollVideoStack = dynamic(() => import('@/components/Pages/Home/ScrollVideoStack'), { ssr: false })
 const PartnersSection  = dynamic(() => import('@/components/Pages/Home/Partners'),         { ssr: false })
@@ -134,29 +135,47 @@ export default function HomeClientSections({
       <ScrollVideoStack>
         {partnersData?.is_shown !== false && (
           <div id="about">
-            <PartnersSection data={partnersData} />
+            <SectionReveal yOffset={60}>
+              <PartnersSection data={partnersData} />
+            </SectionReveal>
           </div>
         )}
         {servicesData?.is_shown !== false && (
           <div id="services">
-            <ServicesOrbital data={servicesData} />
+            <SectionReveal yOffset={60}>
+              <ServicesOrbital data={servicesData} />
+            </SectionReveal>
           </div>
         )}
-        <Stats data={statsData} />
+        <SectionReveal yOffset={60}>
+          <Stats data={statsData} />
+        </SectionReveal>
         {portfoliosData?.is_shown !== false && (
           <div id="projects">
-            <Projects data={portfoliosData} />
+            <SectionReveal yOffset={60}>
+              <Projects data={portfoliosData} />
+            </SectionReveal>
           </div>
         )}
-        <Methodologies data={methodologiesData} />
+        <SectionReveal yOffset={60}>
+          <Methodologies data={methodologiesData} />
+        </SectionReveal>
       </ScrollVideoStack>
       <div ref={sentinelRef} aria-hidden />
       {belowFoldReady && (
         <>
-          <TestimonialsSection data={reviewsData} />
-          <CTASection data={ctaData} />
-          <FAQSection data={faqsData} stillHaveQuestionsData={stillHaveQuestionsData} />
-          <ContactSection data={contactUsData} />
+          <SectionReveal yOffset={60}>
+            <TestimonialsSection data={reviewsData} />
+          </SectionReveal>
+          <SectionReveal yOffset={60}>
+            <CTASection data={ctaData} />
+          </SectionReveal>
+          <SectionReveal yOffset={60}>
+            <FAQSection data={faqsData} stillHaveQuestionsData={stillHaveQuestionsData} />
+          </SectionReveal>
+          <SectionReveal yOffset={60}>
+            <ContactSection data={contactUsData} />
+          </SectionReveal>
         </>
       )}
     </>
