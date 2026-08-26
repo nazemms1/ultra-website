@@ -42,19 +42,16 @@ export function useOrbitalPointerParallax(
     let pendingX = 0
     let pendingY = 0
 
-    // Cache rect and refresh only on resize — avoids getBoundingClientRect on every move
-    let rect = container.getBoundingClientRect()
-    const updateRect = () => { rect = container.getBoundingClientRect() }
-    const resizeObserver = new ResizeObserver(updateRect)
-    resizeObserver.observe(container)
-
     const flush = () => {
       rafId = null
+      const rect = container.getBoundingClientRect()
+      if (rect.width === 0 || rect.height === 0) return
+
       const centerX = rect.left + rect.width / 2
       const centerY = rect.top + rect.height / 2
       const halfW = rect.width / 2
       const halfH = rect.height / 2
-      if (halfW === 0 || halfH === 0) return
+
       normalizedX.set(clamp((pendingX - centerX) / halfW, -1, 1))
       normalizedY.set(clamp((pendingY - centerY) / halfH, -1, 1))
     }
@@ -76,7 +73,6 @@ export function useOrbitalPointerParallax(
 
     return () => {
       if (rafId !== null) cancelAnimationFrame(rafId)
-      resizeObserver.disconnect()
       container.removeEventListener('pointermove', handlePointerMove)
       container.removeEventListener('pointerleave', handlePointerLeave)
     }
