@@ -16,32 +16,32 @@ const GlobalStyles = () => css`
   @font-face {
     font-family: 'Ethnocentric Rg';
     font-style: normal;
-    font-weight: 400;
-    font-display: optional;
+    font-weight: 100 900;
+    font-display: swap;
     src: url('/fonts/Ethnocentric-Regular.otf') format('opentype');
   }
 
   @font-face {
     font-family: 'Nulshock';
     font-style: normal;
-    font-weight: 700;
-    font-display: optional;
+    font-weight: 100 900;
+    font-display: swap;
     src: url('/fonts/Nulshock Bd.otf') format('opentype');
   }
 
   @font-face {
     font-family: 'Almarai';
     font-style: normal;
-    font-weight: 700;
-    font-display: optional;
+    font-weight: 100 900;
+    font-display: swap;
     src: url('/fonts/Almarai-Bold.ttf') format('truetype');
   }
 
   @font-face {
     font-family: 'Changa';
     font-style: normal;
-    font-weight: 400;
-    font-display: optional;
+    font-weight: 100 900;
+    font-display: swap;
     src: url('/fonts/Changa-Regular.ttf') format('truetype');
   }
 

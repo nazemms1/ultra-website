@@ -98,6 +98,36 @@ export default async function LocaleLayout({ children, params }: Props) {
       style={{ scrollBehavior: 'smooth' }}
     >
       <head>
+        {/* Preload critical local font files for instant high-priority rendering */}
+        <link
+          rel="preload"
+          href="/fonts/Ethnocentric-Regular.otf"
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Nulshock Bd.otf"
+          as="font"
+          type="font/otf"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Almarai-Bold.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="/fonts/Changa-Regular.ttf"
+          as="font"
+          type="font/ttf"
+          crossOrigin="anonymous"
+        />
+
         {/* Preconnect to backend API for faster image/data loading */}
         <link rel="preconnect" href="https://newwebsite-dev-back.ultrawares.com" />
         <link rel="dns-prefetch" href="https://newwebsite-dev-back.ultrawares.com" />
