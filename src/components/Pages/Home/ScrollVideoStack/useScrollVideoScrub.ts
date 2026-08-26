@@ -6,16 +6,9 @@ import { drawCoverFrame, getMaskCanvasContext, syncCanvasToViewport } from './ca
 import {
   SCROLL_VIDEO_CONTENT_OPACITY,
   SCROLL_VIDEO_EDGE_FADE,
-  SCROLL_VIDEO_PRELOAD_RADIUS,
+  SCROLL_VIDEO_FALLBACK_SRC,
+  SCROLL_VIDEO_SRC,
 } from './constants'
-import {
-  ensureFrameImage,
-  getCachedFrameImage,
-  getCachedScrollFrameUrls,
-  preloadFrameRange,
-  preloadFrameWindow,
-  tryLoadStaticFrameUrls,
-} from './frameLoader'
 
 type UseScrollVideoScrubOptions = {
   progress: MotionValue<number>
@@ -42,12 +35,6 @@ function edgeFadeFactor(value: number) {
   return 1
 }
 
-function frameIndexFromProgress(value: number, count: number) {
-  if (count <= 1) return 0
-  const fast = clampProgress(value * 1.0)
-  return Math.min(Math.floor(fast * (count - 1)), count - 1)
-}
-
 function readDevicePixelRatio() {
   if (typeof window === 'undefined') return 1
   return Math.min(window.devicePixelRatio || 1, 2)
@@ -60,9 +47,8 @@ export function useScrollVideoScrub({
   disabled = false,
 }: UseScrollVideoScrubOptions) {
   const [isReady, setIsReady] = useState(false)
-  const frameCountRef = useRef(0)
-  const frameUrlsRef = useRef<string[]>([])
-  const paintedIndexRef = useRef(-1)
+  const videoRef = useRef<HTMLVideoElement | null>(null)
+  const durationRef = useRef(0)
   const latestProgressRef = useRef(0)
   const rafRef = useRef<number | null>(null)
   const ctxRef = useRef<CanvasRenderingContext2D | null>(null)
@@ -73,129 +59,117 @@ export function useScrollVideoScrub({
     value => edgeFadeFactor(value) * SCROLL_VIDEO_CONTENT_OPACITY,
   )
 
-  const paintFrame = useCallback(
-    (value: number, force = false) => {
-      const canvas = canvasRef.current
-      const viewport = viewportRef.current
-      if (!canvas || !viewport) return
+  const paintFrame = useCallback(() => {
+    const canvas = canvasRef.current
+    const viewport = viewportRef.current
+    const video = videoRef.current
+    if (!canvas || !viewport || !video || durationRef.current <= 0) return
 
-      const count = frameCountRef.current
-      const urls = frameUrlsRef.current
-      if (count < 1) return
+    const dpr = readDevicePixelRatio()
+    let size: { width: number; height: number } | null = null
 
-      const index = frameIndexFromProgress(value, count)
-      if (!force && index === paintedIndexRef.current) return
-
-      const url = urls[index]
-      const image = url ? getCachedFrameImage(url) : null
-      if (!image) {
-        preloadFrameWindow(urls, index)
-        void ensureFrameImage(url).then(loaded => {
-          if (!loaded) return
-          if (frameIndexFromProgress(latestProgressRef.current, count) === index) {
-            // eslint-disable-next-line react-hooks/immutability
-            paintFrame(latestProgressRef.current, true)
-          }
-        })
-        return
-      }
-
-      const dpr = readDevicePixelRatio()
-      let size: { width: number; height: number } | null = null
-
-      if (viewportSizeRef.current) {
-        const width = Math.round(viewportSizeRef.current.width * dpr)
-        const height = Math.round(viewportSizeRef.current.height * dpr)
-        if (width > 0 && height > 0) {
-          if (canvas.width !== width || canvas.height !== height) {
-            canvas.width = width
-            canvas.height = height
-          }
-          size = { width, height }
+    if (viewportSizeRef.current) {
+      const width = Math.round(viewportSizeRef.current.width * dpr)
+      const height = Math.round(viewportSizeRef.current.height * dpr)
+      if (width > 0 && height > 0) {
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width
+          canvas.height = height
         }
+        size = { width, height }
       }
+    }
 
-      if (!size) {
-        size = syncCanvasToViewport(canvas, viewport, dpr)
-      }
-      if (!size) return
+    if (!size) {
+      size = syncCanvasToViewport(canvas, viewport, dpr)
+    }
+    if (!size) return
 
-      if (!ctxRef.current) {
-        ctxRef.current = getMaskCanvasContext(canvas)
-      }
+    if (!ctxRef.current) {
+      ctxRef.current = getMaskCanvasContext(canvas)
+    }
 
-      drawCoverFrame(ctxRef.current, image, size.width, size.height)
-      paintedIndexRef.current = index
-      preloadFrameWindow(urls, index)
-    },
-    [canvasRef, viewportRef],
-  )
+    drawCoverFrame(ctxRef.current, video, size.width, size.height)
+  }, [canvasRef, viewportRef])
 
-  const schedulePaint = useCallback(
+  const scheduleSeekAndPaint = useCallback(
     (value: number) => {
       if (disabled) return
-
       latestProgressRef.current = value
+
+      const video = videoRef.current
+      const duration = durationRef.current
+      if (video && duration > 0) {
+        const targetTime = clampProgress(value) * duration
+        if (Math.abs(video.currentTime - targetTime) > 0.001) {
+          if ('fastSeek' in video && typeof (video as { fastSeek?: (t: number) => void }).fastSeek === 'function') {
+            ;(video as { fastSeek: (t: number) => void }).fastSeek(targetTime)
+          } else {
+            video.currentTime = targetTime
+          }
+        }
+      }
 
       if (rafRef.current !== null) return
 
       rafRef.current = requestAnimationFrame(() => {
         rafRef.current = null
-        paintFrame(latestProgressRef.current)
+        paintFrame()
       })
     },
-    [paintFrame, disabled],
+    [disabled, paintFrame],
   )
 
   useEffect(() => {
     if (disabled) return
 
     let cancelled = false
+    const video = document.createElement('video')
+    video.setAttribute('playsinline', 'true')
+    video.setAttribute('preload', 'auto')
+    video.muted = true
 
-    const bootstrap = async () => {
-      const cached = getCachedScrollFrameUrls()
-      const urls = cached?.length ? cached : await tryLoadStaticFrameUrls()
-      if (cancelled || !urls?.length) return
+    videoRef.current = video
 
-      frameCountRef.current = urls.length
-      frameUrlsRef.current = urls
-      paintedIndexRef.current = -1
-
-      const initialIndex = frameIndexFromProgress(progress.get(), urls.length)
-      await preloadFrameRange(
-        urls,
-        initialIndex - SCROLL_VIDEO_PRELOAD_RADIUS,
-        initialIndex + SCROLL_VIDEO_PRELOAD_RADIUS,
-      )
-
+    const handleLoadedMetadata = () => {
       if (cancelled) return
-
-      latestProgressRef.current = progress.get()
-      if (!cancelled) setIsReady(true)
+      durationRef.current = video.duration || 0
+      setIsReady(true)
+      scheduleSeekAndPaint(progress.get())
     }
 
-    void bootstrap()
+    const handleError = () => {
+      if (cancelled) return
+      if (video.src !== SCROLL_VIDEO_FALLBACK_SRC) {
+        video.src = SCROLL_VIDEO_FALLBACK_SRC
+        video.load()
+      }
+    }
+
+    video.addEventListener('loadedmetadata', handleLoadedMetadata)
+    video.addEventListener('seeked', paintFrame)
+    video.addEventListener('error', handleError)
+
+    video.src = SCROLL_VIDEO_SRC
+    video.load()
 
     return () => {
       cancelled = true
-      frameCountRef.current = 0
-      frameUrlsRef.current = []
-      paintedIndexRef.current = -1
-      ctxRef.current = null
-      if (rafRef.current !== null) {
-        cancelAnimationFrame(rafRef.current)
-        rafRef.current = null
-      }
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      video.removeEventListener('seeked', paintFrame)
+      video.removeEventListener('error', handleError)
+      video.pause()
+      video.src = ''
+      videoRef.current = null
+      durationRef.current = 0
       setIsReady(false)
     }
-  }, [disabled, progress])
+  }, [disabled, progress, scheduleSeekAndPaint, paintFrame])
 
   useEffect(() => {
     if (disabled || !isReady) return
-
-    paintedIndexRef.current = -1
-    paintFrame(progress.get(), true)
-  }, [disabled, isReady, paintFrame, progress])
+    scheduleSeekAndPaint(progress.get())
+  }, [disabled, isReady, progress, scheduleSeekAndPaint])
 
   useEffect(() => {
     if (disabled) return
@@ -211,15 +185,14 @@ export function useScrollVideoScrub({
           height: entry.target.clientHeight,
         }
       }
-      paintedIndexRef.current = -1
-      paintFrame(latestProgressRef.current, true)
+      paintFrame()
     })
 
     observer.observe(viewport)
     return () => observer.disconnect()
   }, [disabled, viewportRef, paintFrame])
 
-  useMotionValueEvent(progress, 'change', schedulePaint)
+  useMotionValueEvent(progress, 'change', scheduleSeekAndPaint)
 
   return { isReady, layerOpacity }
 }

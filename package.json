@@ -10,7 +10,7 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "typecheck": "tsc --noEmit",
-    "video:frames": "node scripts/extract-video-frames.mjs"
+    "video:optimize": "node scripts/optimize-video.mjs"
   },
   "dependencies": {
     "@emotion/cache": "^11.14.0",
