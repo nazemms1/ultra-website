@@ -152,14 +152,18 @@ export function logoPlateSx(theme: Theme): SxProps<Theme> {
 }
 
 export function rowGradient(theme: Theme, _opacity: number, imageOnLeft: boolean): string {
-  const angle = imageOnLeft ? '270deg' : '90deg'
+  const isRtl = theme.direction === 'rtl'
+  const visualImageOnLeft = isRtl ? !imageOnLeft : imageOnLeft
+  const angle = visualImageOnLeft ? '270deg' : '90deg'
   const dark = alpha(theme.palette.background.default, 0.92)
   return `linear-gradient(${angle}, ${dark} 0%, ${alpha(theme.palette.background.default, 0)} 100%)`
 }
 
 export function coverEdgeFade(theme: Theme, imageOnLeft: boolean): string {
+  const isRtl = theme.direction === 'rtl'
+  const visualImageOnLeft = isRtl ? !imageOnLeft : imageOnLeft
   const fade = alpha(theme.palette.background.default, 0.98)
-  return imageOnLeft
+  return visualImageOnLeft
     ? `linear-gradient(90deg, transparent 0%, transparent 45%, ${fade} 100%)`
     : `linear-gradient(270deg, transparent 0%, transparent 45%, ${fade} 100%)`
 }

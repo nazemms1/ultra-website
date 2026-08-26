@@ -31,12 +31,14 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
   const t = useTranslations('ProjectsPage')
   const isReversed = index % 2 === 1
   const imageOnLeft = !isReversed
+  const isRtl = theme.direction === 'rtl'
+  const visualImageOnLeft = isRtl ? !imageOnLeft : imageOnLeft
 
   const notchHeight = 42
   const rowOverlap = index > 0 ? notchHeight : 0
   const heightDelta = layout.imageHoverHeight - layout.imageIdleHeight
 
-  const clipPathPolygon = imageOnLeft
+  const clipPathPolygon = visualImageOnLeft
     ? 'polygon(0px 0px, 46% 0px, 54% 42px, 100% 42px, 100% calc(100% - 42px), 54% calc(100% - 42px), 46% 100%, 0px 100%)'
     : 'polygon(0px 42px, 46% 42px, 54% 0px, 100% 0px, 100% 100%, 54% 100%, 46% calc(100% - 42px), 0px calc(100% - 42px))'
 
@@ -68,7 +70,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             maxWidth: { md: '100%' },
           },
           '& .text-block': {
-            background: rowGradient(theme, layout.hoverGradient, imageOnLeft),
+            background: rowGradient(theme, layout.hoverGradient, visualImageOnLeft),
           },
           '& .cover-fade': {
             opacity: 0.25,
@@ -121,8 +123,8 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
           sx={{
             display: { xs: 'none', md: 'block' },
             position: { xs: 'relative', md: 'absolute' },
-            left: imageOnLeft ? 0 : 'auto',
-            right: !imageOnLeft ? 0 : 'auto',
+            left: visualImageOnLeft ? 0 : 'auto',
+            right: !visualImageOnLeft ? 0 : 'auto',
             top: 0,
             bottom: 0,
             transform: 'none',
@@ -171,7 +173,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
                   inset: 0,
                   zIndex: 1,
                   opacity: 0.5,
-                  background: coverEdgeFade(theme, imageOnLeft),
+                  background: coverEdgeFade(theme, visualImageOnLeft),
                   pointerEvents: 'none',
                   transition: HOVER_TRANSITION,
                 }}
@@ -182,7 +184,7 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
 
         {/* LogoFlipCard — hidden on mobile, shown on md+ */}
         <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-          <LogoFlipCard item={item} imageOnLeft={imageOnLeft} />
+          <LogoFlipCard item={item} imageOnLeft={visualImageOnLeft} />
         </Box>
 
         {/* Text block — desktop only (md+) */}
@@ -197,10 +199,10 @@ export default function ProjectGridRow({ item, index, layout }: ProjectGridRowPr
             justifyContent: 'center',
             alignItems: 'flex-start',
             minWidth: 0,
-            pl: imageOnLeft ? '64%' : 10,
-            pr: !imageOnLeft ? '64%' : 10,
+            pl: visualImageOnLeft ? '64%' : 10,
+            pr: !visualImageOnLeft ? '64%' : 10,
             py: 2,
-            background: rowGradient(theme, layout.idleGradient, imageOnLeft),
+            background: rowGradient(theme, layout.idleGradient, visualImageOnLeft),
             overflow: 'hidden',
             zIndex: 3,
             position: 'relative',
