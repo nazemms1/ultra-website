@@ -243,7 +243,6 @@ function ProjectContent({
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
   const imageFirst = project.imageSide === 'left'
-  const isMobileMockup = project.mockup.kind === 'mobile'
 
   return (
     <Box
@@ -286,25 +285,26 @@ function ProjectContent({
         }}
       >
         {/* Mockup */}
-        <Box sx={{ order: { xs: 0, md: imageFirst ? 0 : 1 }, display: 'flex', justifyContent: 'center', minWidth: 0 }}>
+        <Box sx={{ order: { xs: 0, md: imageFirst ? 0 : 1 }, display: 'flex', justifyContent: 'center', alignItems: 'center', minWidth: 0 }}>
           <Box
             sx={{
               position: 'relative',
               width: '100%',
-              maxWidth: isMobileMockup
-                ? { xs: 180, sm: 240, md: 300 }
-                : { xs: '100%', md: 520 },
-              aspectRatio: isMobileMockup ? '9/16' : '16/9',
-              transform: isMobileMockup ? 'rotate(2deg)' : 'none',
-              filter: 'drop-shadow(0 40px 70px rgba(0,0,0,0.45))',
+              maxWidth: { xs: '100%', sm: 480, md: 540 },
+              aspectRatio: '16/9',
+              borderRadius: { xs: '16px', md: '24px' },
+              overflow: 'hidden',
+              border: `1px solid ${alpha(theme.palette.common.white, 0.12)}`,
+              bgcolor: alpha(theme.palette.common.black, 0.5),
+              boxShadow: `0 30px 60px ${alpha(theme.palette.common.black, 0.5)}, inset 0 1px 0 ${alpha(theme.palette.common.white, 0.1)}`,
             }}
           >
             <Image
               src={project.mockup.src}
               alt={project.mockup.alt}
               fill
-              sizes="(max-width: 600px) 90vw, (max-width: 900px) 45vw, 520px"
-              style={{ objectFit: 'contain' }}
+              sizes="(max-width: 600px) 90vw, (max-width: 900px) 45vw, 540px"
+              style={{ objectFit: 'fill' }}
               loading={index === 0 ? 'eager' : 'lazy'}
             />
           </Box>
