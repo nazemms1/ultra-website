@@ -11,6 +11,7 @@ import OrbitalDeck from './OrbitalDeck'
 import { SERVICES } from './data'
 import { useOrbitalPointerParallax } from './useOrbitalPointerParallax'
 import AnimatedButton from '@/components/shared/AnimatedButton'
+import { useTranslations } from 'next-intl'
 
 const EASE = [0.22, 1, 0.36, 1] as const
 const SLIDE_EASE = [0.16, 1.1, 0.3, 1] as const
@@ -52,6 +53,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
   const theme = useTheme()
   const isRtl = theme.direction === 'rtl'
+  const t = useTranslations('Common')
 
   const itemsData = data?.items || []
   const mappedItems = itemsData.map((item, i) => ({
@@ -68,12 +70,12 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
     mappedItems.length > 0
       ? mappedItems
       : SERVICES.map(s => ({
-          ...s,
-          tools: s.tags.map((t, idx) => ({
-            id: idx,
-            name: t,
-          })),
-        }))
+        ...s,
+        tools: s.tags.map((t, idx) => ({
+          id: idx,
+          name: t,
+        })),
+      }))
 
   const activeIndex = hoveredIndex ?? selectedIndex
   const active = activeIndex !== null ? orbitalItems[activeIndex] : null
@@ -156,7 +158,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           color: 'primary.main',
         }}
       >
-        What we do
+        {t('whatWeDo')}
       </Typography>
 
       <Typography
@@ -170,11 +172,11 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           color: 'text.primary',
         }}
       >
-        Services built for{' '}
+        {t('servicesTitleLine1')}
         <Box component="span" sx={{ color: 'primary.main' }}>
-          ultra
-        </Box>{' '}
-        outcomes
+          {t('servicesTitleAccent')}
+        </Box>
+        {t('servicesTitleLine2')}
       </Typography>
     </>
   )
@@ -320,7 +322,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           {headerContent}
         </Box>
 
-        {/* Orbital deck — shifted to the right */}
+        {/* Orbital deck — shifted appropriately based on RTL */}
         <Box
           component={motion.div}
           initial={{ opacity: 0 }}
@@ -330,22 +332,31 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
           sx={{
             width: '100%',
             display: 'flex',
-            justifyContent: 'flex-end',
+            justifyContent: isRtl ? 'flex-start' : 'flex-end',
             overflow: 'hidden',
           }}
         >
           <Box
             sx={{
-              transformOrigin: 'center right',
-              transform: {
-                xs: 'scale(0.64) translateX(40%) translateY(-140px)',
-                sm: 'scale(0.80) translateX(35%) translateY(-140px)',
-              },
+              transformOrigin: isRtl ? 'center left' : 'center right',
+              transform: isRtl
+                ? {
+                  xs: 'scale(0.64) translateX(-40%) translateY(-140px)',
+                  sm: 'scale(0.80) translateX(-35%) translateY(-140px)',
+                }
+                : {
+                  xs: 'scale(0.64) translateX(40%) translateY(-140px)',
+                  sm: 'scale(0.80) translateX(35%) translateY(-140px)',
+                },
               '@media (max-width: 360px)': {
-                transform: 'scale(0.58) translateX(42%) translateY(-140px)',
+                transform: isRtl
+                  ? 'scale(0.58) translateX(-42%) translateY(-140px)'
+                  : 'scale(0.58) translateX(42%) translateY(-140px)',
               },
               '@media (max-width: 320px)': {
-                transform: 'scale(0.50) translateX(42%) translateY(-140px)',
+                transform: isRtl
+                  ? 'scale(0.50) translateX(-42%) translateY(-140px)'
+                  : 'scale(0.50) translateX(42%) translateY(-140px)',
               },
             }}
           >
@@ -365,7 +376,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
               href="/services"
               sx={{ px: 4, fontSize: 14 }}
             >
-              {data?.button_text || 'View all services'}
+              {data?.button_text || t('exploreServices')}
             </AnimatedButton>
           </Box>
         )}
@@ -408,7 +419,7 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
                     href="/services"
                     sx={{ px: 4, fontSize: 18 }}
                   >
-                    {data?.button_text || 'View all services'}
+                    {data?.button_text || t('exploreServices')}
                   </AnimatedButton>
                 </Box>
               )}
@@ -421,17 +432,16 @@ export default function ServicesOrbital({ data }: ServicesOrbitalProps) {
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'flex-end',
+              justifyContent: isRtl ? 'flex-start' : 'flex-end',
               overflow: 'visible',
             }}
           >
             <Box
-              sx={{
-                transformOrigin: 'center right',
-                transform: {
-                  lg: 'scale(0.9) translateX(50px) translateY(-120px)',
-                  xl: 'scale(1) translateX(80px) translateY(-120px)',
-                },
+              style={{
+                transformOrigin: isRtl ? 'center left' : 'center right',
+                transform: isRtl
+                  ? 'scale(0.95) translateX(-300px) translateY(-120px)'
+                  : 'scale(1) translateX(80px) translateY(-120px)',
               }}
             >
               {orbitalDeck}

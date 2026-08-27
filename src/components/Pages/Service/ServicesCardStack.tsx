@@ -18,6 +18,7 @@ import {
   type MotionValue,
 } from 'framer-motion'
 import Image from 'next/image'
+import { useTranslations } from 'next-intl'
 import { glassSurface } from '@/lib/theme/surfaces'
 
 // Widget 1: Web Development - Translucent Code Editor & Page Speed Dial
@@ -507,6 +508,7 @@ interface ServiceCardContentProps {
 
 function ServiceCardContent({ service, active }: ServiceCardContentProps) {
   const theme = useTheme()
+  const t = useTranslations('ProjectDetails')
 
   // Glowing border that intensifies as the card reaches the centered (active) state.
   const fallbackActive = useMotionValue(1)
@@ -665,7 +667,7 @@ function ServiceCardContent({ service, active }: ServiceCardContentProps) {
               fontSize: '11px',
             }}
           >
-            Tools Used
+            {t('usedTools')}
           </Typography>
           <Stack direction="row" spacing={1.5} sx={{ flexWrap: 'wrap', gap: 1 }}>
             {service.tools.map(tool => (

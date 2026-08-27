@@ -12,7 +12,11 @@
   },
   "Common": {
     "exploreServices": "Explore Services",
-    "getInTouch": "Get In Touch"
+    "getInTouch": "Get In Touch",
+    "whatWeDo": "What we do",
+    "servicesTitleLine1": "Services built for ",
+    "servicesTitleAccent": "ultra",
+    "servicesTitleLine2": " outcomes"
   },
   "Projects": {
     "label": "Our Portfolio",
@@ -38,7 +42,7 @@
     "feedback": "Feedback",
     "success": "Success",
     "servicesDeployed": "Services Deployed",
-    "usedTools": "Used tools"
+    "usedTools": "Tools Used"
   },
   "Methodologies": {
     "label": "Our methodologies",

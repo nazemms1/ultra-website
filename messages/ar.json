@@ -12,7 +12,11 @@
   },
   "Common": {
     "exploreServices": "استعرض الخدمات",
-    "getInTouch": "تواصل معنا"
+    "getInTouch": "تواصل معنا",
+    "whatWeDo": "خدماتنا",
+    "servicesTitleLine1": "خدمات مُبتكرة لنتائج ",
+    "servicesTitleAccent": "فائقة",
+    "servicesTitleLine2": ""
   },
   "ProjectsPage": {
     "eyebrow": "معرض أعمالنا",

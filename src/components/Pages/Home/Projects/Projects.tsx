@@ -10,6 +10,7 @@ import { motion, useReducedMotion, useScroll, useTransform, type MotionValue } f
 import { useRef } from 'react'
 import SectionHeader from '@/components/shared/SectionHeader'
 import AnimatedButton from '@/components/shared/AnimatedButton'
+import { useTranslations } from 'next-intl'
 import { PROJECTS } from './data'
 import type { ProjectItem } from './types'
 
@@ -34,10 +35,10 @@ function processProjects(data: any): ProjectItem[] {
   })
 }
 
-function getSectionText(data: any) {
+function getSectionText(data: any, defaultSubtitle: string) {
   const s = data?.['main-section'] || data
   return {
-    subtitle: s?.title || 'Our Portfolio',
+    subtitle: s?.title || defaultSubtitle,
     title: s?.subtitle || s?.description || '',
   }
 }
@@ -60,7 +61,8 @@ export default function Projects({ data }: { data?: any }) {
   const projects = processProjects(data)
   if (projects.length === 0) return null
 
-  const { subtitle, title } = getSectionText(data)
+  const t = useTranslations('ProjectsPage')
+  const { subtitle, title } = getSectionText(data, t('eyebrow'))
 
   return reduce ? (
     <StackedProjects projects={projects} subtitle={subtitle} title={title} />

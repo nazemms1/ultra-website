@@ -20,10 +20,10 @@ import { type ServiceItem } from './data'
 // ─── Layout ──────────────────────────────────────────────────────────────────
 
 const EASE = [0.22, 1, 0.36, 1] as const
-const R_DOT    = 140
-const R_CARD   = R_DOT + 8 + CARD_W / 2
-const DECK     = (R_CARD + CARD_H / 2 + 40) * 2
-const CENTER   = DECK / 2
+const R_DOT = 140
+const R_CARD = R_DOT + 8 + CARD_W / 2
+const DECK = (R_CARD + CARD_H / 2 + 40) * 2
+const CENTER = DECK / 2
 
 // How long (ms) to wait after becoming visible before starting the spin.
 // Lets the entrance fade finish before the rAF loop kicks in.
@@ -32,15 +32,15 @@ const SPIN_DELAY_MS = 550
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 interface OrbitalDeckProps {
-  items:         ServiceItem[]
-  baseSpeed?:    number
-  onActivate:    (index: number | null) => void
-  onHover:       (index: number | null) => void
-  activeIndex:   number | null
+  items: ServiceItem[]
+  baseSpeed?: number
+  onActivate: (index: number | null) => void
+  onHover: (index: number | null) => void
+  activeIndex: number | null
   selectedIndex: number | null
-  eyeOffsetX:    MotionValue<number>
-  eyeOffsetY:    MotionValue<number>
-  isInView:      boolean
+  eyeOffsetX: MotionValue<number>
+  eyeOffsetY: MotionValue<number>
+  isInView: boolean
 }
 
 // ─── OrbitalDeck ─────────────────────────────────────────────────────────────
@@ -57,18 +57,18 @@ export default function OrbitalDeck({
   isInView,
 }: OrbitalDeckProps) {
   const prefersReduced = useReducedMotion()
-  const deckRef        = useRef<HTMLDivElement>(null)
-  
+  const deckRef = useRef<HTMLDivElement>(null)
+
   // Local useInView with amount: 0.2 on deckRef so it triggers exactly when the deck itself is visible!
   const localIsInView = useInView(deckRef, { once: false, amount: 0.2 })
 
   // spin drives all spoke transforms via useTransform chains
-  const spin     = useMotionValue(0)
+  const spin = useMotionValue(0)
   const pausedRef = useRef(false)
-  const speedRef  = useRef(baseSpeed)
+  const speedRef = useRef(baseSpeed)
 
   // Delayed ready flag — gates the animation loop
-  const [ready,   setReady]   = useState(false)
+  const [ready, setReady] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // ── Delayed activation — waits for entrance animation to finish ──────
@@ -123,12 +123,12 @@ export default function OrbitalDeck({
 
     const dt = Math.min(delta, 64) / 1000
     const target = pausedRef.current ? 0 : baseSpeed
-    const k      = 1 - Math.exp(-dt * 6)
+    const k = 1 - Math.exp(-dt * 6)
     speedRef.current += (target - speedRef.current) * k
     spin.set(spin.get() - speedRef.current * dt)
   })
 
-  const pause  = useCallback(() => { pausedRef.current = true  }, [])
+  const pause = useCallback(() => { pausedRef.current = true }, [])
   const resume = useCallback(() => { pausedRef.current = false }, [])
 
   const handleHoverStartParent = useCallback((index: number) => {
@@ -165,22 +165,22 @@ export default function OrbitalDeck({
         />
       ))}
 
-      {/* Right-side fade veil */}
+      {/* Side fade veil */}
       <Box
         aria-hidden
         sx={{
           pointerEvents: 'none',
-          position:      'absolute',
-          inset:         '0 0 -10px auto',
-          zIndex:        20,
-          width:         '0%',
+          position: 'absolute',
+          inset: theme => theme.direction === 'rtl' ? '0 auto -10px 0' : '0 0 -10px auto',
+          zIndex: 20,
+          width: '0%',
           background: theme =>
-            `linear-gradient(to right,
+            `linear-gradient(to ${theme.direction === 'rtl' ? 'left' : 'right'},
               transparent 0%,
               ${alpha(theme.palette.background.default, 0.65)} 55%,
               ${alpha(theme.palette.background.default, 0.95)} 100%)`,
-          maskImage:         'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
-          WebkitMaskImage:   'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
+          maskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 0%, black 85%, transparent 100%)',
         }}
       />
     </Box>
@@ -190,15 +190,15 @@ export default function OrbitalDeck({
 // ─── OrbitalSpoke ─────────────────────────────────────────────────────────────
 
 interface OrbitalSpokeProps {
-  spin:         MotionValue<number>
-  service:      ServiceItem
-  index:        number
-  isSelected:   boolean
-  isActive:     boolean
-  onSelect:     (index: number | null) => void
+  spin: MotionValue<number>
+  service: ServiceItem
+  index: number
+  isSelected: boolean
+  isActive: boolean
+  onSelect: (index: number | null) => void
   onHoverStart: (index: number) => void
-  onHoverEnd:   () => void
-  visible:      boolean
+  onHoverEnd: () => void
+  visible: boolean
 }
 
 const OrbitalSpoke = memo(function OrbitalSpoke({
@@ -212,33 +212,33 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
   onHoverEnd,
   visible,
 }: OrbitalSpokeProps) {
-  const theme   = useTheme()
+  const theme = useTheme()
   const primary = theme.palette.primary.main
   const { baseAngle } = service
 
   // Derived motion values — update on the GPU thread, no React re-render
-  const spokeRotate     = useTransform(spin, s => baseAngle + s)
-  const cardCounterRot  = useTransform(spin, s => -(baseAngle + s))
+  const spokeRotate = useTransform(spin, s => baseAngle + s)
+  const cardCounterRot = useTransform(spin, s => -(baseAngle + s))
 
   const cardOpacity = useTransform(spin, s => {
     const angle = (((baseAngle + s) % 360) + 360) % 360
-    const dist  = Math.abs(angle - 180)
+    const dist = Math.abs(angle - 180)
     return clamp((90 - dist) / 30, 0.001, 1)   // fade 60°–90° from back
   })
-  const cardScale   = useTransform(cardOpacity, o => 0.82 + 0.18 * o)
+  const cardScale = useTransform(cardOpacity, o => 0.82 + 0.18 * o)
 
   return (
     // Outer div rotates the whole spoke arm
     <Box
       component={motion.div}
       sx={{
-        position:        'absolute',
-        left:            CENTER,
-        top:             CENTER,
-        width:           0,
-        height:          0,
+        position: 'absolute',
+        left: CENTER,
+        top: CENTER,
+        width: 0,
+        height: 0,
         transformOrigin: '0px 0px',
-        willChange:      'transform',
+        willChange: 'transform',
       }}
       style={{ rotate: spokeRotate }}
     >
@@ -256,16 +256,16 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
         }}
         style={{ opacity: cardOpacity }}
         sx={{
-          position:     'absolute',
-          left:         R_DOT,
-          top:          0,
-          width:        10,
-          height:       10,
-          ml:           '-5px',
-          mt:           '-5px',
+          position: 'absolute',
+          left: R_DOT,
+          top: 0,
+          width: 10,
+          height: 10,
+          ml: '-5px',
+          mt: '-5px',
           borderRadius: '50%',
-          bgcolor:      'primary.main',
-          boxShadow:    `0 0 10px 2px ${alpha(primary, 0.7)}`,
+          bgcolor: 'primary.main',
+          boxShadow: `0 0 10px 2px ${alpha(primary, 0.7)}`,
         }}
       />
 
@@ -288,19 +288,19 @@ const OrbitalSpoke = memo(function OrbitalSpoke({
         <Box
           sx={{
             position: 'absolute',
-            left:     R_CARD,
-            top:      0,
-            width:    CARD_W,
-            height:   CARD_H,
-            ml:       `${-CARD_W / 2.5}px`,
-            mt:       `${-CARD_H / 2}px`,
+            left: R_CARD,
+            top: 0,
+            width: CARD_W,
+            height: CARD_H,
+            ml: `${-CARD_W / 2.5}px`,
+            mt: `${-CARD_H / 2}px`,
           }}
         >
           <Box
             component={motion.div}
             style={{
-              rotate:          cardCounterRot,
-              scale:           cardScale,
+              rotate: cardCounterRot,
+              scale: cardScale,
               transformOrigin: `${CARD_W / 2}px ${CARD_H / 2}px`,
             }}
           >
@@ -356,27 +356,39 @@ function OrbitalCenter({ offsetX, offsetY, visible }: OrbitalCenterProps) {
     <Box
       sx={{
         pointerEvents: 'none',
-        position:      'absolute',
-        left:          CENTER,
-        top:           CENTER,
-        width:         0,
-        height:        0,
+        position: 'absolute',
+        left: CENTER,
+        top: CENTER,
+        width: 0,
+        height: 0,
       }}
     >
-      <Ring diameter={384} sx={{ borderColor: '#244D59' }} delay={0.2} visible={visible} />
-      <Ring diameter={280} sx={{ borderColor: '#2A5A68' }} delay={0.35} visible={visible} />
+      <Ring
+        diameter={384}
+        sx={{
+          borderColor: 'rgba(13, 241, 217, 0.35)',
+        }}
+        delay={0.2}
+        visible={visible}
+      />
+      <Ring
+        diameter={280}
+        sx={{
+          borderColor: 'rgba(13, 241, 217, 0.45)',
+        }}
+        delay={0.35}
+        visible={visible}
+      />
       <Ring
         diameter={200}
         sx={{
           borderColor: '#00E6D2',
-          boxShadow:
-            `inset 0 0 30px ${alpha('#00E6D2', 0.2)}, 0 0 40px ${alpha('#00E6D2', 0.2)}`,
         }}
         delay={0.5}
         visible={visible}
       />
 
-      {/* Central radial glow */}
+      {/* Soft atmospheric light glow (pure light aura without solid background) */}
       <Box
         component={motion.div}
         initial={{ opacity: 0, scale: 0.5 }}
@@ -384,19 +396,14 @@ function OrbitalCenter({ offsetX, offsetY, visible }: OrbitalCenterProps) {
         transition={{ duration: 0.8, delay: visible ? 0.6 : 0 }}
         aria-hidden
         sx={{
-          position:     'absolute',
-          left:         -200,
-          top:          -200,
-          width:        400,
-          height:       400,
+          position: 'absolute',
+          left: -250,
+          top: -250,
+          width: 500,
+          height: 500,
           borderRadius: '50%',
-          // The radial gradient already feathers to transparent, so the former
-          // blur(40px) was redundant softening. Dropping the filter removes a
-          // large filtered layer that was being re-rasterized under the
-          // continuously spinning cards; the falloff is widened slightly to
-          // reproduce the same soft glow.
           background:
-            'radial-gradient(ellipse 72% 72% at 50% 50%, rgba(13,241,217,0.18) 0%, rgba(18,18,18,0) 72%)',
+            'radial-gradient(circle at 50% 50%, rgba(13, 241, 217, 0.20) 0%, rgba(13, 241, 217, 0.08) 40%, rgba(13, 241, 217, 0.01) 65%, transparent 80%)',
           pointerEvents: 'none',
         }}
       />
@@ -444,13 +451,13 @@ function Ring({
         delay: visible ? delay : 0,
       }}
       sx={{
-        position:     'absolute',
-        left:         -diameter / 2,
-        top:          -diameter / 2,
-        width:        diameter,
-        height:       diameter,
+        position: 'absolute',
+        left: -diameter / 2,
+        top: -diameter / 2,
+        width: diameter,
+        height: diameter,
         borderRadius: '50%',
-        border:       '1px solid',
+        border: '1px solid',
         ...sx,
       }}
     />
