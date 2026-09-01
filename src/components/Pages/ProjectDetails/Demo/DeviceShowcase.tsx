@@ -280,8 +280,7 @@ function LaptopFrame({ screenshot }: { screenshot: DemoScreenshot }) {
 function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: number }) {
   const theme = useTheme()
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { hintVisible, dismiss } = useScrollHint(scrollRef)
-  useWheelScroll(scrollRef)
+  // Scrolling disabled for mobile view
 
   return (
     // Outer: sizing + centering only — significantly larger on mobile/tablet
@@ -293,7 +292,7 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
         mx: 'auto',
       }}
     >
-      {/* Screenshot scroll area — positioned on top of bezel (zIndex: 2) to ensure perfect touch scrolling */}
+      {/* Screenshot scroll area — positioned on top of bezel (zIndex: 2) — scrolling disabled */}
       <Box
         ref={scrollRef}
         sx={{
@@ -303,11 +302,10 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
           left: '5.2%',
           right: '5.2%',
           borderRadius: '32px',
-          overflowY: 'auto',
+          overflowY: 'hidden',
+          overflow: 'hidden',
           bgcolor: 'background.paper',
           zIndex: 2,
-          WebkitOverflowScrolling: 'touch',
-          touchAction: 'pan-y',
           pointerEvents: 'auto',
           '&::-webkit-scrollbar': { display: 'none' },
           scrollbarWidth: 'none',
@@ -333,8 +331,7 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
             borderRadius: '0 0 32px 32px',
             background: 'linear-gradient(to top, rgba(0,0,0,0.45) 0%, transparent 100%)',
             pointerEvents: 'none',
-            transition: 'opacity 0.4s',
-            opacity: hintVisible ? 1 : 0,
+            display: 'none',
           }}
         />
       </Box>
@@ -354,8 +351,6 @@ function PhoneFrame({ screenshot, index }: { screenshot: DemoScreenshot; index: 
           filter: `drop-shadow(30px 20px 40px ${alpha(theme.palette.common.black, 0.45)})`,
         }}
       />
-
-      <ScrollHintOverlay visible={hintVisible} onDismiss={dismiss} />
     </Box>
   )
 }
