@@ -455,17 +455,17 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                 </Typography>
                 <Stack spacing={1.25} component="ul" sx={{ listStyle: 'none', p: 0, m: 0 }}>
                   {address && (
-                    <Typography component="li" sx={{ ...footerBodySx, fontSize: '15px' }}>
+                    <Typography component="li" sx={{ ...footerBodySx, fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
                       {address}
                     </Typography>
                   )}
                   {phone && (
-                    <Typography component="li" sx={{ ...footerBodySx, fontSize: '15px' }}>
+                    <Typography component="li" sx={{ ...footerBodySx, fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
                       {phone}
                     </Typography>
                   )}
                   {mobile && (
-                    <Typography component="li" sx={{ ...footerBodySx, fontSize: '15px' }}>
+                    <Typography component="li" sx={{ ...footerBodySx, fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}>
                       {mobile}
                     </Typography>
                   )}
@@ -474,7 +474,7 @@ export default function FooterSection({ data, statsData }: { data?: any; statsDa
                       <Box
                         component={Link}
                         href={`mailto:${email}`}
-                        sx={{ ...footerLinkSx, fontSize: '15px' }}
+                        sx={{ ...footerLinkSx, fontSize: '16px', lineHeight: '24px', fontWeight: 500 }}
                       >
                         {email}
                       </Box>
