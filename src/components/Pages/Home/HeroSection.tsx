@@ -238,6 +238,7 @@ export default function HeroSection({ data }: HeroSectionProps) {
           display: 'flex',
           alignItems: 'flex-start',
           pt: '160px',
+          pb: { xs: 0, md: '160px' },
           maxWidth: theme.breakpoints.values.xl,
           mx: 'auto',
           width: '100%',
@@ -251,6 +252,9 @@ export default function HeroSection({ data }: HeroSectionProps) {
           initial={false}
           animate={heroVisible ? 'visible' : 'hidden'}
           sx={{
+            // Desktop: auto vertical margins center the block in the hero without pushing it above the top padding.
+            // Mobile keeps the text at the top.
+            my: { xs: 0, md: 'auto' },
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'flex-start',

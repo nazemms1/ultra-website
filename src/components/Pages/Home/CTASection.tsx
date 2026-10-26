@@ -42,7 +42,7 @@ export default function CTASection({ data }: CTASectionProps) {
         const video = videoRef.current
         if (!video) return
         if (entry.isIntersecting) {
-          video.play().catch(() => {})
+          video.play().catch(() => { })
         } else {
           video.pause()
         }
@@ -85,26 +85,10 @@ export default function CTASection({ data }: CTASectionProps) {
     const nx = (e.clientX - rect.left) / rect.width - 0.5
     const ny = (e.clientY - rect.top) / rect.height - 0.5
     target.current = { x: nx * 40, y: ny * 40 }
-
-    // Update mouse coordinates relative to the card for the interactive hover light glow
-    const card = cardRef.current
-    if (card) {
-      const cardRect = card.getBoundingClientRect()
-      const x = e.clientX - cardRect.left
-      const y = e.clientY - cardRect.top
-      card.style.setProperty('--mouse-x', `${x}px`)
-      card.style.setProperty('--mouse-y', `${y}px`)
-    }
   }
 
   const handleMouseLeave = () => {
     target.current = { x: 0, y: 0 }
-    const card = cardRef.current
-    if (card) {
-      // Reset position to center when mouse leaves
-      card.style.setProperty('--mouse-x', '-999px')
-      card.style.setProperty('--mouse-y', '-999px')
-    }
   }
 
   if (data?.is_shown === false) return null
@@ -244,13 +228,16 @@ export default function CTASection({ data }: CTASectionProps) {
           flexDirection: 'column',
           alignItems: 'center',
           justifyContent: 'center',
-          backdropFilter: 'blur(20px) brightness(1.10) saturate(1.15)',
-          WebkitBackdropFilter: 'blur(20px) brightness(1.08) saturate(1.15)',
-          border: '1px solid rgba(255, 255, 255, 0.15)',
+          overflow: 'hidden',
+          background: 'linear-gradient(135deg, rgba(255, 255, 255, 0.12) 0%, rgba(255, 255, 255, 0.03) 50%, rgba(18, 18, 18, 0.35) 100%)',
+          backdropFilter: 'blur(24px) brightness(1.12) saturate(1.35)',
+          WebkitBackdropFilter: 'blur(24px) brightness(1.12) saturate(1.35)',
+          border: '1px solid rgba(255, 255, 255, 0.20)',
           boxShadow: [
-            '0 8px 96px 0 rgba(0, 0, 0, 0.55)',
-            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.71)}`,
-            `inset -1px -1px 0 0 rgba(0, 0, 0, 0.15)`,
+            '0 20px 80px 0 rgba(0, 0, 0, 0.65)',
+            '0 0 40px 0 rgba(13, 241, 217, 0.12)',
+            `inset 1px 1px 0 0 ${alpha(theme.palette.common.white, 0.75)}`,
+            `inset -1px -1px 0 0 ${alpha(theme.palette.common.white, 0.10)}`,
           ].join(', '),
           backgroundClip: 'padding-box',
           borderRadius: '50px',
@@ -258,6 +245,8 @@ export default function CTASection({ data }: CTASectionProps) {
       >
         <Box
           sx={{
+            position: 'relative',
+            zIndex: 2,
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
@@ -310,6 +299,8 @@ export default function CTASection({ data }: CTASectionProps) {
         {(!data || data.button_text) && (
           <Box
             sx={{
+              position: 'relative',
+              zIndex: 2,
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
